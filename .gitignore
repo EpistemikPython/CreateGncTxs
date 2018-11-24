@@ -1,6 +1,8 @@
 .*
 !.gitignore
 /gnucash
+/py3bindings
+!py3bindings/usr/share/doc/python3-gnucash/examples/
 **/out
 **/test*
 **/bin
