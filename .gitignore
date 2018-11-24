@@ -1,0 +1,7 @@
+.*
+!.gitignore
+/gnucash
+**/out
+**/test*
+**/bin
+
