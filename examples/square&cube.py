@@ -9,9 +9,12 @@ def cubeIt(n):
     return n*n*n
 
 def main():
-    anum = int(input("Please enter a number: "))
-    print('Square:', squareIt(anum))
-    print('Cube:', cubeIt(anum))
-
+    anum = int( input("Please enter a number: ") )
+#     print('Square:', squareIt(anum))
+#     print('Cube:', cubeIt(anum))
+    print( "Square: {0}".format(squareIt(anum)) )
+    print( "Cube: {0}".format(cubeIt(anum)) )
+    print("Bye!\n")
+    
 if __name__ == "__main__":
     main()
