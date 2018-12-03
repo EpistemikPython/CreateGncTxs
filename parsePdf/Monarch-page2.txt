@@ -1,0 +1,113 @@
+len(sys.argv) = 2
+number of pages = 5
+content of page #2
+Advisor :  Rudy Johnson, CFP
+Dealer :  Monarch Wealth Corporation
+Branch :  RocheBanyan
+Phone :  (613)842-7240
+Fax :  (613)746-0720
+Email :  rjohnson@rochebanyan.ca
+137 Marlborough Ave.
+Ottawa ON K1N 8G1
+Mark H. Sattolo
+October 01, 2018 - December 31, 2018
+CLIENT TRANSACTIONS
+Plan Type:
+OPEN (Joint)
+Plan ID:
+78512
+Opened In:
+Client Name
+Beneficiary:
+Owner(s):
+Mark H. Sattolo, Louise Robb
+In-Trust for:
+Description:
+CI Investments/CIG 11461-Signature Diversified Yield II Fund A   Account # 106035991
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+10/26/2018
+Reinvested 
+Distribution/Interest
+$34.53
+$34.53
+3.8480
+$8.9732
+694.4350
+11/23/2018
+Reinvested 
+Distribution/Interest
+$34.73
+$34.73
+3.8610
+$8.9957
+698.2960
+CI Investments/CIG 11111-Signature Diversified Yield II Fund A   Account # 106035991
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+10/26/2018
+Reinvested 
+Distribution/Interest
+$5.30
+$5.30
+0.5910
+$8.9732
+106.6770
+11/23/2018
+Reinvested 
+Distribution/Interest
+$5.33
+$5.33
+0.5930
+$8.9957
+107.2700
+Plan Type:
+TFSA (Individual)
+Plan ID:
+300787
+Registered In:
+Client Name
+Beneficiary:
+Owner(s):
+Mark H. Sattolo
+In-Trust for:
+Description:
+Franklin Templeton Investments/TML 674-Templeton Global Bond Fund Series A   Account # 4963030
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+10/30/2018
+Reinvested 
+Distribution/Interest
+$4.93
+$4.93
+0.5840
+$8.4422
+308.6739
+11/29/2018
+Reinvested 
+Distribution/Interest
+$4.94
+$4.94
+0.5766
+$8.5672
+309.2505
+Page 1
+Printed on Saturday, December 01, 2018
+
+Bye!
+
