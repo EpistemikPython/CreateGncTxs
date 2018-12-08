@@ -17,7 +17,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2018-12-08 12:02"
+__updated__ = "2018-12-08 12:37"
 
 import sys  
 import os
@@ -30,15 +30,15 @@ PL_OPEN   = "OPEN"
 PL_TFSA   = "TFSA"
 PL_RRSP   = "RRSP"
 
-FUND_CODE    = "Fund Code"
+FUND_CODE  = "Fund Code"
 # re = ([0-9]{2}/[0-9]{2}/[0-9]{4})
-TRADE_DATE   = "Trade Date"
-DESCRIPTION  = "Description"
-GROSS        = "Gross"
-NET          = "Net"
-UNITS        = "Units"
-PRICE        = "Price"
-UNIT_BALANCE = "Unit Balance" 
+TRADE_DATE = "Trade Date"
+DESC       = "Description"
+GROSS      = "Gross"
+NET        = "Net"
+UNITS      = "Units"
+PRICE      = "Price"
+UNIT_BAL   = "Unit Balance" 
 
 # re = ([A-Z]{3}_[0-9]{3,5})
 CIG_11461 = "CIG 11461"
@@ -85,17 +85,17 @@ Monarch_record = {
 Monarch_tx = {
     FUND_CODE    : "" ,
     TRADE_DATE   : "" ,
-    DESCRIPTION  : "" ,
+    DESC  : "" ,
     GROSS        : "" ,
     NET          : "" ,
     UNITS        : "" ,
     PRICE        : "" ,
-    UNIT_BALANCE : "" 
+    UNIT_BAL : "" 
 }
 
 # parsing states
-STATE_NONE     = 0
-FIND_PLAN_TYPE = STATE_NONE + 1
+STATE_SEARCH   = 0
+FIND_PLAN_TYPE = STATE_SEARCH + 1
 FIND_FUND      = FIND_PLAN_TYPE +1
 FIND_NEXT_TX   = FIND_FUND + 1
 FILL_CURR_TX   = FIND_NEXT_TX + 1
@@ -130,10 +130,11 @@ def parseFile(file):
     fund_name = ""
     tx_date = ""
     tx_line = 0
-    mon_state = STATE_NONE
+    mon_state = STATE_SEARCH
     with open(file) as fp:
-        ct = 1
+        ct = 0
         for line in fp:
+            ct += 1
             if mon_state == FIND_PLAN_TYPE:
                 re_match = re.match(rePLN, line)
                 if re_match:
@@ -156,8 +157,6 @@ def parseFile(file):
                     print("Current fund_name is: {}".format(fund_name))
                     mon_state = FIND_NEXT_TX
                     continue
-#                 else:
-#                     print("ERROR finding Fund Type!\n")
 
             if mon_state == FIND_NEXT_TX:
                 print("FIND_NEXT_TX line {} = {}".format(ct, line))
@@ -167,13 +166,41 @@ def parseFile(file):
                     tx_date = re_match.group(1)
                     print("Current tx_date is: {}".format(tx_date))
                     curr_tx = copy.deepcopy(Monarch_tx)
-                    curr_tx[FUND_CODE] = tx_date
+                    curr_tx[FUND_CODE] = fund_name
+                    curr_tx[TRADE_DATE] = tx_date
                     mon_state = FILL_CURR_TX
                     continue
 
             if mon_state == FILL_CURR_TX:
                 print("FILL_CURR_TX line {} = {}".format(ct, line))
                 tx_line += 1
+                if tx_line < 3:
+                    curr_tx[DESC] += (line.strip() + ":")
+                    print("curr_tx[DESC] is: {}".format(curr_tx[DESC]))
+                    continue
+                if tx_line < 4:
+                    curr_tx[GROSS] += (line.strip())
+                    print("curr_tx[GROSS] is: {}".format(curr_tx[GROSS]))
+                    continue
+                if tx_line < 5:
+                    curr_tx[NET] += (line.strip())
+                    print("curr_tx[NET] is: {}".format(curr_tx[NET]))
+                    continue
+                if tx_line < 6:
+                    curr_tx[UNITS] += (line.strip())
+                    print("curr_tx[UNITS] is: {}".format(curr_tx[UNITS]))
+                    continue
+                if tx_line < 7:
+                    curr_tx[PRICE] += (line.strip())
+                    print("curr_tx[PRICE] is: {}".format(curr_tx[PRICE]))
+                    continue
+                if tx_line < 8:
+                    curr_tx[UNIT_BAL] += (line.strip())
+                    print("curr_tx[UNIT_BAL] is: {}".format(curr_tx[UNIT_BAL]))
+                    bag.append(curr_tx)
+                    mon_state = FIND_NEXT_TX
+                    tx_line = 0
+                    continue
 
             if re.match(reCTX, line):
                 print("line {}: {}".format(ct, line))
@@ -181,8 +208,6 @@ def parseFile(file):
             if re.match(rePLT, line):
                 print("line {}: {}".format(ct, line))
                 mon_state = FIND_PLAN_TYPE
-            #
-            ct += 1
 
 def main():  
     filepath = sys.argv[1]
