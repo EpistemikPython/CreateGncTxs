@@ -5,6 +5,5 @@
 **/out
 **/test*
 **/bin
-*.out
 *.exe
 *.x

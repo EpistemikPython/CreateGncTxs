@@ -1,0 +1,1318 @@
+parseFile()
+
+line 0 contents: len(sys.argv) = 1
+
+line 1 contents: docInfo = {
+
+line 2 contents:         "/Creator": "Microsoft Reporting Services 12.0.0.0",
+
+line 3 contents:         "/Subject": "",
+
+line 4 contents:         "/Title": "",
+
+line 5 contents:         "/Producer": "Microsoft Reporting Services PDF Rendering Extension 12.0.0.0",
+
+line 6 contents:         "/Author": "",
+
+line 7 contents:         "/CreationDate": "D:20181201071726-05'00'"
+
+line 8 contents:         }
+
+line 9 contents: number of pages = 5
+
+line 10 contents: ===========================================================================================================
+
+line 11 contents: ** The registered owner of MRS assets is B
+
+line 12 contents: 2
+
+line 13 contents: B Trustco, B
+
+line 14 contents: 2
+
+line 15 contents: B Bank Financial Services Inc., B
+
+line 16 contents: 2
+
+line 17 contents: B Bank Securities Services Inc. or B
+
+line 18 contents: 2
+
+line 19 contents: B Bank Intermediary 
+
+line 20 contents: Services Inc.
+
+line 21 contents: *** Indicates investment/insurance products not purchased through [MONARCH] . Unit Price represents market price. Market prices shown are 
+
+line 22 contents: obtained from sources we believe reliable, but we do not guarantee the accuracy of the unit price or book values reflected on this statement. Please 
+
+line 23 contents: review this statement carefully and notify your advisor should there be any discrepancies.
+
+line 24 contents: Advisor :  Rudy Johnson
+
+line 25 contents: Branch :  RocheBanyan
+
+line 26 contents: Phone :  (613)842-7240
+
+line 27 contents: Fax :  (613)746-0720
+
+line 28 contents: Email :  rjohnson@rochebanyan.ca
+
+line 29 contents: 137 Marlborough Ave.
+
+line 30 contents: Ottawa ON K1N 8G1
+
+line 31 contents: Mark H. Sattolo
+
+line 32 contents: October 01, 2018 - December 31, 2018
+
+line 33 contents: CLIENT TRANSACTIONS
+
+line 34 contents: No transactions were found for this period.
+
+line 35 contents: Page 1
+
+line 36 contents: Printed on Saturday, December 01, 2018
+
+line 37 contents: ------------------------------------------------------------------------------------------------------------------------
+
+line 38 contents: Advisor :  Rudy Johnson, CFP
+
+line 39 contents: Dealer :  Monarch Wealth Corporation
+
+line 40 contents: Branch :  RocheBanyan
+
+line 41 contents: Phone :  (613)842-7240
+
+line 42 contents: Fax :  (613)746-0720
+
+line 43 contents: Email :  rjohnson@rochebanyan.ca
+
+line 44 contents: 137 Marlborough Ave.
+
+line 45 contents: Ottawa ON K1N 8G1
+
+line 46 contents: Mark H. Sattolo
+
+line 47 contents: October 01, 2018 - December 31, 2018
+
+line 48 contents: 
+
+line 49 contents: CLIENT TRANSACTIONS
+
+line 50 contents: Plan Type:
+
+line 51 contents: OPEN (Joint)
+
+line 52 contents: Plan ID:
+
+line 53 contents: 78512
+
+line 54 contents: Opened In:
+
+line 55 contents: Client Name
+
+line 56 contents: Beneficiary:
+
+line 57 contents: Owner(s):
+
+line 58 contents: Mark H. Sattolo, Louise Robb
+
+line 59 contents: In-Trust for:
+
+line 60 contents: Description:
+
+line 61 contents: CI Investments/CIG 11461-Signature Diversified Yield II Fund A   Account # 106035991
+
+line 62 contents: 
+
+line 63 contents: Trade Date
+
+line 64 contents: Description
+
+line 65 contents: Gross
+
+line 66 contents: Net
+
+line 67 contents: Units
+
+line 68 contents: Price
+
+line 69 contents: Unit Balance
+
+line 70 contents: 
+
+line 71 contents: 10/26/2018
+
+line 72 contents: Reinvested 
+
+line 73 contents: Distribution/Interest
+
+line 74 contents: $34.53
+
+line 75 contents: $34.53
+
+line 76 contents: 3.8480
+
+line 77 contents: $8.9732
+
+line 78 contents: 694.4350
+
+line 79 contents: 
+
+line 80 contents: 11/23/2018
+
+line 81 contents: Reinvested 
+
+line 82 contents: Distribution/Interest
+
+line 83 contents: $34.73
+
+line 84 contents: $34.73
+
+line 85 contents: 3.8610
+
+line 86 contents: $8.9957
+
+line 87 contents: 698.2960
+
+line 88 contents: 
+
+line 89 contents: CI Investments/CIG 11111-Signature Diversified Yield II Fund A   Account # 106035991
+
+line 90 contents: Trade Date
+
+line 91 contents: Description
+
+line 92 contents: Gross
+
+line 93 contents: Net
+
+line 94 contents: Units
+
+line 95 contents: Price
+
+line 96 contents: Unit Balance
+
+line 97 contents: 
+
+line 98 contents: 10/26/2018
+
+line 99 contents: Reinvested 
+
+line 100 contents: Distribution/Interest
+
+line 101 contents: $5.30
+
+line 102 contents: $5.30
+
+line 103 contents: 0.5910
+
+line 104 contents: $8.9732
+
+line 105 contents: 106.6770
+
+line 106 contents: 
+
+line 107 contents: 11/23/2018
+
+line 108 contents: Reinvested 
+
+line 109 contents: Distribution/Interest
+
+line 110 contents: $5.33
+
+line 111 contents: $5.33
+
+line 112 contents: 0.5930
+
+line 113 contents: $8.9957
+
+line 114 contents: 107.2700
+
+line 115 contents: 
+
+line 116 contents: 
+
+line 117 contents: Plan Type:
+
+line 118 contents: TFSA (Individual)
+
+line 119 contents: Plan ID:
+
+line 120 contents: 300787
+
+line 121 contents: Registered In:
+
+line 122 contents: Client Name
+
+line 123 contents: Beneficiary:
+
+line 124 contents: Owner(s):
+
+line 125 contents: Mark H. Sattolo
+
+line 126 contents: In-Trust for:
+
+line 127 contents: Description:
+
+line 128 contents: Franklin Templeton Investments/TML 674-Templeton Global Bond Fund Series A   Account # 4963030
+
+line 129 contents: 
+
+line 130 contents: Trade Date
+
+line 131 contents: Description
+
+line 132 contents: Gross
+
+line 133 contents: Net
+
+line 134 contents: Units
+
+line 135 contents: Price
+
+line 136 contents: Unit Balance
+
+line 137 contents: 
+
+line 138 contents: 10/30/2018
+
+line 139 contents: Reinvested 
+
+line 140 contents: Distribution/Interest
+
+line 141 contents: $4.93
+
+line 142 contents: $4.93
+
+line 143 contents: 0.5840
+
+line 144 contents: $8.4422
+
+line 145 contents: 308.6739
+
+line 146 contents: 
+
+line 147 contents: 11/29/2018
+
+line 148 contents: Reinvested 
+
+line 149 contents: Distribution/Interest
+
+line 150 contents: $4.94
+
+line 151 contents: $4.94
+
+line 152 contents: 0.5766
+
+line 153 contents: $8.5672
+
+line 154 contents: 309.2505
+
+line 155 contents: 
+
+line 156 contents: Page 1
+
+line 157 contents: Printed on Saturday, December 01, 2018
+
+line 158 contents: ------------------------------------------------------------------------------------------------------------------------
+
+line 159 contents: Franklin Templeton Investments/TML 704-Templeton Global Bond Fund Series A   Account # 4963030
+
+line 160 contents: Trade Date
+
+line 161 contents: Description
+
+line 162 contents: Gross
+
+line 163 contents: Net
+
+line 164 contents: Units
+
+line 165 contents: Price
+
+line 166 contents: Unit Balance
+
+line 167 contents: 
+
+line 168 contents: 10/30/2018
+
+line 169 contents: Reinvested 
+
+line 170 contents: Distribution/Interest
+
+line 171 contents: $7.87
+
+line 172 contents: $7.87
+
+line 173 contents: 0.9322
+
+line 174 contents: $8.4422
+
+line 175 contents: 492.7939
+
+line 176 contents: 
+
+line 177 contents: 11/29/2018
+
+line 178 contents: Reinvested 
+
+line 179 contents: Distribution/Interest
+
+line 180 contents: $7.88
+
+line 181 contents: $7.88
+
+line 182 contents: 0.9198
+
+line 183 contents: $8.5672
+
+line 184 contents: 493.7137
+
+line 185 contents: 
+
+line 186 contents: Franklin Templeton Investments/TML 203-Franklin Bissett Dividend Income Fund A   Account # 4963030
+
+line 187 contents: Trade Date
+
+line 188 contents: Description
+
+line 189 contents: Gross
+
+line 190 contents: Net
+
+line 191 contents: Units
+
+line 192 contents: Price
+
+line 193 contents: Unit Balance
+
+line 194 contents: 
+
+line 195 contents: 10/30/2018
+
+line 196 contents: Reinvested 
+
+line 197 contents: Distribution/Interest
+
+line 198 contents: $15.99
+
+line 199 contents: $15.99
+
+line 200 contents: 0.5887
+
+line 201 contents: $27.1627
+
+line 202 contents: 291.2588
+
+line 203 contents: 
+
+line 204 contents: 11/29/2018
+
+line 205 contents: Reinvested 
+
+line 206 contents: Distribution/Interest
+
+line 207 contents: $16.02
+
+line 208 contents: $16.02
+
+line 209 contents: 0.5844
+
+line 210 contents: $27.4141
+
+line 211 contents: 291.8432
+
+line 212 contents: 
+
+line 213 contents: Franklin Templeton Investments/TML 519-Franklin Bissett Dividend Income Fund A   Account # 4963030
+
+line 214 contents: Trade Date
+
+line 215 contents: Description
+
+line 216 contents: Gross
+
+line 217 contents: Net
+
+line 218 contents: Units
+
+line 219 contents: Price
+
+line 220 contents: Unit Balance
+
+line 221 contents: 
+
+line 222 contents: 10/30/2018
+
+line 223 contents: Reinvested 
+
+line 224 contents: Distribution/Interest
+
+line 225 contents: $10.34
+
+line 226 contents: $10.34
+
+line 227 contents: 0.3807
+
+line 228 contents: $27.1627
+
+line 229 contents: 188.2952
+
+line 230 contents: 
+
+line 231 contents: 11/29/2018
+
+line 232 contents: Reinvested 
+
+line 233 contents: Distribution/Interest
+
+line 234 contents: $10.36
+
+line 235 contents: $10.36
+
+line 236 contents: 0.3779
+
+line 237 contents: $27.4141
+
+line 238 contents: 188.6731
+
+line 239 contents: 
+
+line 240 contents: Plan Type:
+
+line 241 contents: RRSP (Individual)
+
+line 242 contents: Plan ID:
+
+line 243 contents: 278827
+
+line 244 contents: Registered In:
+
+line 245 contents: Client Name
+
+line 246 contents: Beneficiary:
+
+line 247 contents: Louise Robb
+
+line 248 contents: Owner(s):
+
+line 249 contents: Mark H. Sattolo
+
+line 250 contents: In-Trust for:
+
+line 251 contents: Description:
+
+line 252 contents: Mackenzie Financial Corp./MFC 856-Mackenzie Corporate Bond Fund Series A   Account # 64665893
+
+line 253 contents: 
+
+line 254 contents: Trade Date
+
+line 255 contents: Description
+
+line 256 contents: Gross
+
+line 257 contents: Net
+
+line 258 contents: Units
+
+line 259 contents: Price
+
+line 260 contents: Unit Balance
+
+line 261 contents: 
+
+line 262 contents: 10/19/2018
+
+line 263 contents: Reinvested 
+
+line 264 contents: Distribution/Interest
+
+line 265 contents: $26.28
+
+line 266 contents: $26.28
+
+line 267 contents: 6.1490
+
+line 268 contents: $4.2733
+
+line 269 contents: 1910.3030
+
+line 270 contents: 
+
+line 271 contents: 11/23/2018
+
+line 272 contents: Reinvested 
+
+line 273 contents: Distribution/Interest
+
+line 274 contents: $33.43
+
+line 275 contents: $33.43
+
+line 276 contents: 7.9800
+
+line 277 contents: $4.1890
+
+line 278 contents: 1918.2830
+
+line 279 contents: 
+
+line 280 contents: Mackenzie Financial Corp./MFC 6129-Mackenzie Canadian Bond Fund Series PW   Account # 64665893
+
+line 281 contents: Trade Date
+
+line 282 contents: Description
+
+line 283 contents: Gross
+
+line 284 contents: Net
+
+line 285 contents: Units
+
+line 286 contents: Price
+
+line 287 contents: Unit Balance
+
+line 288 contents: 
+
+line 289 contents: 10/19/2018
+
+line 290 contents: Reinvested 
+
+line 291 contents: Distribution/Interest
+
+line 292 contents: $20.49
+
+line 293 contents: $20.49
+
+line 294 contents: 2.0220
+
+line 295 contents: $10.1337
+
+line 296 contents: 1386.5420
+
+line 297 contents: 
+
+line 298 contents: 11/23/2018
+
+line 299 contents: Reinvested 
+
+line 300 contents: Distribution/Interest
+
+line 301 contents: $22.88
+
+line 302 contents: $22.88
+
+line 303 contents: 2.2540
+
+line 304 contents: $10.1511
+
+line 305 contents: 1388.7960
+
+line 306 contents: 
+
+line 307 contents: Mackenzie Financial Corp./MFC 6130-Mackenzie Corporate Bond Fund Series PW   Account # 64665893
+
+line 308 contents: Trade Date
+
+line 309 contents: Description
+
+line 310 contents: Gross
+
+line 311 contents: Net
+
+line 312 contents: Units
+
+line 313 contents: Price
+
+line 314 contents: Unit Balance
+
+line 315 contents: 
+
+line 316 contents: 10/19/2018
+
+line 317 contents: Reinvested 
+
+line 318 contents: Distribution/Interest
+
+line 319 contents: $40.65
+
+line 320 contents: $40.65
+
+line 321 contents: 4.3910
+
+line 322 contents: $9.2574
+
+line 323 contents: 1243.5800
+
+line 324 contents: 
+
+line 325 contents: 11/23/2018
+
+line 326 contents: Reinvested 
+
+line 327 contents: Distribution/Interest
+
+line 328 contents: $51.48
+
+line 329 contents: $51.48
+
+line 330 contents: 5.6740
+
+line 331 contents: $9.0744
+
+line 332 contents: 1249.2540
+
+line 333 contents: 
+
+line 334 contents: Mackenzie Financial Corp./MFC 6138-Mackenzie Strategic Income Fund Series PW   Account # 64665893
+
+line 335 contents: Trade Date
+
+line 336 contents: Description
+
+line 337 contents: Gross
+
+line 338 contents: Net
+
+line 339 contents: Units
+
+line 340 contents: Price
+
+line 341 contents: Unit Balance
+
+line 342 contents: 
+
+line 343 contents: 10/19/2018
+
+line 344 contents: Reinvested 
+
+line 345 contents: Distribution/Interest
+
+line 346 contents: $135.08
+
+line 347 contents: $135.08
+
+line 348 contents: 9.7570
+
+line 349 contents: $13.8439
+
+line 350 contents: 1855.1140
+
+line 351 contents: 
+
+line 352 contents: 11/23/2018
+
+line 353 contents: Reinvested 
+
+line 354 contents: Distribution/Interest
+
+line 355 contents: $135.79
+
+line 356 contents: $135.79
+
+line 357 contents: 9.9940
+
+line 358 contents: $13.5872
+
+line 359 contents: 1865.1080
+
+line 360 contents: 
+
+line 361 contents: Page 2
+
+line 362 contents: Printed on Saturday, December 01, 2018
+
+line 363 contents: For: Mark H. Sattolo 
+
+line 364 contents: ------------------------------------------------------------------------------------------------------------------------
+
+line 365 contents: Mackenzie Financial Corp./MFC 302-Mackenzie Canadian Bond Fund Series A   Account # 64665893
+
+line 366 contents: Trade Date
+
+line 367 contents: Description
+
+line 368 contents: Gross
+
+line 369 contents: Net
+
+line 370 contents: Units
+
+line 371 contents: Price
+
+line 372 contents: Unit Balance
+
+line 373 contents: 
+
+line 374 contents: 10/19/2018
+
+line 375 contents: Reinvested 
+
+line 376 contents: Distribution/Interest
+
+line 377 contents: $12.91
+
+line 378 contents: $12.91
+
+line 379 contents: 0.9630
+
+line 380 contents: $13.4137
+
+line 381 contents: 844.8180
+
+line 382 contents: 
+
+line 383 contents: 11/23/2018
+
+line 384 contents: Reinvested 
+
+line 385 contents: Distribution/Interest
+
+line 386 contents: $14.02
+
+line 387 contents: $14.02
+
+line 388 contents: 1.0440
+
+line 389 contents: $13.4359
+
+line 390 contents: 845.8620
+
+line 391 contents: 
+
+line 392 contents: Mackenzie Financial Corp./MFC 3232-Mackenzie Strategic Income Fund Series A   Account # 64665893
+
+line 393 contents: Trade Date
+
+line 394 contents: Description
+
+line 395 contents: Gross
+
+line 396 contents: Net
+
+line 397 contents: Units
+
+line 398 contents: Price
+
+line 399 contents: Unit Balance
+
+line 400 contents: 
+
+line 401 contents: 10/19/2018
+
+line 402 contents: Reinvested 
+
+line 403 contents: Distribution/Interest
+
+line 404 contents: $101.75
+
+line 405 contents: $101.75
+
+line 406 contents: 11.8730
+
+line 407 contents: $8.5701
+
+line 408 contents: 2253.0850
+
+line 409 contents: 
+
+line 410 contents: 11/23/2018
+
+line 411 contents: Reinvested 
+
+line 412 contents: Distribution/Interest
+
+line 413 contents: $102.29
+
+line 414 contents: $102.29
+
+line 415 contents: 12.1640
+
+line 416 contents: $8.4092
+
+line 417 contents: 2265.2490
+
+line 418 contents: 
+
+line 419 contents: Dynamic Funds/DYN 029-Dynamic Equity Income Fund Series A   Account # 424767671
+
+line 420 contents: Trade Date
+
+line 421 contents: Description
+
+line 422 contents: Gross
+
+line 423 contents: Net
+
+line 424 contents: Units
+
+line 425 contents: Price
+
+line 426 contents: Unit Balance
+
+line 427 contents: 
+
+line 428 contents: 10/26/2018
+
+line 429 contents: Reinvested 
+
+line 430 contents: Distribution/Interest
+
+line 431 contents: $42.25
+
+line 432 contents: $42.25
+
+line 433 contents: 2.1231
+
+line 434 contents: $19.9000
+
+line 435 contents: 605.7630
+
+line 436 contents: 
+
+line 437 contents: 11/30/2018
+
+line 438 contents: Reinvested 
+
+line 439 contents: Distribution/Interest
+
+line 440 contents: $42.40
+
+line 441 contents: $42.40
+
+line 442 contents: 2.0513
+
+line 443 contents: $20.6700
+
+line 444 contents: 607.8143
+
+line 445 contents: 
+
+line 446 contents: Dynamic Funds/DYN 729-Dynamic Equity Income Fund Series A   Account # 424767671
+
+line 447 contents: Trade Date
+
+line 448 contents: Description
+
+line 449 contents: Gross
+
+line 450 contents: Net
+
+line 451 contents: Units
+
+line 452 contents: Price
+
+line 453 contents: Unit Balance
+
+line 454 contents: 
+
+line 455 contents: 10/26/2018
+
+line 456 contents: Reinvested 
+
+line 457 contents: Distribution/Interest
+
+line 458 contents: $31.15
+
+line 459 contents: $31.15
+
+line 460 contents: 1.5653
+
+line 461 contents: $19.9000
+
+line 462 contents: 446.5658
+
+line 463 contents: 
+
+line 464 contents: 11/30/2018
+
+line 465 contents: Reinvested 
+
+line 466 contents: Distribution/Interest
+
+line 467 contents: $31.26
+
+line 468 contents: $31.26
+
+line 469 contents: 1.5123
+
+line 470 contents: $20.6700
+
+line 471 contents: 448.0781
+
+line 472 contents: 
+
+line 473 contents: Dynamic Funds/DYN 1562-Dynamic Strategic Yield Fund Series A   Account # 424767671
+
+line 474 contents: Trade Date
+
+line 475 contents: Description
+
+line 476 contents: Gross
+
+line 477 contents: Net
+
+line 478 contents: Units
+
+line 479 contents: Price
+
+line 480 contents: Unit Balance
+
+line 481 contents: 
+
+line 482 contents: 10/26/2018
+
+line 483 contents: Reinvested 
+
+line 484 contents: Distribution/Interest
+
+line 485 contents: $34.88
+
+line 486 contents: $34.88
+
+line 487 contents: 2.6484
+
+line 488 contents: $13.1700
+
+line 489 contents: 599.8550
+
+line 490 contents: 
+
+line 491 contents: 11/30/2018
+
+line 492 contents: Reinvested 
+
+line 493 contents: Distribution/Interest
+
+line 494 contents: $35.03
+
+line 495 contents: $35.03
+
+line 496 contents: 2.6006
+
+line 497 contents: $13.4700
+
+line 498 contents: 602.4556
+
+line 499 contents: 
+
+line 500 contents: Manulife Mutual Funds/MMF 44424-Manulife Yield Opportunities Fund Advisor Series   Account # 72562759
+
+line 501 contents: Trade Date
+
+line 502 contents: Description
+
+line 503 contents: Gross
+
+line 504 contents: Net
+
+line 505 contents: Units
+
+line 506 contents: Price
+
+line 507 contents: Unit Balance
+
+line 508 contents: 
+
+line 509 contents: 10/26/2018
+
+line 510 contents: Reinvested 
+
+line 511 contents: Distribution/Interest
+
+line 512 contents: $28.53
+
+line 513 contents: $28.53
+
+line 514 contents: 3.1040
+
+line 515 contents: $9.1905
+
+line 516 contents: 573.6710
+
+line 517 contents: 
+
+line 518 contents: 11/30/2018
+
+line 519 contents: Reinvested 
+
+line 520 contents: Distribution/Interest
+
+line 521 contents: $28.68
+
+line 522 contents: $28.68
+
+line 523 contents: 3.1570
+
+line 524 contents: $9.0850
+
+line 525 contents: 576.8280
+
+line 526 contents: 
+
+line 527 contents: Manulife Mutual Funds/MMF 4524-Manulife Yield Opportunities Fund Advisor Series   Account # 72562759
+
+line 528 contents: Trade Date
+
+line 529 contents: Description
+
+line 530 contents: Gross
+
+line 531 contents: Net
+
+line 532 contents: Units
+
+line 533 contents: Price
+
+line 534 contents: Unit Balance
+
+line 535 contents: 
+
+line 536 contents: 10/26/2018
+
+line 537 contents: Reinvested 
+
+line 538 contents: Distribution/Interest
+
+line 539 contents: $170.56
+
+line 540 contents: $170.56
+
+line 541 contents: 18.5580
+
+line 542 contents: $9.1905
+
+line 543 contents: 3429.8050
+
+line 544 contents: 
+
+line 545 contents: 11/30/2018
+
+line 546 contents: Reinvested 
+
+line 547 contents: Distribution/Interest
+
+line 548 contents: $171.49
+
+line 549 contents: $171.49
+
+line 550 contents: 18.8760
+
+line 551 contents: $9.0850
+
+line 552 contents: 3448.6810
+
+line 553 contents: 
+
+line 554 contents: Dynamic Funds/DYN 1560-Dynamic Strategic Yield Fund Series A   Account # 424767671
+
+line 555 contents: Trade Date
+
+line 556 contents: Description
+
+line 557 contents: Gross
+
+line 558 contents: Net
+
+line 559 contents: Units
+
+line 560 contents: Price
+
+line 561 contents: Unit Balance
+
+line 562 contents: 
+
+line 563 contents: 10/26/2018
+
+line 564 contents: Reinvested 
+
+line 565 contents: Distribution/Interest
+
+line 566 contents: $50.98
+
+line 567 contents: $50.98
+
+line 568 contents: 3.8709
+
+line 569 contents: $13.1700
+
+line 570 contents: 876.8561
+
+line 571 contents: 
+
+line 572 contents: 11/30/2018
+
+line 573 contents: Reinvested 
+
+line 574 contents: Distribution/Interest
+
+line 575 contents: $51.21
+
+line 576 contents: $51.21
+
+line 577 contents: 3.8018
+
+line 578 contents: $13.4700
+
+line 579 contents: 880.6579
+
+line 580 contents: 
+
+line 581 contents: Page 3
+
+line 582 contents: Printed on Saturday, December 01, 2018
+
+line 583 contents: For: Mark H. Sattolo 
+
+line 584 contents: ------------------------------------------------------------------------------------------------------------------------
+
+line 585 contents: ** The registered owner of MRS assets is B
+
+line 586 contents: 2
+
+line 587 contents: B Trustco, B
+
+line 588 contents: 2
+
+line 589 contents: B Bank Financial Services Inc., B
+
+line 590 contents: 2
+
+line 591 contents: B Bank Securities Services Inc. or B
+
+line 592 contents: 2
+
+line 593 contents: B Bank Intermediary 
+
+line 594 contents: Services Inc.
+
+line 595 contents: *** Indicates investment/insurance products not purchased through [MONARCH] . Unit Price represents market price. Market prices shown are 
+
+line 596 contents: obtained from sources we believe reliable, but we do not guarantee the accuracy of the unit price or book values reflected on this statement. Please 
+
+line 597 contents: review this statement carefully and notify your advisor should there be any discrepancies.
+
+line 598 contents: Franklin Templeton Investments/TML 1018-Franklin Bissett Canadian Dividend Fund A   Account # 4722871
+
+line 599 contents: 
+
+line 600 contents: Trade Date
+
+line 601 contents: Description
+
+line 602 contents: Gross
+
+line 603 contents: Net
+
+line 604 contents: Units
+
+line 605 contents: Price
+
+line 606 contents: Unit Balance
+
+line 607 contents: 
+
+line 608 contents: 10/30/2018
+
+line 609 contents: Reinvested 
+
+line 610 contents: Distribution/Interest
+
+line 611 contents: $15.82
+
+line 612 contents: $15.82
+
+line 613 contents: 1.1568
+
+line 614 contents: $13.6762
+
+line 615 contents: 487.8724
+
+line 616 contents: 
+
+line 617 contents: 11/29/2018
+
+line 618 contents: Reinvested 
+
+line 619 contents: Distribution/Interest
+
+line 620 contents: $15.86
+
+line 621 contents: $15.86
+
+line 622 contents: 1.1520
+
+line 623 contents: $13.7670
+
+line 624 contents: 489.0244
+
+line 625 contents: 
+
+line 626 contents: Franklin Templeton Investments/TML 1017-Franklin Bissett Canadian Dividend Fund A   Account # 4722871
+
+line 627 contents: Trade Date
+
+line 628 contents: Description
+
+line 629 contents: Gross
+
+line 630 contents: Net
+
+line 631 contents: Units
+
+line 632 contents: Price
+
+line 633 contents: Unit Balance
+
+line 634 contents: 
+
+line 635 contents: 10/30/2018
+
+line 636 contents: Reinvested 
+
+line 637 contents: Distribution/Interest
+
+line 638 contents: $6.17
+
+line 639 contents: $6.17
+
+line 640 contents: 0.4511
+
+line 641 contents: $13.6762
+
+line 642 contents: 190.1902
+
+line 643 contents: 
+
+line 644 contents: 11/29/2018
+
+line 645 contents: Reinvested 
+
+line 646 contents: Distribution/Interest
+
+line 647 contents: $6.18
+
+line 648 contents: $6.18
+
+line 649 contents: 0.4489
+
+line 650 contents: $13.7670
+
+line 651 contents: 190.6391
+
+line 652 contents: 
+
+line 653 contents: Page 4
+
+line 654 contents: Printed on Saturday, December 01, 2018
+
+line 655 contents: For: Mark H. Sattolo 
+
+line 656 contents: ===========================================================================================================
+
+line 657 contents: Bye!
+
