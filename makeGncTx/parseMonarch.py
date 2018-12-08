@@ -17,15 +17,18 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2018-12-08 12:37"
+__updated__ = "2018-12-08 13:51"
 
 import sys  
 import os
 import re
 import copy
+import json
 
 CLIENT_TX = "CLIENT TRANSACTIONS"
 PLAN_TYPE = "Plan Type"
+AUTO_SYS  = "Automatic/Systematic"
+
 PL_OPEN   = "OPEN"
 PL_TFSA   = "TFSA"
 PL_RRSP   = "RRSP"
@@ -77,20 +80,20 @@ FundsList = [
 # mon_tfsa = list()
 # mon_rrsp = list()
 Monarch_record = {
-    PL_OPEN : ["o"] ,
-    PL_TFSA : ["t"] ,
-    PL_RRSP : ["r"]
+    PL_OPEN : [] ,
+    PL_TFSA : [] ,
+    PL_RRSP : []
 }
 
 Monarch_tx = {
     FUND_CODE    : "" ,
     TRADE_DATE   : "" ,
-    DESC  : "" ,
+    DESC         : "" ,
     GROSS        : "" ,
     NET          : "" ,
     UNITS        : "" ,
     PRICE        : "" ,
-    UNIT_BAL : "" 
+    UNIT_BAL     : "" 
 }
 
 # parsing states
@@ -101,7 +104,7 @@ FIND_NEXT_TX   = FIND_FUND + 1
 FILL_CURR_TX   = FIND_NEXT_TX + 1
 
 def parseFile(file):
-    print("parseFile()\n")
+    print("parseFile({})\n".format(file))
     # ?? look for 'CLIENT TRANSACTIONS' = start of transactions
     # loop:
     #     check for 'Plan Type:'
@@ -135,33 +138,30 @@ def parseFile(file):
         ct = 0
         for line in fp:
             ct += 1
-            if mon_state == FIND_PLAN_TYPE:
-                re_match = re.match(rePLN, line)
-                if re_match:
-                    print(re_match.groups())
-                    bag_name = re_match.group(1)
-                    print("Current bag_name is: {}".format(bag_name))
-                    bag = Monarch_record[bag_name]
-                    print("Current bag is: {}\n".format(str(bag)))
-                else:
-                    print("ERROR finding Plan Type!")
+            re_match = re.match(rePLN, line)
+            if re_match:
+                print(re_match.groups())
+                bag_name = re_match.group(1)
+                print("Current bag_name is: {}".format(bag_name))
+                bag = Monarch_record[bag_name]
+                print("Current bag is: {}\n".format(str(bag)))
                 mon_state = FIND_FUND
                 continue
             
-            if mon_state == FIND_FUND:
-                print("FIND_FUND line {} = {}".format(ct, line))
+            if mon_state <= FIND_FUND:
                 re_match = re.match(reFND, line)
                 if re_match:
+                    print("FIND_FUND line {} = {}".format(ct, line))
                     print(re_match.groups())
                     fund_name = re_match.group(1)
                     print("Current fund_name is: {}".format(fund_name))
                     mon_state = FIND_NEXT_TX
                     continue
 
-            if mon_state == FIND_NEXT_TX:
-                print("FIND_NEXT_TX line {} = {}".format(ct, line))
+            if mon_state <= FIND_NEXT_TX:
                 re_match = re.match(reDTE, line)
                 if re_match:
+                    print("FIND_NEXT_TX line {} = {}".format(ct, line))
                     print(re_match.groups())
                     tx_date = re_match.group(1)
                     print("Current tx_date is: {}".format(tx_date))
@@ -174,41 +174,48 @@ def parseFile(file):
             if mon_state == FILL_CURR_TX:
                 print("FILL_CURR_TX line {} = {}".format(ct, line))
                 tx_line += 1
+                entry = line.strip()
                 if tx_line < 3:
-                    curr_tx[DESC] += (line.strip() + ":")
+                    if entry == AUTO_SYS:
+                        # back up by one to have one more line of DESCRIPTION for AUTO_SYS case
+                        tx_line -= 1
+                        # TODO: match number to proceed to looking for GROSS?
+                    curr_tx[DESC] += (entry + ":")
                     print("curr_tx[DESC] is: {}".format(curr_tx[DESC]))
                     continue
                 if tx_line < 4:
-                    curr_tx[GROSS] += (line.strip())
+                    curr_tx[GROSS] += (entry)
                     print("curr_tx[GROSS] is: {}".format(curr_tx[GROSS]))
                     continue
                 if tx_line < 5:
-                    curr_tx[NET] += (line.strip())
+                    curr_tx[NET] += (entry)
                     print("curr_tx[NET] is: {}".format(curr_tx[NET]))
                     continue
                 if tx_line < 6:
-                    curr_tx[UNITS] += (line.strip())
+                    curr_tx[UNITS] += (entry)
                     print("curr_tx[UNITS] is: {}".format(curr_tx[UNITS]))
                     continue
                 if tx_line < 7:
-                    curr_tx[PRICE] += (line.strip())
+                    curr_tx[PRICE] += (entry)
                     print("curr_tx[PRICE] is: {}".format(curr_tx[PRICE]))
                     continue
                 if tx_line < 8:
-                    curr_tx[UNIT_BAL] += (line.strip())
+                    curr_tx[UNIT_BAL] += (entry)
                     print("curr_tx[UNIT_BAL] is: {}".format(curr_tx[UNIT_BAL]))
                     bag.append(curr_tx)
-                    mon_state = FIND_NEXT_TX
+                    mon_state = STATE_SEARCH
                     tx_line = 0
-                    continue
 
-            if re.match(reCTX, line):
-                print("line {}: {}".format(ct, line))
-                
-            if re.match(rePLT, line):
-                print("line {}: {}".format(ct, line))
-                mon_state = FIND_PLAN_TYPE
+#             if re.match(reCTX, line):
+#                 print("line {}: {}".format(ct, line))
+#                 
+#             if re.match(rePLT, line):
+#                 print("line {}: {}".format(ct, line))
+#                 mon_state = FIND_PLAN_TYPE
 
+def createGnuTxs(record):
+    print("record = {}".format(record))
+    
 def main():  
     filepath = sys.argv[1]
     
@@ -217,6 +224,17 @@ def main():
         sys.exit()
     
     parseFile(filepath)
+    
+    print("\n\tlen(Monarch_record[{}]) = {}".format(PL_OPEN, len(Monarch_record[PL_OPEN])))
+    print("\tMonarch_record[{}] = {}".format(PL_OPEN, json.dumps(Monarch_record[PL_OPEN], indent=4)))
 
+    print("\n\tlen(Monarch_record[{}]) = {}".format(PL_TFSA, len(Monarch_record[PL_TFSA])))
+    print("\tMonarch_record[{}] = {}".format(PL_TFSA, json.dumps(Monarch_record[PL_TFSA], indent=4)))
+
+    print("\n\tlen(Monarch_record[{}]) = {}".format(PL_RRSP, len(Monarch_record[PL_RRSP])))
+    print("\tMonarch_record[{}] = {}".format(PL_RRSP, json.dumps(Monarch_record[PL_RRSP], indent=4)))
+
+    createGnuTxs(Monarch_record)
+    
 if __name__ == '__main__':  
    main()
