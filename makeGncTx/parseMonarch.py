@@ -17,10 +17,12 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2018-12-08 08:32"
+__updated__ = "2018-12-08 12:02"
 
 import sys  
 import os
+import re
+import copy
 
 CLIENT_TX = "CLIENT TRANSACTIONS"
 PLAN_TYPE = "Plan Type"
@@ -71,13 +73,13 @@ FundsList = [
     MMF_44424, MMF_4524
 ]
 
-mon_open = list()
-mon_tfsa = list()
-mon_rrsp = list()
+# mon_open = list()
+# mon_tfsa = list()
+# mon_rrsp = list()
 Monarch_record = {
-    PL_OPEN : [] ,
-    PL_TFSA : [] ,
-    PL_RRSP : []
+    PL_OPEN : ["o"] ,
+    PL_TFSA : ["t"] ,
+    PL_RRSP : ["r"]
 }
 
 Monarch_tx = {
@@ -90,6 +92,13 @@ Monarch_tx = {
     PRICE        : "" ,
     UNIT_BALANCE : "" 
 }
+
+# parsing states
+STATE_NONE     = 0
+FIND_PLAN_TYPE = STATE_NONE + 1
+FIND_FUND      = FIND_PLAN_TYPE +1
+FIND_NEXT_TX   = FIND_FUND + 1
+FILL_CURR_TX   = FIND_NEXT_TX + 1
 
 def parseFile(file):
     print("parseFile()\n")
@@ -109,10 +118,69 @@ def parseFile(file):
     #               line  = 'Price'        : Currency float
     #               line  = 'Unit Balance' : float
 
+    reCTX = re.compile(".*{}.*".format(CLIENT_TX))
+    rePLT = re.compile(".*{}.*".format(PLAN_TYPE))
+    rePLN = re.compile(r'([OPENTFSAR]{4})(\s?.*)')
+    reFND = re.compile(".*([A-Z]{3}\s?[0-9]{3,5}).*")
+    reDTE = re.compile(".*([0-9]{2}/[0-9]{2}/[0-9]{4}).*")
+    
+    curr_tx = {}
+    bag = list()
+    bag_name = ""
+    fund_name = ""
+    tx_date = ""
+    tx_line = 0
+    mon_state = STATE_NONE
     with open(file) as fp:
-        ct = 0
+        ct = 1
         for line in fp:
-            print("line {} contents: {}".format(ct, line))
+            if mon_state == FIND_PLAN_TYPE:
+                re_match = re.match(rePLN, line)
+                if re_match:
+                    print(re_match.groups())
+                    bag_name = re_match.group(1)
+                    print("Current bag_name is: {}".format(bag_name))
+                    bag = Monarch_record[bag_name]
+                    print("Current bag is: {}\n".format(str(bag)))
+                else:
+                    print("ERROR finding Plan Type!")
+                mon_state = FIND_FUND
+                continue
+            
+            if mon_state == FIND_FUND:
+                print("FIND_FUND line {} = {}".format(ct, line))
+                re_match = re.match(reFND, line)
+                if re_match:
+                    print(re_match.groups())
+                    fund_name = re_match.group(1)
+                    print("Current fund_name is: {}".format(fund_name))
+                    mon_state = FIND_NEXT_TX
+                    continue
+#                 else:
+#                     print("ERROR finding Fund Type!\n")
+
+            if mon_state == FIND_NEXT_TX:
+                print("FIND_NEXT_TX line {} = {}".format(ct, line))
+                re_match = re.match(reDTE, line)
+                if re_match:
+                    print(re_match.groups())
+                    tx_date = re_match.group(1)
+                    print("Current tx_date is: {}".format(tx_date))
+                    curr_tx = copy.deepcopy(Monarch_tx)
+                    curr_tx[FUND_CODE] = tx_date
+                    mon_state = FILL_CURR_TX
+                    continue
+
+            if mon_state == FILL_CURR_TX:
+                print("FILL_CURR_TX line {} = {}".format(ct, line))
+                tx_line += 1
+
+            if re.match(reCTX, line):
+                print("line {}: {}".format(ct, line))
+                
+            if re.match(rePLT, line):
+                print("line {}: {}".format(ct, line))
+                mon_state = FIND_PLAN_TYPE
             #
             ct += 1
 
