@@ -1,4 +1,24 @@
 
+# parseMonarch.py -- parse a Monarch text file 
+#                    and create Gnucash transactions from the data
+#
+# Copyright (c) 2018, 2019 Mark Sattolo <epistemik@gmail.com>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 2 of
+# the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# @author Mark Sattolo <epistemik@gmail.com>
+
+__created__ = "2018-12-02 07:13"
+__updated__ = "2018-12-08 08:32"
+
 import sys  
 import os
 
@@ -21,6 +41,7 @@ UNIT_BALANCE = "Unit Balance"
 # re = ([A-Z]{3}_[0-9]{3,5})
 CIG_11461 = "CIG 11461"
 CIG_11111 = "CIG 11111"
+CIG_18140 = "CIG 18140"
 TML_674   = "TML 674"
 TML_704   = "TML 704"
 TML_203   = "TML 203"
@@ -33,6 +54,8 @@ MFC_6130  = "MFC 6130"
 MFC_6138  = "MFC 6138"
 MFC_302   = "MFC 302"
 MFC_3232  = "MFC 3232"
+MFC_3689  = "MFC 3689"
+MFC_1960  = "MFC 1960"
 DYN_029   = "DYN 029"
 DYN_729   = "DYN 729"
 DYN_1562  = "DYN 1562"
@@ -41,9 +64,9 @@ MMF_44424 = "MMF 44424"
 MMF_4524  = "MMF 4524"
 
 FundsList = [ 
-    CIG_11461, CIG_11111,
-    TML_674, TML_704, TML_203, TML_519, TML_1017, TML_1017, 
-    MFC_856, MFC_6129, MFC_6130, MFC_6138, MFC_302, MFC_3232,
+    CIG_11461, CIG_11111, CIG_18140, 
+    TML_674, TML_704, TML_203, TML_519, TML_1017, TML_1018, 
+    MFC_856, MFC_6129, MFC_6130, MFC_6138, MFC_302, MFC_3232, MFC_3689, MFC_1960, 
     DYN_029, DYN_729, DYN_1562, DYN_1560,
     MMF_44424, MMF_4524
 ]
