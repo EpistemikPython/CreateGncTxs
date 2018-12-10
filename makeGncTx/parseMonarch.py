@@ -17,22 +17,27 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2018-12-08 13:51"
+__updated__ = "2018-12-09 17:51"
 
 import sys  
 import os
 import re
 import copy
 import json
+from gnucash import Session, Transaction, Split, Account, GncNumeric, GncCommodity, ACCT_TYPE_BANK, GUID
+from gnucash.gnucash_core_c import guid_new_return, guid_to_string
 
 CLIENT_TX = "CLIENT TRANSACTIONS"
-PLAN_TYPE = "Plan Type"
+PLAN_TYPE = "Plan Type:"
+OWNER     = "Owner(s):"
 AUTO_SYS  = "Automatic/Systematic"
 
+# Plan types
 PL_OPEN   = "OPEN"
 PL_TFSA   = "TFSA"
 PL_RRSP   = "RRSP"
 
+# tx categories
 FUND_CODE  = "Fund Code"
 # re = ([0-9]{2}/[0-9]{2}/[0-9]{4})
 TRADE_DATE = "Trade Date"
@@ -43,6 +48,7 @@ UNITS      = "Units"
 PRICE      = "Price"
 UNIT_BAL   = "Unit Balance" 
 
+# Fund codes
 # re = ([A-Z]{3}_[0-9]{3,5})
 CIG_11461 = "CIG 11461"
 CIG_11111 = "CIG 11111"
@@ -76,10 +82,8 @@ FundsList = [
     MMF_44424, MMF_4524
 ]
 
-# mon_open = list()
-# mon_tfsa = list()
-# mon_rrsp = list()
 Monarch_record = {
+    OWNER   : "" ,
     PL_OPEN : [] ,
     PL_TFSA : [] ,
     PL_RRSP : []
@@ -98,10 +102,20 @@ Monarch_tx = {
 
 # parsing states
 STATE_SEARCH   = 0
-FIND_PLAN_TYPE = STATE_SEARCH + 1
+FIND_PLAN_TYPE = STATE_SEARCH + 1 # become FIND_OWNER ?
 FIND_FUND      = FIND_PLAN_TYPE +1
 FIND_NEXT_TX   = FIND_FUND + 1
 FILL_CURR_TX   = FIND_NEXT_TX + 1
+
+OPEN_ACCT    = "Rev_Inv_Open"
+RRSP_ACCT_Mk = "Mk-RR"
+RRSP_ACCT_Lu = "Lu-RR"
+TFSA_ACCT_Mk = "Mk-TF"
+TFSA_ACCT_Lu = "Lu-TF"
+
+PRACTICE_GNC = "/bak/home/marksa/dev/Python/gnucash/liclipse/practice.gnc"
+RL_GNC       = "/bak/home/marksa/dev/Python/gnucash/liclipse/RL.gnc"
+NEW_GNC      = "/bak/home/marksa/dev/Python/gnucash/liclipse/new.gnc"
 
 def parseFile(file):
     print("parseFile({})\n".format(file))
@@ -148,6 +162,8 @@ def parseFile(file):
                 mon_state = FIND_FUND
                 continue
             
+            # for RRSP and TFSA need to find owner after finding plan type 
+            
             if mon_state <= FIND_FUND:
                 re_match = re.match(reFND, line)
                 if re_match:
@@ -183,38 +199,117 @@ def parseFile(file):
                     curr_tx[DESC] += (entry + ":")
                     print("curr_tx[DESC] is: {}".format(curr_tx[DESC]))
                     continue
-                if tx_line < 4:
+                if tx_line == 3:
                     curr_tx[GROSS] += (entry)
                     print("curr_tx[GROSS] is: {}".format(curr_tx[GROSS]))
-                    continue
-                if tx_line < 5:
+                if tx_line == 4:
                     curr_tx[NET] += (entry)
                     print("curr_tx[NET] is: {}".format(curr_tx[NET]))
-                    continue
-                if tx_line < 6:
+                if tx_line == 5:
                     curr_tx[UNITS] += (entry)
                     print("curr_tx[UNITS] is: {}".format(curr_tx[UNITS]))
-                    continue
-                if tx_line < 7:
+                if tx_line == 6:
                     curr_tx[PRICE] += (entry)
                     print("curr_tx[PRICE] is: {}".format(curr_tx[PRICE]))
-                    continue
-                if tx_line < 8:
+                if tx_line == 7:
                     curr_tx[UNIT_BAL] += (entry)
                     print("curr_tx[UNIT_BAL] is: {}".format(curr_tx[UNIT_BAL]))
                     bag.append(curr_tx)
                     mon_state = STATE_SEARCH
                     tx_line = 0
 
-#             if re.match(reCTX, line):
-#                 print("line {}: {}".format(ct, line))
-#                 
-#             if re.match(rePLT, line):
-#                 print("line {}: {}".format(ct, line))
-#                 mon_state = FIND_PLAN_TYPE
-
 def createGnuTxs(record):
-    print("record = {}".format(record))
+#     print("record = {}".format(record))
+    
+#     if len(argv) < 6:    
+#         print("NOT ENOUGH parameters!")
+#         print("usage: createTx.py <gnucash file> <acct1> <acct2> <amount> <descr>")
+#         print("example:")
+#         print("[gnucash-env] [python] createTx.py 'HouseHold.gnucash' 'Dining' 'CIBC Visa' '1313' 'Test'|'Prod'")
+#         exit()
+    
+    gncFileName = PRACTICE_GNC
+    print("gncFileName = {}".format(gncFileName))
+    
+    try:
+        session = Session(gncFileName)
+        book = session.book
+        print("flag1")
+        
+        root = book.get_root_account()
+        root.get_instance()
+        print("flag2")
+        
+        commod_tab = book.get_table()
+        print("flag3")
+        session.save()
+        print("flag4")
+        
+        CAD = commod_tab.lookup("ISO4217", "CAD")
+        print("flag5")
+        
+        amount = int('1313')
+        print("amount = {0}".format(amount))
+        amount2 = amount * (-1)
+        print("amount2 = {0}".format(amount2))
+        
+        acct1_name = 'Dining'
+        acct2_name = 'CIBC Visa'
+        acct1 = root.lookup_by_name(acct1_name)
+        acct2 = root.lookup_by_name(acct2_name)
+        print("acct1_name = {}".format(acct1_name))
+        
+        # create a new Tx
+        tx = Transaction(book)
+        # gets a guid on construction
+        print("tx guid = {0}".format(tx.GetGUID().to_string()))
+    
+        tx.BeginEdit()
+        
+        # create two splits for the Tx
+        s1 = Split(book)
+        s1.SetParent(tx)
+        # gets a guid on construction
+        print("s1 guid = {0}".format(s1.GetGUID().to_string()))
+        s2 = Split(book)
+        s2.SetParent(tx)
+        # gets a guid on construction
+        print("s2 guid = {0}".format(s2.GetGUID().to_string()))
+        
+        tx.SetCurrency(CAD)
+        tx.SetDate(13, 2, 2019)
+        tx.SetDescription("Python Prod")
+        tx.SetNotes("Python {0}".format(gncFileName))
+    #     tx: set action ?
+        
+        # set the account and amount of split1
+        s1.SetAccount(acct1)
+        s1.SetValue(GncNumeric(amount, 100))
+    #     s1.SetAmount(GncNumeric(amount, 100))
+        
+        # set the account and amount of split2
+        s2.SetAccount(acct2)
+        s2.SetValue(GncNumeric(amount2, 100))
+    #     s2.SetAmount(GncNumeric(amount2, 100))
+        
+        print("Tx imbalance = {0}".format(tx.GetImbalanceValue().to_string()))
+        
+        mode = argv[5].upper()
+        if mode != "PROD":
+            print("Mode = {}: Roll back changes!".format(mode))
+            tx.RollbackEdit()
+        else:
+            print("Mode = {}: Commit and save changes.".format(mode))
+            tx.CommitEdit()
+            session.save()
+    
+        session.end()
+    #     session.destroy()
+    except:
+        print("createGnuTxs() EXCEPTION!!")
+        if "session" in locals():
+            session.end()
+        raise
     
 def main():  
     filepath = sys.argv[1]
@@ -235,6 +330,8 @@ def main():
     print("\tMonarch_record[{}] = {}".format(PL_RRSP, json.dumps(Monarch_record[PL_RRSP], indent=4)))
 
     createGnuTxs(Monarch_record)
+    
+    print("\n >>> PROGRAM ENDED.")
     
 if __name__ == '__main__':  
    main()
