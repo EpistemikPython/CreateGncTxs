@@ -16,7 +16,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2018-12-16 09:48"
+__updated__ = "2018-12-16 17:57"
 
 CLIENT_TX = "CLIENT TRANSACTIONS"
 PLAN_TYPE = "Plan Type:"
@@ -100,12 +100,13 @@ Monarch_tx = {
     UNIT_BAL     : "" 
 }
 
-REVENUE = "REVENUE"
-ASSET   = "ASSET"
-OWNER_MARK = "Mark H. Sattolo"
-OWNER_LULU = "Louise Robb"
-ASSET_MARK  = "Mark"
-ASSET_LULU  = "Lulu"
+REVENUE  = "REVENUE"
+ASSET    = "ASSET"
+MON_MARK = "Mark H. Sattolo"
+MON_LULU = "Louise Robb"
+GNU_MARK = "Mark"
+GNU_LULU = "Lulu"
+# change these in gnucash book to 'Mark-RRSP' etc so can construct name from existing defines
 RRSP_REV_Mk = "Mk-RR"
 RRSP_REV_Lu = "Lu-RR"
 TFSA_REV_Mk = "Mk-TF"
@@ -113,19 +114,25 @@ TFSA_REV_Lu = "Lu-TF"
 
 # find the proper account in the gnucash file
 Account_Paths = {
-    PL_OPEN: {
-        REVENUE : ["REV", "REV_Invest", "Dist", PL_OPEN] ,
-        ASSET   : ["FAMILY", "INVEST", PL_OPEN] 
-    } ,
-    PL_TFSA: {
-        REVENUE : ["REV", "REV_Invest", "Dist", PL_TFSA] ,
-        ASSET   : ["FAMILY", "INVEST", PL_TFSA] 
-    } ,
-    PL_RRSP: {
-        REVENUE : ["REV", "REV_Invest", "Dist", PL_RRSP] ,
-        ASSET   : ["FAMILY", "INVEST", PL_RRSP] 
-    }
+    REVENUE  : ["REV", "REV_Invest", "Dist"] ,# + planType [+ Owner]
+    ASSET    : ["FAMILY", "INVEST"] ,# + planType [+ Owner]
+    MON_MARK : GNU_MARK ,
+    MON_LULU : GNU_LULU
 }
+# Account_Paths = {
+#     PL_OPEN: {
+#         REVENUE : ["REV", "REV_Invest", "Dist", PL_OPEN] ,
+#         ASSET   : ["FAMILY", "INVEST", PL_OPEN] 
+#     } ,
+#     PL_TFSA: {
+#         REVENUE : ["REV", "REV_Invest", "Dist", PL_TFSA] ,
+#         ASSET   : ["FAMILY", "INVEST", PL_TFSA] 
+#     } ,
+#     PL_RRSP: {
+#         REVENUE : ["REV", "REV_Invest", "Dist", PL_RRSP] ,
+#         ASSET   : ["FAMILY", "INVEST", PL_RRSP] 
+#     }
+# }
 
 # list of gnucash transactions, by date, for each company
 Gnucash_record = {

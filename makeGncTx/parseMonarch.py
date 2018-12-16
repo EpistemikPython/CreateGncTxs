@@ -17,7 +17,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2018-12-16 10:29"
+__updated__ = "2018-12-16 18:29"
 
 from sys import argv, exit
 import os
@@ -190,8 +190,119 @@ def createGnuTxs(record, mode):
     reUNITS  = re.compile("^([0-9]{1,5})\.([0-9]{4}).*")
     reDATE   = re.compile("^([0-9]{2})/([0-9]{2})/([0-9]{4}).*")
     
-    gncFileName = PRAC_GNC
-    print("gncFileName = {}".format(gncFileName))
+    def prepareAccounts(planType):
+        print("Plan type = '{}'".format(planType))
+        
+        revPath = copy.copy(Account_Paths[REVENUE])
+#         print("revPath = '{}'".format(str(revPath)))
+        revPath.append(planType)
+#         print("revPath = '{}'".format(str(revPath)))
+        astParentPath = copy.copy(Account_Paths[ASSET])
+        astParentPath.append(planType)
+        
+        if planType != PL_OPEN:
+            plOwner = record[OWNER]
+            revPath.append(Account_Paths[plOwner])
+            astParentPath.append(Account_Paths[plOwner])
+        
+        print("revPath = '{}'".format(str(revPath)))
+        print("astParentPath = '{}'".format(str(astParentPath)))
+
+        revAcct = account_from_path(root, revPath)
+        print("revAcct = '{}'".format(revAcct.GetName()))
+        
+        astParent = account_from_path(root, astParentPath)
+        print("astParent = '{}'".format(astParent.GetName()))
+        
+        for mtx in record[planType]:
+            createGnuTx(mtx, revAcct, astParent)
+        
+    def createGnuTx(tx, revAcct, astParent):
+        astAcctName = tx[FUND_CMPY] + " " + tx[FUND_CODE]
+        astAcct = astParent.lookup_by_name(astAcctName)
+        print("astAcct = '{}'".format(astAcctName))
+
+        re_match = re.match(reAMOUNT, tx[GROSS])
+        if re_match:
+            print(re_match.groups())
+            valAst = int(re_match.group(1) + re_match.group(2))
+            print("valAst = '{}'".format(valAst))
+            valRev = valAst * (-1)
+            print("valRev = '{}'".format(valRev))
+        
+        re_match = re.match(reUNITS, tx[UNITS])
+        if re_match:
+            print(re_match.groups())
+            units = int(re_match.group(1) + re_match.group(2)) 
+            print("units = '{}'".format(units))
+        
+        re_match = re.match(reDATE, tx[TRADE_DATE])
+        if re_match:
+            print(re_match.groups())
+            trade_mth = int(re_match.group(1)) 
+            print("trade_mth = '{}'".format(trade_mth))
+            trade_day = int(re_match.group(2)) 
+            print("trade_day = '{}'".format(trade_day))
+            trade_yr  = int(re_match.group(3))
+            print("trade_yr = '{}'".format(trade_yr))
+        
+        descr = tx[DESC] + " " + astAcctName
+        print("descr = '{}'".format(descr))
+        
+        notes = "Unit Balance = " + tx[UNIT_BAL]
+        print("notes = '{}'".format(notes))
+        
+        action = "Dist"
+        
+        # create a new Tx
+        gtx = Transaction(book)
+        # gets a guid on construction
+        print("gtx guid = '{}'".format(gtx.GetGUID().to_string()))
+        
+        gtx.BeginEdit()
+        
+        gtx.SetCurrency(CAD)
+        gtx.SetDate(trade_day, trade_mth, trade_yr)
+        print("gtx date = '{}'".format(gtx.GetDate()))
+        gtx.SetDescription(descr)
+        gtx.SetNotes(notes)
+        
+        # create the Revenue split for the Tx
+        splRev = Split(book)
+        splRev.SetParent(gtx)
+        # gets a guid on construction
+        print("splRev guid = '{}'".format(splRev.GetGUID().to_string()))
+        # set the account and value of the Revenue split
+        splRev.SetAccount(revAcct)
+        splRev.SetValue(GncNumeric(valRev, 100))
+        
+        # create the Asset split for the Tx
+        splAst = Split(book)
+        splAst.SetParent(gtx)
+        # gets a guid on construction
+        print("splAst guid = '{}'".format(splAst.GetGUID().to_string()))
+        
+        # set the account, value, units and action of the Asset split
+        splAst.SetAccount(astAcct)
+        splAst.SetValue(GncNumeric(valAst, 100))
+        splAst.SetAmount(GncNumeric(units, 10000))
+        splAst.SetAction(action)
+        
+        if not gtx.GetImbalanceValue().zero_p():
+            print("gtx imbalance = '{}'!! Roll back transaction changes!".format(gtx.GetImbalanceValue().to_string()))
+            gtx.RollbackEdit()
+            return
+        
+        if mode == "PROD":
+            print("Mode = '{}': Commit transaction changes.".format(mode))
+            gtx.CommitEdit()
+            session.save()
+        else:
+            print("Mode = '{}': Roll back transaction changes!".format(mode))
+            gtx.RollbackEdit()
+        
+    gncFileName = PRAC2_GNC
+    print("gncFileName = '{}'".format(gncFileName))
     
     try:
         session = Session(gncFileName)
@@ -217,96 +328,12 @@ def createGnuTxs(record, mode):
             # for Notes: use 'Unit Balance' and UNIT_BAL
             
             # combine txs from the same fund company and same date to one tx?
-            for tx in record[PL_OPEN]:
-                revAcct = account_from_path(root, Account_Paths[PL_OPEN][REVENUE])
-                print("revAcct = '{}'".format(revAcct.GetName()))
-                
-                astParent = account_from_path(root, Account_Paths[PL_OPEN][ASSET])
-                astAcctName = tx[FUND_CMPY] + " " + tx[FUND_CODE]
-                astAcct = astParent.lookup_by_name(astAcctName)
-                print("astAcct = '{}'".format(astAcctName))
-                
-                re_match = re.match(reAMOUNT, tx[GROSS])
-                if re_match:
-                    print(re_match.groups())
-                    valAst = int(re_match.group(1) + re_match.group(2)) 
-#                     print("valAst = {0}".format(valAst))
-#                     valAst = int(valAst)
-                    print("valAst = '{}'".format(valAst))
-                    valRev = valAst * (-1)
-                    print("valRev = '{}'".format(valRev))
-                    
-                re_match = re.match(reUNITS, tx[UNITS])
-                if re_match:
-                    print(re_match.groups())
-                    units = int(re_match.group(1) + re_match.group(2)) 
-                    print("units = '{}'".format(units))
-                
-                re_match = re.match(reDATE, tx[TRADE_DATE])
-                if re_match:
-                    print(re_match.groups())
-                    trade_mth = int(re_match.group(1)) 
-                    print("trade_mth = '{}'".format(trade_mth))
-                    trade_day = int(re_match.group(2)) 
-                    print("trade_day = '{}'".format(trade_day))
-                    trade_yr  = int(re_match.group(3))
-                    print("trade_yr = '{}'".format(trade_yr))
-                
-                descr = tx[DESC] + " " + astAcctName
-                print("descr = '{}'".format(descr))
-                
-                notes = "Unit Balance = " + tx[UNIT_BAL]
-                print("notes = '{}'".format(notes))
-                
-                action = "Dist"
-                
-                # create a new Tx
-                gtx = Transaction(book)
-                # gets a guid on construction
-                print("gtx guid = '{}'".format(gtx.GetGUID().to_string()))
-                
-                gtx.BeginEdit()
-                
-                gtx.SetCurrency(CAD)
-                gtx.SetDate(trade_day, trade_mth, trade_yr)
-                print("gtx date = '{}'".format(gtx.GetDate()))
-                gtx.SetDescription(descr)
-                gtx.SetNotes(notes)
-                
-                # create the Revenue split for the Tx
-                splRev = Split(book)
-                splRev.SetParent(gtx)
-                # gets a guid on construction
-                print("splRev guid = '{}'".format(splRev.GetGUID().to_string()))
-                # set the account and value of the Revenue split
-                splRev.SetAccount(revAcct)
-                splRev.SetValue(GncNumeric(valRev, 100))
-                
-                # create the Asset split for the Tx
-                splAst = Split(book)
-                splAst.SetParent(gtx)
-                # gets a guid on construction
-                print("splAst guid = '{}'".format(splAst.GetGUID().to_string()))
-                
-                # set the account, value, units and action of the Asset split
-                splAst.SetAccount(astAcct)
-                splAst.SetValue(GncNumeric(valAst, 100))
-                splAst.SetAmount(GncNumeric(units, 10000))
-                splAst.SetAction(action)
-                
-                if not gtx.GetImbalanceValue().zero_p():
-                    print("gtx imbalance = '{}'!! Roll back transaction changes!".format(gtx.GetImbalanceValue().to_string()))
-                    gtx.RollbackEdit()
-                    continue
-                
-                if mode == "PROD":
-                    print("Mode = '{}': Commit transaction changes.".format(mode))
-                    gtx.CommitEdit()
-                    session.save()
-                else:
-                    print("Mode = '{}': Roll back transaction changes!".format(mode))
-                    gtx.RollbackEdit()
-                
+            prepareAccounts(PL_OPEN)
+            
+            prepareAccounts(PL_TFSA)
+            
+            prepareAccounts(PL_RRSP)
+            
             if mode == "PROD":
                 print("Mode = '{}': Save session.".format(mode))
                 session.save()
@@ -322,7 +349,7 @@ def createGnuTxs(record, mode):
             showAccount(root, Account_Paths[PL_RRSP][ASSET])
         
         session.end()
-    #     session.destroy()
+    
     except Exception as e:
         print("createGnuTxs() EXCEPTION!! '{}'".format(str(e)))
         if "session" in locals():
