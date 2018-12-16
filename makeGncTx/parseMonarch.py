@@ -17,7 +17,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2018-12-14 18:31"
+__updated__ = "2018-12-16 10:29"
 
 from sys import argv, exit
 import os
@@ -84,7 +84,7 @@ def parseMonarchReport(file, record):
     rePLT = re.compile(".*{}.*".format(PLAN_TYPE))
     reOWN = re.compile(".*({}).*".format(OWNER))
     rePLN = re.compile(r'([OPENTFSAR]{4})(\s?.*)')
-    reFND = re.compile(".*([A-Z]{3}\s?[0-9]{3,5}).*")
+    reFND = re.compile(".*([A-Z]{3})\s?([0-9]{3,5}).*")
     reDTE = re.compile(".*([0-9]{2}/[0-9]{2}/[0-9]{4}).*")
     
     curr_tx = {}
@@ -103,7 +103,7 @@ def parseMonarchReport(file, record):
             if re_match:
                 print(re_match.groups())
                 bag_name = re_match.group(1)
-                print("Current bag_name is: {}".format(bag_name))
+                print("Current bag_name is: '{}'".format(bag_name))
                 bag = record[bag_name]
                 print("Current bag is: {}\n".format(str(bag)))
                 mon_state = FIND_FUND
@@ -121,7 +121,7 @@ def parseMonarchReport(file, record):
                         own_line += 1
                 else:
                     owner_name = line.strip()
-                    print("Current owner_name is: {}".format(owner_name))
+                    print("Current owner_name is: '{}'".format(owner_name))
                     record[OWNER] = owner_name
                     own_line = 0
                     mon_state = FIND_FUND
@@ -130,9 +130,11 @@ def parseMonarchReport(file, record):
             if mon_state <= FIND_FUND:
                 re_match = re.match(reFND, line)
                 if re_match:
-                    print("FIND_FUND line {} = {}".format(ct, line))
-                    print(re_match.groups())
-                    fund_name = re_match.group(1)
+                    print("FIND_FUND line {} = {}".format(ct, line.strip()))
+#                     print(re_match.groups())
+                    fund_company = re_match.group(1)
+                    fund_code = re_match.group(2)
+                    fund_name = fund_company + " " + fund_code
                     print("Current fund_name is: {}".format(fund_name))
                     mon_state = FIND_NEXT_TX
                     continue
@@ -140,18 +142,19 @@ def parseMonarchReport(file, record):
             if mon_state <= FIND_NEXT_TX:
                 re_match = re.match(reDTE, line)
                 if re_match:
-                    print("FIND_NEXT_TX line {} = {}".format(ct, line))
-                    print(re_match.groups())
+                    print("FIND_NEXT_TX line {} = {}".format(ct, line.strip()))
+#                     print(re_match.groups())
                     tx_date = re_match.group(1)
-                    print("Current tx_date is: {}".format(tx_date))
+                    print("Current tx_date is: '{}'".format(tx_date))
                     curr_tx = copy.deepcopy(Monarch_tx)
-                    curr_tx[FUND_CODE] = fund_name
+                    curr_tx[FUND_CMPY] = fund_company
+                    curr_tx[FUND_CODE] = fund_code
                     curr_tx[TRADE_DATE] = tx_date
                     mon_state = FILL_CURR_TX
                     continue
 
             if mon_state == FILL_CURR_TX:
-                print("FILL_CURR_TX line {} = {}".format(ct, line))
+                print("FILL_CURR_TX line {} = {}".format(ct, line.strip()))
                 tx_line += 1
                 entry = line.strip()
                 if tx_line < 3:
@@ -160,41 +163,34 @@ def parseMonarchReport(file, record):
                         tx_line -= 1
                         # TODO: match number to proceed to looking for GROSS?
                     curr_tx[DESC] += (entry + ":")
-                    print("curr_tx[DESC] is: {}".format(curr_tx[DESC]))
+                    print("curr_tx[DESC] is: '{}'".format(curr_tx[DESC]))
                     continue
                 if tx_line == 3:
                     curr_tx[GROSS] += (entry)
-                    print("curr_tx[GROSS] is: {}".format(curr_tx[GROSS]))
+                    print("curr_tx[GROSS] is: '{}'".format(curr_tx[GROSS]))
                 if tx_line == 4:
                     curr_tx[NET] += (entry)
-                    print("curr_tx[NET] is: {}".format(curr_tx[NET]))
+                    print("curr_tx[NET] is: '{}'".format(curr_tx[NET]))
                 if tx_line == 5:
                     curr_tx[UNITS] += (entry)
-                    print("curr_tx[UNITS] is: {}".format(curr_tx[UNITS]))
+                    print("curr_tx[UNITS] is: '{}'".format(curr_tx[UNITS]))
                 if tx_line == 6:
                     curr_tx[PRICE] += (entry)
-                    print("curr_tx[PRICE] is: {}".format(curr_tx[PRICE]))
+                    print("curr_tx[PRICE] is: '{}'".format(curr_tx[PRICE]))
                 if tx_line == 7:
                     curr_tx[UNIT_BAL] += (entry)
-                    print("curr_tx[UNIT_BAL] is: {}".format(curr_tx[UNIT_BAL]))
+                    print("curr_tx[UNIT_BAL] is: '{}'".format(curr_tx[UNIT_BAL]))
                     bag.append(curr_tx)
                     mon_state = STATE_SEARCH
                     tx_line = 0
 
 def createGnuTxs(record, mode):
 #     print("record = {}".format(record))
+    reAMOUNT = re.compile("^\$([0-9]{1,4})\.([0-9]{2}).*")
+    reUNITS  = re.compile("^([0-9]{1,5})\.([0-9]{4}).*")
+    reDATE   = re.compile("^([0-9]{2})/([0-9]{2})/([0-9]{4}).*")
     
-#     if len(argv) < 6:    
-#         print("NOT ENOUGH parameters!")
-#         print("usage: createTx.py <gnucash file> <acct1> <acct2> <amount> <descr>")
-#         print("example:")
-#         print("[gnucash-env] [python] createTx.py 'HouseHold.gnucash' 'Dining' 'CIBC Visa' '1313' 'Test'|'Prod'")
-#         exit()
-    
-    reAMOUNT = re.compile("^$([0-9]{1,4})\.([0-9]{2})")
-    reDATE   = re.compile("^([0-9]{2})/([0-9]{2})/([0-9]{4})")
-    
-    gncFileName = PRACTICE_GNC
+    gncFileName = PRAC_GNC
     print("gncFileName = {}".format(gncFileName))
     
     try:
@@ -211,63 +207,110 @@ def createGnuTxs(record, mode):
         
         # EXPERIMENT
         if mode.lower() == 'prod':
+            
+            # for Asset account: use the proper path to find the parent then search for the Fund Code in the descendants
+            # for Revenue account: pick the proper account based on owner and plan type
+            # for valAst: re match to Gross then concatenate the two match groups
+            # for date: re match to get day, month and year then re-assemble to form Gnc date
+            # for Units: need to find position of decimal point to know Gnc denominator
+            # for Description: use DESC and Fund Code
+            # for Notes: use 'Unit Balance' and UNIT_BAL
+            
+            # combine txs from the same fund company and same date to one tx?
             for tx in record[PL_OPEN]:
-                print("{} Fund is '{}'".format(PL_OPEN, tx[FUND_CODE]))
+                revAcct = account_from_path(root, Account_Paths[PL_OPEN][REVENUE])
+                print("revAcct = '{}'".format(revAcct.GetName()))
                 
-            amount = int('1313')
-            print("amount = {0}".format(amount))
-            amount2 = amount * (-1)
-            print("amount2 = {0}".format(amount2))
-             
-            acct1_name = 'Dining'
-            acct2_name = 'CIBC Visa'
-            acct1 = root.lookup_by_name(acct1_name)
-            acct2 = root.lookup_by_name(acct2_name)
-            print("acct1_name = {}".format(acct1_name))
-             
-            # create a new Tx
-            tx = Transaction(book)
-            # gets a guid on construction
-            print("tx guid = {0}".format(tx.GetGUID().to_string()))
-         
-            tx.BeginEdit()
-             
-            # create two splits for the Tx
-            s1 = Split(book)
-            s1.SetParent(tx)
-            # gets a guid on construction
-            print("s1 guid = {0}".format(s1.GetGUID().to_string()))
-            s2 = Split(book)
-            s2.SetParent(tx)
-            # gets a guid on construction
-            print("s2 guid = {0}".format(s2.GetGUID().to_string()))
-             
-            tx.SetCurrency(CAD)
-            tx.SetDate(13, 2, 2019)
-            tx.SetDescription("Python Prod")
-            tx.SetNotes("Python {0}".format(gncFileName))
-        #     tx: set action ?
-             
-            # set the account and amount of split1
-            s1.SetAccount(acct1)
-            s1.SetValue(GncNumeric(amount, 100))
-        #     s1.SetAmount(GncNumeric(amount, 100))
-             
-            # set the account and amount of split2
-            s2.SetAccount(acct2)
-            s2.SetValue(GncNumeric(amount2, 100))
-        #     s2.SetAmount(GncNumeric(amount2, 100))
-             
-            print("Tx imbalance = {0}".format(tx.GetImbalanceValue().to_string()))
-             
+                astParent = account_from_path(root, Account_Paths[PL_OPEN][ASSET])
+                astAcctName = tx[FUND_CMPY] + " " + tx[FUND_CODE]
+                astAcct = astParent.lookup_by_name(astAcctName)
+                print("astAcct = '{}'".format(astAcctName))
+                
+                re_match = re.match(reAMOUNT, tx[GROSS])
+                if re_match:
+                    print(re_match.groups())
+                    valAst = int(re_match.group(1) + re_match.group(2)) 
+#                     print("valAst = {0}".format(valAst))
+#                     valAst = int(valAst)
+                    print("valAst = '{}'".format(valAst))
+                    valRev = valAst * (-1)
+                    print("valRev = '{}'".format(valRev))
+                    
+                re_match = re.match(reUNITS, tx[UNITS])
+                if re_match:
+                    print(re_match.groups())
+                    units = int(re_match.group(1) + re_match.group(2)) 
+                    print("units = '{}'".format(units))
+                
+                re_match = re.match(reDATE, tx[TRADE_DATE])
+                if re_match:
+                    print(re_match.groups())
+                    trade_mth = int(re_match.group(1)) 
+                    print("trade_mth = '{}'".format(trade_mth))
+                    trade_day = int(re_match.group(2)) 
+                    print("trade_day = '{}'".format(trade_day))
+                    trade_yr  = int(re_match.group(3))
+                    print("trade_yr = '{}'".format(trade_yr))
+                
+                descr = tx[DESC] + " " + astAcctName
+                print("descr = '{}'".format(descr))
+                
+                notes = "Unit Balance = " + tx[UNIT_BAL]
+                print("notes = '{}'".format(notes))
+                
+                action = "Dist"
+                
+                # create a new Tx
+                gtx = Transaction(book)
+                # gets a guid on construction
+                print("gtx guid = '{}'".format(gtx.GetGUID().to_string()))
+                
+                gtx.BeginEdit()
+                
+                gtx.SetCurrency(CAD)
+                gtx.SetDate(trade_day, trade_mth, trade_yr)
+                print("gtx date = '{}'".format(gtx.GetDate()))
+                gtx.SetDescription(descr)
+                gtx.SetNotes(notes)
+                
+                # create the Revenue split for the Tx
+                splRev = Split(book)
+                splRev.SetParent(gtx)
+                # gets a guid on construction
+                print("splRev guid = '{}'".format(splRev.GetGUID().to_string()))
+                # set the account and value of the Revenue split
+                splRev.SetAccount(revAcct)
+                splRev.SetValue(GncNumeric(valRev, 100))
+                
+                # create the Asset split for the Tx
+                splAst = Split(book)
+                splAst.SetParent(gtx)
+                # gets a guid on construction
+                print("splAst guid = '{}'".format(splAst.GetGUID().to_string()))
+                
+                # set the account, value, units and action of the Asset split
+                splAst.SetAccount(astAcct)
+                splAst.SetValue(GncNumeric(valAst, 100))
+                splAst.SetAmount(GncNumeric(units, 10000))
+                splAst.SetAction(action)
+                
+                if not gtx.GetImbalanceValue().zero_p():
+                    print("gtx imbalance = '{}'!! Roll back transaction changes!".format(gtx.GetImbalanceValue().to_string()))
+                    gtx.RollbackEdit()
+                    continue
+                
+                if mode == "PROD":
+                    print("Mode = '{}': Commit transaction changes.".format(mode))
+                    gtx.CommitEdit()
+                    session.save()
+                else:
+                    print("Mode = '{}': Roll back transaction changes!".format(mode))
+                    gtx.RollbackEdit()
+                
             if mode == "PROD":
-                print("Mode = {}: Commit and save changes.".format(mode))
-                tx.CommitEdit()
+                print("Mode = '{}': Save session.".format(mode))
                 session.save()
-            else:
-                print("Mode = {}: Roll back changes!".format(mode))
-                tx.RollbackEdit()
-
+        
         else:
             showAccount(root, Account_Paths[PL_OPEN][REVENUE])
             showAccount(root, Account_Paths[PL_OPEN][ASSET])
@@ -277,7 +320,7 @@ def createGnuTxs(record, mode):
             
             showAccount(root, Account_Paths[PL_RRSP][REVENUE])
             showAccount(root, Account_Paths[PL_RRSP][ASSET])
-    
+        
         session.end()
     #     session.destroy()
     except Exception as e:
@@ -295,7 +338,7 @@ def main():
     
     filepath = argv[1]
     if not os.path.isfile(filepath):
-        print("File path {} does not exist. Exiting...".format(filepath))
+        print("File path '{}' does not exist. Exiting...".format(filepath))
         exit()
     
     mode = argv[2]
