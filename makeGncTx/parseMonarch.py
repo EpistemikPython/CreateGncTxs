@@ -17,7 +17,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2018-12-16 18:29"
+__updated__ = "2018-12-22 10:45"
 
 from sys import argv, exit
 import os
@@ -185,122 +185,165 @@ def parseMonarchReport(file, record):
                     tx_line = 0
 
 def createGnuTxs(record, mode):
+    '''
+        Take the transaction information from a Monarch record and produce Gnucash transactions to write to a gnucash file
+    '''
 #     print("record = {}".format(record))
-    reAMOUNT = re.compile("^\$([0-9]{1,4})\.([0-9]{2}).*")
-    reUNITS  = re.compile("^([0-9]{1,5})\.([0-9]{4}).*")
+
+    # set the regex values needed for matches
+    reAMOUNT = re.compile("^(\(?)\$([0-9,]{1,6})\.([0-9]{2})\)?.*")
+    reUNITS  = re.compile("^(\-?)([0-9]{1,5})\.([0-9]{4}).*")
     reDATE   = re.compile("^([0-9]{2})/([0-9]{2})/([0-9]{4}).*")
     
     def prepareAccounts(planType):
-        print("Plan type = '{}'".format(planType))
+        print("\n\nPlan type = '{}'".format(planType))
         
-        revPath = copy.copy(Account_Paths[REVENUE])
+        revPath = copy.copy(ACCT_PATHS[REVENUE])
 #         print("revPath = '{}'".format(str(revPath)))
         revPath.append(planType)
 #         print("revPath = '{}'".format(str(revPath)))
-        astParentPath = copy.copy(Account_Paths[ASSET])
+        astParentPath = copy.copy(ACCT_PATHS[ASSET])
         astParentPath.append(planType)
         
         if planType != PL_OPEN:
             plOwner = record[OWNER]
-            revPath.append(Account_Paths[plOwner])
-            astParentPath.append(Account_Paths[plOwner])
+            if plOwner == '':
+                raise Exception("PROBLEM!! Trying to process plan type '{}' but NO Owner value found in Record!!".format(planType))
+            revPath.append(ACCT_PATHS[plOwner])
+            astParentPath.append(ACCT_PATHS[plOwner])
         
         print("revPath = '{}'".format(str(revPath)))
-        print("astParentPath = '{}'".format(str(astParentPath)))
-
         revAcct = account_from_path(root, revPath)
         print("revAcct = '{}'".format(revAcct.GetName()))
         
+        print("astParentPath = '{}'".format(str(astParentPath)))
         astParent = account_from_path(root, astParentPath)
         print("astParent = '{}'".format(astParent.GetName()))
         
         for mtx in record[planType]:
             createGnuTx(mtx, revAcct, astParent)
-        
+    # end prepareAccounts()
+    
     def createGnuTx(tx, revAcct, astParent):
-        astAcctName = tx[FUND_CMPY] + " " + tx[FUND_CODE]
-        astAcct = astParent.lookup_by_name(astAcctName)
-        print("astAcct = '{}'".format(astAcctName))
-
-        re_match = re.match(reAMOUNT, tx[GROSS])
-        if re_match:
-            print(re_match.groups())
-            valAst = int(re_match.group(1) + re_match.group(2))
-            print("valAst = '{}'".format(valAst))
-            valRev = valAst * (-1)
-            print("valRev = '{}'".format(valRev))
-        
-        re_match = re.match(reUNITS, tx[UNITS])
-        if re_match:
-            print(re_match.groups())
-            units = int(re_match.group(1) + re_match.group(2)) 
-            print("units = '{}'".format(units))
-        
-        re_match = re.match(reDATE, tx[TRADE_DATE])
-        if re_match:
-            print(re_match.groups())
-            trade_mth = int(re_match.group(1)) 
-            print("trade_mth = '{}'".format(trade_mth))
-            trade_day = int(re_match.group(2)) 
-            print("trade_day = '{}'".format(trade_day))
-            trade_yr  = int(re_match.group(3))
-            print("trade_yr = '{}'".format(trade_yr))
-        
-        descr = tx[DESC] + " " + astAcctName
-        print("descr = '{}'".format(descr))
-        
-        notes = "Unit Balance = " + tx[UNIT_BAL]
-        print("notes = '{}'".format(notes))
-        
-        action = "Dist"
-        
-        # create a new Tx
-        gtx = Transaction(book)
-        # gets a guid on construction
-        print("gtx guid = '{}'".format(gtx.GetGUID().to_string()))
-        
-        gtx.BeginEdit()
-        
-        gtx.SetCurrency(CAD)
-        gtx.SetDate(trade_day, trade_mth, trade_yr)
-        print("gtx date = '{}'".format(gtx.GetDate()))
-        gtx.SetDescription(descr)
-        gtx.SetNotes(notes)
-        
-        # create the Revenue split for the Tx
-        splRev = Split(book)
-        splRev.SetParent(gtx)
-        # gets a guid on construction
-        print("splRev guid = '{}'".format(splRev.GetGUID().to_string()))
-        # set the account and value of the Revenue split
-        splRev.SetAccount(revAcct)
-        splRev.SetValue(GncNumeric(valRev, 100))
-        
-        # create the Asset split for the Tx
-        splAst = Split(book)
-        splAst.SetParent(gtx)
-        # gets a guid on construction
-        print("splAst guid = '{}'".format(splAst.GetGUID().to_string()))
-        
-        # set the account, value, units and action of the Asset split
-        splAst.SetAccount(astAcct)
-        splAst.SetValue(GncNumeric(valAst, 100))
-        splAst.SetAmount(GncNumeric(units, 10000))
-        splAst.SetAction(action)
-        
-        if not gtx.GetImbalanceValue().zero_p():
-            print("gtx imbalance = '{}'!! Roll back transaction changes!".format(gtx.GetImbalanceValue().to_string()))
-            gtx.RollbackEdit()
-            return
-        
-        if mode == "PROD":
-            print("Mode = '{}': Commit transaction changes.".format(mode))
-            gtx.CommitEdit()
-            session.save()
-        else:
-            print("Mode = '{}': Roll back transaction changes!".format(mode))
-            gtx.RollbackEdit()
-        
+        try:
+            astAcctName = tx[FUND_CMPY] + " " + tx[FUND_CODE]
+            
+            # special locations for Trust Revenue and Asset accounts
+            if astAcctName == TRUST_ACCT:
+                astParent = root.lookup_by_name("XTERNAL")
+                revAcct = root.lookup_by_name("Trust Base")
+            
+            astAcct = astParent.lookup_by_name(astAcctName)
+            if astAcct == None:
+                raise Exception("Could NOT find acct '{}' under parent '{}'".format(astAcctName, astParent.GetName()))
+    #             return
+            else:
+                print("astAcct = '{}'".format(astAcct.GetName()))
+            
+            re_match = re.match(reAMOUNT, tx[GROSS])
+            if re_match:
+                print(re_match.groups())
+                strAst = re_match.group(2) + re_match.group(3)
+                # remove possible comma
+                valAst = int(strAst.replace(',', ''))
+                # if match group 1 is not empty, amount is negative
+                if re_match.group(1) != '':
+                    valAst *= -1
+                print("valAst = '{}'".format(valAst))
+                valRev = valAst * -1
+                print("valRev = '{}'".format(valRev))
+            else:
+                raise Exception("PROBLEM!! DID NOT match reAMOUNT with value '{}'!".format(tx[GROSS]))
+#                 return
+            
+            re_match = re.match(reUNITS, tx[UNITS])
+            if re_match:
+                print(re_match.groups())
+                units = int(re_match.group(2) + re_match.group(3)) 
+                # if match group 1 is not empty, units is negative
+                if re_match.group(1) != '':
+                    units *= -1
+                print("units = '{}'".format(units))
+            else:
+                raise Exception("PROBLEM!! DID NOT match reUNITS with value '{}'!".format(tx[UNITS]))
+#                 return
+            
+            re_match = re.match(reDATE, tx[TRADE_DATE])
+            if re_match:
+                print(re_match.groups())
+                trade_mth = int(re_match.group(1)) 
+                print("trade_mth = '{}'".format(trade_mth))
+                trade_day = int(re_match.group(2)) 
+                print("trade_day = '{}'".format(trade_day))
+                trade_yr  = int(re_match.group(3))
+                print("trade_yr = '{}'".format(trade_yr))
+            else:
+                raise Exception("PROBLEM!! DID NOT match reTRADE_DATE with value '{}'!".format(tx[TRADE_DATE]))
+#                 return
+            
+            # assemble the Description string
+            descr = CMPY_FULL_NAME[tx[FUND_CMPY]] + ": " + tx[DESC] + " " + astAcctName
+            print("descr = '{}'".format(descr))
+            
+            # notes field
+            notes = "Unit Balance = " + tx[UNIT_BAL]
+            print("notes = '{}'".format(notes))
+            
+            # create a new Tx
+            gtx = Transaction(book)
+            # gets a guid on construction
+            print("gtx guid = '{}'".format(gtx.GetGUID().to_string()))
+            
+            gtx.BeginEdit()
+            
+            gtx.SetCurrency(CAD)
+            gtx.SetDate(trade_day, trade_mth, trade_yr)
+            print("gtx date = '{}'".format(gtx.GetDate()))
+            gtx.SetDescription(descr)
+            gtx.SetNotes(notes)
+            
+            # create the Revenue split for the Tx
+            splRev = Split(book)
+            splRev.SetParent(gtx)
+            # gets a guid on construction
+            print("splRev guid = '{}'".format(splRev.GetGUID().to_string()))
+            # set the account and value of the Revenue split
+            splRev.SetAccount(revAcct)
+            splRev.SetValue(GncNumeric(valRev, 100))
+            
+            # create the Asset split for the Tx
+            splAst = Split(book)
+            splAst.SetParent(gtx)
+            # gets a guid on construction
+            print("splAst guid = '{}'".format(splAst.GetGUID().to_string()))
+            
+            # set the account, value, units and action of the Asset split
+            splAst.SetAccount(astAcct)
+            print("SetAccount")
+            splAst.SetValue(GncNumeric(valAst, 100))
+            print("SetValue")
+            splAst.SetAmount(GncNumeric(units, 10000))
+            print("SetAmount")
+            splAst.SetAction("Dist")
+            
+            # roll back if something went wrong and the two splits DO NOT balance
+            if not gtx.GetImbalanceValue().zero_p():
+                print("gtx imbalance = '{}'!! Roll back transaction changes!".format(gtx.GetImbalanceValue().to_string()))
+                gtx.RollbackEdit()
+                return
+            
+            if mode == "PROD":
+                print("Mode = '{}': Commit transaction changes.".format(mode))
+                gtx.CommitEdit()
+                session.save()
+            else:
+                print("Mode = '{}': Roll back transaction changes!".format(mode))
+                gtx.RollbackEdit()
+                
+        except Exception as e:
+            print("createGnuTx() EXCEPTION!! '{}'".format(str(e)))
+    # end createGnuTx()
+    
     gncFileName = PRAC2_GNC
     print("gncFileName = '{}'".format(gncFileName))
     
@@ -312,7 +355,7 @@ def createGnuTxs(record, mode):
         root.get_instance()
         
         commod_tab = book.get_table()
-        session.save()
+        session.save() # really needed?
         
         CAD = commod_tab.lookup("ISO4217", "CAD")
         
@@ -327,7 +370,7 @@ def createGnuTxs(record, mode):
             # for Description: use DESC and Fund Code
             # for Notes: use 'Unit Balance' and UNIT_BAL
             
-            # combine txs from the same fund company and same date to one tx?
+            # combine all txs from the same fund company on the same date to one tx?
             prepareAccounts(PL_OPEN)
             
             prepareAccounts(PL_TFSA)
@@ -339,14 +382,26 @@ def createGnuTxs(record, mode):
                 session.save()
         
         else:
-            showAccount(root, Account_Paths[PL_OPEN][REVENUE])
-            showAccount(root, Account_Paths[PL_OPEN][ASSET])
+            revPath = copy.copy(ACCT_PATHS[REVENUE])
+            revPath.append(PL_OPEN)
+            showAccount(root, revPath)
+            astPath = copy.copy(ACCT_PATHS[ASSET])
+            astPath.append(PL_OPEN)
+            showAccount(root, astPath)
             
-            showAccount(root, Account_Paths[PL_TFSA][REVENUE])
-            showAccount(root, Account_Paths[PL_TFSA][ASSET])
+            revPath.pop()
+            revPath.append(PL_TFSA)
+            showAccount(root, revPath)
+            astPath.pop()
+            astPath.append(PL_TFSA)
+            showAccount(root, astPath)
             
-            showAccount(root, Account_Paths[PL_RRSP][REVENUE])
-            showAccount(root, Account_Paths[PL_RRSP][ASSET])
+            revPath.pop()
+            revPath.append(PL_RRSP)
+            showAccount(root, revPath)
+            astPath.pop()
+            astPath.append(PL_RRSP)
+            showAccount(root, astPath)
         
         session.end()
     
@@ -371,18 +426,21 @@ def main():
     mode = argv[2]
     if mode.lower() == "prod":
         record = copy.deepcopy(Monarch_record)
+        
+        # parse an external Monarch report file
         parseMonarchReport(filepath, record)
         
-        print("\tMonarch record[{}] = {}".format(OWNER, record[OWNER]))
         print("\n\tlen(Monarch record[{}]) = {}".format(PL_OPEN, len(record[PL_OPEN])))
         print("\tMonarch record[{}] = {}".format(PL_OPEN, json.dumps(record[PL_OPEN], indent=4)))
     
+        print("\n\tMonarch record[{}] = {}".format(OWNER, record[OWNER]))
         print("\n\tlen(Monarch record[{}]) = {}".format(PL_TFSA, len(record[PL_TFSA])))
         print("\tMonarch record[{}] = {}".format(PL_TFSA, json.dumps(record[PL_TFSA], indent=4)))
     
         print("\n\tlen(Monarch record[{}]) = {}".format(PL_RRSP, len(record[PL_RRSP])))
         print("\tMonarch record[{}] = {}".format(PL_RRSP, json.dumps(record[PL_RRSP], indent=4)))
     else:
+        # use a short standard record
         record = { OWNER:"OWNER_MARK" ,
         PL_OPEN : [
         {"Trade Date": "10/26/2018", "Gross": "$34.53", "Description": "Reinvested:Distribution/Interest:", "Price": "$8.9732", "Unit Balance": "694.4350", "Units": "3.8480", "Net": "$34.53", "Fund Code": "CIG 11461"},

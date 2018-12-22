@@ -16,7 +16,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2018-12-16 17:57"
+__updated__ = "2018-12-22 10:42"
 
 CLIENT_TX = "CLIENT TRANSACTIONS"
 PLAN_TYPE = "Plan Type:"
@@ -46,6 +46,14 @@ MFC = "MFC"
 DYN = "DYN"
 MMF = "MMF"
 
+CMPY_FULL_NAME = {
+    CIG : "CI Investments",
+    TML : "Franklin Templeton",
+    MFC : "Mackenzie Financial Corp",
+    DYN : "Dynamic Funds",
+    MMF : "Manulife Mutual Funds"
+}
+
 # Fund names
 CIG_11461 = CIG + " 11461"
 CIG_11111 = CIG + " 11111"
@@ -70,6 +78,8 @@ DYN_1562  = DYN + " 1562"
 DYN_1560  = DYN + " 1560"
 MMF_44424 = MMF + " 44424"
 MMF_4524  = MMF + " 4524"
+
+TRUST_ACCT = CIG_18140
 
 FundsList = [ 
     CIG_11461, CIG_11111, CIG_18140, 
@@ -102,22 +112,19 @@ Monarch_tx = {
 
 REVENUE  = "REVENUE"
 ASSET    = "ASSET"
+TRUST    = "TRUST"
 MON_MARK = "Mark H. Sattolo"
 MON_LULU = "Louise Robb"
 GNU_MARK = "Mark"
 GNU_LULU = "Lulu"
-# change these in gnucash book to 'Mark-RRSP' etc so can construct name from existing defines
-RRSP_REV_Mk = "Mk-RR"
-RRSP_REV_Lu = "Lu-RR"
-TFSA_REV_Mk = "Mk-TF"
-TFSA_REV_Lu = "Lu-TF"
 
 # find the proper account in the gnucash file
-Account_Paths = {
+ACCT_PATHS = {
     REVENUE  : ["REV", "REV_Invest", "Dist"] ,# + planType [+ Owner]
     ASSET    : ["FAMILY", "INVEST"] ,# + planType [+ Owner]
     MON_MARK : GNU_MARK ,
-    MON_LULU : GNU_LULU
+    MON_LULU : GNU_LULU ,
+    TRUST    : ["XTERNAL", TRUST, "Trust Assets", "Monarch ITF", CMPY_FULL_NAME[CIG] ]
 }
 # Account_Paths = {
 #     PL_OPEN: {
@@ -152,9 +159,9 @@ FIND_NEXT_TX   = FIND_FUND    + 1
 FILL_CURR_TX   = FIND_NEXT_TX + 1
 
 # file paths
-PRAC_GNC = "/bak/home/marksa/dev/Python/gnucash/liclipse/practice.gnc"
+PRAC_GNC  = "/bak/home/marksa/dev/Python/gnucash/liclipse/practice.gnc"
 PRAC1_GNC = "/bak/home/marksa/dev/Python/gnucash/liclipse/practice1.gnc"
 PRAC2_GNC = "/bak/home/marksa/dev/Python/gnucash/liclipse/practice2.gnc"
 PRAC3_GNC = "/bak/home/marksa/dev/Python/gnucash/liclipse/practice3.gnc"
-RL_GNC       = "/bak/home/marksa/dev/Python/gnucash/liclipse/RL.gnc"
-NEW_GNC      = "/bak/home/marksa/dev/Python/gnucash/liclipse/new.gnc"
+RL_GNC    = "/bak/home/marksa/dev/Python/gnucash/liclipse/RL.gnc"
+NEW_GNC   = "/bak/home/marksa/dev/Python/gnucash/liclipse/new.gnc"
