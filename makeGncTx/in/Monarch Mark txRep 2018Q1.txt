@@ -1,0 +1,1392 @@
+
+len(sys.argv) = 2
+Monarch report is: /bak/home/marksa/dev/Python/parsePdf/in/Monarch Mark txRep 2018Q1.pdf
+docInfo = {"/Creator": "Microsoft Reporting Services 12.0.0.0",
+           "/Subject": "",
+           "/Title": "",
+           "/Producer": "Microsoft Reporting Services PDF Rendering Extension 12.0.0.0",
+           "/Author": "",
+           "/CreationDate": "D:20181223062725-05'00'"}
+number of pages = 9
+** The registered owner of MRS assets is B
+2
+B Trustco, B
+2
+B Bank Financial Services Inc., B
+2
+B Bank Securities Services Inc. or B
+2
+B Bank Intermediary 
+Services Inc.
+*** Indicates investment/insurance products not purchased through [MONARCH] . Unit Price represents market price. Market prices shown are 
+obtained from sources we believe reliable, but we do not guarantee the accuracy of the unit price or book values reflected on this statement. Please 
+review this statement carefully and notify your advisor should there be any discrepancies.
+Advisor :  Rudy Johnson
+Branch :  RocheBanyan
+Phone :  (613)842-7240
+Fax :  (613)746-0720
+Email :  rjohnson@rochebanyan.ca
+137 Marlborough Ave.
+Ottawa ON K1N 8G1
+Mark H. Sattolo
+January 01, 2018 - March 31, 2018
+CLIENT TRANSACTIONS
+No transactions were found for this period.
+Page 1
+Printed on Sunday, December 23, 2018
+
+Advisor :  Rudy Johnson, CFP
+Dealer :  Monarch Wealth Corporation
+Branch :  RocheBanyan
+Phone :  (613)842-7240
+Fax :  (613)746-0720
+Email :  rjohnson@rochebanyan.ca
+137 Marlborough Ave.
+Ottawa ON K1N 8G1
+Mark H. Sattolo
+January 01, 2018 - March 31, 2018
+CLIENT TRANSACTIONS
+Plan Type:
+OPEN (Individual)
+Plan ID:
+300786
+Opened In:
+Client Name
+Beneficiary:
+Owner(s):
+Mark H. Sattolo
+In-Trust for:
+Description:
+CI Investments/CIG 11111-Signature Diversified Yield II Fund A   Account # 95526265
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/11/2018
+Switch-In
+$988.14
+$988.14
+101.1420
+$9.7698
+101.1420
+01/26/2018
+Reinvested 
+Distribution/Interest
+$5.06
+$5.06
+0.5240
+$9.6576
+101.6660
+02/23/2018
+Reinvested 
+Distribution/Interest
+$5.09
+$5.09
+0.5430
+$9.3696
+102.2090
+03/01/2018
+Internal Transfer-Out 
+(Change Account)
+($951.88)
+($951.88)
+-102.2090
+$9.3131
+0.0000
+CI Investments/CIG 11461-Signature Diversified Yield II Fund A   Account # 95526265
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/11/2018
+Switch-Out
+($988.14)
+($988.14)
+-101.1420
+$9.7698
+658.4090
+01/26/2018
+Reinvested 
+Distribution/Interest
+$32.92
+$32.92
+3.4090
+$9.6576
+661.8180
+02/23/2018
+Reinvested 
+Distribution/Interest
+$33.09
+$33.09
+3.5320
+$9.3696
+665.3500
+03/01/2018
+Internal Transfer-Out 
+(Change Account)
+($6,196.47)
+($6,196.47)
+-665.3500
+$9.3131
+0.0000
+CI Investments/CIG 6104-CI Can-Am Small Cap Corporate Class A   Account # 95526265
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/11/2018
+Switch-In
+$347.22
+$347.22
+16.1640
+$21.4809
+16.1640
+03/01/2018
+Internal Transfer-Out 
+(Change Account)
+($329.38)
+($329.38)
+-16.1640
+$20.3774
+0.0000
+CI Investments/CIG 1154-CI Can-Am Small Cap Corporate Class A   Account # 95526265
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/11/2018
+Switch-Out
+($347.22)
+($347.22)
+-16.1640
+$21.4809
+108.7040
+Page 1
+Printed on Sunday, December 23, 2018
+
+03/01/2018
+Internal Transfer-Out 
+(Change Account)
+($2,215.10)
+($2,215.10)
+-108.7040
+$20.3774
+0.0000
+CI Investments/CIG 2321-Cambridge Canadian Equity Corporate Class A   Account # 95526265
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/11/2018
+Switch-In
+$1,126.43
+$1,126.43
+62.9160
+$17.9037
+62.9160
+03/01/2018
+Internal Transfer-Out 
+(Change Account)
+($1,085.61)
+($1,085.61)
+-62.9160
+$17.2549
+0.0000
+CI Investments/CIG 1521-Cambridge Canadian Equity Corporate Class A   Account # 95526265
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/11/2018
+Switch-Out
+($1,126.43)
+($1,126.43)
+-62.9160
+$17.9037
+399.1300
+03/01/2018
+Internal Transfer-Out 
+(Change Account)
+($6,886.95)
+($6,886.95)
+-399.1300
+$17.2549
+0.0000
+CI Investments/CIG 2304-Signature High Income Corporate Class A   Account # 95526265
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/11/2018
+Switch-In
+$975.31
+$975.31
+36.3500
+$26.8312
+36.3500
+03/01/2018
+Internal Transfer-Out 
+(Change Account)
+($944.47)
+($944.47)
+-36.3500
+$25.9828
+0.0000
+CI Investments/CIG 1304-Signature High Income Corporate Class A   Account # 95526265
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/11/2018
+Switch-Out
+($975.31)
+($975.31)
+-36.3500
+$26.8312
+240.1400
+03/01/2018
+Internal Transfer-Out 
+(Change Account)
+($6,239.51)
+($6,239.51)
+-240.1400
+$25.9828
+0.0000
+Plan Type:
+OPEN (Joint)
+Plan ID:
+78512
+Opened In:
+Client Name
+Beneficiary:
+Owner(s):
+Mark H. Sattolo, Louise Robb
+In-Trust for:
+Description:
+CI Investments/CIG 6104-CI Can-Am Small Cap Corporate Class A   Account # 106035991
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+03/01/2018
+Internal Transfer-In 
+(Change Account-Same 
+Dealer)
+$329.38
+$329.38
+16.1640
+$20.3774
+16.1640
+03/23/2018
+Reinvested 
+Distribution/Interest
+$11.68
+$11.68
+0.6110
+$19.1235
+16.7750
+CI Investments/CIG 2304-Signature High Income Corporate Class A   Account # 106035991
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+03/01/2018
+Internal Transfer-In 
+(Change Account-Same 
+Dealer)
+$944.47
+$944.47
+36.3500
+$25.9828
+36.3500
+03/23/2018
+Reinvested 
+Distribution/Interest
+$12.31
+$12.31
+0.4870
+$25.2854
+36.8370
+CI Investments/CIG 1521-Cambridge Canadian Equity Corporate Class A   Account # 106035991
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+03/01/2018
+Internal Transfer-In 
+(Change Account-Same 
+Dealer)
+$6,886.95
+$6,886.95
+399.1300
+$17.2549
+399.1300
+03/23/2018
+Reinvested 
+Distribution/Interest
+$248.28
+$248.28
+15.0370
+$16.5113
+414.1670
+Page 2
+Printed on Sunday, December 23, 2018
+For: Mark H. Sattolo 
+
+CI Investments/CIG 1154-CI Can-Am Small Cap Corporate Class A   Account # 106035991
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+03/01/2018
+Internal Transfer-In 
+(Change Account-Same 
+Dealer)
+$2,215.10
+$2,215.10
+108.7040
+$20.3774
+108.7040
+03/23/2018
+Reinvested 
+Distribution/Interest
+$78.58
+$78.58
+4.1090
+$19.1235
+112.8130
+CI Investments/CIG 2321-Cambridge Canadian Equity Corporate Class A   Account # 106035991
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+03/01/2018
+Internal Transfer-In 
+(Change Account-Same 
+Dealer)
+$1,085.61
+$1,085.61
+62.9160
+$17.2549
+62.9160
+03/23/2018
+Reinvested 
+Distribution/Interest
+$39.13
+$39.13
+2.3700
+$16.5113
+65.2860
+CI Investments/CIG 11111-Signature Diversified Yield II Fund A   Account # 106035991
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+03/01/2018
+Internal Transfer-In 
+(Change Account-Same 
+Dealer)
+$951.88
+$951.88
+102.2090
+$9.3131
+102.2090
+03/23/2018
+Reinvested 
+Distribution/Interest
+$5.11
+$5.11
+0.5610
+$9.1132
+102.7700
+CI Investments/CIG 1304-Signature High Income Corporate Class A   Account # 106035991
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+03/01/2018
+Internal Transfer-In 
+(Change Account-Same 
+Dealer)
+$6,239.51
+$6,239.51
+240.1400
+$25.9828
+240.1400
+03/23/2018
+Reinvested 
+Distribution/Interest
+$81.37
+$81.37
+3.2180
+$25.2854
+243.3580
+CI Investments/CIG 11461-Signature Diversified Yield II Fund A   Account # 106035991
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+03/01/2018
+Internal Transfer-In 
+(Change Account-Same 
+Dealer)
+$6,196.47
+$6,196.47
+665.3500
+$9.3131
+665.3500
+03/23/2018
+Reinvested 
+Distribution/Interest
+$33.26
+$33.26
+3.6500
+$9.1132
+669.0000
+Plan Type:
+TFSA (Individual)
+Plan ID:
+300787
+Registered In:
+Client Name
+Beneficiary:
+Owner(s):
+Mark H. Sattolo
+In-Trust for:
+Description:
+Franklin Templeton Investments/TML 674-Templeton Global Bond Fund Series A   Account # 4963030
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/11/2018
+Switch-Out
+($2,598.96)
+($2,598.96)
+-295.3368
+$8.8000
+301.8952
+01/30/2018
+Reinvested 
+Distribution/Interest
+$4.83
+$4.83
+0.5501
+$8.7800
+302.4453
+02/27/2018
+Reinvested 
+Distribution/Interest
+$4.84
+$4.84
+0.5372
+$9.0100
+302.9825
+03/28/2018
+Reinvested 
+Distribution/Interest
+$6.06
+$6.06
+0.6637
+$9.1300
+303.6462
+Page 3
+Printed on Sunday, December 23, 2018
+For: Mark H. Sattolo 
+
+Franklin Templeton Investments/TML 223-Franklin Bissett Small Cap Fund Series A   Account # 4963030
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/11/2018
+Switch-In
+$1,570.21
+$1,570.21
+31.6959
+$49.5400
+54.5587
+Franklin Templeton Investments/TML 598-Franklin Bissett Small Cap Fund Series A   Account # 4963030
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/11/2018
+Switch-Out
+($1,570.21)
+($1,570.21)
+-31.6959
+$49.5400
+36.4098
+Franklin Templeton Investments/TML 707-Templeton Global Smaller Companies Fund A   Account # 4963030
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/11/2018
+Switch-In
+$1,432.73
+$1,432.73
+50.6445
+$28.2900
+81.5155
+Franklin Templeton Investments/TML 694-Templeton Global Smaller Companies Fund A   Account # 4963030
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/11/2018
+Switch-Out
+($1,432.73)
+($1,432.73)
+-50.6445
+$28.2900
+44.9386
+Franklin Templeton Investments/TML 704-Templeton Global Bond Fund Series A   Account # 4963030
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/11/2018
+Switch-In
+$2,598.96
+$2,598.96
+295.3368
+$8.8000
+481.9739
+01/30/2018
+Reinvested 
+Distribution/Interest
+$7.71
+$7.71
+0.8781
+$8.7800
+482.8520
+02/27/2018
+Reinvested 
+Distribution/Interest
+$7.73
+$7.73
+0.8579
+$9.0100
+483.7099
+03/28/2018
+Reinvested 
+Distribution/Interest
+$9.67
+$9.67
+1.0591
+$9.1300
+484.7690
+Franklin Templeton Investments/TML 518-Franklin Bissett Canadian Equity Fund Series A   Account # 4963030
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/11/2018
+Switch-Out
+($4,098.53)
+($4,098.53)
+-40.5755
+$101.0100
+41.0329
+Franklin Templeton Investments/TML 180-Franklin Mutual Global Discovery Fund A   Account # 4963030
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/11/2018
+Switch-In
+$4,020.56
+$4,020.56
+200.7271
+$20.0300
+331.6702
+Franklin Templeton Investments/TML 184-Franklin Mutual Global Discovery Fund A   Account # 4963030
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/11/2018
+Switch-Out
+($4,020.56)
+($4,020.56)
+-200.7271
+$20.0300
+202.5092
+Franklin Templeton Investments/TML 203-Franklin Bissett Dividend Income Fund A   Account # 4963030
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/11/2018
+Switch-In
+$4,932.06
+$4,932.06
+171.7292
+$28.7200
+285.2569
+01/30/2018
+Reinvested 
+Distribution/Interest
+$15.69
+$15.69
+0.5558
+$28.2300
+285.8127
+02/27/2018
+Reinvested 
+Distribution/Interest
+$15.72
+$15.72
+0.5735
+$27.4100
+286.3862
+03/28/2018
+Reinvested 
+Distribution/Interest
+$18.62
+$18.62
+0.6846
+$27.2000
+287.0708
+Page 4
+Printed on Sunday, December 23, 2018
+For: Mark H. Sattolo 
+
+Franklin Templeton Investments/TML 519-Franklin Bissett Dividend Income Fund A   Account # 4963030
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/11/2018
+Switch-Out
+($4,932.06)
+($4,932.06)
+-171.7292
+$28.7200
+184.4152
+01/30/2018
+Reinvested 
+Distribution/Interest
+$10.14
+$10.14
+0.3592
+$28.2300
+184.7744
+02/27/2018
+Reinvested 
+Distribution/Interest
+$10.16
+$10.16
+0.3707
+$27.4100
+185.1451
+03/28/2018
+Reinvested 
+Distribution/Interest
+$12.03
+$12.03
+0.4423
+$27.2000
+185.5874
+Franklin Templeton Investments/TML 202-Franklin Bissett Canadian Equity Fund Series A   Account # 4963030
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/11/2018
+Switch-In
+$4,098.53
+$4,098.53
+40.5755
+$101.0100
+67.6682
+Plan Type:
+RRSP (Individual)
+Plan ID:
+278827
+Registered In:
+Client Name
+Beneficiary:
+Louise Robb
+Owner(s):
+Mark H. Sattolo
+In-Trust for:
+Description:
+Mackenzie Financial Corp./MFC 756-Mackenzie Corporate Bond Fund Series A   Account # 64665893
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/03/2018
+Switch-In
+$910.03
+$910.03
+204.6110
+$4.4476
+2600.8300
+01/19/2018
+Reinvested 
+Distribution/Interest
+$29.91
+$29.91
+6.7330
+$4.4420
+2607.5630
+02/16/2018
+Reinvested 
+Distribution/Interest
+$35.46
+$35.46
+8.0840
+$4.3866
+2615.6470
+03/23/2018
+Reinvested 
+Distribution/Interest
+$55.71
+$55.71
+12.8310
+$4.3420
+2628.4780
+Mackenzie Financial Corp./MFC 3232-Mackenzie Strategic Income Fund Series A   Account # 64665893
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/03/2018
+Switch-Out
+($2,159.22)
+($2,159.22)
+-236.5360
+$9.1285
+2140.9330
+01/19/2018
+Reinvested 
+Distribution/Interest
+$97.20
+$97.20
+10.6050
+$9.1653
+2151.5380
+02/16/2018
+Reinvested 
+Distribution/Interest
+$97.68
+$97.68
+10.9370
+$8.9312
+2162.4750
+03/23/2018
+Reinvested 
+Distribution/Interest
+$98.18
+$98.18
+11.2100
+$8.7581
+2173.6850
+Mackenzie Financial Corp./MFC 2238-Mackenzie Strategic Income Fund Series A   Account # 64665893
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/03/2018
+Switch-In
+$2,159.22
+$2,159.22
+236.5360
+$9.1285
+2845.6400
+01/19/2018
+Reinvested 
+Distribution/Interest
+$129.19
+$129.19
+14.0960
+$9.1653
+2859.7360
+02/16/2018
+Reinvested 
+Distribution/Interest
+$129.83
+$129.83
+14.5370
+$8.9312
+2874.2730
+03/23/2018
+Reinvested 
+Distribution/Interest
+$130.49
+$130.49
+14.9000
+$8.7581
+2889.1730
+Mackenzie Financial Corp./MFC 302-Mackenzie Canadian Bond Fund Series A   Account # 64665893
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/03/2018
+Switch-Out
+($1,272.91)
+($1,272.91)
+-92.9930
+$13.6883
+836.7320
+01/19/2018
+Reinvested 
+Distribution/Interest
+$9.20
+$9.20
+0.6760
+$13.6166
+837.4080
+Page 5
+Printed on Sunday, December 23, 2018
+For: Mark H. Sattolo 
+
+02/16/2018
+Reinvested 
+Distribution/Interest
+$10.13
+$10.13
+0.7480
+$13.5516
+838.1560
+03/23/2018
+Reinvested 
+Distribution/Interest
+$10.06
+$10.06
+0.7380
+$13.6361
+838.8940
+Mackenzie Financial Corp./MFC 3769-Mackenzie Canadian Bond Fund Series SC   Account # 64665893
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/03/2018
+Switch-In
+$1,272.91
+$1,272.91
+125.1460
+$10.1714
+1392.1700
+01/19/2018
+Reinvested 
+Distribution/Interest
+$14.90
+$14.90
+1.4720
+$10.1171
+1393.6420
+02/16/2018
+Reinvested 
+Distribution/Interest
+$16.03
+$16.03
+1.5920
+$10.0688
+1395.2340
+03/23/2018
+Reinvested 
+Distribution/Interest
+$16.88
+$16.88
+1.6660
+$10.1318
+1396.9000
+Mackenzie Financial Corp./MFC 856-Mackenzie Corporate Bond Fund Series A   Account # 64665893
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/03/2018
+Switch-Out
+($910.03)
+($910.03)
+-204.6110
+$4.4476
+1846.1560
+01/19/2018
+Reinvested 
+Distribution/Interest
+$21.23
+$21.23
+4.7800
+$4.4420
+1850.9360
+02/16/2018
+Reinvested 
+Distribution/Interest
+$25.17
+$25.17
+5.7390
+$4.3866
+1856.6750
+03/23/2018
+Reinvested 
+Distribution/Interest
+$39.55
+$39.55
+9.1080
+$4.3420
+1865.7830
+Dynamic Funds/DYN 729-Dynamic Equity Income Fund Series A   Account # 424767671
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/11/2018
+Switch-Out
+($1,018.86)
+($1,018.86)
+-47.9691
+$21.2400
+431.7222
+01/26/2018
+Reinvested 
+Distribution/Interest
+$30.22
+$30.22
+1.4201
+$21.2800
+433.1423
+02/23/2018
+Reinvested 
+Distribution/Interest
+$30.32
+$30.32
+1.4740
+$20.5700
+434.6163
+03/29/2018
+Reinvested 
+Distribution/Interest
+$30.42
+$30.42
+1.5082
+$20.1700
+436.1245
+Manulife Mutual Funds/MMF 3517-Manulife Conservative Income Fund Advisor Series   Account # 72562759
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/11/2018
+Switch-In
+$9,287.98
+$9,287.98
+713.0610
+$13.0255
+2481.9310
+01/26/2018
+Reinvested 
+Distribution/Interest
+$124.10
+$124.10
+9.5230
+$13.0315
+2491.4540
+02/23/2018
+Reinvested 
+Distribution/Interest
+$124.57
+$124.57
+9.7690
+$12.7513
+2501.2230
+03/29/2018
+Reinvested 
+Distribution/Interest
+$125.06
+$125.06
+9.8770
+$12.6620
+2511.1000
+Manulife Mutual Funds/MMF 13417-Manulife Conservative Income Fund Advisor Series   Account # 72562759
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/11/2018
+Switch-Out
+($9,287.98)
+($9,287.98)
+-713.0610
+$13.0255
+415.1290
+01/26/2018
+Reinvested 
+Distribution/Interest
+$20.76
+$20.76
+1.5930
+$13.0315
+416.7220
+02/23/2018
+Reinvested 
+Distribution/Interest
+$20.84
+$20.84
+1.6340
+$12.7513
+418.3560
+03/29/2018
+Reinvested 
+Distribution/Interest
+$20.92
+$20.92
+1.6520
+$12.6620
+420.0080
+Page 6
+Printed on Sunday, December 23, 2018
+For: Mark H. Sattolo 
+
+Dynamic Funds/DYN 1562-Dynamic Strategic Yield Fund Series A   Account # 424767671
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/11/2018
+Switch-Out
+($905.65)
+($905.65)
+-63.8683
+$14.1800
+574.8150
+01/26/2018
+Reinvested 
+Distribution/Interest
+$33.57
+$33.57
+2.3674
+$14.1800
+577.1824
+02/23/2018
+Reinvested 
+Distribution/Interest
+$33.71
+$33.71
+2.4357
+$13.8400
+579.6181
+03/29/2018
+Reinvested 
+Distribution/Interest
+$33.85
+$33.85
+2.4890
+$13.6000
+582.1071
+Franklin Templeton Investments/TML 1017-Franklin Bissett Canadian Dividend Fund A   Account # 4722871
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/11/2018
+Switch-In
+$781.01
+$781.01
+51.9978
+$15.0200
+185.8790
+01/30/2018
+Reinvested 
+Distribution/Interest
+$6.04
+$6.04
+0.4117
+$14.6700
+186.2907
+02/27/2018
+Reinvested 
+Distribution/Interest
+$6.05
+$6.05
+0.4279
+$14.1400
+186.7186
+03/28/2018
+Reinvested 
+Distribution/Interest
+$7.00
+$7.00
+0.4979
+$14.0600
+187.2165
+Franklin Templeton Investments/TML 1018-Franklin Bissett Canadian Dividend Fund A   Account # 4722871
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/11/2018
+Switch-Out
+($781.01)
+($781.01)
+-51.9978
+$15.0200
+476.8121
+01/30/2018
+Reinvested 
+Distribution/Interest
+$15.50
+$15.50
+1.0566
+$14.6700
+477.8687
+02/27/2018
+Reinvested 
+Distribution/Interest
+$15.53
+$15.53
+1.0983
+$14.1400
+478.9670
+03/28/2018
+Reinvested 
+Distribution/Interest
+$17.96
+$17.96
+1.2774
+$14.0600
+480.2444
+Dynamic Funds/DYN 029-Dynamic Equity Income Fund Series A   Account # 424767671
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/11/2018
+Switch-In
+$1,018.86
+$1,018.86
+47.9691
+$21.2400
+585.6278
+01/26/2018
+Reinvested 
+Distribution/Interest
+$40.99
+$40.99
+1.9262
+$21.2800
+587.5540
+02/23/2018
+Reinvested 
+Distribution/Interest
+$41.13
+$41.13
+1.9995
+$20.5700
+589.5535
+03/29/2018
+Reinvested 
+Distribution/Interest
+$41.27
+$41.27
+2.0461
+$20.1700
+591.5996
+Dynamic Funds/DYN 1560-Dynamic Strategic Yield Fund Series A   Account # 424767671
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/11/2018
+Switch-In
+$905.65
+$905.65
+63.8683
+$14.1800
+840.2552
+01/26/2018
+Reinvested 
+Distribution/Interest
+$49.07
+$49.07
+3.4605
+$14.1800
+843.7157
+02/23/2018
+Reinvested 
+Distribution/Interest
+$49.27
+$49.27
+3.5600
+$13.8400
+847.2757
+03/29/2018
+Reinvested 
+Distribution/Interest
+$49.48
+$49.48
+3.6382
+$13.6000
+850.9139
+CIBC Asset Management - ATL/ATL 059-Renaissance Global Infrastructure Fund Class A   Account # 3089478001
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+03/29/2018
+Reinvested 
+Distribution/Interest
+$34.19
+$34.19
+3.2270
+$10.5945
+1546.0110
+Page 7
+Printed on Sunday, December 23, 2018
+For: Mark H. Sattolo 
+
+** The registered owner of MRS assets is B
+2
+B Trustco, B
+2
+B Bank Financial Services Inc., B
+2
+B Bank Securities Services Inc. or B
+2
+B Bank Intermediary 
+Services Inc.
+*** Indicates investment/insurance products not purchased through [MONARCH] . Unit Price represents market price. Market prices shown are 
+obtained from sources we believe reliable, but we do not guarantee the accuracy of the unit price or book values reflected on this statement. Please 
+review this statement carefully and notify your advisor should there be any discrepancies.
+Page 8
+Printed on Sunday, December 23, 2018
+For: Mark H. Sattolo 
+
+Bye!

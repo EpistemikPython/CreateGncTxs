@@ -17,7 +17,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2018-12-22 13:39"
+__updated__ = "2018-12-23 07:11"
 
 CLIENT_TX = "CLIENT TRANSACTIONS"
 PLAN_TYPE = "Plan Type:"
@@ -116,15 +116,15 @@ Monarch_record = {
 
 # information for each transaction
 Monarch_tx = {
-    FUND_CMPY    : "" ,
-    FUND_CODE    : "" ,
-    TRADE_DATE   : "" ,
-    DESC         : "" ,
-    GROSS        : "" ,
-    NET          : "" ,
-    UNITS        : "" ,
-    PRICE        : "" ,
-    UNIT_BAL     : "" 
+    FUND_CMPY   : "" ,
+    FUND_CODE   : "" ,
+    TRADE_DATE  : "" ,
+    DESC        : "" ,
+    GROSS       : "" ,
+    NET         : "" ,
+    UNITS       : "" ,
+    PRICE       : "" ,
+    UNIT_BAL    : "" 
 }
 
 REVENUE  = "REVENUE"
@@ -146,14 +146,28 @@ ACCT_PATHS = {
     TRUST    : ["XTERNAL", TRUST, "Trust Assets", "Monarch ITF", CMPY_FULL_NAME[CIG] ]
 }
 
-# list of gnucash transactions, by date, for each company
+# information for each switch transaction
+Gnucash_switch = {
+    FUND_IN     : "" ,
+    FUND_OUT    : "" ,
+    TRADE_DATE  : "" ,
+    DESC        : "" ,
+    GROSS       : "" ,
+    NET         : "" ,
+    UNITS       : "" ,
+    PRICE       : "" ,
+    UNIT_BAL    : "" 
+}
+
+# list of gnucash switches, by date, for each company
 Gnucash_record = {
-    OWNER : "" ,
-    CIG : [] ,
-    TML : [] ,
-    MFC : [] ,
-    DYN : [] ,
-    MMF : []
+    OWNER     : "" ,
+    PLAN_TYPE : "" ,
+    CIG       : [] ,
+    TML       : [] ,
+    MFC       : [] ,
+    DYN       : [] ,
+    MMF       : []
 }
 
 # parsing states
@@ -164,9 +178,8 @@ FIND_NEXT_TX   = FIND_FUND    + 1
 FILL_CURR_TX   = FIND_NEXT_TX + 1
 
 # file paths
-PRAC_GNC  = "/bak/home/marksa/dev/Python/gnucash/liclipse/practice.gnc"
-PRAC1_GNC = "/bak/home/marksa/dev/Python/gnucash/liclipse/practice1.gnc"
-PRAC2_GNC = "/bak/home/marksa/dev/Python/gnucash/liclipse/practice2.gnc"
-PRAC3_GNC = "/bak/home/marksa/dev/Python/gnucash/liclipse/practice3.gnc"
-RL_GNC    = "/bak/home/marksa/dev/Python/gnucash/liclipse/RL.gnc"
-NEW_GNC   = "/bak/home/marksa/dev/Python/gnucash/liclipse/new.gnc"
+GNC_FOLDER = "/home/marksa/dev/Python/gnucash/"
+PRAC1_GNC  = GNC_FOLDER + "practice1.gnc"
+PRAC2_GNC  = GNC_FOLDER + "practice2.gnc"
+PRAC3_GNC  = GNC_FOLDER + "practice3.gnc"
+PRAC4_GNC  = GNC_FOLDER + "practice4.gnc"
