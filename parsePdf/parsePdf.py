@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# tryPyPDF2.py -- parse a PDF file and recover the text
+# parsePdf.py -- parse a PDF file and recover the text
 #
 # Copyright (c) 2018, 2019 Mark Sattolo <epistemik@gmail.com>
 #
@@ -16,7 +16,7 @@
 #
 # @author Mark Sattolo <epistemik@gmail.com>
 
-__updated__ = "2018-12-08 06:25"
+__updated__ = "2018-12-22 20:26"
 
 import sys
 import collections
@@ -35,11 +35,11 @@ def getAllPages(readPdf):
        page = readPdf.getPage(i)
        page_content = page.extractText()
        print page_content.encode('utf-8')
-
+    
 def main():
     print("len(sys.argv) = {0}".format(len(sys.argv)))
     if len(sys.argv) < 2:
-        print("Usage: python {} <reportPath> [pageNum]".format(sys.argv[0]))
+        print("Usage: python '{}' <reportPath> [pageNum]".format(sys.argv[0]))
         
     monarch = sys.argv[1]
     print("Monarch report is: {}".format(monarch))
@@ -47,9 +47,9 @@ def main():
     pageNum = 0
     readAll = True
     if len(sys.argv) > 2:
-        pageNum = int(sys.argv[1]) - 1
+        pageNum = int(sys.argv[2]) - 1
         readAll = False
-        
+    
     pdfFile = open(monarch, 'rb')
     pdfReader = PyPDF2.PdfFileReader(pdfFile)
     
