@@ -1,5 +1,6 @@
 
 # Configuration.py -- static defines to help parse a Monarch text file 
+#                     and write transactions to a gnucash file
 #
 # Copyright (c) 2018, 2019 Mark Sattolo <epistemik@gmail.com>
 #
@@ -16,7 +17,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2018-12-22 10:42"
+__updated__ = "2018-12-22 13:39"
 
 CLIENT_TX = "CLIENT TRANSACTIONS"
 PLAN_TYPE = "Plan Type:"
@@ -57,36 +58,52 @@ CMPY_FULL_NAME = {
 # Fund names
 CIG_11461 = CIG + " 11461"
 CIG_11111 = CIG + " 11111"
+CIG_2304  = CIG + " 2304"
+CIG_2321  = CIG + " 2321"
+CIG_6104  = CIG + " 6104"
+CIG_1154  = CIG + " 1154"
+CIG_1304  = CIG + " 1304"
+CIG_1521  = CIG + " 1521"
 CIG_18140 = CIG + " 18140"
-TML_674   = TML + " 674"
-TML_704   = TML + " 704"
+TML_180   = TML + " 180"
+TML_184   = TML + " 184"
+TML_202   = TML + " 202"
 TML_203   = TML + " 203"
+TML_518   = TML + " 518"
 TML_519   = TML + " 519"
+TML_598   = TML + " 598"
+TML_674   = TML + " 674"
+TML_694   = TML + " 694"
+TML_704   = TML + " 704"
+TML_707   = TML + " 707"
 TML_1017  = TML + " 1017"
 TML_1018  = TML + " 1018"
+MFC_756   = MFC + " 756"
 MFC_856   = MFC + " 856"
 MFC_6129  = MFC + " 6129"
 MFC_6130  = MFC + " 6130"
 MFC_6138  = MFC + " 6138"
 MFC_302   = MFC + " 302"
+MFC_2238  = MFC + " 2238"
 MFC_3232  = MFC + " 3232"
+MFC_3769  = MFC + " 3769"
 MFC_3689  = MFC + " 3689"
 MFC_1960  = MFC + " 1960"
 DYN_029   = DYN + " 029"
 DYN_729   = DYN + " 729"
 DYN_1562  = DYN + " 1562"
 DYN_1560  = DYN + " 1560"
-MMF_44424 = MMF + " 44424"
 MMF_4524  = MMF + " 4524"
-
-TRUST_ACCT = CIG_18140
+MMF_44424 = MMF + " 44424"
+MMF_3517  = MMF + " 3517"
+MMF_13417 = MMF + " 13417"
 
 FundsList = [ 
-    CIG_11461, CIG_11111, CIG_18140, 
-    TML_674, TML_704, TML_203, TML_519, TML_1017, TML_1018, 
-    MFC_856, MFC_6129, MFC_6130, MFC_6138, MFC_302, MFC_3232, MFC_3689, MFC_1960, 
+    CIG_11461, CIG_11111, CIG_18140, CIG_2304, CIG_2321, CIG_6104, CIG_1154, CIG_1304, CIG_1521,
+    TML_674, TML_704, TML_180, TML_184, TML_202, TML_203, TML_518, TML_519, TML_598, TML_694, TML_707, TML_1017, TML_1018, 
+    MFC_756, MFC_856, MFC_6129, MFC_6130, MFC_6138, MFC_302, MFC_2238, MFC_3232, MFC_3769, MFC_3689, MFC_1960, 
     DYN_029, DYN_729, DYN_1562, DYN_1560,
-    MMF_44424, MMF_4524
+    MMF_44424, MMF_4524, MMF_3517, MMF_13417
 ]
 
 # owner and list of transactions for each plan type
@@ -118,6 +135,8 @@ MON_LULU = "Louise Robb"
 GNU_MARK = "Mark"
 GNU_LULU = "Lulu"
 
+TRUST_ACCT = CIG_18140
+
 # find the proper account in the gnucash file
 ACCT_PATHS = {
     REVENUE  : ["REV", "REV_Invest", "Dist"] ,# + planType [+ Owner]
@@ -126,20 +145,6 @@ ACCT_PATHS = {
     MON_LULU : GNU_LULU ,
     TRUST    : ["XTERNAL", TRUST, "Trust Assets", "Monarch ITF", CMPY_FULL_NAME[CIG] ]
 }
-# Account_Paths = {
-#     PL_OPEN: {
-#         REVENUE : ["REV", "REV_Invest", "Dist", PL_OPEN] ,
-#         ASSET   : ["FAMILY", "INVEST", PL_OPEN] 
-#     } ,
-#     PL_TFSA: {
-#         REVENUE : ["REV", "REV_Invest", "Dist", PL_TFSA] ,
-#         ASSET   : ["FAMILY", "INVEST", PL_TFSA] 
-#     } ,
-#     PL_RRSP: {
-#         REVENUE : ["REV", "REV_Invest", "Dist", PL_RRSP] ,
-#         ASSET   : ["FAMILY", "INVEST", PL_RRSP] 
-#     }
-# }
 
 # list of gnucash transactions, by date, for each company
 Gnucash_record = {

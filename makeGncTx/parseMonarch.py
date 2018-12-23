@@ -17,7 +17,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2018-12-22 10:45"
+__updated__ = "2018-12-22 14:27"
 
 from sys import argv, exit
 import os
@@ -80,8 +80,6 @@ def parseMonarchReport(file, record):
     print("parseMonarchReport({})\n".format(file))
     
     # re searches
-    reCTX = re.compile(".*{}.*".format(CLIENT_TX))
-    rePLT = re.compile(".*{}.*".format(PLAN_TYPE))
     reOWN = re.compile(".*({}).*".format(OWNER))
     rePLN = re.compile(r'([OPENTFSAR]{4})(\s?.*)')
     reFND = re.compile(".*([A-Z]{3})\s?([0-9]{3,5}).*")
@@ -114,7 +112,7 @@ def parseMonarchReport(file, record):
             
             # for RRSP and TFSA need to find owner after finding plan type 
             if mon_state == FIND_OWNER:
-                print("FIND_OWNER line {} = {}".format(ct, line))
+#                 print("FIND_OWNER line {} = {}".format(ct, line))
                 if own_line == 0:
                     re_match = re.match(reOWN, line)
                     if re_match:
@@ -130,7 +128,7 @@ def parseMonarchReport(file, record):
             if mon_state <= FIND_FUND:
                 re_match = re.match(reFND, line)
                 if re_match:
-                    print("FIND_FUND line {} = {}".format(ct, line.strip()))
+#                     print("FIND_FUND line {} = {}".format(ct, line.strip()))
 #                     print(re_match.groups())
                     fund_company = re_match.group(1)
                     fund_code = re_match.group(2)
@@ -142,7 +140,7 @@ def parseMonarchReport(file, record):
             if mon_state <= FIND_NEXT_TX:
                 re_match = re.match(reDTE, line)
                 if re_match:
-                    print("FIND_NEXT_TX line {} = {}".format(ct, line.strip()))
+#                     print("FIND_NEXT_TX line {} = {}".format(ct, line.strip()))
 #                     print(re_match.groups())
                     tx_date = re_match.group(1)
                     print("Current tx_date is: '{}'".format(tx_date))
@@ -154,7 +152,7 @@ def parseMonarchReport(file, record):
                     continue
 
             if mon_state == FILL_CURR_TX:
-                print("FILL_CURR_TX line {} = {}".format(ct, line.strip()))
+#                 print("FILL_CURR_TX line {} = {}".format(ct, line.strip()))
                 tx_line += 1
                 entry = line.strip()
                 if tx_line < 3:
@@ -184,7 +182,7 @@ def parseMonarchReport(file, record):
                     mon_state = STATE_SEARCH
                     tx_line = 0
 
-def createGnuTxs(record, mode):
+def createGnuTxs(record, gncFile, mode):
     '''
         Take the transaction information from a Monarch record and produce Gnucash transactions to write to a gnucash file
     '''
@@ -225,6 +223,15 @@ def createGnuTxs(record, mode):
     # end prepareAccounts()
     
     def createGnuTx(tx, revAcct, astParent):
+        '''
+        for Asset account: use the proper path to find the parent then search for the Fund Code in the descendants
+        for Revenue account: pick the proper account based on owner and plan type
+        for valAst: re match to Gross then concatenate the two match groups
+        for date: re match to get day, month and year then re-assemble to form Gnc date
+        for Units: need to find position of decimal point to know Gnc denominator
+        for Description: use DESC and Fund Code
+        for Notes: use 'Unit Balance' and UNIT_BAL
+        '''
         try:
             astAcctName = tx[FUND_CMPY] + " " + tx[FUND_CODE]
             
@@ -253,7 +260,7 @@ def createGnuTxs(record, mode):
                 valRev = valAst * -1
                 print("valRev = '{}'".format(valRev))
             else:
-                raise Exception("PROBLEM!! DID NOT match reAMOUNT with value '{}'!".format(tx[GROSS]))
+                raise Exception("PROBLEM!! reAMOUNT DID NOT match with value '{}'!".format(tx[GROSS]))
 #                 return
             
             re_match = re.match(reUNITS, tx[UNITS])
@@ -265,7 +272,7 @@ def createGnuTxs(record, mode):
                     units *= -1
                 print("units = '{}'".format(units))
             else:
-                raise Exception("PROBLEM!! DID NOT match reUNITS with value '{}'!".format(tx[UNITS]))
+                raise Exception("PROBLEM!! reUNITS DID NOT match with value '{}'!".format(tx[UNITS]))
 #                 return
             
             re_match = re.match(reDATE, tx[TRADE_DATE])
@@ -278,7 +285,7 @@ def createGnuTxs(record, mode):
                 trade_yr  = int(re_match.group(3))
                 print("trade_yr = '{}'".format(trade_yr))
             else:
-                raise Exception("PROBLEM!! DID NOT match reTRADE_DATE with value '{}'!".format(tx[TRADE_DATE]))
+                raise Exception("PROBLEM!! reTRADE_DATE DID NOT match with value '{}'!".format(tx[TRADE_DATE]))
 #                 return
             
             # assemble the Description string
@@ -319,11 +326,11 @@ def createGnuTxs(record, mode):
             
             # set the account, value, units and action of the Asset split
             splAst.SetAccount(astAcct)
-            print("SetAccount")
+#             print("SetAccount")
             splAst.SetValue(GncNumeric(valAst, 100))
-            print("SetValue")
+#             print("SetValue")
             splAst.SetAmount(GncNumeric(units, 10000))
-            print("SetAmount")
+#             print("SetAmount")
             splAst.SetAction("Dist")
             
             # roll back if something went wrong and the two splits DO NOT balance
@@ -333,22 +340,22 @@ def createGnuTxs(record, mode):
                 return
             
             if mode == "PROD":
-                print("Mode = '{}': Commit transaction changes.".format(mode))
+                print("Mode = '{}': Commit transaction changes.\n".format(mode))
                 gtx.CommitEdit()
                 session.save()
             else:
-                print("Mode = '{}': Roll back transaction changes!".format(mode))
+                print("Mode = '{}': Roll back transaction changes!\n".format(mode))
                 gtx.RollbackEdit()
                 
         except Exception as e:
             print("createGnuTx() EXCEPTION!! '{}'".format(str(e)))
     # end createGnuTx()
     
-    gncFileName = PRAC2_GNC
-    print("gncFileName = '{}'".format(gncFileName))
+#     gncFileName = PRAC2_GNC
+    print("gncFile = '{}'".format(gncFile))
     
     try:
-        session = Session(gncFileName)
+        session = Session(gncFile)
         book = session.book
         
         root = book.get_root_account()
@@ -361,14 +368,6 @@ def createGnuTxs(record, mode):
         
         # EXPERIMENT
         if mode.lower() == 'prod':
-            
-            # for Asset account: use the proper path to find the parent then search for the Fund Code in the descendants
-            # for Revenue account: pick the proper account based on owner and plan type
-            # for valAst: re match to Gross then concatenate the two match groups
-            # for date: re match to get day, month and year then re-assemble to form Gnc date
-            # for Units: need to find position of decimal point to know Gnc denominator
-            # for Description: use DESC and Fund Code
-            # for Notes: use 'Unit Balance' and UNIT_BAL
             
             # combine all txs from the same fund company on the same date to one tx?
             prepareAccounts(PL_OPEN)
@@ -412,23 +411,28 @@ def createGnuTxs(record, mode):
         raise
     
 def main():
-    if len(argv) < 3:
+    if len(argv) < 4:
         print("NOT ENOUGH parameters!")
-        print("usage: python {0} <book url> <mode: prod|test>".format(argv[0]))
-        print("Example: {0} {1} 'test'".format(argv[0], PRACTICE_GNC))
+        print("usage: python {0} <monarch file> <gnucash file> <mode: prod|test>".format(argv[0]))
+        print("Example: {0} '{1}' '{2}' 'test'".format(argv[0], "in/Monarch-Mark-all.txt", PRAC_GNC))
         exit()
     
-    filepath = argv[1]
-    if not os.path.isfile(filepath):
-        print("File path '{}' does not exist. Exiting...".format(filepath))
+    monFile = argv[1]
+    if not os.path.isfile(monFile):
+        print("File path '{}' does not exist. Exiting...".format(monFile))
         exit()
     
-    mode = argv[2]
+    gncFile = argv[2]
+    if not os.path.isfile(gncFile):
+        print("File path '{}' does not exist. Exiting...".format(gncFile))
+        exit()
+    
+    mode = argv[3]
     if mode.lower() == "prod":
         record = copy.deepcopy(Monarch_record)
         
         # parse an external Monarch report file
-        parseMonarchReport(filepath, record)
+        parseMonarchReport(monFile, record)
         
         print("\n\tlen(Monarch record[{}]) = {}".format(PL_OPEN, len(record[PL_OPEN])))
         print("\tMonarch record[{}] = {}".format(PL_OPEN, json.dumps(record[PL_OPEN], indent=4)))
@@ -462,7 +466,7 @@ def main():
         ]
         }
     
-    createGnuTxs(record, mode)
+    createGnuTxs(record, gncFile, mode)
     
     print("\n >>> PROGRAM ENDED.")
     
