@@ -17,7 +17,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2018-12-23 07:11"
+__updated__ = "2018-12-23 13:06"
 
 CLIENT_TX = "CLIENT TRANSACTIONS"
 PLAN_TYPE = "Plan Type:"
@@ -30,8 +30,9 @@ PL_TFSA   = "TFSA"
 PL_RRSP   = "RRSP"
 
 # tx categories
-FUND_CODE  = "Fund Code"
-FUND_CMPY  = "Fund Company"
+FUND       = "Fund"
+FUND_CODE  = FUND + " Code"
+FUND_CMPY  = FUND + " Company"
 TRADE_DATE = "Trade Date"
 DESC       = "Description"
 GROSS      = "Gross"
@@ -41,73 +42,77 @@ PRICE      = "Price"
 UNIT_BAL   = "Unit Balance" 
 
 # Fund companies
+ATL = "ATL"
 CIG = "CIG"
-TML = "TML"
-MFC = "MFC"
 DYN = "DYN"
+MFC = "MFC"
 MMF = "MMF"
+TML = "TML"
 
 CMPY_FULL_NAME = {
+    ATL : "CIBC Asset Management",
     CIG : "CI Investments",
-    TML : "Franklin Templeton",
-    MFC : "Mackenzie Financial Corp",
     DYN : "Dynamic Funds",
-    MMF : "Manulife Mutual Funds"
+    MFC : "Mackenzie Financial Corp",
+    MMF : "Manulife Mutual Funds",
+    TML : "Franklin Templeton"
 }
 
 # Fund names
-CIG_11461 = CIG + " 11461"
-CIG_11111 = CIG + " 11111"
-CIG_2304  = CIG + " 2304"
-CIG_2321  = CIG + " 2321"
-CIG_6104  = CIG + " 6104"
-CIG_1154  = CIG + " 1154"
-CIG_1304  = CIG + " 1304"
-CIG_1521  = CIG + " 1521"
-CIG_18140 = CIG + " 18140"
-TML_180   = TML + " 180"
-TML_184   = TML + " 184"
-TML_202   = TML + " 202"
-TML_203   = TML + " 203"
-TML_518   = TML + " 518"
-TML_519   = TML + " 519"
-TML_598   = TML + " 598"
-TML_674   = TML + " 674"
-TML_694   = TML + " 694"
-TML_704   = TML + " 704"
-TML_707   = TML + " 707"
-TML_1017  = TML + " 1017"
-TML_1018  = TML + " 1018"
-MFC_756   = MFC + " 756"
-MFC_856   = MFC + " 856"
-MFC_6129  = MFC + " 6129"
-MFC_6130  = MFC + " 6130"
-MFC_6138  = MFC + " 6138"
-MFC_302   = MFC + " 302"
-MFC_2238  = MFC + " 2238"
-MFC_3232  = MFC + " 3232"
-MFC_3769  = MFC + " 3769"
-MFC_3689  = MFC + " 3689"
-MFC_1960  = MFC + " 1960"
-DYN_029   = DYN + " 029"
-DYN_729   = DYN + " 729"
-DYN_1562  = DYN + " 1562"
-DYN_1560  = DYN + " 1560"
-MMF_4524  = MMF + " 4524"
-MMF_44424 = MMF + " 44424"
-MMF_3517  = MMF + " 3517"
-MMF_13417 = MMF + " 13417"
+ATL_O59   = ATL + " 059"   # Renaissance Global Infrastructure Fund Class A
+CIG_11111 = CIG + " 11111" # Signature Diversified Yield II Fund A
+CIG_11461 = CIG + " 11461" # Signature Diversified Yield II Fund A
+CIG_1304  = CIG + " 1304"  # Signature High Income Corporate Class A
+CIG_2304  = CIG + " 2304"  # Signature High Income Corporate Class A
+CIG_1521  = CIG + " 1521"  # Cambridge Canadian Equity Corporate Class A
+CIG_2321  = CIG + " 2321"  # Cambridge Canadian Equity Corporate Class A
+CIG_1154  = CIG + " 1154"  # CI Can-Am Small Cap Corporate Class A
+CIG_6104  = CIG + " 6104"  # CI Can-Am Small Cap Corporate Class A
+CIG_18140 = CIG + " 18140" # Signature Diversified Yield Corporate Class O
+TML_180   = TML + " 180"   # Franklin Mutual Global Discovery Fund A
+TML_184   = TML + " 184"   # Franklin Mutual Global Discovery Fund A
+TML_202   = TML + " 202"   # Franklin Bissett Canadian Equity Fund Series A
+TML_518   = TML + " 518"   # Franklin Bissett Canadian Equity Fund Series A
+TML_203   = TML + " 203"   # Franklin Bissett Dividend Income Fund A
+TML_519   = TML + " 519"   # Franklin Bissett Dividend Income Fund A
+TML_223   = TML + " 223"   # Franklin Bissett Small Cap Fund Series A
+TML_598   = TML + " 598"   # Franklin Bissett Small Cap Fund Series A
+TML_674   = TML + " 674"   # Templeton Global Bond Fund Series A
+TML_704   = TML + " 704"   # Templeton Global Bond Fund Series A
+TML_694   = TML + " 694"   # Templeton Global Smaller Companies Fund A
+TML_707   = TML + " 707"   # Templeton Global Smaller Companies Fund A
+TML_1017  = TML + " 1017"  # Franklin Bissett Canadian Dividend Fund A
+TML_1018  = TML + " 1018"  # Franklin Bissett Canadian Dividend Fund A
+MFC_756   = MFC + " 756"   # Mackenzie Corporate Bond Fund Series A
+MFC_856   = MFC + " 856"   # Mackenzie Corporate Bond Fund Series A
+MFC_6130  = MFC + " 6130"  # Mackenzie Corporate Bond Fund Series PW
+MFC_2238  = MFC + " 2238"  # Mackenzie Strategic Income Fund Series A
+MFC_3232  = MFC + " 3232"  # Mackenzie Strategic Income Fund Series A
+MFC_6138  = MFC + " 6138"  # Mackenzie Strategic Income Fund Series PW
+MFC_302   = MFC + " 302"   # Mackenzie Canadian Bond Fund Series A
+MFC_3769  = MFC + " 3769"  # Mackenzie Canadian Bond Fund Series SC
+MFC_6129  = MFC + " 6129"  # Mackenzie Canadian Bond Fund Series PW
+MFC_1960  = MFC + " 1960"  # Mackenzie Strategic Income Class Series T6
+MFC_3689  = MFC + " 3689"  # Mackenzie Strategic Income Class Series T6
+DYN_029   = DYN + " 029"   # Dynamic Equity Income Fund Series A
+DYN_729   = DYN + " 729"   # Dynamic Equity Income Fund Series A
+DYN_1560  = DYN + " 1560"  # Dynamic Strategic Yield Fund Series A
+DYN_1562  = DYN + " 1562"  # Dynamic Strategic Yield Fund Series A
+MMF_4524  = MMF + " 4524"  # Manulife Yield Opportunities Fund Advisor Series
+MMF_44424 = MMF + " 44424" # Manulife Yield Opportunities Fund Advisor Series
+MMF_3517  = MMF + " 3517"  # Manulife Conservative Income Fund Advisor Series
+MMF_13417 = MMF + " 13417" # Manulife Conservative Income Fund Advisor Series
 
 FundsList = [ 
     CIG_11461, CIG_11111, CIG_18140, CIG_2304, CIG_2321, CIG_6104, CIG_1154, CIG_1304, CIG_1521,
-    TML_674, TML_704, TML_180, TML_184, TML_202, TML_203, TML_518, TML_519, TML_598, TML_694, TML_707, TML_1017, TML_1018, 
+    TML_674, TML_704, TML_180, TML_184, TML_202, TML_203, TML_223, TML_518, TML_519, TML_598, TML_694, TML_707, TML_1017, TML_1018, 
     MFC_756, MFC_856, MFC_6129, MFC_6130, MFC_6138, MFC_302, MFC_2238, MFC_3232, MFC_3769, MFC_3689, MFC_1960, 
     DYN_029, DYN_729, DYN_1562, DYN_1560,
     MMF_44424, MMF_4524, MMF_3517, MMF_13417
 ]
 
 # owner and list of transactions for each plan type
-Monarch_record = {
+Monarch_Record = {
     OWNER   : "" ,
     PL_OPEN : [] ,
     PL_TFSA : [] ,
@@ -115,20 +120,20 @@ Monarch_record = {
 }
 
 # information for each transaction
-Monarch_tx = {
-    FUND_CMPY   : "" ,
-    FUND_CODE   : "" ,
-    TRADE_DATE  : "" ,
-    DESC        : "" ,
-    GROSS       : "" ,
-    NET         : "" ,
-    UNITS       : "" ,
-    PRICE       : "" ,
-    UNIT_BAL    : "" 
+Monarch_Tx = {
+    FUND_CMPY  : "" ,
+    FUND_CODE  : "" ,
+    TRADE_DATE : "" ,
+    DESC       : "" ,
+    GROSS      : "" ,
+    NET        : "" ,
+    UNITS      : "" ,
+    PRICE      : "" ,
+    UNIT_BAL   : "" 
 }
 
-REVENUE  = "REVENUE"
-ASSET    = "ASSET"
+REVENUE  = "Revenue"
+ASSET    = "Asset"
 TRUST    = "TRUST"
 MON_MARK = "Mark H. Sattolo"
 MON_LULU = "Louise Robb"
@@ -137,7 +142,7 @@ GNU_LULU = "Lulu"
 
 TRUST_ACCT = CIG_18140
 
-# find the proper account in the gnucash file
+# find the proper path to the account in the gnucash file
 ACCT_PATHS = {
     REVENUE  : ["REV", "REV_Invest", "Dist"] ,# + planType [+ Owner]
     ASSET    : ["FAMILY", "INVEST"] ,# + planType [+ Owner]
@@ -146,36 +151,44 @@ ACCT_PATHS = {
     TRUST    : ["XTERNAL", TRUST, "Trust Assets", "Monarch ITF", CMPY_FULL_NAME[CIG] ]
 }
 
+IN      = "Switch-In"
+OUT     = "Switch-Out"
+INT_TFI = "Internal Transfer-In"
+INT_TFO = "Internal Transfer-Out"
+ACCT    = "Account"
+VALUE   = "Value"
+AMOUNT  = "Amount"
+
+# information for each distribution transaction
+Gnucash_Dist = {
+    TRADE_DATE : "" ,
+    DESC       : "" ,
+    REVENUE    : { ACCT:"", VALUE:"" } ,
+    ASSET      : { ACCT:"", VALUE:"", AMOUNT:"" } 
+}
+
 # information for each switch transaction
-Gnucash_switch = {
-    FUND_IN     : "" ,
-    FUND_OUT    : "" ,
-    TRADE_DATE  : "" ,
-    DESC        : "" ,
-    GROSS       : "" ,
-    NET         : "" ,
-    UNITS       : "" ,
-    PRICE       : "" ,
-    UNIT_BAL    : "" 
+Gnucash_Switch = {
+    TRADE_DATE : "" ,
+    DESC       : "" ,
+    IN         : { FUND:"", GROSS:"", PRICE:"", UNITS:"", UNIT_BAL:"" } ,
+    OUT        : { FUND:"", GROSS:"", PRICE:"", UNITS:"", UNIT_BAL:"" } 
 }
 
-# list of gnucash switches, by date, for each company
-Gnucash_record = {
-    OWNER     : "" ,
-    PLAN_TYPE : "" ,
-    CIG       : [] ,
-    TML       : [] ,
-    MFC       : [] ,
-    DYN       : [] ,
-    MMF       : []
+# list of gnucash switches for each plan type and fund company
+Gnucash_Record = {
+    OWNER   : "" ,
+    PL_OPEN : [] , # all CIG
+    PL_TFSA : [] , # if Mark = TML, if Lulu = MFC
+    PL_RRSP : { ATL:[], DYN:[], MFC:[], MMF:[], TML:[] }
 }
 
-# parsing states
-STATE_SEARCH   = 0
-FIND_OWNER     = STATE_SEARCH + 1
-FIND_FUND      = FIND_OWNER   + 1
-FIND_NEXT_TX   = FIND_FUND    + 1
-FILL_CURR_TX   = FIND_NEXT_TX + 1
+    # parsing states
+STATE_SEARCH = 0
+FIND_OWNER   = STATE_SEARCH + 1
+FIND_FUND    = FIND_OWNER   + 1
+FIND_NEXT_TX = FIND_FUND    + 1
+FILL_CURR_TX = FIND_NEXT_TX + 1
 
 # file paths
 GNC_FOLDER = "/home/marksa/dev/Python/gnucash/"

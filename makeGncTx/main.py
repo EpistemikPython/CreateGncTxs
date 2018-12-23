@@ -17,7 +17,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2018-12-23 07:09"
+__updated__ = "2018-12-23 10:00"
 
 from sys import argv, exit
 import os
@@ -414,7 +414,7 @@ def main():
     if len(argv) < 4:
         print("NOT ENOUGH parameters!")
         print("usage: python {0} <monarch file> <gnucash file> <mode: prod|test>".format(argv[0]))
-        print("Example: {0} '{1}' '{2}' 'test'".format(argv[0], "in/Monarch-Mark-all.txt", PRAC_GNC))
+        print("Example: {0} '{1}' '{2}' 'test'".format(argv[0], "in/Monarch-Mark-all.txt", PRAC1_GNC))
         exit()
     
     monFile = argv[1]

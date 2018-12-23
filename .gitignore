@@ -2,9 +2,14 @@
 !.gitignore
 /gnucash
 /py3bindings
-**/out
-**/test*
-**/bin
+**/out/
+**/test*/
+**/bin/
 *.py[cdo]
+*.out
+*.o
+*.so
+*.obj
+*.bin
 *.exe
 *.x

@@ -1,0 +1,1507 @@
+
+parseFile(/bak/home/marksa/dev/Python/makeGncTx/in/Monarch-Mark-all.txt)
+
+('OPEN', ' (Joint)')
+Current bag_name is: OPEN
+Current bag is: []
+
+FIND_FUND line 62 = CI Investments/CIG 11461-Signature Diversified Yield II Fund A   Account # 106035991
+
+('CIG 11461',)
+Current fund_name is: CIG 11461
+FIND_NEXT_TX line 72 = 10/26/2018
+
+('10/26/2018',)
+Current tx_date is: 10/26/2018
+FILL_CURR_TX line 73 = Reinvested 
+
+curr_tx[DESC] is: Reinvested:
+FILL_CURR_TX line 74 = Distribution/Interest
+
+curr_tx[DESC] is: Reinvested:Distribution/Interest:
+FILL_CURR_TX line 75 = $34.53
+
+curr_tx[GROSS] is: $34.53
+FILL_CURR_TX line 76 = $34.53
+
+curr_tx[NET] is: $34.53
+FILL_CURR_TX line 77 = 3.8480
+
+curr_tx[UNITS] is: 3.8480
+FILL_CURR_TX line 78 = $8.9732
+
+curr_tx[PRICE] is: $8.9732
+FILL_CURR_TX line 79 = 694.4350
+
+curr_tx[UNIT_BAL] is: 694.4350
+FIND_NEXT_TX line 81 = 11/23/2018
+
+('11/23/2018',)
+Current tx_date is: 11/23/2018
+FILL_CURR_TX line 82 = Reinvested 
+
+curr_tx[DESC] is: Reinvested:
+FILL_CURR_TX line 83 = Distribution/Interest
+
+curr_tx[DESC] is: Reinvested:Distribution/Interest:
+FILL_CURR_TX line 84 = $34.73
+
+curr_tx[GROSS] is: $34.73
+FILL_CURR_TX line 85 = $34.73
+
+curr_tx[NET] is: $34.73
+FILL_CURR_TX line 86 = 3.8610
+
+curr_tx[UNITS] is: 3.8610
+FILL_CURR_TX line 87 = $8.9957
+
+curr_tx[PRICE] is: $8.9957
+FILL_CURR_TX line 88 = 698.2960
+
+curr_tx[UNIT_BAL] is: 698.2960
+FIND_FUND line 90 = CI Investments/CIG 11111-Signature Diversified Yield II Fund A   Account # 106035991
+
+('CIG 11111',)
+Current fund_name is: CIG 11111
+FIND_NEXT_TX line 99 = 10/26/2018
+
+('10/26/2018',)
+Current tx_date is: 10/26/2018
+FILL_CURR_TX line 100 = Reinvested 
+
+curr_tx[DESC] is: Reinvested:
+FILL_CURR_TX line 101 = Distribution/Interest
+
+curr_tx[DESC] is: Reinvested:Distribution/Interest:
+FILL_CURR_TX line 102 = $5.30
+
+curr_tx[GROSS] is: $5.30
+FILL_CURR_TX line 103 = $5.30
+
+curr_tx[NET] is: $5.30
+FILL_CURR_TX line 104 = 0.5910
+
+curr_tx[UNITS] is: 0.5910
+FILL_CURR_TX line 105 = $8.9732
+
+curr_tx[PRICE] is: $8.9732
+FILL_CURR_TX line 106 = 106.6770
+
+curr_tx[UNIT_BAL] is: 106.6770
+FIND_NEXT_TX line 108 = 11/23/2018
+
+('11/23/2018',)
+Current tx_date is: 11/23/2018
+FILL_CURR_TX line 109 = Reinvested 
+
+curr_tx[DESC] is: Reinvested:
+FILL_CURR_TX line 110 = Distribution/Interest
+
+curr_tx[DESC] is: Reinvested:Distribution/Interest:
+FILL_CURR_TX line 111 = $5.33
+
+curr_tx[GROSS] is: $5.33
+FILL_CURR_TX line 112 = $5.33
+
+curr_tx[NET] is: $5.33
+FILL_CURR_TX line 113 = 0.5930
+
+curr_tx[UNITS] is: 0.5930
+FILL_CURR_TX line 114 = $8.9957
+
+curr_tx[PRICE] is: $8.9957
+FILL_CURR_TX line 115 = 107.2700
+
+curr_tx[UNIT_BAL] is: 107.2700
+('TFSA', ' (Individual)')
+Current bag_name is: TFSA
+Current bag is: []
+
+FIND_FUND line 129 = Franklin Templeton Investments/TML 674-Templeton Global Bond Fund Series A   Account # 4963030
+
+('TML 674',)
+Current fund_name is: TML 674
+FIND_NEXT_TX line 139 = 10/30/2018
+
+('10/30/2018',)
+Current tx_date is: 10/30/2018
+FILL_CURR_TX line 140 = Reinvested 
+
+curr_tx[DESC] is: Reinvested:
+FILL_CURR_TX line 141 = Distribution/Interest
+
+curr_tx[DESC] is: Reinvested:Distribution/Interest:
+FILL_CURR_TX line 142 = $4.93
+
+curr_tx[GROSS] is: $4.93
+FILL_CURR_TX line 143 = $4.93
+
+curr_tx[NET] is: $4.93
+FILL_CURR_TX line 144 = 0.5840
+
+curr_tx[UNITS] is: 0.5840
+FILL_CURR_TX line 145 = $8.4422
+
+curr_tx[PRICE] is: $8.4422
+FILL_CURR_TX line 146 = 308.6739
+
+curr_tx[UNIT_BAL] is: 308.6739
+FIND_NEXT_TX line 148 = 11/29/2018
+
+('11/29/2018',)
+Current tx_date is: 11/29/2018
+FILL_CURR_TX line 149 = Reinvested 
+
+curr_tx[DESC] is: Reinvested:
+FILL_CURR_TX line 150 = Distribution/Interest
+
+curr_tx[DESC] is: Reinvested:Distribution/Interest:
+FILL_CURR_TX line 151 = $4.94
+
+curr_tx[GROSS] is: $4.94
+FILL_CURR_TX line 152 = $4.94
+
+curr_tx[NET] is: $4.94
+FILL_CURR_TX line 153 = 0.5766
+
+curr_tx[UNITS] is: 0.5766
+FILL_CURR_TX line 154 = $8.5672
+
+curr_tx[PRICE] is: $8.5672
+FILL_CURR_TX line 155 = 309.2505
+
+curr_tx[UNIT_BAL] is: 309.2505
+FIND_FUND line 160 = Franklin Templeton Investments/TML 704-Templeton Global Bond Fund Series A   Account # 4963030
+
+('TML 704',)
+Current fund_name is: TML 704
+FIND_NEXT_TX line 169 = 10/30/2018
+
+('10/30/2018',)
+Current tx_date is: 10/30/2018
+FILL_CURR_TX line 170 = Reinvested 
+
+curr_tx[DESC] is: Reinvested:
+FILL_CURR_TX line 171 = Distribution/Interest
+
+curr_tx[DESC] is: Reinvested:Distribution/Interest:
+FILL_CURR_TX line 172 = $7.87
+
+curr_tx[GROSS] is: $7.87
+FILL_CURR_TX line 173 = $7.87
+
+curr_tx[NET] is: $7.87
+FILL_CURR_TX line 174 = 0.9322
+
+curr_tx[UNITS] is: 0.9322
+FILL_CURR_TX line 175 = $8.4422
+
+curr_tx[PRICE] is: $8.4422
+FILL_CURR_TX line 176 = 492.7939
+
+curr_tx[UNIT_BAL] is: 492.7939
+FIND_NEXT_TX line 178 = 11/29/2018
+
+('11/29/2018',)
+Current tx_date is: 11/29/2018
+FILL_CURR_TX line 179 = Reinvested 
+
+curr_tx[DESC] is: Reinvested:
+FILL_CURR_TX line 180 = Distribution/Interest
+
+curr_tx[DESC] is: Reinvested:Distribution/Interest:
+FILL_CURR_TX line 181 = $7.88
+
+curr_tx[GROSS] is: $7.88
+FILL_CURR_TX line 182 = $7.88
+
+curr_tx[NET] is: $7.88
+FILL_CURR_TX line 183 = 0.9198
+
+curr_tx[UNITS] is: 0.9198
+FILL_CURR_TX line 184 = $8.5672
+
+curr_tx[PRICE] is: $8.5672
+FILL_CURR_TX line 185 = 493.7137
+
+curr_tx[UNIT_BAL] is: 493.7137
+FIND_FUND line 187 = Franklin Templeton Investments/TML 203-Franklin Bissett Dividend Income Fund A   Account # 4963030
+
+('TML 203',)
+Current fund_name is: TML 203
+FIND_NEXT_TX line 196 = 10/30/2018
+
+('10/30/2018',)
+Current tx_date is: 10/30/2018
+FILL_CURR_TX line 197 = Reinvested 
+
+curr_tx[DESC] is: Reinvested:
+FILL_CURR_TX line 198 = Distribution/Interest
+
+curr_tx[DESC] is: Reinvested:Distribution/Interest:
+FILL_CURR_TX line 199 = $15.99
+
+curr_tx[GROSS] is: $15.99
+FILL_CURR_TX line 200 = $15.99
+
+curr_tx[NET] is: $15.99
+FILL_CURR_TX line 201 = 0.5887
+
+curr_tx[UNITS] is: 0.5887
+FILL_CURR_TX line 202 = $27.1627
+
+curr_tx[PRICE] is: $27.1627
+FILL_CURR_TX line 203 = 291.2588
+
+curr_tx[UNIT_BAL] is: 291.2588
+FIND_NEXT_TX line 205 = 11/29/2018
+
+('11/29/2018',)
+Current tx_date is: 11/29/2018
+FILL_CURR_TX line 206 = Reinvested 
+
+curr_tx[DESC] is: Reinvested:
+FILL_CURR_TX line 207 = Distribution/Interest
+
+curr_tx[DESC] is: Reinvested:Distribution/Interest:
+FILL_CURR_TX line 208 = $16.02
+
+curr_tx[GROSS] is: $16.02
+FILL_CURR_TX line 209 = $16.02
+
+curr_tx[NET] is: $16.02
+FILL_CURR_TX line 210 = 0.5844
+
+curr_tx[UNITS] is: 0.5844
+FILL_CURR_TX line 211 = $27.4141
+
+curr_tx[PRICE] is: $27.4141
+FILL_CURR_TX line 212 = 291.8432
+
+curr_tx[UNIT_BAL] is: 291.8432
+FIND_FUND line 214 = Franklin Templeton Investments/TML 519-Franklin Bissett Dividend Income Fund A   Account # 4963030
+
+('TML 519',)
+Current fund_name is: TML 519
+FIND_NEXT_TX line 223 = 10/30/2018
+
+('10/30/2018',)
+Current tx_date is: 10/30/2018
+FILL_CURR_TX line 224 = Reinvested 
+
+curr_tx[DESC] is: Reinvested:
+FILL_CURR_TX line 225 = Distribution/Interest
+
+curr_tx[DESC] is: Reinvested:Distribution/Interest:
+FILL_CURR_TX line 226 = $10.34
+
+curr_tx[GROSS] is: $10.34
+FILL_CURR_TX line 227 = $10.34
+
+curr_tx[NET] is: $10.34
+FILL_CURR_TX line 228 = 0.3807
+
+curr_tx[UNITS] is: 0.3807
+FILL_CURR_TX line 229 = $27.1627
+
+curr_tx[PRICE] is: $27.1627
+FILL_CURR_TX line 230 = 188.2952
+
+curr_tx[UNIT_BAL] is: 188.2952
+FIND_NEXT_TX line 232 = 11/29/2018
+
+('11/29/2018',)
+Current tx_date is: 11/29/2018
+FILL_CURR_TX line 233 = Reinvested 
+
+curr_tx[DESC] is: Reinvested:
+FILL_CURR_TX line 234 = Distribution/Interest
+
+curr_tx[DESC] is: Reinvested:Distribution/Interest:
+FILL_CURR_TX line 235 = $10.36
+
+curr_tx[GROSS] is: $10.36
+FILL_CURR_TX line 236 = $10.36
+
+curr_tx[NET] is: $10.36
+FILL_CURR_TX line 237 = 0.3779
+
+curr_tx[UNITS] is: 0.3779
+FILL_CURR_TX line 238 = $27.4141
+
+curr_tx[PRICE] is: $27.4141
+FILL_CURR_TX line 239 = 188.6731
+
+curr_tx[UNIT_BAL] is: 188.6731
+('RRSP', ' (Individual)')
+Current bag_name is: RRSP
+Current bag is: []
+
+FIND_FUND line 253 = Mackenzie Financial Corp./MFC 856-Mackenzie Corporate Bond Fund Series A   Account # 64665893
+
+('MFC 856',)
+Current fund_name is: MFC 856
+FIND_NEXT_TX line 263 = 10/19/2018
+
+('10/19/2018',)
+Current tx_date is: 10/19/2018
+FILL_CURR_TX line 264 = Reinvested 
+
+curr_tx[DESC] is: Reinvested:
+FILL_CURR_TX line 265 = Distribution/Interest
+
+curr_tx[DESC] is: Reinvested:Distribution/Interest:
+FILL_CURR_TX line 266 = $26.28
+
+curr_tx[GROSS] is: $26.28
+FILL_CURR_TX line 267 = $26.28
+
+curr_tx[NET] is: $26.28
+FILL_CURR_TX line 268 = 6.1490
+
+curr_tx[UNITS] is: 6.1490
+FILL_CURR_TX line 269 = $4.2733
+
+curr_tx[PRICE] is: $4.2733
+FILL_CURR_TX line 270 = 1910.3030
+
+curr_tx[UNIT_BAL] is: 1910.3030
+FIND_NEXT_TX line 272 = 11/23/2018
+
+('11/23/2018',)
+Current tx_date is: 11/23/2018
+FILL_CURR_TX line 273 = Reinvested 
+
+curr_tx[DESC] is: Reinvested:
+FILL_CURR_TX line 274 = Distribution/Interest
+
+curr_tx[DESC] is: Reinvested:Distribution/Interest:
+FILL_CURR_TX line 275 = $33.43
+
+curr_tx[GROSS] is: $33.43
+FILL_CURR_TX line 276 = $33.43
+
+curr_tx[NET] is: $33.43
+FILL_CURR_TX line 277 = 7.9800
+
+curr_tx[UNITS] is: 7.9800
+FILL_CURR_TX line 278 = $4.1890
+
+curr_tx[PRICE] is: $4.1890
+FILL_CURR_TX line 279 = 1918.2830
+
+curr_tx[UNIT_BAL] is: 1918.2830
+FIND_FUND line 281 = Mackenzie Financial Corp./MFC 6129-Mackenzie Canadian Bond Fund Series PW   Account # 64665893
+
+('MFC 6129',)
+Current fund_name is: MFC 6129
+FIND_NEXT_TX line 290 = 10/19/2018
+
+('10/19/2018',)
+Current tx_date is: 10/19/2018
+FILL_CURR_TX line 291 = Reinvested 
+
+curr_tx[DESC] is: Reinvested:
+FILL_CURR_TX line 292 = Distribution/Interest
+
+curr_tx[DESC] is: Reinvested:Distribution/Interest:
+FILL_CURR_TX line 293 = $20.49
+
+curr_tx[GROSS] is: $20.49
+FILL_CURR_TX line 294 = $20.49
+
+curr_tx[NET] is: $20.49
+FILL_CURR_TX line 295 = 2.0220
+
+curr_tx[UNITS] is: 2.0220
+FILL_CURR_TX line 296 = $10.1337
+
+curr_tx[PRICE] is: $10.1337
+FILL_CURR_TX line 297 = 1386.5420
+
+curr_tx[UNIT_BAL] is: 1386.5420
+FIND_NEXT_TX line 299 = 11/23/2018
+
+('11/23/2018',)
+Current tx_date is: 11/23/2018
+FILL_CURR_TX line 300 = Reinvested 
+
+curr_tx[DESC] is: Reinvested:
+FILL_CURR_TX line 301 = Distribution/Interest
+
+curr_tx[DESC] is: Reinvested:Distribution/Interest:
+FILL_CURR_TX line 302 = $22.88
+
+curr_tx[GROSS] is: $22.88
+FILL_CURR_TX line 303 = $22.88
+
+curr_tx[NET] is: $22.88
+FILL_CURR_TX line 304 = 2.2540
+
+curr_tx[UNITS] is: 2.2540
+FILL_CURR_TX line 305 = $10.1511
+
+curr_tx[PRICE] is: $10.1511
+FILL_CURR_TX line 306 = 1388.7960
+
+curr_tx[UNIT_BAL] is: 1388.7960
+FIND_FUND line 308 = Mackenzie Financial Corp./MFC 6130-Mackenzie Corporate Bond Fund Series PW   Account # 64665893
+
+('MFC 6130',)
+Current fund_name is: MFC 6130
+FIND_NEXT_TX line 317 = 10/19/2018
+
+('10/19/2018',)
+Current tx_date is: 10/19/2018
+FILL_CURR_TX line 318 = Reinvested 
+
+curr_tx[DESC] is: Reinvested:
+FILL_CURR_TX line 319 = Distribution/Interest
+
+curr_tx[DESC] is: Reinvested:Distribution/Interest:
+FILL_CURR_TX line 320 = $40.65
+
+curr_tx[GROSS] is: $40.65
+FILL_CURR_TX line 321 = $40.65
+
+curr_tx[NET] is: $40.65
+FILL_CURR_TX line 322 = 4.3910
+
+curr_tx[UNITS] is: 4.3910
+FILL_CURR_TX line 323 = $9.2574
+
+curr_tx[PRICE] is: $9.2574
+FILL_CURR_TX line 324 = 1243.5800
+
+curr_tx[UNIT_BAL] is: 1243.5800
+FIND_NEXT_TX line 326 = 11/23/2018
+
+('11/23/2018',)
+Current tx_date is: 11/23/2018
+FILL_CURR_TX line 327 = Reinvested 
+
+curr_tx[DESC] is: Reinvested:
+FILL_CURR_TX line 328 = Distribution/Interest
+
+curr_tx[DESC] is: Reinvested:Distribution/Interest:
+FILL_CURR_TX line 329 = $51.48
+
+curr_tx[GROSS] is: $51.48
+FILL_CURR_TX line 330 = $51.48
+
+curr_tx[NET] is: $51.48
+FILL_CURR_TX line 331 = 5.6740
+
+curr_tx[UNITS] is: 5.6740
+FILL_CURR_TX line 332 = $9.0744
+
+curr_tx[PRICE] is: $9.0744
+FILL_CURR_TX line 333 = 1249.2540
+
+curr_tx[UNIT_BAL] is: 1249.2540
+FIND_FUND line 335 = Mackenzie Financial Corp./MFC 6138-Mackenzie Strategic Income Fund Series PW   Account # 64665893
+
+('MFC 6138',)
+Current fund_name is: MFC 6138
+FIND_NEXT_TX line 344 = 10/19/2018
+
+('10/19/2018',)
+Current tx_date is: 10/19/2018
+FILL_CURR_TX line 345 = Reinvested 
+
+curr_tx[DESC] is: Reinvested:
+FILL_CURR_TX line 346 = Distribution/Interest
+
+curr_tx[DESC] is: Reinvested:Distribution/Interest:
+FILL_CURR_TX line 347 = $135.08
+
+curr_tx[GROSS] is: $135.08
+FILL_CURR_TX line 348 = $135.08
+
+curr_tx[NET] is: $135.08
+FILL_CURR_TX line 349 = 9.7570
+
+curr_tx[UNITS] is: 9.7570
+FILL_CURR_TX line 350 = $13.8439
+
+curr_tx[PRICE] is: $13.8439
+FILL_CURR_TX line 351 = 1855.1140
+
+curr_tx[UNIT_BAL] is: 1855.1140
+FIND_NEXT_TX line 353 = 11/23/2018
+
+('11/23/2018',)
+Current tx_date is: 11/23/2018
+FILL_CURR_TX line 354 = Reinvested 
+
+curr_tx[DESC] is: Reinvested:
+FILL_CURR_TX line 355 = Distribution/Interest
+
+curr_tx[DESC] is: Reinvested:Distribution/Interest:
+FILL_CURR_TX line 356 = $135.79
+
+curr_tx[GROSS] is: $135.79
+FILL_CURR_TX line 357 = $135.79
+
+curr_tx[NET] is: $135.79
+FILL_CURR_TX line 358 = 9.9940
+
+curr_tx[UNITS] is: 9.9940
+FILL_CURR_TX line 359 = $13.5872
+
+curr_tx[PRICE] is: $13.5872
+FILL_CURR_TX line 360 = 1865.1080
+
+curr_tx[UNIT_BAL] is: 1865.1080
+FIND_FUND line 366 = Mackenzie Financial Corp./MFC 302-Mackenzie Canadian Bond Fund Series A   Account # 64665893
+
+('MFC 302',)
+Current fund_name is: MFC 302
+FIND_NEXT_TX line 375 = 10/19/2018
+
+('10/19/2018',)
+Current tx_date is: 10/19/2018
+FILL_CURR_TX line 376 = Reinvested 
+
+curr_tx[DESC] is: Reinvested:
+FILL_CURR_TX line 377 = Distribution/Interest
+
+curr_tx[DESC] is: Reinvested:Distribution/Interest:
+FILL_CURR_TX line 378 = $12.91
+
+curr_tx[GROSS] is: $12.91
+FILL_CURR_TX line 379 = $12.91
+
+curr_tx[NET] is: $12.91
+FILL_CURR_TX line 380 = 0.9630
+
+curr_tx[UNITS] is: 0.9630
+FILL_CURR_TX line 381 = $13.4137
+
+curr_tx[PRICE] is: $13.4137
+FILL_CURR_TX line 382 = 844.8180
+
+curr_tx[UNIT_BAL] is: 844.8180
+FIND_NEXT_TX line 384 = 11/23/2018
+
+('11/23/2018',)
+Current tx_date is: 11/23/2018
+FILL_CURR_TX line 385 = Reinvested 
+
+curr_tx[DESC] is: Reinvested:
+FILL_CURR_TX line 386 = Distribution/Interest
+
+curr_tx[DESC] is: Reinvested:Distribution/Interest:
+FILL_CURR_TX line 387 = $14.02
+
+curr_tx[GROSS] is: $14.02
+FILL_CURR_TX line 388 = $14.02
+
+curr_tx[NET] is: $14.02
+FILL_CURR_TX line 389 = 1.0440
+
+curr_tx[UNITS] is: 1.0440
+FILL_CURR_TX line 390 = $13.4359
+
+curr_tx[PRICE] is: $13.4359
+FILL_CURR_TX line 391 = 845.8620
+
+curr_tx[UNIT_BAL] is: 845.8620
+FIND_FUND line 393 = Mackenzie Financial Corp./MFC 3232-Mackenzie Strategic Income Fund Series A   Account # 64665893
+
+('MFC 3232',)
+Current fund_name is: MFC 3232
+FIND_NEXT_TX line 402 = 10/19/2018
+
+('10/19/2018',)
+Current tx_date is: 10/19/2018
+FILL_CURR_TX line 403 = Reinvested 
+
+curr_tx[DESC] is: Reinvested:
+FILL_CURR_TX line 404 = Distribution/Interest
+
+curr_tx[DESC] is: Reinvested:Distribution/Interest:
+FILL_CURR_TX line 405 = $101.75
+
+curr_tx[GROSS] is: $101.75
+FILL_CURR_TX line 406 = $101.75
+
+curr_tx[NET] is: $101.75
+FILL_CURR_TX line 407 = 11.8730
+
+curr_tx[UNITS] is: 11.8730
+FILL_CURR_TX line 408 = $8.5701
+
+curr_tx[PRICE] is: $8.5701
+FILL_CURR_TX line 409 = 2253.0850
+
+curr_tx[UNIT_BAL] is: 2253.0850
+FIND_NEXT_TX line 411 = 11/23/2018
+
+('11/23/2018',)
+Current tx_date is: 11/23/2018
+FILL_CURR_TX line 412 = Reinvested 
+
+curr_tx[DESC] is: Reinvested:
+FILL_CURR_TX line 413 = Distribution/Interest
+
+curr_tx[DESC] is: Reinvested:Distribution/Interest:
+FILL_CURR_TX line 414 = $102.29
+
+curr_tx[GROSS] is: $102.29
+FILL_CURR_TX line 415 = $102.29
+
+curr_tx[NET] is: $102.29
+FILL_CURR_TX line 416 = 12.1640
+
+curr_tx[UNITS] is: 12.1640
+FILL_CURR_TX line 417 = $8.4092
+
+curr_tx[PRICE] is: $8.4092
+FILL_CURR_TX line 418 = 2265.2490
+
+curr_tx[UNIT_BAL] is: 2265.2490
+FIND_FUND line 420 = Dynamic Funds/DYN 029-Dynamic Equity Income Fund Series A   Account # 424767671
+
+('DYN 029',)
+Current fund_name is: DYN 029
+FIND_NEXT_TX line 429 = 10/26/2018
+
+('10/26/2018',)
+Current tx_date is: 10/26/2018
+FILL_CURR_TX line 430 = Reinvested 
+
+curr_tx[DESC] is: Reinvested:
+FILL_CURR_TX line 431 = Distribution/Interest
+
+curr_tx[DESC] is: Reinvested:Distribution/Interest:
+FILL_CURR_TX line 432 = $42.25
+
+curr_tx[GROSS] is: $42.25
+FILL_CURR_TX line 433 = $42.25
+
+curr_tx[NET] is: $42.25
+FILL_CURR_TX line 434 = 2.1231
+
+curr_tx[UNITS] is: 2.1231
+FILL_CURR_TX line 435 = $19.9000
+
+curr_tx[PRICE] is: $19.9000
+FILL_CURR_TX line 436 = 605.7630
+
+curr_tx[UNIT_BAL] is: 605.7630
+FIND_NEXT_TX line 438 = 11/30/2018
+
+('11/30/2018',)
+Current tx_date is: 11/30/2018
+FILL_CURR_TX line 439 = Reinvested 
+
+curr_tx[DESC] is: Reinvested:
+FILL_CURR_TX line 440 = Distribution/Interest
+
+curr_tx[DESC] is: Reinvested:Distribution/Interest:
+FILL_CURR_TX line 441 = $42.40
+
+curr_tx[GROSS] is: $42.40
+FILL_CURR_TX line 442 = $42.40
+
+curr_tx[NET] is: $42.40
+FILL_CURR_TX line 443 = 2.0513
+
+curr_tx[UNITS] is: 2.0513
+FILL_CURR_TX line 444 = $20.6700
+
+curr_tx[PRICE] is: $20.6700
+FILL_CURR_TX line 445 = 607.8143
+
+curr_tx[UNIT_BAL] is: 607.8143
+FIND_FUND line 447 = Dynamic Funds/DYN 729-Dynamic Equity Income Fund Series A   Account # 424767671
+
+('DYN 729',)
+Current fund_name is: DYN 729
+FIND_NEXT_TX line 456 = 10/26/2018
+
+('10/26/2018',)
+Current tx_date is: 10/26/2018
+FILL_CURR_TX line 457 = Reinvested 
+
+curr_tx[DESC] is: Reinvested:
+FILL_CURR_TX line 458 = Distribution/Interest
+
+curr_tx[DESC] is: Reinvested:Distribution/Interest:
+FILL_CURR_TX line 459 = $31.15
+
+curr_tx[GROSS] is: $31.15
+FILL_CURR_TX line 460 = $31.15
+
+curr_tx[NET] is: $31.15
+FILL_CURR_TX line 461 = 1.5653
+
+curr_tx[UNITS] is: 1.5653
+FILL_CURR_TX line 462 = $19.9000
+
+curr_tx[PRICE] is: $19.9000
+FILL_CURR_TX line 463 = 446.5658
+
+curr_tx[UNIT_BAL] is: 446.5658
+FIND_NEXT_TX line 465 = 11/30/2018
+
+('11/30/2018',)
+Current tx_date is: 11/30/2018
+FILL_CURR_TX line 466 = Reinvested 
+
+curr_tx[DESC] is: Reinvested:
+FILL_CURR_TX line 467 = Distribution/Interest
+
+curr_tx[DESC] is: Reinvested:Distribution/Interest:
+FILL_CURR_TX line 468 = $31.26
+
+curr_tx[GROSS] is: $31.26
+FILL_CURR_TX line 469 = $31.26
+
+curr_tx[NET] is: $31.26
+FILL_CURR_TX line 470 = 1.5123
+
+curr_tx[UNITS] is: 1.5123
+FILL_CURR_TX line 471 = $20.6700
+
+curr_tx[PRICE] is: $20.6700
+FILL_CURR_TX line 472 = 448.0781
+
+curr_tx[UNIT_BAL] is: 448.0781
+FIND_FUND line 474 = Dynamic Funds/DYN 1562-Dynamic Strategic Yield Fund Series A   Account # 424767671
+
+('DYN 1562',)
+Current fund_name is: DYN 1562
+FIND_NEXT_TX line 483 = 10/26/2018
+
+('10/26/2018',)
+Current tx_date is: 10/26/2018
+FILL_CURR_TX line 484 = Reinvested 
+
+curr_tx[DESC] is: Reinvested:
+FILL_CURR_TX line 485 = Distribution/Interest
+
+curr_tx[DESC] is: Reinvested:Distribution/Interest:
+FILL_CURR_TX line 486 = $34.88
+
+curr_tx[GROSS] is: $34.88
+FILL_CURR_TX line 487 = $34.88
+
+curr_tx[NET] is: $34.88
+FILL_CURR_TX line 488 = 2.6484
+
+curr_tx[UNITS] is: 2.6484
+FILL_CURR_TX line 489 = $13.1700
+
+curr_tx[PRICE] is: $13.1700
+FILL_CURR_TX line 490 = 599.8550
+
+curr_tx[UNIT_BAL] is: 599.8550
+FIND_NEXT_TX line 492 = 11/30/2018
+
+('11/30/2018',)
+Current tx_date is: 11/30/2018
+FILL_CURR_TX line 493 = Reinvested 
+
+curr_tx[DESC] is: Reinvested:
+FILL_CURR_TX line 494 = Distribution/Interest
+
+curr_tx[DESC] is: Reinvested:Distribution/Interest:
+FILL_CURR_TX line 495 = $35.03
+
+curr_tx[GROSS] is: $35.03
+FILL_CURR_TX line 496 = $35.03
+
+curr_tx[NET] is: $35.03
+FILL_CURR_TX line 497 = 2.6006
+
+curr_tx[UNITS] is: 2.6006
+FILL_CURR_TX line 498 = $13.4700
+
+curr_tx[PRICE] is: $13.4700
+FILL_CURR_TX line 499 = 602.4556
+
+curr_tx[UNIT_BAL] is: 602.4556
+FIND_FUND line 501 = Manulife Mutual Funds/MMF 44424-Manulife Yield Opportunities Fund Advisor Series   Account # 72562759
+
+('MMF 44424',)
+Current fund_name is: MMF 44424
+FIND_NEXT_TX line 510 = 10/26/2018
+
+('10/26/2018',)
+Current tx_date is: 10/26/2018
+FILL_CURR_TX line 511 = Reinvested 
+
+curr_tx[DESC] is: Reinvested:
+FILL_CURR_TX line 512 = Distribution/Interest
+
+curr_tx[DESC] is: Reinvested:Distribution/Interest:
+FILL_CURR_TX line 513 = $28.53
+
+curr_tx[GROSS] is: $28.53
+FILL_CURR_TX line 514 = $28.53
+
+curr_tx[NET] is: $28.53
+FILL_CURR_TX line 515 = 3.1040
+
+curr_tx[UNITS] is: 3.1040
+FILL_CURR_TX line 516 = $9.1905
+
+curr_tx[PRICE] is: $9.1905
+FILL_CURR_TX line 517 = 573.6710
+
+curr_tx[UNIT_BAL] is: 573.6710
+FIND_NEXT_TX line 519 = 11/30/2018
+
+('11/30/2018',)
+Current tx_date is: 11/30/2018
+FILL_CURR_TX line 520 = Reinvested 
+
+curr_tx[DESC] is: Reinvested:
+FILL_CURR_TX line 521 = Distribution/Interest
+
+curr_tx[DESC] is: Reinvested:Distribution/Interest:
+FILL_CURR_TX line 522 = $28.68
+
+curr_tx[GROSS] is: $28.68
+FILL_CURR_TX line 523 = $28.68
+
+curr_tx[NET] is: $28.68
+FILL_CURR_TX line 524 = 3.1570
+
+curr_tx[UNITS] is: 3.1570
+FILL_CURR_TX line 525 = $9.0850
+
+curr_tx[PRICE] is: $9.0850
+FILL_CURR_TX line 526 = 576.8280
+
+curr_tx[UNIT_BAL] is: 576.8280
+FIND_FUND line 528 = Manulife Mutual Funds/MMF 4524-Manulife Yield Opportunities Fund Advisor Series   Account # 72562759
+
+('MMF 4524',)
+Current fund_name is: MMF 4524
+FIND_NEXT_TX line 537 = 10/26/2018
+
+('10/26/2018',)
+Current tx_date is: 10/26/2018
+FILL_CURR_TX line 538 = Reinvested 
+
+curr_tx[DESC] is: Reinvested:
+FILL_CURR_TX line 539 = Distribution/Interest
+
+curr_tx[DESC] is: Reinvested:Distribution/Interest:
+FILL_CURR_TX line 540 = $170.56
+
+curr_tx[GROSS] is: $170.56
+FILL_CURR_TX line 541 = $170.56
+
+curr_tx[NET] is: $170.56
+FILL_CURR_TX line 542 = 18.5580
+
+curr_tx[UNITS] is: 18.5580
+FILL_CURR_TX line 543 = $9.1905
+
+curr_tx[PRICE] is: $9.1905
+FILL_CURR_TX line 544 = 3429.8050
+
+curr_tx[UNIT_BAL] is: 3429.8050
+FIND_NEXT_TX line 546 = 11/30/2018
+
+('11/30/2018',)
+Current tx_date is: 11/30/2018
+FILL_CURR_TX line 547 = Reinvested 
+
+curr_tx[DESC] is: Reinvested:
+FILL_CURR_TX line 548 = Distribution/Interest
+
+curr_tx[DESC] is: Reinvested:Distribution/Interest:
+FILL_CURR_TX line 549 = $171.49
+
+curr_tx[GROSS] is: $171.49
+FILL_CURR_TX line 550 = $171.49
+
+curr_tx[NET] is: $171.49
+FILL_CURR_TX line 551 = 18.8760
+
+curr_tx[UNITS] is: 18.8760
+FILL_CURR_TX line 552 = $9.0850
+
+curr_tx[PRICE] is: $9.0850
+FILL_CURR_TX line 553 = 3448.6810
+
+curr_tx[UNIT_BAL] is: 3448.6810
+FIND_FUND line 555 = Dynamic Funds/DYN 1560-Dynamic Strategic Yield Fund Series A   Account # 424767671
+
+('DYN 1560',)
+Current fund_name is: DYN 1560
+FIND_NEXT_TX line 564 = 10/26/2018
+
+('10/26/2018',)
+Current tx_date is: 10/26/2018
+FILL_CURR_TX line 565 = Reinvested 
+
+curr_tx[DESC] is: Reinvested:
+FILL_CURR_TX line 566 = Distribution/Interest
+
+curr_tx[DESC] is: Reinvested:Distribution/Interest:
+FILL_CURR_TX line 567 = $50.98
+
+curr_tx[GROSS] is: $50.98
+FILL_CURR_TX line 568 = $50.98
+
+curr_tx[NET] is: $50.98
+FILL_CURR_TX line 569 = 3.8709
+
+curr_tx[UNITS] is: 3.8709
+FILL_CURR_TX line 570 = $13.1700
+
+curr_tx[PRICE] is: $13.1700
+FILL_CURR_TX line 571 = 876.8561
+
+curr_tx[UNIT_BAL] is: 876.8561
+FIND_NEXT_TX line 573 = 11/30/2018
+
+('11/30/2018',)
+Current tx_date is: 11/30/2018
+FILL_CURR_TX line 574 = Reinvested 
+
+curr_tx[DESC] is: Reinvested:
+FILL_CURR_TX line 575 = Distribution/Interest
+
+curr_tx[DESC] is: Reinvested:Distribution/Interest:
+FILL_CURR_TX line 576 = $51.21
+
+curr_tx[GROSS] is: $51.21
+FILL_CURR_TX line 577 = $51.21
+
+curr_tx[NET] is: $51.21
+FILL_CURR_TX line 578 = 3.8018
+
+curr_tx[UNITS] is: 3.8018
+FILL_CURR_TX line 579 = $13.4700
+
+curr_tx[PRICE] is: $13.4700
+FILL_CURR_TX line 580 = 880.6579
+
+curr_tx[UNIT_BAL] is: 880.6579
+FIND_FUND line 599 = Franklin Templeton Investments/TML 1018-Franklin Bissett Canadian Dividend Fund A   Account # 4722871
+
+('TML 1018',)
+Current fund_name is: TML 1018
+FIND_NEXT_TX line 609 = 10/30/2018
+
+('10/30/2018',)
+Current tx_date is: 10/30/2018
+FILL_CURR_TX line 610 = Reinvested 
+
+curr_tx[DESC] is: Reinvested:
+FILL_CURR_TX line 611 = Distribution/Interest
+
+curr_tx[DESC] is: Reinvested:Distribution/Interest:
+FILL_CURR_TX line 612 = $15.82
+
+curr_tx[GROSS] is: $15.82
+FILL_CURR_TX line 613 = $15.82
+
+curr_tx[NET] is: $15.82
+FILL_CURR_TX line 614 = 1.1568
+
+curr_tx[UNITS] is: 1.1568
+FILL_CURR_TX line 615 = $13.6762
+
+curr_tx[PRICE] is: $13.6762
+FILL_CURR_TX line 616 = 487.8724
+
+curr_tx[UNIT_BAL] is: 487.8724
+FIND_NEXT_TX line 618 = 11/29/2018
+
+('11/29/2018',)
+Current tx_date is: 11/29/2018
+FILL_CURR_TX line 619 = Reinvested 
+
+curr_tx[DESC] is: Reinvested:
+FILL_CURR_TX line 620 = Distribution/Interest
+
+curr_tx[DESC] is: Reinvested:Distribution/Interest:
+FILL_CURR_TX line 621 = $15.86
+
+curr_tx[GROSS] is: $15.86
+FILL_CURR_TX line 622 = $15.86
+
+curr_tx[NET] is: $15.86
+FILL_CURR_TX line 623 = 1.1520
+
+curr_tx[UNITS] is: 1.1520
+FILL_CURR_TX line 624 = $13.7670
+
+curr_tx[PRICE] is: $13.7670
+FILL_CURR_TX line 625 = 489.0244
+
+curr_tx[UNIT_BAL] is: 489.0244
+FIND_FUND line 627 = Franklin Templeton Investments/TML 1017-Franklin Bissett Canadian Dividend Fund A   Account # 4722871
+
+('TML 1017',)
+Current fund_name is: TML 1017
+FIND_NEXT_TX line 636 = 10/30/2018
+
+('10/30/2018',)
+Current tx_date is: 10/30/2018
+FILL_CURR_TX line 637 = Reinvested 
+
+curr_tx[DESC] is: Reinvested:
+FILL_CURR_TX line 638 = Distribution/Interest
+
+curr_tx[DESC] is: Reinvested:Distribution/Interest:
+FILL_CURR_TX line 639 = $6.17
+
+curr_tx[GROSS] is: $6.17
+FILL_CURR_TX line 640 = $6.17
+
+curr_tx[NET] is: $6.17
+FILL_CURR_TX line 641 = 0.4511
+
+curr_tx[UNITS] is: 0.4511
+FILL_CURR_TX line 642 = $13.6762
+
+curr_tx[PRICE] is: $13.6762
+FILL_CURR_TX line 643 = 190.1902
+
+curr_tx[UNIT_BAL] is: 190.1902
+FIND_NEXT_TX line 645 = 11/29/2018
+
+('11/29/2018',)
+Current tx_date is: 11/29/2018
+FILL_CURR_TX line 646 = Reinvested 
+
+curr_tx[DESC] is: Reinvested:
+FILL_CURR_TX line 647 = Distribution/Interest
+
+curr_tx[DESC] is: Reinvested:Distribution/Interest:
+FILL_CURR_TX line 648 = $6.18
+
+curr_tx[GROSS] is: $6.18
+FILL_CURR_TX line 649 = $6.18
+
+curr_tx[NET] is: $6.18
+FILL_CURR_TX line 650 = 0.4489
+
+curr_tx[UNITS] is: 0.4489
+FILL_CURR_TX line 651 = $13.7670
+
+curr_tx[PRICE] is: $13.7670
+FILL_CURR_TX line 652 = 190.6391
+
+curr_tx[UNIT_BAL] is: 190.6391
+
+	len(Monarch_record[OPEN]) = 4
+	Monarch_record[OPEN] = [
+    {
+        "Trade Date": "10/26/2018", 
+        "Gross": "$34.53", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$8.9732", 
+        "Unit Balance": "694.4350", 
+        "Units": "3.8480", 
+        "Net": "$34.53", 
+        "Fund Code": "CIG 11461"
+    }, 
+    {
+        "Trade Date": "11/23/2018", 
+        "Gross": "$34.73", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$8.9957", 
+        "Unit Balance": "698.2960", 
+        "Units": "3.8610", 
+        "Net": "$34.73", 
+        "Fund Code": "CIG 11461"
+    }, 
+    {
+        "Trade Date": "10/26/2018", 
+        "Gross": "$5.30", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$8.9732", 
+        "Unit Balance": "106.6770", 
+        "Units": "0.5910", 
+        "Net": "$5.30", 
+        "Fund Code": "CIG 11111"
+    }, 
+    {
+        "Trade Date": "11/23/2018", 
+        "Gross": "$5.33", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$8.9957", 
+        "Unit Balance": "107.2700", 
+        "Units": "0.5930", 
+        "Net": "$5.33", 
+        "Fund Code": "CIG 11111"
+    }
+]
+
+	len(Monarch_record[TFSA]) = 8
+	Monarch_record[TFSA] = [
+    {
+        "Trade Date": "10/30/2018", 
+        "Gross": "$4.93", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$8.4422", 
+        "Unit Balance": "308.6739", 
+        "Units": "0.5840", 
+        "Net": "$4.93", 
+        "Fund Code": "TML 674"
+    }, 
+    {
+        "Trade Date": "11/29/2018", 
+        "Gross": "$4.94", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$8.5672", 
+        "Unit Balance": "309.2505", 
+        "Units": "0.5766", 
+        "Net": "$4.94", 
+        "Fund Code": "TML 674"
+    }, 
+    {
+        "Trade Date": "10/30/2018", 
+        "Gross": "$7.87", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$8.4422", 
+        "Unit Balance": "492.7939", 
+        "Units": "0.9322", 
+        "Net": "$7.87", 
+        "Fund Code": "TML 704"
+    }, 
+    {
+        "Trade Date": "11/29/2018", 
+        "Gross": "$7.88", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$8.5672", 
+        "Unit Balance": "493.7137", 
+        "Units": "0.9198", 
+        "Net": "$7.88", 
+        "Fund Code": "TML 704"
+    }, 
+    {
+        "Trade Date": "10/30/2018", 
+        "Gross": "$15.99", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$27.1627", 
+        "Unit Balance": "291.2588", 
+        "Units": "0.5887", 
+        "Net": "$15.99", 
+        "Fund Code": "TML 203"
+    }, 
+    {
+        "Trade Date": "11/29/2018", 
+        "Gross": "$16.02", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$27.4141", 
+        "Unit Balance": "291.8432", 
+        "Units": "0.5844", 
+        "Net": "$16.02", 
+        "Fund Code": "TML 203"
+    }, 
+    {
+        "Trade Date": "10/30/2018", 
+        "Gross": "$10.34", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$27.1627", 
+        "Unit Balance": "188.2952", 
+        "Units": "0.3807", 
+        "Net": "$10.34", 
+        "Fund Code": "TML 519"
+    }, 
+    {
+        "Trade Date": "11/29/2018", 
+        "Gross": "$10.36", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$27.4141", 
+        "Unit Balance": "188.6731", 
+        "Units": "0.3779", 
+        "Net": "$10.36", 
+        "Fund Code": "TML 519"
+    }
+]
+
+	len(Monarch_record[RRSP]) = 28
+	Monarch_record[RRSP] = [
+    {
+        "Trade Date": "10/19/2018", 
+        "Gross": "$26.28", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$4.2733", 
+        "Unit Balance": "1910.3030", 
+        "Units": "6.1490", 
+        "Net": "$26.28", 
+        "Fund Code": "MFC 856"
+    }, 
+    {
+        "Trade Date": "11/23/2018", 
+        "Gross": "$33.43", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$4.1890", 
+        "Unit Balance": "1918.2830", 
+        "Units": "7.9800", 
+        "Net": "$33.43", 
+        "Fund Code": "MFC 856"
+    }, 
+    {
+        "Trade Date": "10/19/2018", 
+        "Gross": "$20.49", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$10.1337", 
+        "Unit Balance": "1386.5420", 
+        "Units": "2.0220", 
+        "Net": "$20.49", 
+        "Fund Code": "MFC 6129"
+    }, 
+    {
+        "Trade Date": "11/23/2018", 
+        "Gross": "$22.88", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$10.1511", 
+        "Unit Balance": "1388.7960", 
+        "Units": "2.2540", 
+        "Net": "$22.88", 
+        "Fund Code": "MFC 6129"
+    }, 
+    {
+        "Trade Date": "10/19/2018", 
+        "Gross": "$40.65", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$9.2574", 
+        "Unit Balance": "1243.5800", 
+        "Units": "4.3910", 
+        "Net": "$40.65", 
+        "Fund Code": "MFC 6130"
+    }, 
+    {
+        "Trade Date": "11/23/2018", 
+        "Gross": "$51.48", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$9.0744", 
+        "Unit Balance": "1249.2540", 
+        "Units": "5.6740", 
+        "Net": "$51.48", 
+        "Fund Code": "MFC 6130"
+    }, 
+    {
+        "Trade Date": "10/19/2018", 
+        "Gross": "$135.08", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$13.8439", 
+        "Unit Balance": "1855.1140", 
+        "Units": "9.7570", 
+        "Net": "$135.08", 
+        "Fund Code": "MFC 6138"
+    }, 
+    {
+        "Trade Date": "11/23/2018", 
+        "Gross": "$135.79", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$13.5872", 
+        "Unit Balance": "1865.1080", 
+        "Units": "9.9940", 
+        "Net": "$135.79", 
+        "Fund Code": "MFC 6138"
+    }, 
+    {
+        "Trade Date": "10/19/2018", 
+        "Gross": "$12.91", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$13.4137", 
+        "Unit Balance": "844.8180", 
+        "Units": "0.9630", 
+        "Net": "$12.91", 
+        "Fund Code": "MFC 302"
+    }, 
+    {
+        "Trade Date": "11/23/2018", 
+        "Gross": "$14.02", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$13.4359", 
+        "Unit Balance": "845.8620", 
+        "Units": "1.0440", 
+        "Net": "$14.02", 
+        "Fund Code": "MFC 302"
+    }, 
+    {
+        "Trade Date": "10/19/2018", 
+        "Gross": "$101.75", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$8.5701", 
+        "Unit Balance": "2253.0850", 
+        "Units": "11.8730", 
+        "Net": "$101.75", 
+        "Fund Code": "MFC 3232"
+    }, 
+    {
+        "Trade Date": "11/23/2018", 
+        "Gross": "$102.29", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$8.4092", 
+        "Unit Balance": "2265.2490", 
+        "Units": "12.1640", 
+        "Net": "$102.29", 
+        "Fund Code": "MFC 3232"
+    }, 
+    {
+        "Trade Date": "10/26/2018", 
+        "Gross": "$42.25", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$19.9000", 
+        "Unit Balance": "605.7630", 
+        "Units": "2.1231", 
+        "Net": "$42.25", 
+        "Fund Code": "DYN 029"
+    }, 
+    {
+        "Trade Date": "11/30/2018", 
+        "Gross": "$42.40", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$20.6700", 
+        "Unit Balance": "607.8143", 
+        "Units": "2.0513", 
+        "Net": "$42.40", 
+        "Fund Code": "DYN 029"
+    }, 
+    {
+        "Trade Date": "10/26/2018", 
+        "Gross": "$31.15", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$19.9000", 
+        "Unit Balance": "446.5658", 
+        "Units": "1.5653", 
+        "Net": "$31.15", 
+        "Fund Code": "DYN 729"
+    }, 
+    {
+        "Trade Date": "11/30/2018", 
+        "Gross": "$31.26", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$20.6700", 
+        "Unit Balance": "448.0781", 
+        "Units": "1.5123", 
+        "Net": "$31.26", 
+        "Fund Code": "DYN 729"
+    }, 
+    {
+        "Trade Date": "10/26/2018", 
+        "Gross": "$34.88", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$13.1700", 
+        "Unit Balance": "599.8550", 
+        "Units": "2.6484", 
+        "Net": "$34.88", 
+        "Fund Code": "DYN 1562"
+    }, 
+    {
+        "Trade Date": "11/30/2018", 
+        "Gross": "$35.03", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$13.4700", 
+        "Unit Balance": "602.4556", 
+        "Units": "2.6006", 
+        "Net": "$35.03", 
+        "Fund Code": "DYN 1562"
+    }, 
+    {
+        "Trade Date": "10/26/2018", 
+        "Gross": "$28.53", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$9.1905", 
+        "Unit Balance": "573.6710", 
+        "Units": "3.1040", 
+        "Net": "$28.53", 
+        "Fund Code": "MMF 44424"
+    }, 
+    {
+        "Trade Date": "11/30/2018", 
+        "Gross": "$28.68", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$9.0850", 
+        "Unit Balance": "576.8280", 
+        "Units": "3.1570", 
+        "Net": "$28.68", 
+        "Fund Code": "MMF 44424"
+    }, 
+    {
+        "Trade Date": "10/26/2018", 
+        "Gross": "$170.56", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$9.1905", 
+        "Unit Balance": "3429.8050", 
+        "Units": "18.5580", 
+        "Net": "$170.56", 
+        "Fund Code": "MMF 4524"
+    }, 
+    {
+        "Trade Date": "11/30/2018", 
+        "Gross": "$171.49", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$9.0850", 
+        "Unit Balance": "3448.6810", 
+        "Units": "18.8760", 
+        "Net": "$171.49", 
+        "Fund Code": "MMF 4524"
+    }, 
+    {
+        "Trade Date": "10/26/2018", 
+        "Gross": "$50.98", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$13.1700", 
+        "Unit Balance": "876.8561", 
+        "Units": "3.8709", 
+        "Net": "$50.98", 
+        "Fund Code": "DYN 1560"
+    }, 
+    {
+        "Trade Date": "11/30/2018", 
+        "Gross": "$51.21", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$13.4700", 
+        "Unit Balance": "880.6579", 
+        "Units": "3.8018", 
+        "Net": "$51.21", 
+        "Fund Code": "DYN 1560"
+    }, 
+    {
+        "Trade Date": "10/30/2018", 
+        "Gross": "$15.82", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$13.6762", 
+        "Unit Balance": "487.8724", 
+        "Units": "1.1568", 
+        "Net": "$15.82", 
+        "Fund Code": "TML 1018"
+    }, 
+    {
+        "Trade Date": "11/29/2018", 
+        "Gross": "$15.86", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$13.7670", 
+        "Unit Balance": "489.0244", 
+        "Units": "1.1520", 
+        "Net": "$15.86", 
+        "Fund Code": "TML 1018"
+    }, 
+    {
+        "Trade Date": "10/30/2018", 
+        "Gross": "$6.17", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$13.6762", 
+        "Unit Balance": "190.1902", 
+        "Units": "0.4511", 
+        "Net": "$6.17", 
+        "Fund Code": "TML 1017"
+    }, 
+    {
+        "Trade Date": "11/29/2018", 
+        "Gross": "$6.18", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$13.7670", 
+        "Unit Balance": "190.6391", 
+        "Units": "0.4489", 
+        "Net": "$6.18", 
+        "Fund Code": "TML 1017"
+    }
+]

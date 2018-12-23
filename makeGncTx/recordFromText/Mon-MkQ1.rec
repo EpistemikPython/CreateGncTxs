@@ -1,0 +1,2318 @@
+parseMonarchReport(/bak/home/marksa/dev/Python/makeGncTx/in/Monarch Mark txRep 2018Q1.txt)
+
+('OPEN', ' (Individual)')
+Current bag_name is: 'OPEN'
+Current bag is: []
+
+
+	Current fund_name is: CIG 11111
+
+	Current tx_date is: '01/11/2018'
+curr_tx[DESC] is: 'Switch-In:'
+curr_tx[GROSS] is: '$988.14'
+curr_tx[UNITS] is: '101.1420'
+curr_tx[PRICE] is: '$9.7698'
+curr_tx[UNIT_BAL] is: '101.1420'
+
+	Current tx_date is: '01/26/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$5.06'
+curr_tx[UNITS] is: '0.5240'
+curr_tx[PRICE] is: '$9.6576'
+curr_tx[UNIT_BAL] is: '101.6660'
+
+	Current tx_date is: '02/23/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$5.09'
+curr_tx[UNITS] is: '0.5430'
+curr_tx[PRICE] is: '$9.3696'
+curr_tx[UNIT_BAL] is: '102.2090'
+
+	Current tx_date is: '03/01/2018'
+curr_tx[DESC] is: 'Internal Transfer-Out:'
+curr_tx[DESC] is: 'Internal Transfer-Out:(Change Account):'
+curr_tx[GROSS] is: '($951.88)'
+curr_tx[UNITS] is: '-102.2090'
+curr_tx[PRICE] is: '$9.3131'
+curr_tx[UNIT_BAL] is: '0.0000'
+
+	Current fund_name is: CIG 11461
+
+	Current tx_date is: '01/11/2018'
+curr_tx[DESC] is: 'Switch-Out:'
+curr_tx[GROSS] is: '($988.14)'
+curr_tx[UNITS] is: '-101.1420'
+curr_tx[PRICE] is: '$9.7698'
+curr_tx[UNIT_BAL] is: '658.4090'
+
+	Current tx_date is: '01/26/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$32.92'
+curr_tx[UNITS] is: '3.4090'
+curr_tx[PRICE] is: '$9.6576'
+curr_tx[UNIT_BAL] is: '661.8180'
+
+	Current tx_date is: '02/23/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$33.09'
+curr_tx[UNITS] is: '3.5320'
+curr_tx[PRICE] is: '$9.3696'
+curr_tx[UNIT_BAL] is: '665.3500'
+
+	Current tx_date is: '03/01/2018'
+curr_tx[DESC] is: 'Internal Transfer-Out:'
+curr_tx[DESC] is: 'Internal Transfer-Out:(Change Account):'
+curr_tx[GROSS] is: '($6,196.47)'
+curr_tx[UNITS] is: '-665.3500'
+curr_tx[PRICE] is: '$9.3131'
+curr_tx[UNIT_BAL] is: '0.0000'
+
+	Current fund_name is: CIG 6104
+
+	Current tx_date is: '01/11/2018'
+curr_tx[DESC] is: 'Switch-In:'
+curr_tx[GROSS] is: '$347.22'
+curr_tx[UNITS] is: '16.1640'
+curr_tx[PRICE] is: '$21.4809'
+curr_tx[UNIT_BAL] is: '16.1640'
+
+	Current tx_date is: '03/01/2018'
+curr_tx[DESC] is: 'Internal Transfer-Out:'
+curr_tx[DESC] is: 'Internal Transfer-Out:(Change Account):'
+curr_tx[GROSS] is: '($329.38)'
+curr_tx[UNITS] is: '-16.1640'
+curr_tx[PRICE] is: '$20.3774'
+curr_tx[UNIT_BAL] is: '0.0000'
+
+	Current fund_name is: CIG 1154
+
+	Current tx_date is: '01/11/2018'
+curr_tx[DESC] is: 'Switch-Out:'
+curr_tx[GROSS] is: '($347.22)'
+curr_tx[UNITS] is: '-16.1640'
+curr_tx[PRICE] is: '$21.4809'
+curr_tx[UNIT_BAL] is: '108.7040'
+
+	Current tx_date is: '03/01/2018'
+curr_tx[DESC] is: 'Internal Transfer-Out:'
+curr_tx[DESC] is: 'Internal Transfer-Out:(Change Account):'
+curr_tx[GROSS] is: '($2,215.10)'
+curr_tx[UNITS] is: '-108.7040'
+curr_tx[PRICE] is: '$20.3774'
+curr_tx[UNIT_BAL] is: '0.0000'
+
+	Current fund_name is: CIG 2321
+
+	Current tx_date is: '01/11/2018'
+curr_tx[DESC] is: 'Switch-In:'
+curr_tx[GROSS] is: '$1,126.43'
+curr_tx[UNITS] is: '62.9160'
+curr_tx[PRICE] is: '$17.9037'
+curr_tx[UNIT_BAL] is: '62.9160'
+
+	Current tx_date is: '03/01/2018'
+curr_tx[DESC] is: 'Internal Transfer-Out:'
+curr_tx[DESC] is: 'Internal Transfer-Out:(Change Account):'
+curr_tx[GROSS] is: '($1,085.61)'
+curr_tx[UNITS] is: '-62.9160'
+curr_tx[PRICE] is: '$17.2549'
+curr_tx[UNIT_BAL] is: '0.0000'
+
+	Current fund_name is: CIG 1521
+
+	Current tx_date is: '01/11/2018'
+curr_tx[DESC] is: 'Switch-Out:'
+curr_tx[GROSS] is: '($1,126.43)'
+curr_tx[UNITS] is: '-62.9160'
+curr_tx[PRICE] is: '$17.9037'
+curr_tx[UNIT_BAL] is: '399.1300'
+
+	Current tx_date is: '03/01/2018'
+curr_tx[DESC] is: 'Internal Transfer-Out:'
+curr_tx[DESC] is: 'Internal Transfer-Out:(Change Account):'
+curr_tx[GROSS] is: '($6,886.95)'
+curr_tx[UNITS] is: '-399.1300'
+curr_tx[PRICE] is: '$17.2549'
+curr_tx[UNIT_BAL] is: '0.0000'
+
+	Current fund_name is: CIG 2304
+
+	Current tx_date is: '01/11/2018'
+curr_tx[DESC] is: 'Switch-In:'
+curr_tx[GROSS] is: '$975.31'
+curr_tx[UNITS] is: '36.3500'
+curr_tx[PRICE] is: '$26.8312'
+curr_tx[UNIT_BAL] is: '36.3500'
+
+	Current tx_date is: '03/01/2018'
+curr_tx[DESC] is: 'Internal Transfer-Out:'
+curr_tx[DESC] is: 'Internal Transfer-Out:(Change Account):'
+curr_tx[GROSS] is: '($944.47)'
+curr_tx[UNITS] is: '-36.3500'
+curr_tx[PRICE] is: '$25.9828'
+curr_tx[UNIT_BAL] is: '0.0000'
+
+	Current fund_name is: CIG 1304
+
+	Current tx_date is: '01/11/2018'
+curr_tx[DESC] is: 'Switch-Out:'
+curr_tx[GROSS] is: '($975.31)'
+curr_tx[UNITS] is: '-36.3500'
+curr_tx[PRICE] is: '$26.8312'
+curr_tx[UNIT_BAL] is: '240.1400'
+
+	Current tx_date is: '03/01/2018'
+curr_tx[DESC] is: 'Internal Transfer-Out:'
+curr_tx[DESC] is: 'Internal Transfer-Out:(Change Account):'
+curr_tx[GROSS] is: '($6,239.51)'
+curr_tx[UNITS] is: '-240.1400'
+curr_tx[PRICE] is: '$25.9828'
+curr_tx[UNIT_BAL] is: '0.0000'
+('OPEN', ' (Joint)')
+Current bag_name is: 'OPEN'
+Current bag is: [{'Trade Date': '01/11/2018', 'Gross': '$988.14', 'Description': 'Switch-In:', 'Price': '$9.7698', 'Fund Company': 'CIG', 'Unit Balance': '101.1420', 'Units': '101.1420', 'Net': '$988.14', 'Fund Code': '11111'}, {'Trade Date': '01/26/2018', 'Gross': '$5.06', 'Description': 'Reinvested:Distribution/Interest:', 'Price': '$9.6576', 'Fund Company': 'CIG', 'Unit Balance': '101.6660', 'Units': '0.5240', 'Net': '$5.06', 'Fund Code': '11111'}, {'Trade Date': '02/23/2018', 'Gross': '$5.09', 'Description': 'Reinvested:Distribution/Interest:', 'Price': '$9.3696', 'Fund Company': 'CIG', 'Unit Balance': '102.2090', 'Units': '0.5430', 'Net': '$5.09', 'Fund Code': '11111'}, {'Trade Date': '03/01/2018', 'Gross': '($951.88)', 'Description': 'Internal Transfer-Out:(Change Account):', 'Price': '$9.3131', 'Fund Company': 'CIG', 'Unit Balance': '0.0000', 'Units': '-102.2090', 'Net': '($951.88)', 'Fund Code': '11111'}, {'Trade Date': '01/11/2018', 'Gross': '($988.14)', 'Description': 'Switch-Out:', 'Price': '$9.7698', 'Fund Company': 'CIG', 'Unit Balance': '658.4090', 'Units': '-101.1420', 'Net': '($988.14)', 'Fund Code': '11461'}, {'Trade Date': '01/26/2018', 'Gross': '$32.92', 'Description': 'Reinvested:Distribution/Interest:', 'Price': '$9.6576', 'Fund Company': 'CIG', 'Unit Balance': '661.8180', 'Units': '3.4090', 'Net': '$32.92', 'Fund Code': '11461'}, {'Trade Date': '02/23/2018', 'Gross': '$33.09', 'Description': 'Reinvested:Distribution/Interest:', 'Price': '$9.3696', 'Fund Company': 'CIG', 'Unit Balance': '665.3500', 'Units': '3.5320', 'Net': '$33.09', 'Fund Code': '11461'}, {'Trade Date': '03/01/2018', 'Gross': '($6,196.47)', 'Description': 'Internal Transfer-Out:(Change Account):', 'Price': '$9.3131', 'Fund Company': 'CIG', 'Unit Balance': '0.0000', 'Units': '-665.3500', 'Net': '($6,196.47)', 'Fund Code': '11461'}, {'Trade Date': '01/11/2018', 'Gross': '$347.22', 'Description': 'Switch-In:', 'Price': '$21.4809', 'Fund Company': 'CIG', 'Unit Balance': '16.1640', 'Units': '16.1640', 'Net': '$347.22', 'Fund Code': '6104'}, {'Trade Date': '03/01/2018', 'Gross': '($329.38)', 'Description': 'Internal Transfer-Out:(Change Account):', 'Price': '$20.3774', 'Fund Company': 'CIG', 'Unit Balance': '0.0000', 'Units': '-16.1640', 'Net': '($329.38)', 'Fund Code': '6104'}, {'Trade Date': '01/11/2018', 'Gross': '($347.22)', 'Description': 'Switch-Out:', 'Price': '$21.4809', 'Fund Company': 'CIG', 'Unit Balance': '108.7040', 'Units': '-16.1640', 'Net': '($347.22)', 'Fund Code': '1154'}, {'Trade Date': '03/01/2018', 'Gross': '($2,215.10)', 'Description': 'Internal Transfer-Out:(Change Account):', 'Price': '$20.3774', 'Fund Company': 'CIG', 'Unit Balance': '0.0000', 'Units': '-108.7040', 'Net': '($2,215.10)', 'Fund Code': '1154'}, {'Trade Date': '01/11/2018', 'Gross': '$1,126.43', 'Description': 'Switch-In:', 'Price': '$17.9037', 'Fund Company': 'CIG', 'Unit Balance': '62.9160', 'Units': '62.9160', 'Net': '$1,126.43', 'Fund Code': '2321'}, {'Trade Date': '03/01/2018', 'Gross': '($1,085.61)', 'Description': 'Internal Transfer-Out:(Change Account):', 'Price': '$17.2549', 'Fund Company': 'CIG', 'Unit Balance': '0.0000', 'Units': '-62.9160', 'Net': '($1,085.61)', 'Fund Code': '2321'}, {'Trade Date': '01/11/2018', 'Gross': '($1,126.43)', 'Description': 'Switch-Out:', 'Price': '$17.9037', 'Fund Company': 'CIG', 'Unit Balance': '399.1300', 'Units': '-62.9160', 'Net': '($1,126.43)', 'Fund Code': '1521'}, {'Trade Date': '03/01/2018', 'Gross': '($6,886.95)', 'Description': 'Internal Transfer-Out:(Change Account):', 'Price': '$17.2549', 'Fund Company': 'CIG', 'Unit Balance': '0.0000', 'Units': '-399.1300', 'Net': '($6,886.95)', 'Fund Code': '1521'}, {'Trade Date': '01/11/2018', 'Gross': '$975.31', 'Description': 'Switch-In:', 'Price': '$26.8312', 'Fund Company': 'CIG', 'Unit Balance': '36.3500', 'Units': '36.3500', 'Net': '$975.31', 'Fund Code': '2304'}, {'Trade Date': '03/01/2018', 'Gross': '($944.47)', 'Description': 'Internal Transfer-Out:(Change Account):', 'Price': '$25.9828', 'Fund Company': 'CIG', 'Unit Balance': '0.0000', 'Units': '-36.3500', 'Net': '($944.47)', 'Fund Code': '2304'}, {'Trade Date': '01/11/2018', 'Gross': '($975.31)', 'Description': 'Switch-Out:', 'Price': '$26.8312', 'Fund Company': 'CIG', 'Unit Balance': '240.1400', 'Units': '-36.3500', 'Net': '($975.31)', 'Fund Code': '1304'}, {'Trade Date': '03/01/2018', 'Gross': '($6,239.51)', 'Description': 'Internal Transfer-Out:(Change Account):', 'Price': '$25.9828', 'Fund Company': 'CIG', 'Unit Balance': '0.0000', 'Units': '-240.1400', 'Net': '($6,239.51)', 'Fund Code': '1304'}]
+
+
+	Current fund_name is: CIG 6104
+
+	Current tx_date is: '03/01/2018'
+curr_tx[DESC] is: 'Internal Transfer-In:'
+curr_tx[DESC] is: 'Internal Transfer-In:(Change Account-Same:'
+curr_tx[DESC] is: 'Internal Transfer-In:(Change Account-Same:Dealer):'
+curr_tx[GROSS] is: '$329.38'
+curr_tx[UNITS] is: '16.1640'
+curr_tx[PRICE] is: '$20.3774'
+curr_tx[UNIT_BAL] is: '16.1640'
+
+	Current tx_date is: '03/23/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$11.68'
+curr_tx[UNITS] is: '0.6110'
+curr_tx[PRICE] is: '$19.1235'
+curr_tx[UNIT_BAL] is: '16.7750'
+
+	Current fund_name is: CIG 2304
+
+	Current tx_date is: '03/01/2018'
+curr_tx[DESC] is: 'Internal Transfer-In:'
+curr_tx[DESC] is: 'Internal Transfer-In:(Change Account-Same:'
+curr_tx[DESC] is: 'Internal Transfer-In:(Change Account-Same:Dealer):'
+curr_tx[GROSS] is: '$944.47'
+curr_tx[UNITS] is: '36.3500'
+curr_tx[PRICE] is: '$25.9828'
+curr_tx[UNIT_BAL] is: '36.3500'
+
+	Current tx_date is: '03/23/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$12.31'
+curr_tx[UNITS] is: '0.4870'
+curr_tx[PRICE] is: '$25.2854'
+curr_tx[UNIT_BAL] is: '36.8370'
+
+	Current fund_name is: CIG 1521
+
+	Current tx_date is: '03/01/2018'
+curr_tx[DESC] is: 'Internal Transfer-In:'
+curr_tx[DESC] is: 'Internal Transfer-In:(Change Account-Same:'
+curr_tx[DESC] is: 'Internal Transfer-In:(Change Account-Same:Dealer):'
+curr_tx[GROSS] is: '$6,886.95'
+curr_tx[UNITS] is: '399.1300'
+curr_tx[PRICE] is: '$17.2549'
+curr_tx[UNIT_BAL] is: '399.1300'
+
+	Current tx_date is: '03/23/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$248.28'
+curr_tx[UNITS] is: '15.0370'
+curr_tx[PRICE] is: '$16.5113'
+curr_tx[UNIT_BAL] is: '414.1670'
+
+	Current fund_name is: CIG 1154
+
+	Current tx_date is: '03/01/2018'
+curr_tx[DESC] is: 'Internal Transfer-In:'
+curr_tx[DESC] is: 'Internal Transfer-In:(Change Account-Same:'
+curr_tx[DESC] is: 'Internal Transfer-In:(Change Account-Same:Dealer):'
+curr_tx[GROSS] is: '$2,215.10'
+curr_tx[UNITS] is: '108.7040'
+curr_tx[PRICE] is: '$20.3774'
+curr_tx[UNIT_BAL] is: '108.7040'
+
+	Current tx_date is: '03/23/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$78.58'
+curr_tx[UNITS] is: '4.1090'
+curr_tx[PRICE] is: '$19.1235'
+curr_tx[UNIT_BAL] is: '112.8130'
+
+	Current fund_name is: CIG 2321
+
+	Current tx_date is: '03/01/2018'
+curr_tx[DESC] is: 'Internal Transfer-In:'
+curr_tx[DESC] is: 'Internal Transfer-In:(Change Account-Same:'
+curr_tx[DESC] is: 'Internal Transfer-In:(Change Account-Same:Dealer):'
+curr_tx[GROSS] is: '$1,085.61'
+curr_tx[UNITS] is: '62.9160'
+curr_tx[PRICE] is: '$17.2549'
+curr_tx[UNIT_BAL] is: '62.9160'
+
+	Current tx_date is: '03/23/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$39.13'
+curr_tx[UNITS] is: '2.3700'
+curr_tx[PRICE] is: '$16.5113'
+curr_tx[UNIT_BAL] is: '65.2860'
+
+	Current fund_name is: CIG 11111
+
+	Current tx_date is: '03/01/2018'
+curr_tx[DESC] is: 'Internal Transfer-In:'
+curr_tx[DESC] is: 'Internal Transfer-In:(Change Account-Same:'
+curr_tx[DESC] is: 'Internal Transfer-In:(Change Account-Same:Dealer):'
+curr_tx[GROSS] is: '$951.88'
+curr_tx[UNITS] is: '102.2090'
+curr_tx[PRICE] is: '$9.3131'
+curr_tx[UNIT_BAL] is: '102.2090'
+
+	Current tx_date is: '03/23/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$5.11'
+curr_tx[UNITS] is: '0.5610'
+curr_tx[PRICE] is: '$9.1132'
+curr_tx[UNIT_BAL] is: '102.7700'
+
+	Current fund_name is: CIG 1304
+
+	Current tx_date is: '03/01/2018'
+curr_tx[DESC] is: 'Internal Transfer-In:'
+curr_tx[DESC] is: 'Internal Transfer-In:(Change Account-Same:'
+curr_tx[DESC] is: 'Internal Transfer-In:(Change Account-Same:Dealer):'
+curr_tx[GROSS] is: '$6,239.51'
+curr_tx[UNITS] is: '240.1400'
+curr_tx[PRICE] is: '$25.9828'
+curr_tx[UNIT_BAL] is: '240.1400'
+
+	Current tx_date is: '03/23/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$81.37'
+curr_tx[UNITS] is: '3.2180'
+curr_tx[PRICE] is: '$25.2854'
+curr_tx[UNIT_BAL] is: '243.3580'
+
+	Current fund_name is: CIG 11461
+
+	Current tx_date is: '03/01/2018'
+curr_tx[DESC] is: 'Internal Transfer-In:'
+curr_tx[DESC] is: 'Internal Transfer-In:(Change Account-Same:'
+curr_tx[DESC] is: 'Internal Transfer-In:(Change Account-Same:Dealer):'
+curr_tx[GROSS] is: '$6,196.47'
+curr_tx[UNITS] is: '665.3500'
+curr_tx[PRICE] is: '$9.3131'
+curr_tx[UNIT_BAL] is: '665.3500'
+
+	Current tx_date is: '03/23/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$33.26'
+curr_tx[UNITS] is: '3.6500'
+curr_tx[PRICE] is: '$9.1132'
+curr_tx[UNIT_BAL] is: '669.0000'
+('TFSA', ' (Individual)')
+Current bag_name is: 'TFSA'
+Current bag is: []
+
+Current owner_name is: 'Mark H. Sattolo'
+
+	Current fund_name is: TML 674
+
+	Current tx_date is: '01/11/2018'
+curr_tx[DESC] is: 'Switch-Out:'
+curr_tx[GROSS] is: '($2,598.96)'
+curr_tx[UNITS] is: '-295.3368'
+curr_tx[PRICE] is: '$8.8000'
+curr_tx[UNIT_BAL] is: '301.8952'
+
+	Current tx_date is: '01/30/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$4.83'
+curr_tx[UNITS] is: '0.5501'
+curr_tx[PRICE] is: '$8.7800'
+curr_tx[UNIT_BAL] is: '302.4453'
+
+	Current tx_date is: '02/27/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$4.84'
+curr_tx[UNITS] is: '0.5372'
+curr_tx[PRICE] is: '$9.0100'
+curr_tx[UNIT_BAL] is: '302.9825'
+
+	Current tx_date is: '03/28/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$6.06'
+curr_tx[UNITS] is: '0.6637'
+curr_tx[PRICE] is: '$9.1300'
+curr_tx[UNIT_BAL] is: '303.6462'
+
+	Current fund_name is: TML 223
+
+	Current tx_date is: '01/11/2018'
+curr_tx[DESC] is: 'Switch-In:'
+curr_tx[GROSS] is: '$1,570.21'
+curr_tx[UNITS] is: '31.6959'
+curr_tx[PRICE] is: '$49.5400'
+curr_tx[UNIT_BAL] is: '54.5587'
+
+	Current fund_name is: TML 598
+
+	Current tx_date is: '01/11/2018'
+curr_tx[DESC] is: 'Switch-Out:'
+curr_tx[GROSS] is: '($1,570.21)'
+curr_tx[UNITS] is: '-31.6959'
+curr_tx[PRICE] is: '$49.5400'
+curr_tx[UNIT_BAL] is: '36.4098'
+
+	Current fund_name is: TML 707
+
+	Current tx_date is: '01/11/2018'
+curr_tx[DESC] is: 'Switch-In:'
+curr_tx[GROSS] is: '$1,432.73'
+curr_tx[UNITS] is: '50.6445'
+curr_tx[PRICE] is: '$28.2900'
+curr_tx[UNIT_BAL] is: '81.5155'
+
+	Current fund_name is: TML 694
+
+	Current tx_date is: '01/11/2018'
+curr_tx[DESC] is: 'Switch-Out:'
+curr_tx[GROSS] is: '($1,432.73)'
+curr_tx[UNITS] is: '-50.6445'
+curr_tx[PRICE] is: '$28.2900'
+curr_tx[UNIT_BAL] is: '44.9386'
+
+	Current fund_name is: TML 704
+
+	Current tx_date is: '01/11/2018'
+curr_tx[DESC] is: 'Switch-In:'
+curr_tx[GROSS] is: '$2,598.96'
+curr_tx[UNITS] is: '295.3368'
+curr_tx[PRICE] is: '$8.8000'
+curr_tx[UNIT_BAL] is: '481.9739'
+
+	Current tx_date is: '01/30/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$7.71'
+curr_tx[UNITS] is: '0.8781'
+curr_tx[PRICE] is: '$8.7800'
+curr_tx[UNIT_BAL] is: '482.8520'
+
+	Current tx_date is: '02/27/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$7.73'
+curr_tx[UNITS] is: '0.8579'
+curr_tx[PRICE] is: '$9.0100'
+curr_tx[UNIT_BAL] is: '483.7099'
+
+	Current tx_date is: '03/28/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$9.67'
+curr_tx[UNITS] is: '1.0591'
+curr_tx[PRICE] is: '$9.1300'
+curr_tx[UNIT_BAL] is: '484.7690'
+
+	Current fund_name is: TML 518
+
+	Current tx_date is: '01/11/2018'
+curr_tx[DESC] is: 'Switch-Out:'
+curr_tx[GROSS] is: '($4,098.53)'
+curr_tx[UNITS] is: '-40.5755'
+curr_tx[PRICE] is: '$101.0100'
+curr_tx[UNIT_BAL] is: '41.0329'
+
+	Current fund_name is: TML 180
+
+	Current tx_date is: '01/11/2018'
+curr_tx[DESC] is: 'Switch-In:'
+curr_tx[GROSS] is: '$4,020.56'
+curr_tx[UNITS] is: '200.7271'
+curr_tx[PRICE] is: '$20.0300'
+curr_tx[UNIT_BAL] is: '331.6702'
+
+	Current fund_name is: TML 184
+
+	Current tx_date is: '01/11/2018'
+curr_tx[DESC] is: 'Switch-Out:'
+curr_tx[GROSS] is: '($4,020.56)'
+curr_tx[UNITS] is: '-200.7271'
+curr_tx[PRICE] is: '$20.0300'
+curr_tx[UNIT_BAL] is: '202.5092'
+
+	Current fund_name is: TML 203
+
+	Current tx_date is: '01/11/2018'
+curr_tx[DESC] is: 'Switch-In:'
+curr_tx[GROSS] is: '$4,932.06'
+curr_tx[UNITS] is: '171.7292'
+curr_tx[PRICE] is: '$28.7200'
+curr_tx[UNIT_BAL] is: '285.2569'
+
+	Current tx_date is: '01/30/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$15.69'
+curr_tx[UNITS] is: '0.5558'
+curr_tx[PRICE] is: '$28.2300'
+curr_tx[UNIT_BAL] is: '285.8127'
+
+	Current tx_date is: '02/27/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$15.72'
+curr_tx[UNITS] is: '0.5735'
+curr_tx[PRICE] is: '$27.4100'
+curr_tx[UNIT_BAL] is: '286.3862'
+
+	Current tx_date is: '03/28/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$18.62'
+curr_tx[UNITS] is: '0.6846'
+curr_tx[PRICE] is: '$27.2000'
+curr_tx[UNIT_BAL] is: '287.0708'
+
+	Current fund_name is: TML 519
+
+	Current tx_date is: '01/11/2018'
+curr_tx[DESC] is: 'Switch-Out:'
+curr_tx[GROSS] is: '($4,932.06)'
+curr_tx[UNITS] is: '-171.7292'
+curr_tx[PRICE] is: '$28.7200'
+curr_tx[UNIT_BAL] is: '184.4152'
+
+	Current tx_date is: '01/30/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$10.14'
+curr_tx[UNITS] is: '0.3592'
+curr_tx[PRICE] is: '$28.2300'
+curr_tx[UNIT_BAL] is: '184.7744'
+
+	Current tx_date is: '02/27/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$10.16'
+curr_tx[UNITS] is: '0.3707'
+curr_tx[PRICE] is: '$27.4100'
+curr_tx[UNIT_BAL] is: '185.1451'
+
+	Current tx_date is: '03/28/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$12.03'
+curr_tx[UNITS] is: '0.4423'
+curr_tx[PRICE] is: '$27.2000'
+curr_tx[UNIT_BAL] is: '185.5874'
+
+	Current fund_name is: TML 202
+
+	Current tx_date is: '01/11/2018'
+curr_tx[DESC] is: 'Switch-In:'
+curr_tx[GROSS] is: '$4,098.53'
+curr_tx[UNITS] is: '40.5755'
+curr_tx[PRICE] is: '$101.0100'
+curr_tx[UNIT_BAL] is: '67.6682'
+('RRSP', ' (Individual)')
+Current bag_name is: 'RRSP'
+Current bag is: []
+
+
+	Current fund_name is: MFC 756
+
+	Current tx_date is: '01/03/2018'
+curr_tx[DESC] is: 'Switch-In:'
+curr_tx[GROSS] is: '$910.03'
+curr_tx[UNITS] is: '204.6110'
+curr_tx[PRICE] is: '$4.4476'
+curr_tx[UNIT_BAL] is: '2600.8300'
+
+	Current tx_date is: '01/19/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$29.91'
+curr_tx[UNITS] is: '6.7330'
+curr_tx[PRICE] is: '$4.4420'
+curr_tx[UNIT_BAL] is: '2607.5630'
+
+	Current tx_date is: '02/16/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$35.46'
+curr_tx[UNITS] is: '8.0840'
+curr_tx[PRICE] is: '$4.3866'
+curr_tx[UNIT_BAL] is: '2615.6470'
+
+	Current tx_date is: '03/23/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$55.71'
+curr_tx[UNITS] is: '12.8310'
+curr_tx[PRICE] is: '$4.3420'
+curr_tx[UNIT_BAL] is: '2628.4780'
+
+	Current fund_name is: MFC 3232
+
+	Current tx_date is: '01/03/2018'
+curr_tx[DESC] is: 'Switch-Out:'
+curr_tx[GROSS] is: '($2,159.22)'
+curr_tx[UNITS] is: '-236.5360'
+curr_tx[PRICE] is: '$9.1285'
+curr_tx[UNIT_BAL] is: '2140.9330'
+
+	Current tx_date is: '01/19/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$97.20'
+curr_tx[UNITS] is: '10.6050'
+curr_tx[PRICE] is: '$9.1653'
+curr_tx[UNIT_BAL] is: '2151.5380'
+
+	Current tx_date is: '02/16/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$97.68'
+curr_tx[UNITS] is: '10.9370'
+curr_tx[PRICE] is: '$8.9312'
+curr_tx[UNIT_BAL] is: '2162.4750'
+
+	Current tx_date is: '03/23/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$98.18'
+curr_tx[UNITS] is: '11.2100'
+curr_tx[PRICE] is: '$8.7581'
+curr_tx[UNIT_BAL] is: '2173.6850'
+
+	Current fund_name is: MFC 2238
+
+	Current tx_date is: '01/03/2018'
+curr_tx[DESC] is: 'Switch-In:'
+curr_tx[GROSS] is: '$2,159.22'
+curr_tx[UNITS] is: '236.5360'
+curr_tx[PRICE] is: '$9.1285'
+curr_tx[UNIT_BAL] is: '2845.6400'
+
+	Current tx_date is: '01/19/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$129.19'
+curr_tx[UNITS] is: '14.0960'
+curr_tx[PRICE] is: '$9.1653'
+curr_tx[UNIT_BAL] is: '2859.7360'
+
+	Current tx_date is: '02/16/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$129.83'
+curr_tx[UNITS] is: '14.5370'
+curr_tx[PRICE] is: '$8.9312'
+curr_tx[UNIT_BAL] is: '2874.2730'
+
+	Current tx_date is: '03/23/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$130.49'
+curr_tx[UNITS] is: '14.9000'
+curr_tx[PRICE] is: '$8.7581'
+curr_tx[UNIT_BAL] is: '2889.1730'
+
+	Current fund_name is: MFC 302
+
+	Current tx_date is: '01/03/2018'
+curr_tx[DESC] is: 'Switch-Out:'
+curr_tx[GROSS] is: '($1,272.91)'
+curr_tx[UNITS] is: '-92.9930'
+curr_tx[PRICE] is: '$13.6883'
+curr_tx[UNIT_BAL] is: '836.7320'
+
+	Current tx_date is: '01/19/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$9.20'
+curr_tx[UNITS] is: '0.6760'
+curr_tx[PRICE] is: '$13.6166'
+curr_tx[UNIT_BAL] is: '837.4080'
+
+	Current tx_date is: '02/16/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$10.13'
+curr_tx[UNITS] is: '0.7480'
+curr_tx[PRICE] is: '$13.5516'
+curr_tx[UNIT_BAL] is: '838.1560'
+
+	Current tx_date is: '03/23/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$10.06'
+curr_tx[UNITS] is: '0.7380'
+curr_tx[PRICE] is: '$13.6361'
+curr_tx[UNIT_BAL] is: '838.8940'
+
+	Current fund_name is: MFC 3769
+
+	Current tx_date is: '01/03/2018'
+curr_tx[DESC] is: 'Switch-In:'
+curr_tx[GROSS] is: '$1,272.91'
+curr_tx[UNITS] is: '125.1460'
+curr_tx[PRICE] is: '$10.1714'
+curr_tx[UNIT_BAL] is: '1392.1700'
+
+	Current tx_date is: '01/19/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$14.90'
+curr_tx[UNITS] is: '1.4720'
+curr_tx[PRICE] is: '$10.1171'
+curr_tx[UNIT_BAL] is: '1393.6420'
+
+	Current tx_date is: '02/16/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$16.03'
+curr_tx[UNITS] is: '1.5920'
+curr_tx[PRICE] is: '$10.0688'
+curr_tx[UNIT_BAL] is: '1395.2340'
+
+	Current tx_date is: '03/23/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$16.88'
+curr_tx[UNITS] is: '1.6660'
+curr_tx[PRICE] is: '$10.1318'
+curr_tx[UNIT_BAL] is: '1396.9000'
+
+	Current fund_name is: MFC 856
+
+	Current tx_date is: '01/03/2018'
+curr_tx[DESC] is: 'Switch-Out:'
+curr_tx[GROSS] is: '($910.03)'
+curr_tx[UNITS] is: '-204.6110'
+curr_tx[PRICE] is: '$4.4476'
+curr_tx[UNIT_BAL] is: '1846.1560'
+
+	Current tx_date is: '01/19/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$21.23'
+curr_tx[UNITS] is: '4.7800'
+curr_tx[PRICE] is: '$4.4420'
+curr_tx[UNIT_BAL] is: '1850.9360'
+
+	Current tx_date is: '02/16/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$25.17'
+curr_tx[UNITS] is: '5.7390'
+curr_tx[PRICE] is: '$4.3866'
+curr_tx[UNIT_BAL] is: '1856.6750'
+
+	Current tx_date is: '03/23/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$39.55'
+curr_tx[UNITS] is: '9.1080'
+curr_tx[PRICE] is: '$4.3420'
+curr_tx[UNIT_BAL] is: '1865.7830'
+
+	Current fund_name is: DYN 729
+
+	Current tx_date is: '01/11/2018'
+curr_tx[DESC] is: 'Switch-Out:'
+curr_tx[GROSS] is: '($1,018.86)'
+curr_tx[UNITS] is: '-47.9691'
+curr_tx[PRICE] is: '$21.2400'
+curr_tx[UNIT_BAL] is: '431.7222'
+
+	Current tx_date is: '01/26/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$30.22'
+curr_tx[UNITS] is: '1.4201'
+curr_tx[PRICE] is: '$21.2800'
+curr_tx[UNIT_BAL] is: '433.1423'
+
+	Current tx_date is: '02/23/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$30.32'
+curr_tx[UNITS] is: '1.4740'
+curr_tx[PRICE] is: '$20.5700'
+curr_tx[UNIT_BAL] is: '434.6163'
+
+	Current tx_date is: '03/29/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$30.42'
+curr_tx[UNITS] is: '1.5082'
+curr_tx[PRICE] is: '$20.1700'
+curr_tx[UNIT_BAL] is: '436.1245'
+
+	Current fund_name is: MMF 3517
+
+	Current tx_date is: '01/11/2018'
+curr_tx[DESC] is: 'Switch-In:'
+curr_tx[GROSS] is: '$9,287.98'
+curr_tx[UNITS] is: '713.0610'
+curr_tx[PRICE] is: '$13.0255'
+curr_tx[UNIT_BAL] is: '2481.9310'
+
+	Current tx_date is: '01/26/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$124.10'
+curr_tx[UNITS] is: '9.5230'
+curr_tx[PRICE] is: '$13.0315'
+curr_tx[UNIT_BAL] is: '2491.4540'
+
+	Current tx_date is: '02/23/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$124.57'
+curr_tx[UNITS] is: '9.7690'
+curr_tx[PRICE] is: '$12.7513'
+curr_tx[UNIT_BAL] is: '2501.2230'
+
+	Current tx_date is: '03/29/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$125.06'
+curr_tx[UNITS] is: '9.8770'
+curr_tx[PRICE] is: '$12.6620'
+curr_tx[UNIT_BAL] is: '2511.1000'
+
+	Current fund_name is: MMF 13417
+
+	Current tx_date is: '01/11/2018'
+curr_tx[DESC] is: 'Switch-Out:'
+curr_tx[GROSS] is: '($9,287.98)'
+curr_tx[UNITS] is: '-713.0610'
+curr_tx[PRICE] is: '$13.0255'
+curr_tx[UNIT_BAL] is: '415.1290'
+
+	Current tx_date is: '01/26/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$20.76'
+curr_tx[UNITS] is: '1.5930'
+curr_tx[PRICE] is: '$13.0315'
+curr_tx[UNIT_BAL] is: '416.7220'
+
+	Current tx_date is: '02/23/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$20.84'
+curr_tx[UNITS] is: '1.6340'
+curr_tx[PRICE] is: '$12.7513'
+curr_tx[UNIT_BAL] is: '418.3560'
+
+	Current tx_date is: '03/29/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$20.92'
+curr_tx[UNITS] is: '1.6520'
+curr_tx[PRICE] is: '$12.6620'
+curr_tx[UNIT_BAL] is: '420.0080'
+
+	Current fund_name is: DYN 1562
+
+	Current tx_date is: '01/11/2018'
+curr_tx[DESC] is: 'Switch-Out:'
+curr_tx[GROSS] is: '($905.65)'
+curr_tx[UNITS] is: '-63.8683'
+curr_tx[PRICE] is: '$14.1800'
+curr_tx[UNIT_BAL] is: '574.8150'
+
+	Current tx_date is: '01/26/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$33.57'
+curr_tx[UNITS] is: '2.3674'
+curr_tx[PRICE] is: '$14.1800'
+curr_tx[UNIT_BAL] is: '577.1824'
+
+	Current tx_date is: '02/23/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$33.71'
+curr_tx[UNITS] is: '2.4357'
+curr_tx[PRICE] is: '$13.8400'
+curr_tx[UNIT_BAL] is: '579.6181'
+
+	Current tx_date is: '03/29/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$33.85'
+curr_tx[UNITS] is: '2.4890'
+curr_tx[PRICE] is: '$13.6000'
+curr_tx[UNIT_BAL] is: '582.1071'
+
+	Current fund_name is: TML 1017
+
+	Current tx_date is: '01/11/2018'
+curr_tx[DESC] is: 'Switch-In:'
+curr_tx[GROSS] is: '$781.01'
+curr_tx[UNITS] is: '51.9978'
+curr_tx[PRICE] is: '$15.0200'
+curr_tx[UNIT_BAL] is: '185.8790'
+
+	Current tx_date is: '01/30/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$6.04'
+curr_tx[UNITS] is: '0.4117'
+curr_tx[PRICE] is: '$14.6700'
+curr_tx[UNIT_BAL] is: '186.2907'
+
+	Current tx_date is: '02/27/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$6.05'
+curr_tx[UNITS] is: '0.4279'
+curr_tx[PRICE] is: '$14.1400'
+curr_tx[UNIT_BAL] is: '186.7186'
+
+	Current tx_date is: '03/28/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$7.00'
+curr_tx[UNITS] is: '0.4979'
+curr_tx[PRICE] is: '$14.0600'
+curr_tx[UNIT_BAL] is: '187.2165'
+
+	Current fund_name is: TML 1018
+
+	Current tx_date is: '01/11/2018'
+curr_tx[DESC] is: 'Switch-Out:'
+curr_tx[GROSS] is: '($781.01)'
+curr_tx[UNITS] is: '-51.9978'
+curr_tx[PRICE] is: '$15.0200'
+curr_tx[UNIT_BAL] is: '476.8121'
+
+	Current tx_date is: '01/30/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$15.50'
+curr_tx[UNITS] is: '1.0566'
+curr_tx[PRICE] is: '$14.6700'
+curr_tx[UNIT_BAL] is: '477.8687'
+
+	Current tx_date is: '02/27/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$15.53'
+curr_tx[UNITS] is: '1.0983'
+curr_tx[PRICE] is: '$14.1400'
+curr_tx[UNIT_BAL] is: '478.9670'
+
+	Current tx_date is: '03/28/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$17.96'
+curr_tx[UNITS] is: '1.2774'
+curr_tx[PRICE] is: '$14.0600'
+curr_tx[UNIT_BAL] is: '480.2444'
+
+	Current fund_name is: DYN 029
+
+	Current tx_date is: '01/11/2018'
+curr_tx[DESC] is: 'Switch-In:'
+curr_tx[GROSS] is: '$1,018.86'
+curr_tx[UNITS] is: '47.9691'
+curr_tx[PRICE] is: '$21.2400'
+curr_tx[UNIT_BAL] is: '585.6278'
+
+	Current tx_date is: '01/26/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$40.99'
+curr_tx[UNITS] is: '1.9262'
+curr_tx[PRICE] is: '$21.2800'
+curr_tx[UNIT_BAL] is: '587.5540'
+
+	Current tx_date is: '02/23/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$41.13'
+curr_tx[UNITS] is: '1.9995'
+curr_tx[PRICE] is: '$20.5700'
+curr_tx[UNIT_BAL] is: '589.5535'
+
+	Current tx_date is: '03/29/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$41.27'
+curr_tx[UNITS] is: '2.0461'
+curr_tx[PRICE] is: '$20.1700'
+curr_tx[UNIT_BAL] is: '591.5996'
+
+	Current fund_name is: DYN 1560
+
+	Current tx_date is: '01/11/2018'
+curr_tx[DESC] is: 'Switch-In:'
+curr_tx[GROSS] is: '$905.65'
+curr_tx[UNITS] is: '63.8683'
+curr_tx[PRICE] is: '$14.1800'
+curr_tx[UNIT_BAL] is: '840.2552'
+
+	Current tx_date is: '01/26/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$49.07'
+curr_tx[UNITS] is: '3.4605'
+curr_tx[PRICE] is: '$14.1800'
+curr_tx[UNIT_BAL] is: '843.7157'
+
+	Current tx_date is: '02/23/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$49.27'
+curr_tx[UNITS] is: '3.5600'
+curr_tx[PRICE] is: '$13.8400'
+curr_tx[UNIT_BAL] is: '847.2757'
+
+	Current tx_date is: '03/29/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$49.48'
+curr_tx[UNITS] is: '3.6382'
+curr_tx[PRICE] is: '$13.6000'
+curr_tx[UNIT_BAL] is: '850.9139'
+
+	Current fund_name is: ATL 059
+
+	Current tx_date is: '03/29/2018'
+curr_tx[DESC] is: 'Reinvested:'
+curr_tx[DESC] is: 'Reinvested:Distribution/Interest:'
+curr_tx[GROSS] is: '$34.19'
+curr_tx[UNITS] is: '3.2270'
+curr_tx[PRICE] is: '$10.5945'
+curr_tx[UNIT_BAL] is: '1546.0110'
+
+	len(Monarch record[OPEN]) = 36
+	Monarch record[OPEN] = [
+    {
+        "Trade Date": "01/11/2018", 
+        "Gross": "$988.14", 
+        "Description": "Switch-In:", 
+        "Price": "$9.7698", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "101.1420", 
+        "Units": "101.1420", 
+        "Net": "$988.14", 
+        "Fund Code": "11111"
+    }, 
+    {
+        "Trade Date": "01/26/2018", 
+        "Gross": "$5.06", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$9.6576", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "101.6660", 
+        "Units": "0.5240", 
+        "Net": "$5.06", 
+        "Fund Code": "11111"
+    }, 
+    {
+        "Trade Date": "02/23/2018", 
+        "Gross": "$5.09", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$9.3696", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "102.2090", 
+        "Units": "0.5430", 
+        "Net": "$5.09", 
+        "Fund Code": "11111"
+    }, 
+    {
+        "Trade Date": "03/01/2018", 
+        "Gross": "($951.88)", 
+        "Description": "Internal Transfer-Out:(Change Account):", 
+        "Price": "$9.3131", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "0.0000", 
+        "Units": "-102.2090", 
+        "Net": "($951.88)", 
+        "Fund Code": "11111"
+    }, 
+    {
+        "Trade Date": "01/11/2018", 
+        "Gross": "($988.14)", 
+        "Description": "Switch-Out:", 
+        "Price": "$9.7698", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "658.4090", 
+        "Units": "-101.1420", 
+        "Net": "($988.14)", 
+        "Fund Code": "11461"
+    }, 
+    {
+        "Trade Date": "01/26/2018", 
+        "Gross": "$32.92", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$9.6576", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "661.8180", 
+        "Units": "3.4090", 
+        "Net": "$32.92", 
+        "Fund Code": "11461"
+    }, 
+    {
+        "Trade Date": "02/23/2018", 
+        "Gross": "$33.09", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$9.3696", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "665.3500", 
+        "Units": "3.5320", 
+        "Net": "$33.09", 
+        "Fund Code": "11461"
+    }, 
+    {
+        "Trade Date": "03/01/2018", 
+        "Gross": "($6,196.47)", 
+        "Description": "Internal Transfer-Out:(Change Account):", 
+        "Price": "$9.3131", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "0.0000", 
+        "Units": "-665.3500", 
+        "Net": "($6,196.47)", 
+        "Fund Code": "11461"
+    }, 
+    {
+        "Trade Date": "01/11/2018", 
+        "Gross": "$347.22", 
+        "Description": "Switch-In:", 
+        "Price": "$21.4809", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "16.1640", 
+        "Units": "16.1640", 
+        "Net": "$347.22", 
+        "Fund Code": "6104"
+    }, 
+    {
+        "Trade Date": "03/01/2018", 
+        "Gross": "($329.38)", 
+        "Description": "Internal Transfer-Out:(Change Account):", 
+        "Price": "$20.3774", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "0.0000", 
+        "Units": "-16.1640", 
+        "Net": "($329.38)", 
+        "Fund Code": "6104"
+    }, 
+    {
+        "Trade Date": "01/11/2018", 
+        "Gross": "($347.22)", 
+        "Description": "Switch-Out:", 
+        "Price": "$21.4809", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "108.7040", 
+        "Units": "-16.1640", 
+        "Net": "($347.22)", 
+        "Fund Code": "1154"
+    }, 
+    {
+        "Trade Date": "03/01/2018", 
+        "Gross": "($2,215.10)", 
+        "Description": "Internal Transfer-Out:(Change Account):", 
+        "Price": "$20.3774", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "0.0000", 
+        "Units": "-108.7040", 
+        "Net": "($2,215.10)", 
+        "Fund Code": "1154"
+    }, 
+    {
+        "Trade Date": "01/11/2018", 
+        "Gross": "$1,126.43", 
+        "Description": "Switch-In:", 
+        "Price": "$17.9037", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "62.9160", 
+        "Units": "62.9160", 
+        "Net": "$1,126.43", 
+        "Fund Code": "2321"
+    }, 
+    {
+        "Trade Date": "03/01/2018", 
+        "Gross": "($1,085.61)", 
+        "Description": "Internal Transfer-Out:(Change Account):", 
+        "Price": "$17.2549", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "0.0000", 
+        "Units": "-62.9160", 
+        "Net": "($1,085.61)", 
+        "Fund Code": "2321"
+    }, 
+    {
+        "Trade Date": "01/11/2018", 
+        "Gross": "($1,126.43)", 
+        "Description": "Switch-Out:", 
+        "Price": "$17.9037", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "399.1300", 
+        "Units": "-62.9160", 
+        "Net": "($1,126.43)", 
+        "Fund Code": "1521"
+    }, 
+    {
+        "Trade Date": "03/01/2018", 
+        "Gross": "($6,886.95)", 
+        "Description": "Internal Transfer-Out:(Change Account):", 
+        "Price": "$17.2549", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "0.0000", 
+        "Units": "-399.1300", 
+        "Net": "($6,886.95)", 
+        "Fund Code": "1521"
+    }, 
+    {
+        "Trade Date": "01/11/2018", 
+        "Gross": "$975.31", 
+        "Description": "Switch-In:", 
+        "Price": "$26.8312", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "36.3500", 
+        "Units": "36.3500", 
+        "Net": "$975.31", 
+        "Fund Code": "2304"
+    }, 
+    {
+        "Trade Date": "03/01/2018", 
+        "Gross": "($944.47)", 
+        "Description": "Internal Transfer-Out:(Change Account):", 
+        "Price": "$25.9828", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "0.0000", 
+        "Units": "-36.3500", 
+        "Net": "($944.47)", 
+        "Fund Code": "2304"
+    }, 
+    {
+        "Trade Date": "01/11/2018", 
+        "Gross": "($975.31)", 
+        "Description": "Switch-Out:", 
+        "Price": "$26.8312", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "240.1400", 
+        "Units": "-36.3500", 
+        "Net": "($975.31)", 
+        "Fund Code": "1304"
+    }, 
+    {
+        "Trade Date": "03/01/2018", 
+        "Gross": "($6,239.51)", 
+        "Description": "Internal Transfer-Out:(Change Account):", 
+        "Price": "$25.9828", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "0.0000", 
+        "Units": "-240.1400", 
+        "Net": "($6,239.51)", 
+        "Fund Code": "1304"
+    }, 
+    {
+        "Trade Date": "03/01/2018", 
+        "Gross": "$329.38", 
+        "Description": "Internal Transfer-In:(Change Account-Same:Dealer):", 
+        "Price": "$20.3774", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "16.1640", 
+        "Units": "16.1640", 
+        "Net": "$329.38", 
+        "Fund Code": "6104"
+    }, 
+    {
+        "Trade Date": "03/23/2018", 
+        "Gross": "$11.68", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$19.1235", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "16.7750", 
+        "Units": "0.6110", 
+        "Net": "$11.68", 
+        "Fund Code": "6104"
+    }, 
+    {
+        "Trade Date": "03/01/2018", 
+        "Gross": "$944.47", 
+        "Description": "Internal Transfer-In:(Change Account-Same:Dealer):", 
+        "Price": "$25.9828", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "36.3500", 
+        "Units": "36.3500", 
+        "Net": "$944.47", 
+        "Fund Code": "2304"
+    }, 
+    {
+        "Trade Date": "03/23/2018", 
+        "Gross": "$12.31", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$25.2854", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "36.8370", 
+        "Units": "0.4870", 
+        "Net": "$12.31", 
+        "Fund Code": "2304"
+    }, 
+    {
+        "Trade Date": "03/01/2018", 
+        "Gross": "$6,886.95", 
+        "Description": "Internal Transfer-In:(Change Account-Same:Dealer):", 
+        "Price": "$17.2549", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "399.1300", 
+        "Units": "399.1300", 
+        "Net": "$6,886.95", 
+        "Fund Code": "1521"
+    }, 
+    {
+        "Trade Date": "03/23/2018", 
+        "Gross": "$248.28", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$16.5113", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "414.1670", 
+        "Units": "15.0370", 
+        "Net": "$248.28", 
+        "Fund Code": "1521"
+    }, 
+    {
+        "Trade Date": "03/01/2018", 
+        "Gross": "$2,215.10", 
+        "Description": "Internal Transfer-In:(Change Account-Same:Dealer):", 
+        "Price": "$20.3774", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "108.7040", 
+        "Units": "108.7040", 
+        "Net": "$2,215.10", 
+        "Fund Code": "1154"
+    }, 
+    {
+        "Trade Date": "03/23/2018", 
+        "Gross": "$78.58", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$19.1235", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "112.8130", 
+        "Units": "4.1090", 
+        "Net": "$78.58", 
+        "Fund Code": "1154"
+    }, 
+    {
+        "Trade Date": "03/01/2018", 
+        "Gross": "$1,085.61", 
+        "Description": "Internal Transfer-In:(Change Account-Same:Dealer):", 
+        "Price": "$17.2549", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "62.9160", 
+        "Units": "62.9160", 
+        "Net": "$1,085.61", 
+        "Fund Code": "2321"
+    }, 
+    {
+        "Trade Date": "03/23/2018", 
+        "Gross": "$39.13", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$16.5113", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "65.2860", 
+        "Units": "2.3700", 
+        "Net": "$39.13", 
+        "Fund Code": "2321"
+    }, 
+    {
+        "Trade Date": "03/01/2018", 
+        "Gross": "$951.88", 
+        "Description": "Internal Transfer-In:(Change Account-Same:Dealer):", 
+        "Price": "$9.3131", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "102.2090", 
+        "Units": "102.2090", 
+        "Net": "$951.88", 
+        "Fund Code": "11111"
+    }, 
+    {
+        "Trade Date": "03/23/2018", 
+        "Gross": "$5.11", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$9.1132", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "102.7700", 
+        "Units": "0.5610", 
+        "Net": "$5.11", 
+        "Fund Code": "11111"
+    }, 
+    {
+        "Trade Date": "03/01/2018", 
+        "Gross": "$6,239.51", 
+        "Description": "Internal Transfer-In:(Change Account-Same:Dealer):", 
+        "Price": "$25.9828", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "240.1400", 
+        "Units": "240.1400", 
+        "Net": "$6,239.51", 
+        "Fund Code": "1304"
+    }, 
+    {
+        "Trade Date": "03/23/2018", 
+        "Gross": "$81.37", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$25.2854", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "243.3580", 
+        "Units": "3.2180", 
+        "Net": "$81.37", 
+        "Fund Code": "1304"
+    }, 
+    {
+        "Trade Date": "03/01/2018", 
+        "Gross": "$6,196.47", 
+        "Description": "Internal Transfer-In:(Change Account-Same:Dealer):", 
+        "Price": "$9.3131", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "665.3500", 
+        "Units": "665.3500", 
+        "Net": "$6,196.47", 
+        "Fund Code": "11461"
+    }, 
+    {
+        "Trade Date": "03/23/2018", 
+        "Gross": "$33.26", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$9.1132", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "669.0000", 
+        "Units": "3.6500", 
+        "Net": "$33.26", 
+        "Fund Code": "11461"
+    }
+]
+
+	Monarch record[Owner] = Mark H. Sattolo
+
+	len(Monarch record[TFSA]) = 24
+	Monarch record[TFSA] = [
+    {
+        "Trade Date": "01/11/2018", 
+        "Gross": "($2,598.96)", 
+        "Description": "Switch-Out:", 
+        "Price": "$8.8000", 
+        "Fund Company": "TML", 
+        "Unit Balance": "301.8952", 
+        "Units": "-295.3368", 
+        "Net": "($2,598.96)", 
+        "Fund Code": "674"
+    }, 
+    {
+        "Trade Date": "01/30/2018", 
+        "Gross": "$4.83", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$8.7800", 
+        "Fund Company": "TML", 
+        "Unit Balance": "302.4453", 
+        "Units": "0.5501", 
+        "Net": "$4.83", 
+        "Fund Code": "674"
+    }, 
+    {
+        "Trade Date": "02/27/2018", 
+        "Gross": "$4.84", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$9.0100", 
+        "Fund Company": "TML", 
+        "Unit Balance": "302.9825", 
+        "Units": "0.5372", 
+        "Net": "$4.84", 
+        "Fund Code": "674"
+    }, 
+    {
+        "Trade Date": "03/28/2018", 
+        "Gross": "$6.06", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$9.1300", 
+        "Fund Company": "TML", 
+        "Unit Balance": "303.6462", 
+        "Units": "0.6637", 
+        "Net": "$6.06", 
+        "Fund Code": "674"
+    }, 
+    {
+        "Trade Date": "01/11/2018", 
+        "Gross": "$1,570.21", 
+        "Description": "Switch-In:", 
+        "Price": "$49.5400", 
+        "Fund Company": "TML", 
+        "Unit Balance": "54.5587", 
+        "Units": "31.6959", 
+        "Net": "$1,570.21", 
+        "Fund Code": "223"
+    }, 
+    {
+        "Trade Date": "01/11/2018", 
+        "Gross": "($1,570.21)", 
+        "Description": "Switch-Out:", 
+        "Price": "$49.5400", 
+        "Fund Company": "TML", 
+        "Unit Balance": "36.4098", 
+        "Units": "-31.6959", 
+        "Net": "($1,570.21)", 
+        "Fund Code": "598"
+    }, 
+    {
+        "Trade Date": "01/11/2018", 
+        "Gross": "$1,432.73", 
+        "Description": "Switch-In:", 
+        "Price": "$28.2900", 
+        "Fund Company": "TML", 
+        "Unit Balance": "81.5155", 
+        "Units": "50.6445", 
+        "Net": "$1,432.73", 
+        "Fund Code": "707"
+    }, 
+    {
+        "Trade Date": "01/11/2018", 
+        "Gross": "($1,432.73)", 
+        "Description": "Switch-Out:", 
+        "Price": "$28.2900", 
+        "Fund Company": "TML", 
+        "Unit Balance": "44.9386", 
+        "Units": "-50.6445", 
+        "Net": "($1,432.73)", 
+        "Fund Code": "694"
+    }, 
+    {
+        "Trade Date": "01/11/2018", 
+        "Gross": "$2,598.96", 
+        "Description": "Switch-In:", 
+        "Price": "$8.8000", 
+        "Fund Company": "TML", 
+        "Unit Balance": "481.9739", 
+        "Units": "295.3368", 
+        "Net": "$2,598.96", 
+        "Fund Code": "704"
+    }, 
+    {
+        "Trade Date": "01/30/2018", 
+        "Gross": "$7.71", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$8.7800", 
+        "Fund Company": "TML", 
+        "Unit Balance": "482.8520", 
+        "Units": "0.8781", 
+        "Net": "$7.71", 
+        "Fund Code": "704"
+    }, 
+    {
+        "Trade Date": "02/27/2018", 
+        "Gross": "$7.73", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$9.0100", 
+        "Fund Company": "TML", 
+        "Unit Balance": "483.7099", 
+        "Units": "0.8579", 
+        "Net": "$7.73", 
+        "Fund Code": "704"
+    }, 
+    {
+        "Trade Date": "03/28/2018", 
+        "Gross": "$9.67", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$9.1300", 
+        "Fund Company": "TML", 
+        "Unit Balance": "484.7690", 
+        "Units": "1.0591", 
+        "Net": "$9.67", 
+        "Fund Code": "704"
+    }, 
+    {
+        "Trade Date": "01/11/2018", 
+        "Gross": "($4,098.53)", 
+        "Description": "Switch-Out:", 
+        "Price": "$101.0100", 
+        "Fund Company": "TML", 
+        "Unit Balance": "41.0329", 
+        "Units": "-40.5755", 
+        "Net": "($4,098.53)", 
+        "Fund Code": "518"
+    }, 
+    {
+        "Trade Date": "01/11/2018", 
+        "Gross": "$4,020.56", 
+        "Description": "Switch-In:", 
+        "Price": "$20.0300", 
+        "Fund Company": "TML", 
+        "Unit Balance": "331.6702", 
+        "Units": "200.7271", 
+        "Net": "$4,020.56", 
+        "Fund Code": "180"
+    }, 
+    {
+        "Trade Date": "01/11/2018", 
+        "Gross": "($4,020.56)", 
+        "Description": "Switch-Out:", 
+        "Price": "$20.0300", 
+        "Fund Company": "TML", 
+        "Unit Balance": "202.5092", 
+        "Units": "-200.7271", 
+        "Net": "($4,020.56)", 
+        "Fund Code": "184"
+    }, 
+    {
+        "Trade Date": "01/11/2018", 
+        "Gross": "$4,932.06", 
+        "Description": "Switch-In:", 
+        "Price": "$28.7200", 
+        "Fund Company": "TML", 
+        "Unit Balance": "285.2569", 
+        "Units": "171.7292", 
+        "Net": "$4,932.06", 
+        "Fund Code": "203"
+    }, 
+    {
+        "Trade Date": "01/30/2018", 
+        "Gross": "$15.69", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$28.2300", 
+        "Fund Company": "TML", 
+        "Unit Balance": "285.8127", 
+        "Units": "0.5558", 
+        "Net": "$15.69", 
+        "Fund Code": "203"
+    }, 
+    {
+        "Trade Date": "02/27/2018", 
+        "Gross": "$15.72", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$27.4100", 
+        "Fund Company": "TML", 
+        "Unit Balance": "286.3862", 
+        "Units": "0.5735", 
+        "Net": "$15.72", 
+        "Fund Code": "203"
+    }, 
+    {
+        "Trade Date": "03/28/2018", 
+        "Gross": "$18.62", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$27.2000", 
+        "Fund Company": "TML", 
+        "Unit Balance": "287.0708", 
+        "Units": "0.6846", 
+        "Net": "$18.62", 
+        "Fund Code": "203"
+    }, 
+    {
+        "Trade Date": "01/11/2018", 
+        "Gross": "($4,932.06)", 
+        "Description": "Switch-Out:", 
+        "Price": "$28.7200", 
+        "Fund Company": "TML", 
+        "Unit Balance": "184.4152", 
+        "Units": "-171.7292", 
+        "Net": "($4,932.06)", 
+        "Fund Code": "519"
+    }, 
+    {
+        "Trade Date": "01/30/2018", 
+        "Gross": "$10.14", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$28.2300", 
+        "Fund Company": "TML", 
+        "Unit Balance": "184.7744", 
+        "Units": "0.3592", 
+        "Net": "$10.14", 
+        "Fund Code": "519"
+    }, 
+    {
+        "Trade Date": "02/27/2018", 
+        "Gross": "$10.16", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$27.4100", 
+        "Fund Company": "TML", 
+        "Unit Balance": "185.1451", 
+        "Units": "0.3707", 
+        "Net": "$10.16", 
+        "Fund Code": "519"
+    }, 
+    {
+        "Trade Date": "03/28/2018", 
+        "Gross": "$12.03", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$27.2000", 
+        "Fund Company": "TML", 
+        "Unit Balance": "185.5874", 
+        "Units": "0.4423", 
+        "Net": "$12.03", 
+        "Fund Code": "519"
+    }, 
+    {
+        "Trade Date": "01/11/2018", 
+        "Gross": "$4,098.53", 
+        "Description": "Switch-In:", 
+        "Price": "$101.0100", 
+        "Fund Company": "TML", 
+        "Unit Balance": "67.6682", 
+        "Units": "40.5755", 
+        "Net": "$4,098.53", 
+        "Fund Code": "202"
+    }
+]
+
+	len(Monarch record[RRSP]) = 57
+	Monarch record[RRSP] = [
+    {
+        "Trade Date": "01/03/2018", 
+        "Gross": "$910.03", 
+        "Description": "Switch-In:", 
+        "Price": "$4.4476", 
+        "Fund Company": "MFC", 
+        "Unit Balance": "2600.8300", 
+        "Units": "204.6110", 
+        "Net": "$910.03", 
+        "Fund Code": "756"
+    }, 
+    {
+        "Trade Date": "01/19/2018", 
+        "Gross": "$29.91", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$4.4420", 
+        "Fund Company": "MFC", 
+        "Unit Balance": "2607.5630", 
+        "Units": "6.7330", 
+        "Net": "$29.91", 
+        "Fund Code": "756"
+    }, 
+    {
+        "Trade Date": "02/16/2018", 
+        "Gross": "$35.46", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$4.3866", 
+        "Fund Company": "MFC", 
+        "Unit Balance": "2615.6470", 
+        "Units": "8.0840", 
+        "Net": "$35.46", 
+        "Fund Code": "756"
+    }, 
+    {
+        "Trade Date": "03/23/2018", 
+        "Gross": "$55.71", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$4.3420", 
+        "Fund Company": "MFC", 
+        "Unit Balance": "2628.4780", 
+        "Units": "12.8310", 
+        "Net": "$55.71", 
+        "Fund Code": "756"
+    }, 
+    {
+        "Trade Date": "01/03/2018", 
+        "Gross": "($2,159.22)", 
+        "Description": "Switch-Out:", 
+        "Price": "$9.1285", 
+        "Fund Company": "MFC", 
+        "Unit Balance": "2140.9330", 
+        "Units": "-236.5360", 
+        "Net": "($2,159.22)", 
+        "Fund Code": "3232"
+    }, 
+    {
+        "Trade Date": "01/19/2018", 
+        "Gross": "$97.20", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$9.1653", 
+        "Fund Company": "MFC", 
+        "Unit Balance": "2151.5380", 
+        "Units": "10.6050", 
+        "Net": "$97.20", 
+        "Fund Code": "3232"
+    }, 
+    {
+        "Trade Date": "02/16/2018", 
+        "Gross": "$97.68", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$8.9312", 
+        "Fund Company": "MFC", 
+        "Unit Balance": "2162.4750", 
+        "Units": "10.9370", 
+        "Net": "$97.68", 
+        "Fund Code": "3232"
+    }, 
+    {
+        "Trade Date": "03/23/2018", 
+        "Gross": "$98.18", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$8.7581", 
+        "Fund Company": "MFC", 
+        "Unit Balance": "2173.6850", 
+        "Units": "11.2100", 
+        "Net": "$98.18", 
+        "Fund Code": "3232"
+    }, 
+    {
+        "Trade Date": "01/03/2018", 
+        "Gross": "$2,159.22", 
+        "Description": "Switch-In:", 
+        "Price": "$9.1285", 
+        "Fund Company": "MFC", 
+        "Unit Balance": "2845.6400", 
+        "Units": "236.5360", 
+        "Net": "$2,159.22", 
+        "Fund Code": "2238"
+    }, 
+    {
+        "Trade Date": "01/19/2018", 
+        "Gross": "$129.19", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$9.1653", 
+        "Fund Company": "MFC", 
+        "Unit Balance": "2859.7360", 
+        "Units": "14.0960", 
+        "Net": "$129.19", 
+        "Fund Code": "2238"
+    }, 
+    {
+        "Trade Date": "02/16/2018", 
+        "Gross": "$129.83", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$8.9312", 
+        "Fund Company": "MFC", 
+        "Unit Balance": "2874.2730", 
+        "Units": "14.5370", 
+        "Net": "$129.83", 
+        "Fund Code": "2238"
+    }, 
+    {
+        "Trade Date": "03/23/2018", 
+        "Gross": "$130.49", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$8.7581", 
+        "Fund Company": "MFC", 
+        "Unit Balance": "2889.1730", 
+        "Units": "14.9000", 
+        "Net": "$130.49", 
+        "Fund Code": "2238"
+    }, 
+    {
+        "Trade Date": "01/03/2018", 
+        "Gross": "($1,272.91)", 
+        "Description": "Switch-Out:", 
+        "Price": "$13.6883", 
+        "Fund Company": "MFC", 
+        "Unit Balance": "836.7320", 
+        "Units": "-92.9930", 
+        "Net": "($1,272.91)", 
+        "Fund Code": "302"
+    }, 
+    {
+        "Trade Date": "01/19/2018", 
+        "Gross": "$9.20", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$13.6166", 
+        "Fund Company": "MFC", 
+        "Unit Balance": "837.4080", 
+        "Units": "0.6760", 
+        "Net": "$9.20", 
+        "Fund Code": "302"
+    }, 
+    {
+        "Trade Date": "02/16/2018", 
+        "Gross": "$10.13", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$13.5516", 
+        "Fund Company": "MFC", 
+        "Unit Balance": "838.1560", 
+        "Units": "0.7480", 
+        "Net": "$10.13", 
+        "Fund Code": "302"
+    }, 
+    {
+        "Trade Date": "03/23/2018", 
+        "Gross": "$10.06", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$13.6361", 
+        "Fund Company": "MFC", 
+        "Unit Balance": "838.8940", 
+        "Units": "0.7380", 
+        "Net": "$10.06", 
+        "Fund Code": "302"
+    }, 
+    {
+        "Trade Date": "01/03/2018", 
+        "Gross": "$1,272.91", 
+        "Description": "Switch-In:", 
+        "Price": "$10.1714", 
+        "Fund Company": "MFC", 
+        "Unit Balance": "1392.1700", 
+        "Units": "125.1460", 
+        "Net": "$1,272.91", 
+        "Fund Code": "3769"
+    }, 
+    {
+        "Trade Date": "01/19/2018", 
+        "Gross": "$14.90", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$10.1171", 
+        "Fund Company": "MFC", 
+        "Unit Balance": "1393.6420", 
+        "Units": "1.4720", 
+        "Net": "$14.90", 
+        "Fund Code": "3769"
+    }, 
+    {
+        "Trade Date": "02/16/2018", 
+        "Gross": "$16.03", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$10.0688", 
+        "Fund Company": "MFC", 
+        "Unit Balance": "1395.2340", 
+        "Units": "1.5920", 
+        "Net": "$16.03", 
+        "Fund Code": "3769"
+    }, 
+    {
+        "Trade Date": "03/23/2018", 
+        "Gross": "$16.88", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$10.1318", 
+        "Fund Company": "MFC", 
+        "Unit Balance": "1396.9000", 
+        "Units": "1.6660", 
+        "Net": "$16.88", 
+        "Fund Code": "3769"
+    }, 
+    {
+        "Trade Date": "01/03/2018", 
+        "Gross": "($910.03)", 
+        "Description": "Switch-Out:", 
+        "Price": "$4.4476", 
+        "Fund Company": "MFC", 
+        "Unit Balance": "1846.1560", 
+        "Units": "-204.6110", 
+        "Net": "($910.03)", 
+        "Fund Code": "856"
+    }, 
+    {
+        "Trade Date": "01/19/2018", 
+        "Gross": "$21.23", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$4.4420", 
+        "Fund Company": "MFC", 
+        "Unit Balance": "1850.9360", 
+        "Units": "4.7800", 
+        "Net": "$21.23", 
+        "Fund Code": "856"
+    }, 
+    {
+        "Trade Date": "02/16/2018", 
+        "Gross": "$25.17", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$4.3866", 
+        "Fund Company": "MFC", 
+        "Unit Balance": "1856.6750", 
+        "Units": "5.7390", 
+        "Net": "$25.17", 
+        "Fund Code": "856"
+    }, 
+    {
+        "Trade Date": "03/23/2018", 
+        "Gross": "$39.55", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$4.3420", 
+        "Fund Company": "MFC", 
+        "Unit Balance": "1865.7830", 
+        "Units": "9.1080", 
+        "Net": "$39.55", 
+        "Fund Code": "856"
+    }, 
+    {
+        "Trade Date": "01/11/2018", 
+        "Gross": "($1,018.86)", 
+        "Description": "Switch-Out:", 
+        "Price": "$21.2400", 
+        "Fund Company": "DYN", 
+        "Unit Balance": "431.7222", 
+        "Units": "-47.9691", 
+        "Net": "($1,018.86)", 
+        "Fund Code": "729"
+    }, 
+    {
+        "Trade Date": "01/26/2018", 
+        "Gross": "$30.22", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$21.2800", 
+        "Fund Company": "DYN", 
+        "Unit Balance": "433.1423", 
+        "Units": "1.4201", 
+        "Net": "$30.22", 
+        "Fund Code": "729"
+    }, 
+    {
+        "Trade Date": "02/23/2018", 
+        "Gross": "$30.32", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$20.5700", 
+        "Fund Company": "DYN", 
+        "Unit Balance": "434.6163", 
+        "Units": "1.4740", 
+        "Net": "$30.32", 
+        "Fund Code": "729"
+    }, 
+    {
+        "Trade Date": "03/29/2018", 
+        "Gross": "$30.42", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$20.1700", 
+        "Fund Company": "DYN", 
+        "Unit Balance": "436.1245", 
+        "Units": "1.5082", 
+        "Net": "$30.42", 
+        "Fund Code": "729"
+    }, 
+    {
+        "Trade Date": "01/11/2018", 
+        "Gross": "$9,287.98", 
+        "Description": "Switch-In:", 
+        "Price": "$13.0255", 
+        "Fund Company": "MMF", 
+        "Unit Balance": "2481.9310", 
+        "Units": "713.0610", 
+        "Net": "$9,287.98", 
+        "Fund Code": "3517"
+    }, 
+    {
+        "Trade Date": "01/26/2018", 
+        "Gross": "$124.10", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$13.0315", 
+        "Fund Company": "MMF", 
+        "Unit Balance": "2491.4540", 
+        "Units": "9.5230", 
+        "Net": "$124.10", 
+        "Fund Code": "3517"
+    }, 
+    {
+        "Trade Date": "02/23/2018", 
+        "Gross": "$124.57", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$12.7513", 
+        "Fund Company": "MMF", 
+        "Unit Balance": "2501.2230", 
+        "Units": "9.7690", 
+        "Net": "$124.57", 
+        "Fund Code": "3517"
+    }, 
+    {
+        "Trade Date": "03/29/2018", 
+        "Gross": "$125.06", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$12.6620", 
+        "Fund Company": "MMF", 
+        "Unit Balance": "2511.1000", 
+        "Units": "9.8770", 
+        "Net": "$125.06", 
+        "Fund Code": "3517"
+    }, 
+    {
+        "Trade Date": "01/11/2018", 
+        "Gross": "($9,287.98)", 
+        "Description": "Switch-Out:", 
+        "Price": "$13.0255", 
+        "Fund Company": "MMF", 
+        "Unit Balance": "415.1290", 
+        "Units": "-713.0610", 
+        "Net": "($9,287.98)", 
+        "Fund Code": "13417"
+    }, 
+    {
+        "Trade Date": "01/26/2018", 
+        "Gross": "$20.76", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$13.0315", 
+        "Fund Company": "MMF", 
+        "Unit Balance": "416.7220", 
+        "Units": "1.5930", 
+        "Net": "$20.76", 
+        "Fund Code": "13417"
+    }, 
+    {
+        "Trade Date": "02/23/2018", 
+        "Gross": "$20.84", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$12.7513", 
+        "Fund Company": "MMF", 
+        "Unit Balance": "418.3560", 
+        "Units": "1.6340", 
+        "Net": "$20.84", 
+        "Fund Code": "13417"
+    }, 
+    {
+        "Trade Date": "03/29/2018", 
+        "Gross": "$20.92", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$12.6620", 
+        "Fund Company": "MMF", 
+        "Unit Balance": "420.0080", 
+        "Units": "1.6520", 
+        "Net": "$20.92", 
+        "Fund Code": "13417"
+    }, 
+    {
+        "Trade Date": "01/11/2018", 
+        "Gross": "($905.65)", 
+        "Description": "Switch-Out:", 
+        "Price": "$14.1800", 
+        "Fund Company": "DYN", 
+        "Unit Balance": "574.8150", 
+        "Units": "-63.8683", 
+        "Net": "($905.65)", 
+        "Fund Code": "1562"
+    }, 
+    {
+        "Trade Date": "01/26/2018", 
+        "Gross": "$33.57", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$14.1800", 
+        "Fund Company": "DYN", 
+        "Unit Balance": "577.1824", 
+        "Units": "2.3674", 
+        "Net": "$33.57", 
+        "Fund Code": "1562"
+    }, 
+    {
+        "Trade Date": "02/23/2018", 
+        "Gross": "$33.71", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$13.8400", 
+        "Fund Company": "DYN", 
+        "Unit Balance": "579.6181", 
+        "Units": "2.4357", 
+        "Net": "$33.71", 
+        "Fund Code": "1562"
+    }, 
+    {
+        "Trade Date": "03/29/2018", 
+        "Gross": "$33.85", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$13.6000", 
+        "Fund Company": "DYN", 
+        "Unit Balance": "582.1071", 
+        "Units": "2.4890", 
+        "Net": "$33.85", 
+        "Fund Code": "1562"
+    }, 
+    {
+        "Trade Date": "01/11/2018", 
+        "Gross": "$781.01", 
+        "Description": "Switch-In:", 
+        "Price": "$15.0200", 
+        "Fund Company": "TML", 
+        "Unit Balance": "185.8790", 
+        "Units": "51.9978", 
+        "Net": "$781.01", 
+        "Fund Code": "1017"
+    }, 
+    {
+        "Trade Date": "01/30/2018", 
+        "Gross": "$6.04", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$14.6700", 
+        "Fund Company": "TML", 
+        "Unit Balance": "186.2907", 
+        "Units": "0.4117", 
+        "Net": "$6.04", 
+        "Fund Code": "1017"
+    }, 
+    {
+        "Trade Date": "02/27/2018", 
+        "Gross": "$6.05", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$14.1400", 
+        "Fund Company": "TML", 
+        "Unit Balance": "186.7186", 
+        "Units": "0.4279", 
+        "Net": "$6.05", 
+        "Fund Code": "1017"
+    }, 
+    {
+        "Trade Date": "03/28/2018", 
+        "Gross": "$7.00", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$14.0600", 
+        "Fund Company": "TML", 
+        "Unit Balance": "187.2165", 
+        "Units": "0.4979", 
+        "Net": "$7.00", 
+        "Fund Code": "1017"
+    }, 
+    {
+        "Trade Date": "01/11/2018", 
+        "Gross": "($781.01)", 
+        "Description": "Switch-Out:", 
+        "Price": "$15.0200", 
+        "Fund Company": "TML", 
+        "Unit Balance": "476.8121", 
+        "Units": "-51.9978", 
+        "Net": "($781.01)", 
+        "Fund Code": "1018"
+    }, 
+    {
+        "Trade Date": "01/30/2018", 
+        "Gross": "$15.50", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$14.6700", 
+        "Fund Company": "TML", 
+        "Unit Balance": "477.8687", 
+        "Units": "1.0566", 
+        "Net": "$15.50", 
+        "Fund Code": "1018"
+    }, 
+    {
+        "Trade Date": "02/27/2018", 
+        "Gross": "$15.53", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$14.1400", 
+        "Fund Company": "TML", 
+        "Unit Balance": "478.9670", 
+        "Units": "1.0983", 
+        "Net": "$15.53", 
+        "Fund Code": "1018"
+    }, 
+    {
+        "Trade Date": "03/28/2018", 
+        "Gross": "$17.96", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$14.0600", 
+        "Fund Company": "TML", 
+        "Unit Balance": "480.2444", 
+        "Units": "1.2774", 
+        "Net": "$17.96", 
+        "Fund Code": "1018"
+    }, 
+    {
+        "Trade Date": "01/11/2018", 
+        "Gross": "$1,018.86", 
+        "Description": "Switch-In:", 
+        "Price": "$21.2400", 
+        "Fund Company": "DYN", 
+        "Unit Balance": "585.6278", 
+        "Units": "47.9691", 
+        "Net": "$1,018.86", 
+        "Fund Code": "029"
+    }, 
+    {
+        "Trade Date": "01/26/2018", 
+        "Gross": "$40.99", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$21.2800", 
+        "Fund Company": "DYN", 
+        "Unit Balance": "587.5540", 
+        "Units": "1.9262", 
+        "Net": "$40.99", 
+        "Fund Code": "029"
+    }, 
+    {
+        "Trade Date": "02/23/2018", 
+        "Gross": "$41.13", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$20.5700", 
+        "Fund Company": "DYN", 
+        "Unit Balance": "589.5535", 
+        "Units": "1.9995", 
+        "Net": "$41.13", 
+        "Fund Code": "029"
+    }, 
+    {
+        "Trade Date": "03/29/2018", 
+        "Gross": "$41.27", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$20.1700", 
+        "Fund Company": "DYN", 
+        "Unit Balance": "591.5996", 
+        "Units": "2.0461", 
+        "Net": "$41.27", 
+        "Fund Code": "029"
+    }, 
+    {
+        "Trade Date": "01/11/2018", 
+        "Gross": "$905.65", 
+        "Description": "Switch-In:", 
+        "Price": "$14.1800", 
+        "Fund Company": "DYN", 
+        "Unit Balance": "840.2552", 
+        "Units": "63.8683", 
+        "Net": "$905.65", 
+        "Fund Code": "1560"
+    }, 
+    {
+        "Trade Date": "01/26/2018", 
+        "Gross": "$49.07", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$14.1800", 
+        "Fund Company": "DYN", 
+        "Unit Balance": "843.7157", 
+        "Units": "3.4605", 
+        "Net": "$49.07", 
+        "Fund Code": "1560"
+    }, 
+    {
+        "Trade Date": "02/23/2018", 
+        "Gross": "$49.27", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$13.8400", 
+        "Fund Company": "DYN", 
+        "Unit Balance": "847.2757", 
+        "Units": "3.5600", 
+        "Net": "$49.27", 
+        "Fund Code": "1560"
+    }, 
+    {
+        "Trade Date": "03/29/2018", 
+        "Gross": "$49.48", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$13.6000", 
+        "Fund Company": "DYN", 
+        "Unit Balance": "850.9139", 
+        "Units": "3.6382", 
+        "Net": "$49.48", 
+        "Fund Code": "1560"
+    }, 
+    {
+        "Trade Date": "03/29/2018", 
+        "Gross": "$34.19", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$10.5945", 
+        "Fund Company": "ATL", 
+        "Unit Balance": "1546.0110", 
+        "Units": "3.2270", 
+        "Net": "$34.19", 
+        "Fund Code": "059"
+    }
+]
+
+ >>> PROGRAM ENDED.

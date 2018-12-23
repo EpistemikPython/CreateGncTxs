@@ -17,7 +17,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2018-12-23 07:09"
+__updated__ = "2018-12-23 09:00"
 
 from sys import argv, exit
 import os
@@ -186,7 +186,7 @@ def createGnuTxs(record, gncFile, mode):
             gtx.SetDescription(descr)
             gtx.SetNotes(notes)
             
-            # create the Revenue split for the Tx
+            # create the REVENUE split for the Tx
             splRev = Split(book)
             splRev.SetParent(gtx)
             # gets a guid on construction
@@ -195,12 +195,11 @@ def createGnuTxs(record, gncFile, mode):
             splRev.SetAccount(revAcct)
             splRev.SetValue(GncNumeric(valRev, 100))
             
-            # create the Asset split for the Tx
+            # create the ASSET split for the Tx
             splAst = Split(book)
             splAst.SetParent(gtx)
             # gets a guid on construction
             print("splAst guid = '{}'".format(splAst.GetGUID().to_string()))
-            
             # set the account, value, units and action of the Asset split
             splAst.SetAccount(astAcct)
 #             print("SetAccount")

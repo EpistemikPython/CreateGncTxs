@@ -16,7 +16,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2018-12-23 07:11"
+__updated__ = "2018-12-23 14:13"
 
 from sys import argv, exit
 import os
@@ -46,17 +46,7 @@ def parseMonarchReport(file, mode):
     print("parseMonarchReport({})\n".format(file))
     
     if mode.lower() == "prod":
-        record = copy.deepcopy(Monarch_record)
-        
-        print("\n\tlen(Monarch record[{}]) = {}".format(PL_OPEN, len(record[PL_OPEN])))
-        print("\tMonarch record[{}] = {}".format(PL_OPEN, json.dumps(record[PL_OPEN], indent=4)))
-    
-        print("\n\tMonarch record[{}] = {}".format(OWNER, record[OWNER]))
-        print("\n\tlen(Monarch record[{}]) = {}".format(PL_TFSA, len(record[PL_TFSA])))
-        print("\tMonarch record[{}] = {}".format(PL_TFSA, json.dumps(record[PL_TFSA], indent=4)))
-    
-        print("\n\tlen(Monarch record[{}]) = {}".format(PL_RRSP, len(record[PL_RRSP])))
-        print("\tMonarch record[{}] = {}".format(PL_RRSP, json.dumps(record[PL_RRSP], indent=4)))
+        record = copy.deepcopy(Monarch_Record)
     else:
         # use a short standard record
         record = { OWNER:"OWNER_MARK" ,
@@ -134,7 +124,7 @@ def parseMonarchReport(file, mode):
                     fund_company = re_match.group(1)
                     fund_code = re_match.group(2)
                     fund_name = fund_company + " " + fund_code
-                    print("Current fund_name is: {}".format(fund_name))
+                    print("\n\tCurrent fund_name is: {}".format(fund_name))
                     mon_state = FIND_NEXT_TX
                     continue
 
@@ -144,8 +134,8 @@ def parseMonarchReport(file, mode):
 #                     print("FIND_NEXT_TX line {} = {}".format(ct, line.strip()))
 #                     print(re_match.groups())
                     tx_date = re_match.group(1)
-                    print("Current tx_date is: '{}'".format(tx_date))
-                    curr_tx = copy.deepcopy(Monarch_tx)
+                    print("\n\tCurrent tx_date is: '{}'".format(tx_date))
+                    curr_tx = copy.deepcopy(Monarch_Tx)
                     curr_tx[FUND_CMPY] = fund_company
                     curr_tx[FUND_CODE] = fund_code
                     curr_tx[TRADE_DATE] = tx_date
@@ -157,31 +147,47 @@ def parseMonarchReport(file, mode):
                 tx_line += 1
                 entry = line.strip()
                 if tx_line < 3:
-                    if entry == AUTO_SYS:
-                        # back up by one to have one more line of DESCRIPTION for AUTO_SYS case
+                    if entry == AUTO_SYS or entry == INT_TFI:
+                        # back up by one as have one MORE line of DESCRIPTION for AUTO_SYS and INT_TFI cases
                         tx_line -= 1
+                    elif entry == IN or entry == OUT:
+                        # move forward by one because one FEWER line of DESCRIPTION for IN and OUT cases
+                        tx_line += 1
                         # TODO: match number to proceed to looking for GROSS?
                     curr_tx[DESC] += (entry + ":")
                     print("curr_tx[DESC] is: '{}'".format(curr_tx[DESC]))
                     continue
                 if tx_line == 3:
-                    curr_tx[GROSS] += (entry)
+                    curr_tx[GROSS] = (entry)
                     print("curr_tx[GROSS] is: '{}'".format(curr_tx[GROSS]))
                 if tx_line == 4:
-                    curr_tx[NET] += (entry)
-                    print("curr_tx[NET] is: '{}'".format(curr_tx[NET]))
+                    curr_tx[NET] = (entry)
+                    if curr_tx[NET] != curr_tx[GROSS]:
+                        print("curr_tx[NET] is: '{}'".format(curr_tx[NET]))
+                        print("\n>>> PROBLEM!!! GROSS and NET do NOT match!!!\n")
+                        continue 
                 if tx_line == 5:
-                    curr_tx[UNITS] += (entry)
+                    curr_tx[UNITS] = (entry)
                     print("curr_tx[UNITS] is: '{}'".format(curr_tx[UNITS]))
                 if tx_line == 6:
-                    curr_tx[PRICE] += (entry)
+                    curr_tx[PRICE] = (entry)
                     print("curr_tx[PRICE] is: '{}'".format(curr_tx[PRICE]))
                 if tx_line == 7:
-                    curr_tx[UNIT_BAL] += (entry)
+                    curr_tx[UNIT_BAL] = (entry)
                     print("curr_tx[UNIT_BAL] is: '{}'".format(curr_tx[UNIT_BAL]))
                     bag.append(curr_tx)
                     mon_state = STATE_SEARCH
                     tx_line = 0
+        
+    print("\n\tlen(Monarch record[{}]) = {}".format(PL_OPEN, len(record[PL_OPEN])))
+    print("\tMonarch record[{}] = {}".format(PL_OPEN, json.dumps(record[PL_OPEN], indent=4)))
+
+    print("\n\tMonarch record[{}] = {}".format(OWNER, record[OWNER]))
+    print("\n\tlen(Monarch record[{}]) = {}".format(PL_TFSA, len(record[PL_TFSA])))
+    print("\tMonarch record[{}] = {}".format(PL_TFSA, json.dumps(record[PL_TFSA], indent=4)))
+
+    print("\n\tlen(Monarch record[{}]) = {}".format(PL_RRSP, len(record[PL_RRSP])))
+    print("\tMonarch record[{}] = {}".format(PL_RRSP, json.dumps(record[PL_RRSP], indent=4)))
 
 def main():
     if len(argv) < 3:
