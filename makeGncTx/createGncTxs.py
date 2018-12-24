@@ -17,7 +17,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2018-12-23 09:00"
+__updated__ = "2018-12-23 16:22"
 
 from sys import argv, exit
 import os
@@ -59,16 +59,20 @@ def showAccount(root, path):
         for subAcct in descendants:
             print( "{}".format(subAcct.GetName()) )
     
-def createGnuTxs(record, gncFile, mode):
+def createGnuTxs(monRec, gncFile, mode):
     '''
-        Take the transaction information from a Monarch record and produce Gnucash transactions to write to a gnucash file
+        Take the transaction information from a Monarch monRec and produce Gnucash transactions to write to a gnucash file
     '''
-#     print("record = {}".format(record))
+#     print("monRec = {}".format(monRec))
 
+    gncRec = copy.deepcopy(Gnucash_Record)
+    
     # set the regex values needed for matches
     reAMOUNT = re.compile("^(\(?)\$([0-9,]{1,6})\.([0-9]{2})\)?.*")
     reUNITS  = re.compile("^(\-?)([0-9]{1,5})\.([0-9]{4}).*")
     reDATE   = re.compile("^([0-9]{2})/([0-9]{2})/([0-9]{4}).*")
+    reSWITCH = re.compile("^({}\-[InOut]{2,3}).*".format(SWITCH))
+    reINTERN = re.compile("^({}\-[InOut]{2,3}).*".format(INTERN))
     
     def prepareAccounts(planType):
         print("\n\nPlan type = '{}'".format(planType))
@@ -81,7 +85,7 @@ def createGnuTxs(record, gncFile, mode):
         astParentPath.append(planType)
         
         if planType != PL_OPEN:
-            plOwner = record[OWNER]
+            plOwner = monRec[OWNER]
             if plOwner == '':
                 raise Exception("PROBLEM!! Trying to process plan type '{}' but NO Owner value found in Record!!".format(planType))
             revPath.append(ACCT_PATHS[plOwner])
@@ -95,13 +99,13 @@ def createGnuTxs(record, gncFile, mode):
         astParent = account_from_path(root, astParentPath)
         print("astParent = '{}'".format(astParent.GetName()))
         
-        for mtx in record[planType]:
+        for mtx in monRec[planType]:
             createGnuTx(mtx, revAcct, astParent)
     # end prepareAccounts()
     
-    def createGnuTx(tx, revAcct, astParent):
+    def createGnuTx(mtx, revAcct, astParent):
         '''
-        for Asset account: use the proper path to find the parent then search for the Fund Code in the descendants
+        for Asset accounts: use the proper path to find the parent then search for the Fund Code in the descendants
         for Revenue account: pick the proper account based on owner and plan type
         for valAst: re match to Gross then concatenate the two match groups
         for date: re match to get day, month and year then re-assemble to form Gnc date
@@ -109,8 +113,17 @@ def createGnuTxs(record, gncFile, mode):
         for Description: use DESC and Fund Code
         for Notes: use 'Unit Balance' and UNIT_BAL
         '''
+        transfer = DIST
         try:
-            astAcctName = tx[FUND_CMPY] + " " + tx[FUND_CODE]
+            re_matSwitch = re.match(reSWITCH, mtx[DESC])
+            re_matIntern = re.match(reINTERN, mtx[DESC])
+            if re_matSwitch or re_matIntern:
+                curr_tx = copy.deepcopy(Gnucash_Switch)
+                transfer = True
+            else:
+                curr_tx = copy.deepcopy(Gnucash_Dist)
+
+            astAcctName = mtx[FUND_CMPY] + " " + mtx[FUND_CODE]
             
             # special locations for Trust Revenue and Asset accounts
             if astAcctName == TRUST_ACCT:
@@ -124,7 +137,7 @@ def createGnuTxs(record, gncFile, mode):
             else:
                 print("astAcct = '{}'".format(astAcct.GetName()))
             
-            re_match = re.match(reAMOUNT, tx[GROSS])
+            re_match = re.match(reAMOUNT, mtx[GROSS])
             if re_match:
                 print(re_match.groups())
                 strAst = re_match.group(2) + re_match.group(3)
@@ -137,10 +150,10 @@ def createGnuTxs(record, gncFile, mode):
                 valRev = valAst * -1
                 print("valRev = '{}'".format(valRev))
             else:
-                raise Exception("PROBLEM!! reAMOUNT DID NOT match with value '{}'!".format(tx[GROSS]))
+                raise Exception("PROBLEM!! reAMOUNT DID NOT match with value '{}'!".format(mtx[GROSS]))
 #                 return
             
-            re_match = re.match(reUNITS, tx[UNITS])
+            re_match = re.match(reUNITS, mtx[UNITS])
             if re_match:
                 print(re_match.groups())
                 units = int(re_match.group(2) + re_match.group(3)) 
@@ -149,10 +162,10 @@ def createGnuTxs(record, gncFile, mode):
                     units *= -1
                 print("units = '{}'".format(units))
             else:
-                raise Exception("PROBLEM!! reUNITS DID NOT match with value '{}'!".format(tx[UNITS]))
+                raise Exception("PROBLEM!! reUNITS DID NOT match with value '{}'!".format(mtx[UNITS]))
 #                 return
             
-            re_match = re.match(reDATE, tx[TRADE_DATE])
+            re_match = re.match(reDATE, mtx[TRADE_DATE])
             if re_match:
                 print(re_match.groups())
                 trade_mth = int(re_match.group(1)) 
@@ -162,17 +175,31 @@ def createGnuTxs(record, gncFile, mode):
                 trade_yr  = int(re_match.group(3))
                 print("trade_yr = '{}'".format(trade_yr))
             else:
-                raise Exception("PROBLEM!! reTRADE_DATE DID NOT match with value '{}'!".format(tx[TRADE_DATE]))
+                raise Exception("PROBLEM!! reTRADE_DATE DID NOT match with value '{}'!".format(mtx[TRADE_DATE]))
 #                 return
             
             # assemble the Description string
-            descr = CMPY_FULL_NAME[tx[FUND_CMPY]] + ": " + tx[DESC] + " " + astAcctName
+            descr = CMPY_FULL_NAME[mtx[FUND_CMPY]] + ": " + mtx[DESC] + " " + astAcctName
             print("descr = '{}'".format(descr))
             
             # notes field
-            notes = "Unit Balance = " + tx[UNIT_BAL]
+            notes = "Unit Balance = " + mtx[UNIT_BAL]
             print("notes = '{}'".format(notes))
             
+            curr_tx[TRADE_DATE] = [trade_day, trade_mth, trade_yr]
+            curr_tx[DESC] = descr
+            
+            if transfer:
+                print("transfer")
+                # matches to In or Out to tell position in tx
+                # look for switches in same plan type [and company]
+                #     - check these switches for same date and opposite amount
+            
+            
+            
+            
+            
+            #=================================================================================================
             # create a new Tx
             gtx = Transaction(book)
             # gets a guid on construction
@@ -286,17 +313,21 @@ def createGnuTxs(record, gncFile, mode):
             session.end()
         raise
     
-def main():
-    if len(argv) < 3:
+def createGncTxsMain():
+    usage = "usage: python {0} <monarch file> <gnucash file> <mode: prod|test>".format(argv[0])
+    if len(argv) < 4:
         print("NOT ENOUGH parameters!")
-        print("usage: python {0} <monarch file> <gnucash file> <mode: prod|test>".format(argv[0]))
-        print("Example: {0} '{1}' '{2}' 'test'".format(argv[0], "in/Monarch-Mark-all.txt", PRAC_GNC))
+        print(usage)
         exit()
     
     monFile = argv[1]
     if not os.path.isfile(monFile):
         print("File path '{}' does not exist. Exiting...".format(monFile))
+        print(usage)
         exit()
+
+    # get Monarch record from the Monarch json file
+#     record = ???()
     
     gncFile = argv[2]
     if not os.path.isfile(gncFile):
@@ -305,12 +336,9 @@ def main():
     
     mode = argv[3]
     
-    # get Monarch record from Monarch json file
-    record = copy.deepcopy(Monarch_record)
-        
     createGnuTxs(record, gncFile, mode)
     
     print("\n >>> PROGRAM ENDED.")
     
 if __name__ == '__main__':  
-   main()
+   createGncTxsMain()

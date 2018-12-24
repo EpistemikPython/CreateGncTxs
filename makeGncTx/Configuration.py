@@ -17,7 +17,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2018-12-23 13:06"
+__updated__ = "2018-12-23 16:21"
 
 CLIENT_TX = "CLIENT TRANSACTIONS"
 PLAN_TYPE = "Plan Type:"
@@ -151,17 +151,21 @@ ACCT_PATHS = {
     TRUST    : ["XTERNAL", TRUST, "Trust Assets", "Monarch ITF", CMPY_FULL_NAME[CIG] ]
 }
 
-IN      = "Switch-In"
-OUT     = "Switch-Out"
-INT_TFI = "Internal Transfer-In"
-INT_TFO = "Internal Transfer-Out"
-ACCT    = "Account"
-VALUE   = "Value"
-AMOUNT  = "Amount"
+DIST    = "Dist"
+SWITCH  = "Switch"
+IN      = SWITCH + "-In"
+OUT     = SWITCH + "-Out"
+INTERN  = "Internal Transfer"
+INT_TFI = INTERN + " -In"
+INT_TFO = INTERN + " -Out"
+
+ACCT    = "Account" # Fund
+VALUE   = "Value"   # Gross
+AMOUNT  = "Amount"  # Units
 
 # information for each distribution transaction
 Gnucash_Dist = {
-    TRADE_DATE : "" ,
+    TRADE_DATE : [] ,
     DESC       : "" ,
     REVENUE    : { ACCT:"", VALUE:"" } ,
     ASSET      : { ACCT:"", VALUE:"", AMOUNT:"" } 
@@ -169,10 +173,10 @@ Gnucash_Dist = {
 
 # information for each switch transaction
 Gnucash_Switch = {
-    TRADE_DATE : "" ,
+    TRADE_DATE : [] ,
     DESC       : "" ,
-    IN         : { FUND:"", GROSS:"", PRICE:"", UNITS:"", UNIT_BAL:"" } ,
-    OUT        : { FUND:"", GROSS:"", PRICE:"", UNITS:"", UNIT_BAL:"" } 
+    IN         : { ACCT:"", VALUE:"", AMOUNT:"", UNIT_BAL:"", PRICE:"" } ,
+    OUT        : { ACCT:"", VALUE:"", AMOUNT:"", UNIT_BAL:"", PRICE:"" } 
 }
 
 # list of gnucash switches for each plan type and fund company

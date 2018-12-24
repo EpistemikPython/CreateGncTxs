@@ -16,7 +16,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2018-12-23 14:13"
+__updated__ = "2018-12-23 15:05"
 
 from sys import argv, exit
 import os
@@ -181,15 +181,17 @@ def parseMonarchReport(file, mode):
         
     print("\n\tlen(Monarch record[{}]) = {}".format(PL_OPEN, len(record[PL_OPEN])))
     print("\tMonarch record[{}] = {}".format(PL_OPEN, json.dumps(record[PL_OPEN], indent=4)))
-
+    
     print("\n\tMonarch record[{}] = {}".format(OWNER, record[OWNER]))
     print("\n\tlen(Monarch record[{}]) = {}".format(PL_TFSA, len(record[PL_TFSA])))
     print("\tMonarch record[{}] = {}".format(PL_TFSA, json.dumps(record[PL_TFSA], indent=4)))
-
+    
     print("\n\tlen(Monarch record[{}]) = {}".format(PL_RRSP, len(record[PL_RRSP])))
     print("\tMonarch record[{}] = {}".format(PL_RRSP, json.dumps(record[PL_RRSP], indent=4)))
+    
+    return record
 
-def main():
+def parseMonarchMain():
     if len(argv) < 3:
         print("NOT ENOUGH parameters!")
         print("usage: python {0} <monarch file> <mode: prod|test>".format(argv[0]))
@@ -204,9 +206,11 @@ def main():
     mode = argv[2]
     
     # parse an external Monarch report file
-    parseMonarchReport(monFile, mode)
+    record = parseMonarchReport(monFile, mode)
+    
+    # print record as json file
         
     print("\n >>> PROGRAM ENDED.")
     
 if __name__ == '__main__':  
-   main()
+   parseMonarchMain()
