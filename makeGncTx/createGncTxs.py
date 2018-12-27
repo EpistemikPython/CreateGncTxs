@@ -1,3 +1,4 @@
+from gnucash._gnucash_core_c import CREC
 
 # createGncTxs.py -- parse a json file with a Monarch record 
 #                    and create Gnucash transactions from the data
@@ -17,7 +18,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2018-12-23 16:22"
+__updated__ = "2018-12-27 08:12"
 
 from sys import argv, exit
 import os
@@ -221,6 +222,7 @@ def createGnuTxs(monRec, gncFile, mode):
             # set the account and value of the Revenue split
             splRev.SetAccount(revAcct)
             splRev.SetValue(GncNumeric(valRev, 100))
+            splRev.SetReconcile(CREC)
             
             # create the ASSET split for the Tx
             splAst = Split(book)
