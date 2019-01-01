@@ -17,7 +17,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2018-12-23 16:21"
+__updated__ = "2019-01-01 10:59"
 
 CLIENT_TX = "CLIENT TRANSACTIONS"
 PLAN_TYPE = "Plan Type:"
@@ -40,6 +40,7 @@ NET        = "Net"
 UNITS      = "Units"
 PRICE      = "Price"
 UNIT_BAL   = "Unit Balance" 
+NOTES      = "Notes"
 
 # Fund companies
 ATL = "ATL"
@@ -151,40 +152,51 @@ ACCT_PATHS = {
     TRUST    : ["XTERNAL", TRUST, "Trust Assets", "Monarch ITF", CMPY_FULL_NAME[CIG] ]
 }
 
-DIST    = "Dist"
-SWITCH  = "Switch"
-IN      = SWITCH + "-In"
-OUT     = SWITCH + "-Out"
-INTERN  = "Internal Transfer"
-INT_TFI = INTERN + " -In"
-INT_TFO = INTERN + " -Out"
+ACCT     = "Account" # Fund company & code
+DIST     = "Dist"
+SWITCH   = "Switch"
+IN       = "In"
+OUT      = "Out"
+SW_IN    = SWITCH + "-" + IN
+SW_OUT   = SWITCH + "-" + OUT
+INTX     = "Internal Transfer"
+INTX_IN  = INTX + "-" + IN
+INTX_OUT = INTX + "-" + OUT
 
-ACCT    = "Account" # Fund
-VALUE   = "Value"   # Gross
-AMOUNT  = "Amount"  # Units
+Switch_Pair = {
+    IN  : OUT ,
+    OUT : IN  
+}
 
 # information for each distribution transaction
 Gnucash_Dist = {
-    TRADE_DATE : [] ,
+    "ID"       : DIST ,
+    TRADE_DATE : "" ,
     DESC       : "" ,
-    REVENUE    : { ACCT:"", VALUE:"" } ,
-    ASSET      : { ACCT:"", VALUE:"", AMOUNT:"" } 
+    REVENUE    : { ACCT:"", GROSS:"" } ,
+    ASSET      : { ACCT:"", GROSS:"", UNITS:"" } 
 }
 
 # information for each switch transaction
 Gnucash_Switch = {
-    TRADE_DATE : [] ,
-    DESC       : "" ,
-    IN         : { ACCT:"", VALUE:"", AMOUNT:"", UNIT_BAL:"", PRICE:"" } ,
-    OUT        : { ACCT:"", VALUE:"", AMOUNT:"", UNIT_BAL:"", PRICE:"" } 
+    "ID"       : SWITCH ,
+    FUND_CMPY  : "" ,
+    TRADE_DATE : "" ,
+    NOTES      : "" ,
+    ACCT       : "" , 
+    GROSS      : "" ,
+    UNITS      : "" 
 }
+#     IN         : { ACCT:"", VALUE:"", AMOUNT:"", UNIT_BAL:"", PRICE:"" } ,
+#     OUT        : { ACCT:"", VALUE:"", AMOUNT:"", UNIT_BAL:"", PRICE:"" } 
+# }
 
 # list of gnucash switches for each plan type and fund company
 Gnucash_Record = {
     OWNER   : "" ,
     PL_OPEN : [] , # all CIG
     PL_TFSA : [] , # if Mark = TML, if Lulu = MFC
-    PL_RRSP : { ATL:[], DYN:[], MFC:[], MMF:[], TML:[] }
+    PL_RRSP : [] #{ ATL:[], DYN:[], MFC:[], MMF:[], TML:[] }
 }
 
     # parsing states

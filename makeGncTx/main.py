@@ -17,7 +17,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2018-12-23 15:04"
+__updated__ = "2019-01-01 08:12"
 
 from sys import argv, exit
 import os
@@ -52,6 +52,7 @@ def main():
     # parse an external Monarch report file
     record = parseMonarchReport(monFile, mode)
     
+    # create gnucash transactions and write to the desired Gnucash file
     createGnuTxs(record, gncFile, mode)
     
     print("\n >>> PROGRAM ENDED.")

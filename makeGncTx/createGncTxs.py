@@ -18,7 +18,7 @@ from gnucash._gnucash_core_c import CREC
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2018-12-27 08:12"
+__updated__ = "2019-01-01 10:59"
 
 from sys import argv, exit
 import os
@@ -66,14 +66,12 @@ def createGnuTxs(monRec, gncFile, mode):
     '''
 #     print("monRec = {}".format(monRec))
 
-    gncRec = copy.deepcopy(Gnucash_Record)
-    
     # set the regex values needed for matches
-    reAMOUNT = re.compile("^(\(?)\$([0-9,]{1,6})\.([0-9]{2})\)?.*")
+    reGROSS  = re.compile("^(\(?)\$([0-9,]{1,6})\.([0-9]{2})\)?.*")
     reUNITS  = re.compile("^(\-?)([0-9]{1,5})\.([0-9]{4}).*")
     reDATE   = re.compile("^([0-9]{2})/([0-9]{2})/([0-9]{4}).*")
-    reSWITCH = re.compile("^({}\-[InOut]{2,3}).*".format(SWITCH))
-    reINTERN = re.compile("^({}\-[InOut]{2,3}).*".format(INTERN))
+    reSWITCH = re.compile("^(" + SWITCH + ")\-([InOut]{2,3}).*")
+    reINTX   = re.compile("^(" + INTX + ")\-([InOut]{2,3}).*")
     
     def prepareAccounts(planType):
         print("\n\nPlan type = '{}'".format(planType))
@@ -101,29 +99,28 @@ def createGnuTxs(monRec, gncFile, mode):
         print("astParent = '{}'".format(astParent.GetName()))
         
         for mtx in monRec[planType]:
-            createGnuTx(mtx, revAcct, astParent)
+            createGnuTx(mtx, planType, revAcct, astParent)
     # end prepareAccounts()
     
-    def createGnuTx(mtx, revAcct, astParent):
+    def createGnuTx(mtx, planType, revAcct, astParent):
         '''
-        for Asset accounts: use the proper path to find the parent then search for the Fund Code in the descendants
-        for Revenue account: pick the proper account based on owner and plan type
-        for valAst: re match to Gross then concatenate the two match groups
-        for date: re match to get day, month and year then re-assemble to form Gnc date
-        for Units: need to find position of decimal point to know Gnc denominator
-        for Description: use DESC and Fund Code
-        for Notes: use 'Unit Balance' and UNIT_BAL
+        Asset accounts: use the proper path to find the parent then search for the Fund Code in the descendants
+        Revenue accounts: pick the proper account based on owner and plan type
+        grossCurr: re match to Gross then concatenate the two match groups
+        date: re match to get day, month and year then re-assemble to form Gnc date
+        Units: need to find position of decimal point to know Gnc denominator
+        Description: use DESC and Fund Code
+        Notes: use 'Unit Balance' and UNIT_BAL
         '''
-        transfer = DIST
+        transfer = False
         try:
+            # check if we have a switch/transfer
             re_matSwitch = re.match(reSWITCH, mtx[DESC])
-            re_matIntern = re.match(reINTERN, mtx[DESC])
-            if re_matSwitch or re_matIntern:
-                curr_tx = copy.deepcopy(Gnucash_Switch)
+            re_matIntx = re.match(reINTX, mtx[DESC])
+            if re_matSwitch or re_matIntx:
                 transfer = True
-            else:
-                curr_tx = copy.deepcopy(Gnucash_Dist)
 
+            # get the asset account name
             astAcctName = mtx[FUND_CMPY] + " " + mtx[FUND_CODE]
             
             # special locations for Trust Revenue and Asset accounts
@@ -131,6 +128,7 @@ def createGnuTxs(monRec, gncFile, mode):
                 astParent = root.lookup_by_name("XTERNAL")
                 revAcct = root.lookup_by_name("Trust Base")
             
+            # get the asset account
             astAcct = astParent.lookup_by_name(astAcctName)
             if astAcct == None:
                 raise Exception("Could NOT find acct '{}' under parent '{}'".format(astAcctName, astParent.GetName()))
@@ -138,22 +136,24 @@ def createGnuTxs(monRec, gncFile, mode):
             else:
                 print("astAcct = '{}'".format(astAcct.GetName()))
             
-            re_match = re.match(reAMOUNT, mtx[GROSS])
+            # get the dollar value of the tx
+            re_match = re.match(reGROSS, mtx[GROSS])
             if re_match:
                 print(re_match.groups())
-                strAst = re_match.group(2) + re_match.group(3)
+                strGrossCurr = re_match.group(2) + re_match.group(3)
                 # remove possible comma
-                valAst = int(strAst.replace(',', ''))
+                grossCurr = int(strGrossCurr.replace(',', ''))
                 # if match group 1 is not empty, amount is negative
                 if re_match.group(1) != '':
-                    valAst *= -1
-                print("valAst = '{}'".format(valAst))
-                valRev = valAst * -1
-                print("valRev = '{}'".format(valRev))
+                    grossCurr *= -1
+                print("grossCurr = '{}'".format(grossCurr))
+                grossOpp = grossCurr * -1
+                print("grossOpp = '{}'".format(grossOpp))
             else:
-                raise Exception("PROBLEM!! reAMOUNT DID NOT match with value '{}'!".format(mtx[GROSS]))
+                raise Exception("PROBLEM!! reGROSS DID NOT match with value '{}'!".format(mtx[GROSS]))
 #                 return
             
+            # get the units of the tx
             re_match = re.match(reUNITS, mtx[UNITS])
             if re_match:
                 print(re_match.groups())
@@ -166,6 +166,7 @@ def createGnuTxs(monRec, gncFile, mode):
                 raise Exception("PROBLEM!! reUNITS DID NOT match with value '{}'!".format(mtx[UNITS]))
 #                 return
             
+            # get the date items
             re_match = re.match(reDATE, mtx[TRADE_DATE])
             if re_match:
                 print(re_match.groups())
@@ -184,24 +185,37 @@ def createGnuTxs(monRec, gncFile, mode):
             print("descr = '{}'".format(descr))
             
             # notes field
-            notes = "Unit Balance = " + mtx[UNIT_BAL]
+            notes = astAcctName + " Unit Balance = " + mtx[UNIT_BAL]
             print("notes = '{}'".format(notes))
             
-            curr_tx[TRADE_DATE] = [trade_day, trade_mth, trade_yr]
-            curr_tx[DESC] = descr
-            
+            # check the type of tx -- a Distribution OR the first or second item of a switch/transfer pair
+            havePair = False
             if transfer:
                 print("transfer")
-                # matches to In or Out to tell position in tx
-                # look for switches in same plan type [and company]
-                #     - check these switches for same date and opposite amount
-            
-            
-            
-            
+                # look for switches in same plan type, company, date and opposite amount
+                for itx in gncRec[planType]:
+                    if itx[FUND_CMPY] == mtx[FUND_CMPY] and itx[TRADE_DATE] == mtx[TRADE_DATE] and itx[GROSS] == grossOpp:
+                        # already have the first item of the pair
+                        havePair = True
+                        pair_tx = itx
+                        break
+                
+                if not havePair:
+                    # create a new switch
+                    pair_tx = copy.deepcopy(Gnucash_Switch)
+                    # fill in the fields for the switch tx
+                    pair_tx[FUND_CMPY] = mtx[FUND_CMPY]
+                    pair_tx[TRADE_DATE] = mtx[TRADE_DATE]
+                    pair_tx[NOTES] = notes
+                    pair_tx[ACCT] = astAcct
+                    pair_tx[GROSS] = grossCurr
+                    pair_tx[UNITS] = units
+                    # add to the record then return
+                    gncRec[planType].append(pair_tx)
+                    return
             
             #=================================================================================================
-            # create a new Tx
+            # create a gnucash Tx
             gtx = Transaction(book)
             # gets a guid on construction
             print("gtx guid = '{}'".format(gtx.GetGUID().to_string()))
@@ -214,16 +228,6 @@ def createGnuTxs(monRec, gncFile, mode):
             gtx.SetDescription(descr)
             gtx.SetNotes(notes)
             
-            # create the REVENUE split for the Tx
-            splRev = Split(book)
-            splRev.SetParent(gtx)
-            # gets a guid on construction
-            print("splRev guid = '{}'".format(splRev.GetGUID().to_string()))
-            # set the account and value of the Revenue split
-            splRev.SetAccount(revAcct)
-            splRev.SetValue(GncNumeric(valRev, 100))
-            splRev.SetReconcile(CREC)
-            
             # create the ASSET split for the Tx
             splAst = Split(book)
             splAst.SetParent(gtx)
@@ -232,11 +236,40 @@ def createGnuTxs(monRec, gncFile, mode):
             # set the account, value, units and action of the Asset split
             splAst.SetAccount(astAcct)
 #             print("SetAccount")
-            splAst.SetValue(GncNumeric(valAst, 100))
+            splAst.SetValue(GncNumeric(grossCurr, 100))
 #             print("SetValue")
             splAst.SetAmount(GncNumeric(units, 10000))
 #             print("SetAmount")
-            splAst.SetAction("Dist")
+            splAst.SetAction("Buy" if units > 0 else "Sell")
+            
+            if transfer:
+                # create the second ASSET split for the Tx
+                splAst2 = Split(book)
+                splAst2.SetParent(gtx)
+                # gets a guid on construction
+                print("splAst2 guid = '{}'".format(splAst2.GetGUID().to_string()))
+                # set the account, value, units and action of the second Asset split
+                splAst2.SetAccount(pair_tx[ACCT])
+    #             print("SetAccount2")
+                splAst2.SetValue(GncNumeric(pair_tx[GROSS], 100))
+    #             print("SetValue2")
+                splAst2.SetAmount(GncNumeric(pair_tx[UNITS], 10000))
+    #             print("SetAmount2")
+                splAst2.SetAction("Buy" if units < 0 else "Sell")
+                # combined Description for the Tx and set memos for the splits
+                gtx.SetNotes(notes + " | " + pair_tx[NOTES])
+                splAst.SetMemo(notes)
+                splAst2.SetMemo(pair_tx[NOTES])
+            else:
+                # create the REVENUE split for the Tx
+                splRev = Split(book)
+                splRev.SetParent(gtx)
+                # gets a guid on construction
+                print("splRev guid = '{}'".format(splRev.GetGUID().to_string()))
+                # set the account and value of the Revenue split
+                splRev.SetAccount(revAcct)
+                splRev.SetValue(GncNumeric(grossOpp, 100))
+                splRev.SetReconcile(CREC)
             
             # roll back if something went wrong and the two splits DO NOT balance
             if not gtx.GetImbalanceValue().zero_p():
@@ -274,12 +307,14 @@ def createGnuTxs(monRec, gncFile, mode):
         # EXPERIMENT
         if mode.lower() == 'prod':
             
+            gncRec = copy.deepcopy(Gnucash_Record)
+    
             # combine all txs from the same fund company on the same date to one tx?
             prepareAccounts(PL_OPEN)
             
-            prepareAccounts(PL_TFSA)
-            
-            prepareAccounts(PL_RRSP)
+#             prepareAccounts(PL_TFSA)
+#             
+#             prepareAccounts(PL_RRSP)
             
             if mode == "PROD":
                 print("Mode = '{}': Save session.".format(mode))
