@@ -16,9 +16,9 @@
 #
 # @author Mark Sattolo <epistemik@gmail.com>
 
-__updated__ = "2018-12-22 20:26"
+__updated__ = "2019-01-01 17:01"
 
-import sys
+from sys import argv, exit
 import collections
 import json
 import PyPDF2
@@ -37,17 +37,18 @@ def getAllPages(readPdf):
        print page_content.encode('utf-8')
     
 def main():
-    print("len(sys.argv) = {0}".format(len(sys.argv)))
-    if len(sys.argv) < 2:
-        print("Usage: python '{}' <reportPath> [pageNum]".format(sys.argv[0]))
-        
-    monarch = sys.argv[1]
+    print("len(argv) = {0}".format(len(argv)))
+    if len(argv) < 2:
+        print("Usage: python '{}' <reportPath> [pageNum]".format(argv[0]))
+        exit()
+     
+    monarch = argv[1]
     print("Monarch report is: {}".format(monarch))
     
     pageNum = 0
     readAll = True
-    if len(sys.argv) > 2:
-        pageNum = int(sys.argv[2]) - 1
+    if len(argv) > 2:
+        pageNum = int(argv[2]) - 1
         readAll = False
     
     pdfFile = open(monarch, 'rb')
