@@ -28,7 +28,7 @@ from gnucash import Session, Transaction, Split, Account, GncNumeric, GncCommodi
 from gnucash.gnucash_core_c import guid_new_return, guid_to_string
 from Configuration import *
 from parseMonarch import *
-from createGncTxs import *
+from createGnucashTxs import *
 
 def main():
     if len(argv) < 4:

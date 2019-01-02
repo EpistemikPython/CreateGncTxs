@@ -17,7 +17,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2019-01-01 10:59"
+__updated__ = "2019-01-01 15:22"
 
 CLIENT_TX = "CLIENT TRANSACTIONS"
 PLAN_TYPE = "Plan Type:"
@@ -162,11 +162,7 @@ SW_OUT   = SWITCH + "-" + OUT
 INTX     = "Internal Transfer"
 INTX_IN  = INTX + "-" + IN
 INTX_OUT = INTX + "-" + OUT
-
-Switch_Pair = {
-    IN  : OUT ,
-    OUT : IN  
-}
+FEE      = "Fee Redemption"
 
 # information for each distribution transaction
 Gnucash_Dist = {
@@ -187,9 +183,6 @@ Gnucash_Switch = {
     GROSS      : "" ,
     UNITS      : "" 
 }
-#     IN         : { ACCT:"", VALUE:"", AMOUNT:"", UNIT_BAL:"", PRICE:"" } ,
-#     OUT        : { ACCT:"", VALUE:"", AMOUNT:"", UNIT_BAL:"", PRICE:"" } 
-# }
 
 # list of gnucash switches for each plan type and fund company
 Gnucash_Record = {

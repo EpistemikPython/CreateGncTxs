@@ -16,7 +16,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2019-01-01 08:43"
+__updated__ = "2019-01-01 15:15"
 
 from sys import argv, exit
 import os
@@ -150,10 +150,10 @@ def parseMonarchReport(file, mode):
                     if entry == AUTO_SYS or entry == INTX_IN:
                         # back up by one as have one MORE line of DESCRIPTION for AUTO_SYS and INT_TFI cases
                         tx_line -= 1
-                    elif entry == SW_IN or entry == SW_OUT:
-                        # move forward by one because one FEWER line of DESCRIPTION for IN and OUT cases
+                    elif entry == SW_IN or entry == SW_OUT or entry == FEE:
+                        # move forward by one because one FEWER line of DESCRIPTION for these cases
                         tx_line += 1
-                        # TODO: match number to proceed to looking for GROSS?
+                    # TODO: match number to proceed to looking for GROSS?
                     curr_tx[DESC] += (entry + ":")
                     print("curr_tx[DESC] is: '{}'".format(curr_tx[DESC]))
                     continue

@@ -1,0 +1,90 @@
+[
+    {
+        "Trade Date": "12/14/2018", 
+        "Gross": "$12.12", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$17.0939", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "114.6780", 
+        "Units": "0.7090", 
+        "Net": "$12.12", 
+        "Fund Code": "1154"
+    }, 
+    {
+        "Trade Date": "12/14/2018", 
+        "Gross": "$5.37", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$8.9156", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "107.8720", 
+        "Units": "0.6020", 
+        "Net": "$5.37", 
+        "Fund Code": "11111"
+    }, 
+    {
+        "Trade Date": "12/14/2018", 
+        "Gross": "$37.40", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$15.8589", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "420.7230", 
+        "Units": "2.3580", 
+        "Net": "$37.40", 
+        "Fund Code": "1521"
+    }, 
+    {
+        "Trade Date": "12/14/2018", 
+        "Gross": "$5.88", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$15.8589", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "66.3190", 
+        "Units": "0.3710", 
+        "Net": "$5.88", 
+        "Fund Code": "2321"
+    }, 
+    {
+        "Trade Date": "12/14/2018", 
+        "Gross": "$13.78", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$25.8483", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "244.8310", 
+        "Units": "0.5330", 
+        "Net": "$13.78", 
+        "Fund Code": "1304"
+    }, 
+    {
+        "Trade Date": "12/14/2018", 
+        "Gross": "$34.92", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$8.9156", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "702.2130", 
+        "Units": "3.9170", 
+        "Net": "$34.92", 
+        "Fund Code": "11461"
+    }, 
+    {
+        "Trade Date": "12/14/2018", 
+        "Gross": "$2.09", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$25.8483", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "37.0600", 
+        "Units": "0.0810", 
+        "Net": "$2.09", 
+        "Fund Code": "2304"
+    }, 
+    {
+        "Trade Date": "12/14/2018", 
+        "Gross": "$1.79", 
+        "Description": "Reinvested:Distribution/Interest:", 
+        "Price": "$17.0939", 
+        "Fund Company": "CIG", 
+        "Unit Balance": "17.0520", 
+        "Units": "0.1050", 
+        "Net": "$1.79", 
+        "Fund Code": "6104"
+    }
+]
