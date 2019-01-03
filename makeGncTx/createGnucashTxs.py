@@ -1,6 +1,7 @@
 
-# createGnucashTxs.py -- parse a json file with a Monarch record 
-#                        and create Gnucash transactions from the data
+# createGnucashTxs.py -- parse a Monarch record, possibly from a json file, 
+#                        create Gnucash transactions from the data 
+#                        and write to a Gnucash file
 #
 # Copyright (c) 2018, 2019 Mark Sattolo <epistemik@gmail.com>
 #
@@ -17,7 +18,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2019-01-01 20:57"
+__updated__ = "2019-01-03 13:19"
 
 from sys import argv, exit
 import os
@@ -61,7 +62,7 @@ def showAccount(root, path):
     
 def createGncTxs(monRec, gncFile, mode):
     '''
-        Take the transaction information from a Monarch monRec and produce Gnucash transactions to write to a gnucash file
+       Take the information from a transaction record and produce Gnucash transactions to write to a gnucash file
     '''
 #     print("monRec = {}".format(monRec))
 
@@ -103,13 +104,13 @@ def createGncTxs(monRec, gncFile, mode):
     
     def createGncTx(mtx, planType, revAcct, astParent):
         '''
-        Asset accounts: use the proper path to find the parent then search for the Fund Code in the descendants
-        Revenue accounts: pick the proper account based on owner and plan type
-        grossCurr: re match to Gross then concatenate the two match groups
-        date: re match to get day, month and year then re-assemble to form Gnc date
-        Units: re match and concatenate the two groups on either side of decimal point
-        Description: use DESC and Fund Code
-        Notes: use 'Unit Balance' and UNIT_BAL
+           Asset accounts: use the proper path to find the parent then search for the Fund Code in the descendants
+           Revenue accounts: pick the proper account based on owner and plan type
+           grossCurr: re match to Gross then concatenate the two match groups
+           date: re match to get day, month and year then re-assemble to form Gnc date
+           Units: re match and concatenate the two groups on either side of decimal point
+           Description: use DESC and Fund Code
+           Notes: use 'Unit Balance' and UNIT_BAL
         '''
         transfer = False
         try:
@@ -123,9 +124,9 @@ def createGncTxs(monRec, gncFile, mode):
             astAcctName = mtx[FUND_CMPY] + " " + mtx[FUND_CODE]
             
             # special locations for Trust Revenue and Asset accounts
-            if astAcctName == TRUST_ACCT:
-                astParent = root.lookup_by_name("XTERNAL")
-                revAcct = root.lookup_by_name("Trust Base")
+            if astAcctName == TRUST_AST_ACCT:
+                astParent = root.lookup_by_name(TRUST)
+                revAcct = root.lookup_by_name(TRUST_REV_ACCT)
             
             # get the asset account
             astAcct = astParent.lookup_by_name(astAcctName)
@@ -197,7 +198,7 @@ def createGncTxs(monRec, gncFile, mode):
                 
                 if not havePair:
                     # create a new switch
-                    pair_tx = copy.deepcopy(Gnucash_Switch)
+                    pair_tx = copy.deepcopy(Tx_Switch)
                     # fill in the fields for the switch tx
                     pair_tx[FUND_CMPY] = mtx[FUND_CMPY]
                     pair_tx[TRADE_DATE] = mtx[TRADE_DATE]
@@ -292,7 +293,7 @@ def createGncTxs(monRec, gncFile, mode):
         # EXPERIMENT
         if mode.lower() == 'prod':
             
-            gncRec = copy.deepcopy(Gnucash_Record)
+            gncRec = copy.deepcopy(Tx_Record)
     
             prepareAccounts(PL_OPEN)
             

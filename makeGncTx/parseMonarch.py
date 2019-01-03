@@ -1,5 +1,6 @@
 
-# parseMonarch.py -- parse a Monarch text file to a json file
+# parseMonarch.py -- parse a Monarch text file to a Monarch record 
+#                    and save as a json file
 #
 # Copyright (c) 2018, 2019 Mark Sattolo <epistemik@gmail.com>
 #
@@ -16,7 +17,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2019-01-01 15:15"
+__updated__ = "2019-01-03 10:40"
 
 from sys import argv, exit
 import os
@@ -46,7 +47,7 @@ def parseMonarchReport(file, mode):
     print("parseMonarchReport({})\n".format(file))
     
     if mode.lower() == "prod":
-        record = copy.deepcopy(Monarch_Record)
+        record = copy.deepcopy(Tx_Record)
     else:
         # use a short example record
         record = { OWNER:"OWNER_MARK" ,
@@ -180,14 +181,14 @@ def parseMonarchReport(file, mode):
                     tx_line = 0
         
     print("\n\tlen(Monarch record[{}]) = {}".format(PL_OPEN, len(record[PL_OPEN])))
-    print("\tMonarch record[{}] = {}".format(PL_OPEN, json.dumps(record[PL_OPEN], indent=4)))
+#     print("\tMonarch record[{}] = {}".format(PL_OPEN, json.dumps(record[PL_OPEN], indent=4)))
     
     print("\n\tMonarch record[{}] = {}".format(OWNER, record[OWNER]))
     print("\n\tlen(Monarch record[{}]) = {}".format(PL_TFSA, len(record[PL_TFSA])))
-    print("\tMonarch record[{}] = {}".format(PL_TFSA, json.dumps(record[PL_TFSA], indent=4)))
+#     print("\tMonarch record[{}] = {}".format(PL_TFSA, json.dumps(record[PL_TFSA], indent=4)))
     
     print("\n\tlen(Monarch record[{}]) = {}".format(PL_RRSP, len(record[PL_RRSP])))
-    print("\tMonarch record[{}] = {}".format(PL_RRSP, json.dumps(record[PL_RRSP], indent=4)))
+#     print("\tMonarch record[{}] = {}".format(PL_RRSP, json.dumps(record[PL_RRSP], indent=4)))
     
     return record
 
@@ -209,6 +210,8 @@ def parseMonarchMain():
     record = parseMonarchReport(monFile, mode)
     
     # print record as json file
+    fp = open('/home/marksa/dev/Python/makeGncTx/MonRec.json', 'w')
+    json.dump(record, fp, indent=4)
         
     print("\n >>> PROGRAM ENDED.")
     

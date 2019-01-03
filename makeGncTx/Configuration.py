@@ -1,6 +1,6 @@
 
 # Configuration.py -- static defines to help parse a Monarch text file 
-#                     and write transactions to a gnucash file
+#                     and write the transactions to a gnucash file
 #
 # Copyright (c) 2018, 2019 Mark Sattolo <epistemik@gmail.com>
 #
@@ -17,7 +17,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2019-01-01 15:22"
+__updated__ = "2019-01-03 13:12"
 
 CLIENT_TX = "CLIENT TRANSACTIONS"
 PLAN_TYPE = "Plan Type:"
@@ -112,17 +112,18 @@ FundsList = [
     MMF_44424, MMF_4524, MMF_3517, MMF_13417
 ]
 
-TRUST_ACCT = CIG_18140
+TRUST_AST_ACCT = CIG_18140
+TRUST_REV_ACCT = "Trust Base"
 
 # owner and list of transactions for each plan type
-Monarch_Record = {
+Tx_Record = {
     OWNER   : "" ,
     PL_OPEN : [] ,
     PL_TFSA : [] ,
     PL_RRSP : []
 }
 
-# information for each transaction
+# information for each Monarch transaction
 Monarch_Tx = {
     FUND_CMPY  : "" ,
     FUND_CODE  : "" ,
@@ -161,20 +162,11 @@ ACCT_PATHS = {
     ASSET    : ["FAMILY", "INVEST"] ,# + planType [+ Owner]
     MON_MARK : GNU_MARK ,
     MON_LULU : GNU_LULU ,
-    TRUST    : ["XTERNAL", TRUST, "Trust Assets", "Monarch ITF", CMPY_FULL_NAME[CIG] ]
+    TRUST    : [TRUST, "Trust Assets", "Monarch ITF", CMPY_FULL_NAME[CIG] ]
 }
 
-# information for each distribution transaction
-Gnucash_Dist = {
-    "ID"       : DIST ,
-    TRADE_DATE : "" ,
-    DESC       : "" ,
-    REVENUE    : { ACCT:"", GROSS:"" } ,
-    ASSET      : { ACCT:"", GROSS:"", UNITS:"" } 
-}
-
-# information for each switch transaction
-Gnucash_Switch = {
+# information for each switch/transfer transaction
+Switch_Tx = {
     "ID"       : SWITCH ,
     FUND_CMPY  : "" ,
     TRADE_DATE : "" ,
@@ -182,14 +174,6 @@ Gnucash_Switch = {
     ACCT       : "" , 
     GROSS      : "" ,
     UNITS      : "" 
-}
-
-# list of gnucash switches for each plan type and fund company
-Gnucash_Record = {
-    OWNER   : "" ,
-    PL_OPEN : [] , # all CIG
-    PL_TFSA : [] , # if Mark = TML, if Lulu = MFC
-    PL_RRSP : [] #{ ATL:[], DYN:[], MFC:[], MMF:[], TML:[] }
 }
 
     # parsing states
