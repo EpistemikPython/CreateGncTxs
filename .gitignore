@@ -3,6 +3,7 @@
 /gnucash
 /py3bindings
 **/out/
+**/Downloads
 **/test*/
 **/bin/
 *.py[cdo]

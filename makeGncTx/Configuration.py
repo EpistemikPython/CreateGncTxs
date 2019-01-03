@@ -104,13 +104,15 @@ MMF_44424 = MMF + " 44424" # Manulife Yield Opportunities Fund Advisor Series
 MMF_3517  = MMF + " 3517"  # Manulife Conservative Income Fund Advisor Series
 MMF_13417 = MMF + " 13417" # Manulife Conservative Income Fund Advisor Series
 
-FundsList = [ 
+FundsList = [
     CIG_11461, CIG_11111, CIG_18140, CIG_2304, CIG_2321, CIG_6104, CIG_1154, CIG_1304, CIG_1521,
     TML_674, TML_704, TML_180, TML_184, TML_202, TML_203, TML_223, TML_518, TML_519, TML_598, TML_694, TML_707, TML_1017, TML_1018, 
     MFC_756, MFC_856, MFC_6129, MFC_6130, MFC_6138, MFC_302, MFC_2238, MFC_3232, MFC_3769, MFC_3689, MFC_1960, 
     DYN_029, DYN_729, DYN_1562, DYN_1560,
     MMF_44424, MMF_4524, MMF_3517, MMF_13417
 ]
+
+TRUST_ACCT = CIG_18140
 
 # owner and list of transactions for each plan type
 Monarch_Record = {
@@ -141,17 +143,6 @@ MON_LULU = "Louise Robb"
 GNU_MARK = "Mark"
 GNU_LULU = "Lulu"
 
-TRUST_ACCT = CIG_18140
-
-# find the proper path to the account in the gnucash file
-ACCT_PATHS = {
-    REVENUE  : ["REV", "REV_Invest", "Dist"] ,# + planType [+ Owner]
-    ASSET    : ["FAMILY", "INVEST"] ,# + planType [+ Owner]
-    MON_MARK : GNU_MARK ,
-    MON_LULU : GNU_LULU ,
-    TRUST    : ["XTERNAL", TRUST, "Trust Assets", "Monarch ITF", CMPY_FULL_NAME[CIG] ]
-}
-
 ACCT     = "Account" # Fund company & code
 DIST     = "Dist"
 SWITCH   = "Switch"
@@ -163,6 +154,15 @@ INTX     = "Internal Transfer"
 INTX_IN  = INTX + "-" + IN
 INTX_OUT = INTX + "-" + OUT
 FEE      = "Fee Redemption"
+
+# find the proper path to the account in the gnucash file
+ACCT_PATHS = {
+    REVENUE  : ["REV", "REV_Invest", DIST] ,# + planType [+ Owner]
+    ASSET    : ["FAMILY", "INVEST"] ,# + planType [+ Owner]
+    MON_MARK : GNU_MARK ,
+    MON_LULU : GNU_LULU ,
+    TRUST    : ["XTERNAL", TRUST, "Trust Assets", "Monarch ITF", CMPY_FULL_NAME[CIG] ]
+}
 
 # information for each distribution transaction
 Gnucash_Dist = {

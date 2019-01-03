@@ -48,7 +48,7 @@ def parseMonarchReport(file, mode):
     if mode.lower() == "prod":
         record = copy.deepcopy(Monarch_Record)
     else:
-        # use a short standard record
+        # use a short example record
         record = { OWNER:"OWNER_MARK" ,
         PL_OPEN : [
         {"Trade Date": "10/26/2018", "Gross": "$34.53", "Description": "Reinvested:Distribution/Interest:", "Price": "$8.9732", "Unit Balance": "694.4350", "Units": "3.8480", "Net": "$34.53", "Fund Code": "CIG 11461"},

@@ -305,6 +305,7 @@ def createGncTxs(monRec, gncFile, mode):
                 session.save()
         
         else:
+            # just show the account paths
             revPath = copy.copy(ACCT_PATHS[REVENUE])
             revPath.append(PL_OPEN)
             showAccount(root, revPath)

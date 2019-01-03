@@ -53,7 +53,7 @@ def main():
     record = parseMonarchReport(monFile, mode)
     
     # create gnucash transactions and write to the desired Gnucash file
-    createGnuTxs(record, gncFile, mode)
+    createGncTxs(record, gncFile, mode)
     
     print("\n >>> PROGRAM ENDED.")
     
