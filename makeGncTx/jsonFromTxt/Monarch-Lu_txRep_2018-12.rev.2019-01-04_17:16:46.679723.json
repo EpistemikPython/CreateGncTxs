@@ -1,0 +1,273 @@
+{
+    "Owner": "Louise Robb", 
+    "RRSP": [
+        {
+            "Trade Date": "12/07/2018", 
+            "Gross": "$86.44", 
+            "Description": "Reinvested:Distribution/Interest:", 
+            "Price": "$13.4691", 
+            "Fund Company": "MFC", 
+            "Unit Balance": "1187.2450", 
+            "Units": "6.4170", 
+            "Net": "$86.44", 
+            "Fund Code": "6138"
+        }, 
+        {
+            "Trade Date": "12/21/2018", 
+            "Gross": "$1.42", 
+            "Description": "Reinvested:Distribution/Interest:", 
+            "Price": "$13.1006", 
+            "Fund Company": "MFC", 
+            "Unit Balance": "1187.3540", 
+            "Units": "0.1090", 
+            "Net": "$1.42", 
+            "Fund Code": "6138"
+        }, 
+        {
+            "Trade Date": "12/07/2018", 
+            "Gross": "$85.66", 
+            "Description": "Reinvested:Distribution/Interest:", 
+            "Price": "$8.3352", 
+            "Fund Company": "MFC", 
+            "Unit Balance": "1897.0170", 
+            "Units": "10.2770", 
+            "Net": "$85.66", 
+            "Fund Code": "3232"
+        }, 
+        {
+            "Trade Date": "12/19/2018", 
+            "Gross": "$15.46", 
+            "Description": "Reinvested:Distribution/Interest:", 
+            "Price": "$12.7168", 
+            "Fund Company": "TML", 
+            "Unit Balance": "401.1312", 
+            "Units": "1.2157", 
+            "Net": "$15.46", 
+            "Fund Code": "1018"
+        }, 
+        {
+            "Trade Date": "12/19/2018", 
+            "Gross": "$3.54", 
+            "Description": "Reinvested:Distribution/Interest:", 
+            "Price": "$12.7168", 
+            "Fund Company": "TML", 
+            "Unit Balance": "91.9149", 
+            "Units": "0.2784", 
+            "Net": "$3.54", 
+            "Fund Code": "1017"
+        }, 
+        {
+            "Trade Date": "12/21/2018", 
+            "Gross": "$30.41", 
+            "Description": "Reinvested:Distribution/Interest:", 
+            "Price": "$10.2055", 
+            "Fund Company": "MFC", 
+            "Unit Balance": "900.1090", 
+            "Units": "2.9800", 
+            "Net": "$30.41", 
+            "Fund Code": "6129"
+        }, 
+        {
+            "Trade Date": "12/21/2018", 
+            "Gross": "$26.53", 
+            "Description": "Reinvested:Distribution/Interest:", 
+            "Price": "$8.9017", 
+            "Fund Company": "MFC", 
+            "Unit Balance": "741.9710", 
+            "Units": "2.9800", 
+            "Net": "$26.53", 
+            "Fund Code": "6130"
+        }, 
+        {
+            "Trade Date": "12/21/2018", 
+            "Gross": "$24.71", 
+            "Description": "Reinvested:Distribution/Interest:", 
+            "Price": "$4.1093", 
+            "Fund Company": "MFC", 
+            "Unit Balance": "1621.3320", 
+            "Units": "6.0140", 
+            "Net": "$24.71", 
+            "Fund Code": "856"
+        }, 
+        {
+            "Trade Date": "12/21/2018", 
+            "Gross": "$29.31", 
+            "Description": "Reinvested:Distribution/Interest:", 
+            "Price": "$13.5066", 
+            "Fund Company": "MFC", 
+            "Unit Balance": "711.9660", 
+            "Units": "2.1700", 
+            "Net": "$29.31", 
+            "Fund Code": "302"
+        }, 
+        {
+            "Trade Date": "12/21/2018", 
+            "Gross": "$17.99", 
+            "Description": "Reinvested:Distribution/Interest:", 
+            "Price": "$8.7001", 
+            "Fund Company": "MMF", 
+            "Unit Balance": "361.8450", 
+            "Units": "2.0680", 
+            "Net": "$17.99", 
+            "Fund Code": "44424"
+        }, 
+        {
+            "Trade Date": "12/21/2018", 
+            "Gross": "$93.75", 
+            "Description": "Reinvested:Distribution/Interest:", 
+            "Price": "$9.7966", 
+            "Fund Company": "ATL", 
+            "Unit Balance": "411.9760", 
+            "Units": "9.5700", 
+            "Net": "$93.75", 
+            "Fund Code": "059"
+        }, 
+        {
+            "Trade Date": "12/21/2018", 
+            "Gross": "$129.33", 
+            "Description": "Reinvested:Distribution/Interest:", 
+            "Price": "$8.7001", 
+            "Fund Company": "MMF", 
+            "Unit Balance": "2601.4460", 
+            "Units": "14.8650", 
+            "Net": "$129.33", 
+            "Fund Code": "4524"
+        }, 
+        {
+            "Trade Date": "12/21/2018", 
+            "Gross": "$26.29", 
+            "Description": "Reinvested:Distribution/Interest:", 
+            "Price": "$18.9000", 
+            "Fund Company": "DYN", 
+            "Unit Balance": "376.9558", 
+            "Units": "1.3910", 
+            "Net": "$26.29", 
+            "Fund Code": "729"
+        }, 
+        {
+            "Trade Date": "12/21/2018", 
+            "Gross": "$30.51", 
+            "Description": "Reinvested:Distribution/Interest:", 
+            "Price": "$18.9000", 
+            "Fund Company": "DYN", 
+            "Unit Balance": "437.4443", 
+            "Units": "1.6143", 
+            "Net": "$30.51", 
+            "Fund Code": "029"
+        }, 
+        {
+            "Trade Date": "12/28/2018", 
+            "Gross": "$28.62", 
+            "Description": "Reinvested:Distribution/Interest:", 
+            "Price": "$12.9900", 
+            "Fund Company": "DYN", 
+            "Unit Balance": "492.3395", 
+            "Units": "2.2032", 
+            "Net": "$28.62", 
+            "Fund Code": "1562"
+        }, 
+        {
+            "Trade Date": "12/28/2018", 
+            "Gross": "$33.58", 
+            "Description": "Reinvested:Distribution/Interest:", 
+            "Price": "$12.9900", 
+            "Fund Company": "DYN", 
+            "Unit Balance": "577.5695", 
+            "Units": "2.5851", 
+            "Net": "$33.58", 
+            "Fund Code": "1560"
+        }
+    ], 
+    "TFSA": [
+        {
+            "Trade Date": "12/07/2018", 
+            "Gross": "$53.45", 
+            "Description": "Reinvested:Distribution/Interest:", 
+            "Price": "$8.3352", 
+            "Fund Company": "MFC", 
+            "Unit Balance": "1183.6970", 
+            "Units": "6.4120", 
+            "Net": "$53.45", 
+            "Fund Code": "3232"
+        }, 
+        {
+            "Trade Date": "12/07/2018", 
+            "Gross": "$123.76", 
+            "Description": "Reinvested:Distribution/Interest:", 
+            "Price": "$13.4691", 
+            "Fund Company": "MFC", 
+            "Unit Balance": "1699.9350", 
+            "Units": "9.1890", 
+            "Net": "$123.76", 
+            "Fund Code": "6138"
+        }, 
+        {
+            "Trade Date": "12/21/2018", 
+            "Gross": "$2.04", 
+            "Description": "Reinvested:Distribution/Interest:", 
+            "Price": "$13.1006", 
+            "Fund Company": "MFC", 
+            "Unit Balance": "1700.0910", 
+            "Units": "0.1560", 
+            "Net": "$2.04", 
+            "Fund Code": "6138"
+        }, 
+        {
+            "Trade Date": "12/07/2018", 
+            "Gross": "$55.06", 
+            "Description": "Reinvested:Distribution/Interest:", 
+            "Price": "$12.0498", 
+            "Fund Company": "MFC", 
+            "Unit Balance": "823.8660", 
+            "Units": "4.5690", 
+            "Net": "$55.06", 
+            "Fund Code": "3689"
+        }, 
+        {
+            "Trade Date": "12/07/2018", 
+            "Gross": "$60.30", 
+            "Description": "Reinvested:Distribution/Interest:", 
+            "Price": "$12.0498", 
+            "Fund Company": "MFC", 
+            "Unit Balance": "902.3640", 
+            "Units": "5.0040", 
+            "Net": "$60.30", 
+            "Fund Code": "1960"
+        }
+    ], 
+    "OPEN": [
+        {
+            "Trade Date": "12/12/2018", 
+            "Gross": "($1,000.00)", 
+            "Description": "Automatic/Systematic:Withdrawal Plan:(AWD/SWP):", 
+            "Price": "$14.9101", 
+            "Fund Company": "CIG", 
+            "Unit Balance": "6403.8580", 
+            "Units": "-67.0690", 
+            "Net": "($1,000.00)", 
+            "Fund Code": "18140"
+        }, 
+        {
+            "Trade Date": "12/14/2018", 
+            "Gross": "($235.30)", 
+            "Description": "Fee Redemption:", 
+            "Price": "$14.8195", 
+            "Fund Company": "CIG", 
+            "Unit Balance": "6399.5770", 
+            "Units": "-15.8780", 
+            "Net": "($235.30)", 
+            "Fund Code": "18140"
+        }, 
+        {
+            "Trade Date": "12/14/2018", 
+            "Gross": "$171.86", 
+            "Description": "Reinvested:Distribution/Interest:", 
+            "Price": "$14.8195", 
+            "Fund Company": "CIG", 
+            "Unit Balance": "6415.4550", 
+            "Units": "11.5970", 
+            "Net": "$171.86", 
+            "Fund Code": "18140"
+        }
+    ]
+}

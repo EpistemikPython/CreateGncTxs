@@ -17,14 +17,17 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2019-01-03 10:40"
+__updated__ = "2019-01-03 17:26"
 
 from sys import argv, exit
 import os
 import re
 import copy
 import json
+import datetime
 from Configuration import *
+
+now = str(datetime.datetime.now())
 
 def parseMonarchReport(file, mode):
     '''
@@ -45,6 +48,7 @@ def parseMonarchReport(file, mode):
                   line  = 'Unit Balance' : float
     '''
     print("parseMonarchReport({})\n".format(file))
+    print("Runtime = " + now)
     
     if mode.lower() == "prod":
         record = copy.deepcopy(Tx_Record)
@@ -179,7 +183,7 @@ def parseMonarchReport(file, mode):
                     bag.append(curr_tx)
                     mon_state = STATE_SEARCH
                     tx_line = 0
-        
+    
     print("\n\tlen(Monarch record[{}]) = {}".format(PL_OPEN, len(record[PL_OPEN])))
 #     print("\tMonarch record[{}] = {}".format(PL_OPEN, json.dumps(record[PL_OPEN], indent=4)))
     
@@ -209,11 +213,17 @@ def parseMonarchMain():
     # parse an external Monarch report file
     record = parseMonarchReport(monFile, mode)
     
+    homeDir = '/home/marksa/dev/git/Python/pyTry/makeGncTx/'
     # print record as json file
-    fp = open('/home/marksa/dev/Python/makeGncTx/MonRec.json', 'w')
+    # pluck basename from monFile to use for saved json file
+    (path, fname) = os.path.split(monFile)
+    (basename, ext) = os.path.splitext(fname)
+    outFile = homeDir + basename + "." + now.replace(" ", "_") + ".json"
+#    fp = open('/home/marksa/dev/Python/makeGncTx/MonRec.json', 'w')
+    fp = open(outFile, 'w')
     json.dump(record, fp, indent=4)
-        
-    print("\n >>> PROGRAM ENDED.")
     
+    print("\n >>> PROGRAM ENDED.")
+
 if __name__ == '__main__':  
    parseMonarchMain()
