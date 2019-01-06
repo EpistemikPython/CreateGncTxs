@@ -18,7 +18,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2019-01-05 20:43"
+__updated__ = "2019-01-05 21:26"
 
 from sys import argv, exit
 import os
@@ -114,15 +114,24 @@ def createGncTxs(monRec, gncFile, mode):
         '''
         transfer = False
         try:
+            # see note in createGncTxsMain() regarding json.load()
+            fund_company = str(mtx[FUND_CMPY])
+            desc = str(mtx[DESC])
+            trade_date = str(mtx[TRADE_DATE])
+            
             # check if we have a switch/transfer
-            re_matSwitch = re.match(reSWITCH, mtx[DESC])
-            re_matIntx = re.match(reINTX, mtx[DESC])
+            re_matSwitch = re.match(reSWITCH, desc)
+            re_matIntx = re.match(reINTX, desc)
             if re_matSwitch or re_matIntx:
                 transfer = True
 
             # get the asset account name
-            astAcctName = mtx[FUND_CMPY] + " " + mtx[FUND_CODE]
-            print("astAcctName = {}".format(astAcctName))
+            astAcctName = fund_company + " " + mtx[FUND_CODE]
+            print("astAcctName = '{}'".format(astAcctName))
+            print("type(astAcctName) = '{}'".format(type(astAcctName)))
+            astAcctStr = str(astAcctName)
+            print("astAcctStr = '{}'".format(astAcctStr))
+            print("type(astAcctStr) = '{}'".format(type(astAcctStr)))
             
             # special locations for Trust Revenue and Asset accounts
             if astAcctName == TRUST_AST_ACCT:
@@ -132,7 +141,7 @@ def createGncTxs(monRec, gncFile, mode):
                 print("\n revAcct = '{}'".format(revAcct.GetName()))
             
             # get the asset account
-            astAcct = astParent.lookup_by_name(astAcctName)
+            astAcct = astParent.lookup_by_name(astAcctStr)
             if astAcct == None:
                 raise Exception("Could NOT find acct '{}' under parent '{}'".format(astAcctName, astParent.GetName()))
             else:
@@ -167,7 +176,7 @@ def createGncTxs(monRec, gncFile, mode):
                 raise Exception("PROBLEM!! reUNITS DID NOT match with value '{}'!".format(mtx[UNITS]))
             
             # get the date items
-            re_match = re.match(reDATE, mtx[TRADE_DATE])
+            re_match = re.match(reDATE, trade_date)
             if re_match:
                 print(re_match.groups())
                 trade_mth = int(re_match.group(1)) 
@@ -177,14 +186,14 @@ def createGncTxs(monRec, gncFile, mode):
                 trade_yr  = int(re_match.group(3))
                 print("trade_yr = '{}'".format(trade_yr))
             else:
-                raise Exception("PROBLEM!! reTRADE_DATE DID NOT match with value '{}'!".format(mtx[TRADE_DATE]))
+                raise Exception("PROBLEM!! reTRADE_DATE DID NOT match with value '{}'!".format(trade_date))
             
             # assemble the Description string
-            descr = CMPY_FULL_NAME[mtx[FUND_CMPY]] + ": " + mtx[DESC] + " " + astAcctName
+            descr = str(CMPY_FULL_NAME[fund_company] + ": " + desc + " " + astAcctName)
             print("descr = '{}'".format(descr))
             
             # notes field
-            notes = astAcctName + " balance = " + mtx[UNIT_BAL]
+            notes = str(astAcctName + " balance = " + mtx[UNIT_BAL])
             print("notes = '{}'".format(notes))
             
             # check the type of tx -- a Distribution OR the first or second item of a switch/transfer pair
@@ -193,7 +202,7 @@ def createGncTxs(monRec, gncFile, mode):
                 print("transfer")
                 # look for switches in same plan type, company, date and opposite gross value
                 for itx in gncRec[planType]:
-                    if itx[FUND_CMPY] == mtx[FUND_CMPY] and itx[TRADE_DATE] == mtx[TRADE_DATE] and itx[GROSS] == grossOpp:
+                    if itx[FUND_CMPY] == fund_company and itx[TRADE_DATE] == trade_date and itx[GROSS] == grossOpp:
                         # already have the first item of the pair
                         havePair = True
                         pair_tx = itx
@@ -203,8 +212,8 @@ def createGncTxs(monRec, gncFile, mode):
                     # create a new switch
                     pair_tx = copy.deepcopy(Tx_Switch)
                     # fill in the fields for the switch tx
-                    pair_tx[FUND_CMPY] = mtx[FUND_CMPY]
-                    pair_tx[TRADE_DATE] = mtx[TRADE_DATE]
+                    pair_tx[FUND_CMPY] = fund_company
+                    pair_tx[TRADE_DATE] = trade_date
                     pair_tx[NOTES] = notes
                     pair_tx[ACCT] = astAcct
                     pair_tx[GROSS] = grossCurr
@@ -355,6 +364,9 @@ def createGncTxsMain():
     
     # get Monarch record from the Monarch json file
     with open(monFile, 'r') as fp:
+        # PROBLEM: with Python2, the text in the record will be <type unicode> instead of <type string>
+        # and cause an exception if passed to any of the gnucash functions expecting a <const char*>
+        # -- easiest solution seems to be to just cast any of this text to str() on definition...
         record = json.load(fp)
     
     gncFile = argv[2]
