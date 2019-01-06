@@ -17,7 +17,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2019-01-03 17:26"
+__updated__ = "2019-01-05 16:16"
 
 from sys import argv, exit
 import os
@@ -163,22 +163,22 @@ def parseMonarchReport(file, mode):
                     print("curr_tx[DESC] is: '{}'".format(curr_tx[DESC]))
                     continue
                 if tx_line == 3:
-                    curr_tx[GROSS] = (entry)
+                    curr_tx[GROSS] = entry
                     print("curr_tx[GROSS] is: '{}'".format(curr_tx[GROSS]))
                 if tx_line == 4:
-                    curr_tx[NET] = (entry)
+                    curr_tx[NET] = entry
                     if curr_tx[NET] != curr_tx[GROSS]:
                         print("curr_tx[NET] is: '{}'".format(curr_tx[NET]))
                         print("\n>>> PROBLEM!!! GROSS and NET do NOT match!!!\n")
                         continue 
                 if tx_line == 5:
-                    curr_tx[UNITS] = (entry)
+                    curr_tx[UNITS] = entry
                     print("curr_tx[UNITS] is: '{}'".format(curr_tx[UNITS]))
                 if tx_line == 6:
-                    curr_tx[PRICE] = (entry)
+                    curr_tx[PRICE] = entry
                     print("curr_tx[PRICE] is: '{}'".format(curr_tx[PRICE]))
                 if tx_line == 7:
-                    curr_tx[UNIT_BAL] = (entry)
+                    curr_tx[UNIT_BAL] = entry
                     print("curr_tx[UNIT_BAL] is: '{}'".format(curr_tx[UNIT_BAL]))
                     bag.append(curr_tx)
                     mon_state = STATE_SEARCH
@@ -213,7 +213,7 @@ def parseMonarchMain():
     # parse an external Monarch report file
     record = parseMonarchReport(monFile, mode)
     
-    homeDir = '/home/marksa/dev/git/Python/pyTry/makeGncTx/'
+    homeDir = '/home/marksa/dev/git/Python/Gnucash/createGncTxs/makeGncTx'
     # print record as json file
     # pluck basename from monFile to use for saved json file
     (path, fname) = os.path.split(monFile)

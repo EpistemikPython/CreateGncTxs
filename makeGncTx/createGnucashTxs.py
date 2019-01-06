@@ -18,7 +18,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2019-01-03 13:19"
+__updated__ = "2019-01-05 20:43"
 
 from sys import argv, exit
 import os
@@ -122,11 +122,14 @@ def createGncTxs(monRec, gncFile, mode):
 
             # get the asset account name
             astAcctName = mtx[FUND_CMPY] + " " + mtx[FUND_CODE]
+            print("astAcctName = {}".format(astAcctName))
             
             # special locations for Trust Revenue and Asset accounts
             if astAcctName == TRUST_AST_ACCT:
                 astParent = root.lookup_by_name(TRUST)
+                print("\n astParent = '{}'".format(astParent.GetName()))
                 revAcct = root.lookup_by_name(TRUST_REV_ACCT)
+                print("\n revAcct = '{}'".format(revAcct.GetName()))
             
             # get the asset account
             astAcct = astParent.lookup_by_name(astAcctName)
@@ -338,7 +341,7 @@ def createGncTxs(monRec, gncFile, mode):
 # end createGncTxs()
     
 def createGncTxsMain():
-    usage = "usage: python {0} <monarch file> <gnucash file> <mode: prod|test>".format(argv[0])
+    usage = "usage: python {0} <monarch json file> <gnucash file> <mode: prod|test>".format(argv[0])
     if len(argv) < 4:
         print("NOT ENOUGH parameters!")
         print(usage)
@@ -349,9 +352,10 @@ def createGncTxsMain():
         print("File path '{}' does not exist. Exiting...".format(monFile))
         print(usage)
         exit()
-
+    
     # get Monarch record from the Monarch json file
-#     record = ???()
+    with open(monFile, 'r') as fp:
+        record = json.load(fp)
     
     gncFile = argv[2]
     if not os.path.isfile(gncFile):

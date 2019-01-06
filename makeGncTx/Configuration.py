@@ -17,7 +17,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2019-01-03 13:12"
+__updated__ = "2019-01-05 16:20"
 
 CLIENT_TX = "CLIENT TRANSACTIONS"
 PLAN_TYPE = "Plan Type:"
@@ -184,7 +184,7 @@ FIND_NEXT_TX = FIND_FUND    + 1
 FILL_CURR_TX = FIND_NEXT_TX + 1
 
 # file paths
-GNC_FOLDER = "/home/marksa/dev/Python/gnucash/"
+GNC_FOLDER = "/home/marksa/dev/git/Python/Gnucash/gncFiles"
 PRAC1_GNC  = GNC_FOLDER + "practice1.gnc"
 PRAC2_GNC  = GNC_FOLDER + "practice2.gnc"
 PRAC3_GNC  = GNC_FOLDER + "practice3.gnc"
