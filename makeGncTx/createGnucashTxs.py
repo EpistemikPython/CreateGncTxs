@@ -18,7 +18,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2019-01-05 21:26"
+__updated__ = "2019-01-06 08:37"
 
 from sys import argv, exit
 import os
@@ -210,7 +210,7 @@ def createGncTxs(monRec, gncFile, mode):
                 
                 if not havePair:
                     # create a new switch
-                    pair_tx = copy.deepcopy(Tx_Switch)
+                    pair_tx = copy.deepcopy(Switch_Tx)
                     # fill in the fields for the switch tx
                     pair_tx[FUND_CMPY] = fund_company
                     pair_tx[TRADE_DATE] = trade_date

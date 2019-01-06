@@ -17,7 +17,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2019-01-05 16:16"
+__updated__ = "2019-01-06 09:49"
 
 from sys import argv, exit
 import os
@@ -218,6 +218,7 @@ def parseMonarchMain():
     # pluck basename from monFile to use for saved json file
     (path, fname) = os.path.split(monFile)
     (basename, ext) = os.path.splitext(fname)
+    # add a timestamp to get a unique file name
     outFile = homeDir + basename + "." + now.replace(" ", "_") + ".json"
 #    fp = open('/home/marksa/dev/Python/makeGncTx/MonRec.json', 'w')
     fp = open(outFile, 'w')
