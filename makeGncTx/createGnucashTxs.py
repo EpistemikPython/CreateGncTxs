@@ -1,6 +1,5 @@
-
-# createGnucashTxs.py -- parse a Monarch record, possibly from a json file, 
-#                        create Gnucash transactions from the data 
+# createGnucashTxs.py -- parse a Monarch record, possibly from a json file,
+#                        create Gnucash transactions from the data
 #                        and write to a Gnucash file
 #
 # Copyright (c) 2018, 2019 Mark Sattolo <epistemik@gmail.com>
@@ -18,231 +17,235 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2019-01-05 21:26"
+__updated__ = "2019-01-06 09:44"
 
 from sys import argv, exit
-import os
+import os.path as osp
 import re
 import copy
 import json
-from gnucash import Session, Transaction, Split, Account, GncNumeric, GncCommodity, ACCT_TYPE_BANK, GUID
-from gnucash.gnucash_core_c import guid_new_return, guid_to_string, CREC
+from gnucash import Session, Transaction, Split, GncNumeric
+from gnucash.gnucash_core_c import CREC
 from Configuration import *
+
 
 def account_from_path(top_account, account_path, original_path=None):
     # mhs | debug
-#     print( "top_account = %s, account_path = %s, original_path = %s" % (top_account.GetName(), account_path, original_path) )
-    if original_path == None:
+    # print( "top_account = %s, account_path = %s, original_path = %s" % (top_account.GetName(), account_path, original_path) )
+    if original_path is None:
         original_path = account_path
     account, account_path = account_path[0], account_path[1:]
     # mhs | debug
-#     print( "account = %s; account_path = %s" % (account, account_path) )
-    
+    # print( "account = %s; account_path = %s" % (account, account_path) )
+
     account = top_account.lookup_by_name(account)
     # mhs | debug
-#     print( "account = " + account.GetName() )
-    if account == None:
+    # print( "account = " + account.GetName() )
+    if account is None:
         raise Exception("path " + str(original_path) + " could NOT be found")
-    if len(account_path) > 0 :
+    if len(account_path) > 0:
         return account_from_path(account, account_path, original_path)
     else:
         return account
-    
-def showAccount(root, path):
+
+
+def show_account(root, path):
     acct = account_from_path(root, path)
     acct_name = acct.GetName()
-    print( "account = " + acct_name )
+    print("account = " + acct_name)
     descendants = acct.get_descendants()
     if len(descendants) == 0:
-        print( "{} has NO Descendants!".format(acct_name) )
+        print("{} has NO Descendants!".format(acct_name))
     else:
-        print( "Descendants of {}:".format(acct_name) )
+        print("Descendants of {}:".format(acct_name))
         for subAcct in descendants:
-            print( "{}".format(subAcct.GetName()) )
-    
-def createGncTxs(monRec, gncFile, mode):
-    '''
+            print("{}".format(subAcct.GetName()))
+
+
+def create_gnc_txs(mon_rec, gnc_file, mode):
+    """
        Take the information from a transaction record and produce Gnucash transactions to write to a gnucash file
-    '''
-#     print("monRec = {}".format(monRec))
+    """
+    # print("monRec = {}".format(monRec))
 
     # set the regex values needed for matches
-    reGROSS  = re.compile("^(\(?)\$([0-9,]{1,6})\.([0-9]{2})\)?.*")
-    reUNITS  = re.compile("^(\-?)([0-9]{1,5})\.([0-9]{4}).*")
-    reDATE   = re.compile("^([0-9]{2})/([0-9]{2})/([0-9]{4}).*")
+    reGROSS = re.compile("^(\(?)\$([0-9,]{1,6})\.([0-9]{2})\)?.*")
+    reUNITS = re.compile("^(\-?)([0-9]{1,5})\.([0-9]{4}).*")
+    reDATE = re.compile("^([0-9]{2})/([0-9]{2})/([0-9]{4}).*")
     reSWITCH = re.compile("^(" + SWITCH + ")\-([InOut]{2,3}).*")
-    reINTX   = re.compile("^(" + INTX + ")\-([InOut]{2,3}).*")
-    
-    def prepareAccounts(planType):
+    reINTX = re.compile("^(" + INTX + ")\-([InOut]{2,3}).*")
+
+    def prepare_accounts(planType):
         print("\n\nPlan type = '{}'".format(planType))
-        
+
         revPath = copy.copy(ACCT_PATHS[REVENUE])
-#         print("revPath = '{}'".format(str(revPath)))
+        # print("revPath = '{}'".format(str(revPath)))
         revPath.append(planType)
-#         print("revPath = '{}'".format(str(revPath)))
+        # print("revPath = '{}'".format(str(revPath)))
         astParentPath = copy.copy(ACCT_PATHS[ASSET])
         astParentPath.append(planType)
-        
+
         if planType != PL_OPEN:
-            plOwner = monRec[OWNER]
+            plOwner = mon_rec[OWNER]
             if plOwner == '':
-                raise Exception("PROBLEM!! Trying to process plan type '{}' but NO Owner value found in Record!!".format(planType))
+                raise Exception(
+                    "PROBLEM!! Trying to process plan type '{}' but NO Owner value found in Record!!".format(planType))
             revPath.append(ACCT_PATHS[plOwner])
             astParentPath.append(ACCT_PATHS[plOwner])
-        
+
         print("revPath = '{}'".format(str(revPath)))
         revAcct = account_from_path(root, revPath)
         print("revAcct = '{}'".format(revAcct.GetName()))
-        
+
         print("astParentPath = '{}'".format(str(astParentPath)))
         astParent = account_from_path(root, astParentPath)
         print("astParent = '{}'".format(astParent.GetName()))
-        
-        for mtx in monRec[planType]:
-            createGncTx(mtx, planType, revAcct, astParent)
-    # end INNER prepareAccounts()
-    
-    def createGncTx(mtx, planType, revAcct, astParent):
-        '''
+
+        for mtx in mon_rec[planType]:
+            create_gnc_tx(mtx, planType, revAcct, astParent)
+    # end INNER prepare_accounts()
+
+    def create_gnc_tx(mtx, plan_type, rev_acct, ast_parent):
+        """
            Asset accounts: use the proper path to find the parent then search for the Fund Code in the descendants
            Revenue accounts: pick the proper account based on owner and plan type
-           grossCurr: re match to Gross then concatenate the two match groups
+           gross_curr: re match to Gross then concatenate the two match groups
            date: re match to get day, month and year then re-assemble to form Gnc date
            Units: re match and concatenate the two groups on either side of decimal point
            Description: use DESC and Fund Code
            Notes: use 'Unit Balance' and UNIT_BAL
-        '''
+        """
         transfer = False
         try:
-            # see note in createGncTxsMain() regarding json.load()
+            # see note in create_gnc_txs_main() regarding json.load()
             fund_company = str(mtx[FUND_CMPY])
             desc = str(mtx[DESC])
             trade_date = str(mtx[TRADE_DATE])
-            
+
             # check if we have a switch/transfer
-            re_matSwitch = re.match(reSWITCH, desc)
-            re_matIntx = re.match(reINTX, desc)
-            if re_matSwitch or re_matIntx:
+            re_mat_switch = re.match(reSWITCH, desc)
+            re_mat_intx = re.match(reINTX, desc)
+            if re_mat_switch or re_mat_intx:
                 transfer = True
 
             # get the asset account name
-            astAcctName = fund_company + " " + mtx[FUND_CODE]
-            print("astAcctName = '{}'".format(astAcctName))
-            print("type(astAcctName) = '{}'".format(type(astAcctName)))
-            astAcctStr = str(astAcctName)
-            print("astAcctStr = '{}'".format(astAcctStr))
-            print("type(astAcctStr) = '{}'".format(type(astAcctStr)))
-            
+            ast_acct_name = fund_company + " " + mtx[FUND_CODE]
+            print("ast_acct_name = '{}'".format(ast_acct_name))
+            print("type(ast_acct_name) = '{}'".format(type(ast_acct_name)))
+            ast_acct_str = str(ast_acct_name)
+            print("ast_acct_str = '{}'".format(ast_acct_str))
+            print("type(ast_acct_str) = '{}'".format(type(ast_acct_str)))
+
             # special locations for Trust Revenue and Asset accounts
-            if astAcctName == TRUST_AST_ACCT:
-                astParent = root.lookup_by_name(TRUST)
-                print("\n astParent = '{}'".format(astParent.GetName()))
-                revAcct = root.lookup_by_name(TRUST_REV_ACCT)
-                print("\n revAcct = '{}'".format(revAcct.GetName()))
-            
+            if ast_acct_name == TRUST_AST_ACCT:
+                ast_parent = root.lookup_by_name(TRUST)
+                print("\n astParent = '{}'".format(ast_parent.GetName()))
+                rev_acct = root.lookup_by_name(TRUST_REV_ACCT)
+                print("\n revAcct = '{}'".format(rev_acct.GetName()))
+
             # get the asset account
-            astAcct = astParent.lookup_by_name(astAcctStr)
-            if astAcct == None:
-                raise Exception("Could NOT find acct '{}' under parent '{}'".format(astAcctName, astParent.GetName()))
+            ast_acct = ast_parent.lookup_by_name(ast_acct_str)
+            if ast_acct is None:
+                raise Exception("Could NOT find acct '{}' under parent '{}'".format(ast_acct_name, ast_parent.GetName()))
             else:
-                print("\n astAcct = '{}'".format(astAcct.GetName()))
-            
+                print("\n ast_acct = '{}'".format(ast_acct.GetName()))
+
             # get the dollar value of the tx
             re_match = re.match(reGROSS, mtx[GROSS])
             if re_match:
                 print(re_match.groups())
-                strGrossCurr = re_match.group(2) + re_match.group(3)
+                str_gross_curr = re_match.group(2) + re_match.group(3)
                 # remove possible comma
-                grossCurr = int(strGrossCurr.replace(',', ''))
+                gross_curr = int(str_gross_curr.replace(',', ''))
                 # if match group 1 is not empty, amount is negative
                 if re_match.group(1) != '':
-                    grossCurr *= -1
-                print("grossCurr = '{}'".format(grossCurr))
-                grossOpp = grossCurr * -1
+                    gross_curr *= -1
+                print("gross_curr = '{}'".format(gross_curr))
+                grossOpp = gross_curr * -1
                 print("grossOpp = '{}'".format(grossOpp))
             else:
                 raise Exception("PROBLEM!! reGROSS DID NOT match with value '{}'!".format(mtx[GROSS]))
-            
+
             # get the units of the tx
             re_match = re.match(reUNITS, mtx[UNITS])
             if re_match:
                 print(re_match.groups())
-                units = int(re_match.group(2) + re_match.group(3)) 
+                units = int(re_match.group(2) + re_match.group(3))
                 # if match group 1 is not empty, units is negative
                 if re_match.group(1) != '':
                     units *= -1
                 print("units = '{}'".format(units))
             else:
                 raise Exception("PROBLEM!! reUNITS DID NOT match with value '{}'!".format(mtx[UNITS]))
-            
+
             # get the date items
             re_match = re.match(reDATE, trade_date)
             if re_match:
                 print(re_match.groups())
-                trade_mth = int(re_match.group(1)) 
+                trade_mth = int(re_match.group(1))
                 print("trade_mth = '{}'".format(trade_mth))
-                trade_day = int(re_match.group(2)) 
+                trade_day = int(re_match.group(2))
                 print("trade_day = '{}'".format(trade_day))
-                trade_yr  = int(re_match.group(3))
+                trade_yr = int(re_match.group(3))
                 print("trade_yr = '{}'".format(trade_yr))
             else:
                 raise Exception("PROBLEM!! reTRADE_DATE DID NOT match with value '{}'!".format(trade_date))
-            
+
             # assemble the Description string
-            descr = str(CMPY_FULL_NAME[fund_company] + ": " + desc + " " + astAcctName)
+            descr = str(CMPY_FULL_NAME[fund_company] + ": " + desc + " " + ast_acct_name)
             print("descr = '{}'".format(descr))
-            
+
             # notes field
-            notes = str(astAcctName + " balance = " + mtx[UNIT_BAL])
+            notes = str(ast_acct_name + " balance = " + mtx[UNIT_BAL])
             print("notes = '{}'".format(notes))
-            
+
             # check the type of tx -- a Distribution OR the first or second item of a switch/transfer pair
-            havePair = False
+            have_pair = False
             if transfer:
                 print("transfer")
                 # look for switches in same plan type, company, date and opposite gross value
-                for itx in gncRec[planType]:
+                for itx in gncRec[plan_type]:
                     if itx[FUND_CMPY] == fund_company and itx[TRADE_DATE] == trade_date and itx[GROSS] == grossOpp:
                         # already have the first item of the pair
-                        havePair = True
+                        have_pair = True
                         pair_tx = itx
                         break
-                
-                if not havePair:
+
+                if not have_pair:
                     # create a new switch
-                    pair_tx = copy.deepcopy(Tx_Switch)
+                    pair_tx = copy.deepcopy(Switch_Tx)
                     # fill in the fields for the switch tx
                     pair_tx[FUND_CMPY] = fund_company
                     pair_tx[TRADE_DATE] = trade_date
                     pair_tx[NOTES] = notes
-                    pair_tx[ACCT] = astAcct
-                    pair_tx[GROSS] = grossCurr
+                    pair_tx[ACCT] = ast_acct
+                    pair_tx[GROSS] = gross_curr
                     pair_tx[UNITS] = units
                     # add to the record then return
-                    gncRec[planType].append(pair_tx)
+                    gncRec[plan_type].append(pair_tx)
                     return
-            
-            #=================================================================================================
+
+            # =================================================================================================
             # create a gnucash Tx
             gtx = Transaction(book)
             # gets a guid on construction
             print("gtx guid = '{}'".format(gtx.GetGUID().to_string()))
-            
+
             gtx.BeginEdit()
-            
+
             gtx.SetCurrency(CAD)
             gtx.SetDate(trade_day, trade_mth, trade_yr)
             print("gtx date = '{}'".format(gtx.GetDate()))
             gtx.SetDescription(descr)
-            
+
             # create the ASSET split for the Tx
             splAst = Split(book)
             splAst.SetParent(gtx)
             # set the account, value, and units of the Asset split
-            splAst.SetAccount(astAcct)
-            splAst.SetValue(GncNumeric(grossCurr, 100))
+            splAst.SetAccount(ast_acct)
+            splAst.SetValue(GncNumeric(gross_curr, 100))
             splAst.SetAmount(GncNumeric(units, 10000))
-            
+
             if transfer:
                 # create the second ASSET split for the Tx
                 splAst2 = Split(book)
@@ -265,16 +268,16 @@ def createGncTxs(monRec, gncFile, mode):
                 splRev = Split(book)
                 splRev.SetParent(gtx)
                 # set the account, value and Reconciled of the Revenue split
-                splRev.SetAccount(revAcct)
+                splRev.SetAccount(rev_acct)
                 splRev.SetValue(GncNumeric(grossOpp, 100))
                 splRev.SetReconcile(CREC)
-            
+
             # roll back if something went wrong and the two splits DO NOT balance
             if not gtx.GetImbalanceValue().zero_p():
                 print("gtx imbalance = '{}'!! Roll back transaction changes!".format(gtx.GetImbalanceValue().to_string()))
                 gtx.RollbackEdit()
                 return
-            
+
             if mode == "PROD":
                 print("Mode = '{}': Commit transaction changes.".format(mode))
                 gtx.CommitEdit()
@@ -282,103 +285,105 @@ def createGncTxs(monRec, gncFile, mode):
             else:
                 print("Mode = '{}': Roll back transaction changes!\n".format(mode))
                 gtx.RollbackEdit()
-                
-        except Exception as e:
-            print("createGncTx() EXCEPTION!! '{}'\n".format(str(e)))
-    # end INNER createGncTx()
-    
-#     gncFileName = PRAC2_GNC
-    print("\n gncFile = '{}'".format(gncFile))
-    
+
+        except Exception as ie:
+            print("createGncTx() EXCEPTION!! '{}'\n".format(str(ie)))
+    # end INNER create_gnc_tx()
+
+    # gnc_file = PRAC2_GNC
+    print("\n gncFile = '{}'".format(gnc_file))
+
     try:
-        session = Session(gncFile)
+        session = Session(gnc_file)
         book = session.book
-        
+
         root = book.get_root_account()
         root.get_instance()
-        
+
         commod_tab = book.get_table()
-        session.save() # really needed?
-        
+        session.save()  # really needed?
+
         CAD = commod_tab.lookup("ISO4217", "CAD")
-        
+
         # EXPERIMENT
         if mode.lower() == 'prod':
-            
+
             gncRec = copy.deepcopy(Tx_Record)
-    
-            prepareAccounts(PL_OPEN)
-            
-            prepareAccounts(PL_TFSA)
-             
-            prepareAccounts(PL_RRSP)
-            
+
+            prepare_accounts(PL_OPEN)
+
+            prepare_accounts(PL_TFSA)
+
+            prepare_accounts(PL_RRSP)
+
             if mode == "PROD":
                 print("Mode = '{}': Save session.".format(mode))
                 session.save()
-        
+
         else:
             # just show the account paths
-            revPath = copy.copy(ACCT_PATHS[REVENUE])
-            revPath.append(PL_OPEN)
-            showAccount(root, revPath)
-            astPath = copy.copy(ACCT_PATHS[ASSET])
-            astPath.append(PL_OPEN)
-            showAccount(root, astPath)
-            
-            revPath.pop()
-            revPath.append(PL_TFSA)
-            showAccount(root, revPath)
-            astPath.pop()
-            astPath.append(PL_TFSA)
-            showAccount(root, astPath)
-            
-            revPath.pop()
-            revPath.append(PL_RRSP)
-            showAccount(root, revPath)
-            astPath.pop()
-            astPath.append(PL_RRSP)
-            showAccount(root, astPath)
-        
+            rev_path = copy.copy(ACCT_PATHS[REVENUE])
+            rev_path.append(PL_OPEN)
+            show_account(root, rev_path)
+            ast_path = copy.copy(ACCT_PATHS[ASSET])
+            ast_path.append(PL_OPEN)
+            show_account(root, ast_path)
+
+            rev_path.pop()
+            rev_path.append(PL_TFSA)
+            show_account(root, rev_path)
+            ast_path.pop()
+            ast_path.append(PL_TFSA)
+            show_account(root, ast_path)
+
+            rev_path.pop()
+            rev_path.append(PL_RRSP)
+            show_account(root, rev_path)
+            ast_path.pop()
+            ast_path.append(PL_RRSP)
+            show_account(root, ast_path)
+
         session.end()
-    
+
     except Exception as e:
-        print("createGncTxs() EXCEPTION!! '{}'".format(str(e)))
+        print("create_gnc_txs() EXCEPTION!! '{}'".format(str(e)))
         if "session" in locals():
             session.end()
         raise
-# end createGncTxs()
-    
-def createGncTxsMain():
+# end create_gnc_txs()
+
+
+def create_gnc_txs_main():
     usage = "usage: python {0} <monarch json file> <gnucash file> <mode: prod|test>".format(argv[0])
     if len(argv) < 4:
         print("NOT ENOUGH parameters!")
         print(usage)
         exit()
-    
-    monFile = argv[1]
-    if not os.path.isfile(monFile):
-        print("File path '{}' does not exist. Exiting...".format(monFile))
+
+    mon_file = argv[1]
+    if not osp.isfile(mon_file):
+        print("File path '{}' does not exist. Exiting...".format(mon_file))
         print(usage)
         exit()
-    
+
     # get Monarch record from the Monarch json file
-    with open(monFile, 'r') as fp:
+    with open(mon_file, 'r') as fp:
         # PROBLEM: with Python2, the text in the record will be <type unicode> instead of <type string>
         # and cause an exception if passed to any of the gnucash functions expecting a <const char*>
         # -- easiest solution seems to be to just cast any of this text to str() on definition...
         record = json.load(fp)
-    
-    gncFile = argv[2]
-    if not os.path.isfile(gncFile):
-        print("File path '{}' does not exist. Exiting...".format(gncFile))
+
+    gnc_file = argv[2]
+    if not osp.isfile(gnc_file):
+        print("File path '{}' does not exist. Exiting...".format(gnc_file))
         exit()
-    
+
     mode = argv[3]
-    
-    createGncTxs(record, gncFile, mode)
-    
+
+    create_gnc_txs(record, gnc_file, mode)
+
     print("\n >>> PROGRAM ENDED.")
-    
-if __name__ == '__main__':  
-   createGncTxsMain()
+
+
+if __name__ == '__main__':
+    create_gnc_txs_main()

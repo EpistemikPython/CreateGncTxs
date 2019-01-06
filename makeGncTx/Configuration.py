@@ -1,5 +1,5 @@
 
-# Configuration.py -- static defines to help parse a Monarch text file 
+# Configuration.py -- static defines to help parse a Monarch text file
 #                     and write the transactions to a gnucash file
 #
 # Copyright (c) 2018, 2019 Mark Sattolo <epistemik@gmail.com>
@@ -17,7 +17,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2019-01-05 16:20"
+__updated__ = "2019-01-06 09:20"
 
 CLIENT_TX = "CLIENT TRANSACTIONS"
 PLAN_TYPE = "Plan Type:"
@@ -39,7 +39,7 @@ GROSS      = "Gross"
 NET        = "Net"
 UNITS      = "Units"
 PRICE      = "Price"
-UNIT_BAL   = "Unit Balance" 
+UNIT_BAL   = "Unit Balance"
 NOTES      = "Notes"
 
 # Fund companies
@@ -106,8 +106,8 @@ MMF_13417 = MMF + " 13417" # Manulife Conservative Income Fund Advisor Series
 
 FundsList = [
     CIG_11461, CIG_11111, CIG_18140, CIG_2304, CIG_2321, CIG_6104, CIG_1154, CIG_1304, CIG_1521,
-    TML_674, TML_704, TML_180, TML_184, TML_202, TML_203, TML_223, TML_518, TML_519, TML_598, TML_694, TML_707, TML_1017, TML_1018, 
-    MFC_756, MFC_856, MFC_6129, MFC_6130, MFC_6138, MFC_302, MFC_2238, MFC_3232, MFC_3769, MFC_3689, MFC_1960, 
+    TML_674, TML_704, TML_180, TML_184, TML_202, TML_203, TML_223, TML_518, TML_519, TML_598, TML_694, TML_707, TML_1017, TML_1018,
+    MFC_756, MFC_856, MFC_6129, MFC_6130, MFC_6138, MFC_302, MFC_2238, MFC_3232, MFC_3769, MFC_3689, MFC_1960,
     DYN_029, DYN_729, DYN_1562, DYN_1560,
     MMF_44424, MMF_4524, MMF_3517, MMF_13417
 ]
@@ -133,7 +133,7 @@ Monarch_Tx = {
     NET        : "" ,
     UNITS      : "" ,
     PRICE      : "" ,
-    UNIT_BAL   : "" 
+    UNIT_BAL   : ""
 }
 
 REVENUE  = "Revenue"
@@ -162,7 +162,7 @@ ACCT_PATHS = {
     ASSET    : ["FAMILY", "INVEST"] ,# + planType [+ Owner]
     MON_MARK : GNU_MARK ,
     MON_LULU : GNU_LULU ,
-    TRUST    : [TRUST, "Trust Assets", "Monarch ITF", CMPY_FULL_NAME[CIG] ]
+    TRUST    : [TRUST, "Trust Assets", "Monarch ITF", CMPY_FULL_NAME[CIG]]
 }
 
 # information for each switch/transfer transaction
@@ -171,12 +171,12 @@ Switch_Tx = {
     FUND_CMPY  : "" ,
     TRADE_DATE : "" ,
     NOTES      : "" ,
-    ACCT       : "" , 
+    ACCT       : "" ,
     GROSS      : "" ,
-    UNITS      : "" 
+    UNITS      : ""
 }
 
-    # parsing states
+# parsing states
 STATE_SEARCH = 0
 FIND_OWNER   = STATE_SEARCH + 1
 FIND_FUND    = FIND_OWNER   + 1
