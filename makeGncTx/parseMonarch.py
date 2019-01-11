@@ -49,8 +49,8 @@ def parse_monarch_report(file_name, mode):
                   line  = 'Unit Balance' : float
     :rtype: object
     """
-    print("parse_monarch_report({})\n".format(file_name))
-    print("Runtime = " + now)
+    print_info("parse_monarch_report({})\n".format(file_name), color=GREEN)
+    print_info("Runtime = " + now, color=MAGENTA)
 
     if mode.lower() == "prod":
         record = copy.deepcopy(Tx_Record)
@@ -243,9 +243,6 @@ def parse_monarch_main():
     (path, fname) = os.path.split(mon_file)
     (basename, ext) = os.path.splitext(fname)
     # add a timestamp to get a unique file name
-    outFile = homeDir + basename + "." + now.replace(" ", "_") + ".json"
-#    fp = open('/home/marksa/dev/Python/makeGncTx/MonRec.json', 'w')
-    fp = open(outFile, 'w')
     out_file = home_dir + basename + "." + now.replace(" ", "_") + ".json"
     # fp = open('/home/marksa/dev/Python/makeGncTx/MonRec.json', 'w')
     fp = open(out_file, 'w')
