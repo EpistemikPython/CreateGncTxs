@@ -16,34 +16,47 @@
 #
 # @author Mark Sattolo <epistemik@gmail.com>
 
+# NEED for Python2 as its 'print' is actually NOT a function...
+from __future__ import print_function
+
 __created__ = "2018-12-02 07:13"
 __updated__ = "2019-01-07 21:44"
 
 import inspect
 
-RED     = 91
-GREEN   = 92
-YELLOW  = 93
-BLUE    = 94
-MAGENTA = 95
-CYAN    = 96
+BLACK   = '30'
+RED     = '91'
+GREEN   = '92'
+YELLOW  = '93'
+BLUE    = '94'
+MAGENTA = '95'
+CYAN    = '96'
+WHITE   = '97'
 
-def printInfo(text, color=False, inspector=True, newline=True):
+
+def print_info(text, color=WHITE, inspector=True, newline=True):
+    """
+    Print information with choices of color, inspection info, newline
+    """
     if text is None:
         text = "================================================================================================================="
         inspector = False
         newline = True
-    else:
-        print( ( ("\x1b[" + str(color) + "m") if color != False else "") + 
-               ( ("[" + inspect.getfile(inspect.currentframe().f_back).split("\\")[-1] + "@" +
-               str(inspect.currentframe().f_back.f_lineno) + "]: ") if inspector else " ") +
-               text + "\x1b[0m ", end=('\n' if newline else '') )
-
-def printError(text, newline=True):
-    print( ("\x1b[" + str(RED) + "m") + 
-           ("[" + inspect.getfile(inspect.currentframe().f_back).split("\\")[-1] + "@" +
-           str(inspect.currentframe().f_back.f_lineno) + "]: ") +
+    print( "\x1b[" + color + "m" +
+           ( ("[" + inspect.getfile(inspect.currentframe().f_back).split("\\")[-1] + "@" +
+             str(inspect.currentframe().f_back.f_lineno) + "]: ") if inspector else " ") +
            text + "\x1b[0m ", end=('\n' if newline else '') )
+
+
+def print_error(text, newline=True):
+    """
+    Print Error information in RED
+    """
+    print( ("\x1b[" + RED + "m") +
+           ("[" + inspect.getfile(inspect.currentframe().f_back).split("\\")[-1] + "@" +
+            str(inspect.currentframe().f_back.f_lineno) + "]: ") +
+           text + "\x1b[0m ", end=('\n' if newline else '') )
+
 
 CLIENT_TX = "CLIENT TRANSACTIONS"
 PLAN_TYPE = "Plan Type:"
