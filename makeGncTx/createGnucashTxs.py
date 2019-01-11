@@ -75,34 +75,34 @@ def create_gnc_txs(mon_rec, gnc_file, mode):
     reSWITCH = re.compile("^(" + SWITCH + ")\-([InOut]{2,3}).*")
     reINTX = re.compile("^(" + INTX + ")\-([InOut]{2,3}).*")
 
-    def prepare_accounts(planType):
-        print("\n\nPlan type = '{}'".format(planType))
+    def prepare_accounts(plan_type):
+        print("\n\nPlan type = '{}'".format(plan_type))
 
-        revPath = copy.copy(ACCT_PATHS[REVENUE])
-        # print("revPath = '{}'".format(str(revPath)))
-        revPath.append(planType)
-        # print("revPath = '{}'".format(str(revPath)))
-        astParentPath = copy.copy(ACCT_PATHS[ASSET])
-        astParentPath.append(planType)
+        rev_path = copy.copy(ACCT_PATHS[REVENUE])
+        # print("rev_path = '{}'".format(str(rev_path)))
+        rev_path.append(plan_type)
+        # print("rev_path = '{}'".format(str(rev_path)))
+        ast_parent_path = copy.copy(ACCT_PATHS[ASSET])
+        ast_parent_path.append(plan_type)
 
-        if planType != PL_OPEN:
-            plOwner = mon_rec[OWNER]
-            if plOwner == '':
+        if plan_type != PL_OPEN:
+            pl_owner = mon_rec[OWNER]
+            if pl_owner == '':
                 raise Exception(
-                    "PROBLEM!! Trying to process plan type '{}' but NO Owner value found in Record!!".format(planType))
-            revPath.append(ACCT_PATHS[plOwner])
-            astParentPath.append(ACCT_PATHS[plOwner])
+                    "PROBLEM!! Trying to process plan type '{}' but NO Owner value found in Record!!".format(plan_type))
+            rev_path.append(ACCT_PATHS[pl_owner])
+            ast_parent_path.append(ACCT_PATHS[pl_owner])
 
-        print("revPath = '{}'".format(str(revPath)))
-        revAcct = account_from_path(root, revPath)
-        print("revAcct = '{}'".format(revAcct.GetName()))
+        print("rev_path = '{}'".format(str(rev_path)))
+        rev_acct = account_from_path(root, rev_path)
+        print("rev_acct = '{}'".format(rev_acct.GetName()))
 
-        print("astParentPath = '{}'".format(str(astParentPath)))
-        astParent = account_from_path(root, astParentPath)
-        print("astParent = '{}'".format(astParent.GetName()))
+        print("ast_parent_path = '{}'".format(str(ast_parent_path)))
+        ast_parent = account_from_path(root, ast_parent_path)
+        print("ast_parent = '{}'".format(ast_parent.GetName()))
 
-        for mtx in mon_rec[planType]:
-            create_gnc_tx(mtx, planType, revAcct, astParent)
+        for mtx in mon_rec[plan_type]:
+            create_gnc_tx(mtx, plan_type, rev_acct, ast_parent)
     # end INNER prepare_accounts()
 
     def create_gnc_tx(mtx, plan_type, rev_acct, ast_parent):
@@ -139,16 +139,16 @@ def create_gnc_txs(mon_rec, gnc_file, mode):
             # special locations for Trust Revenue and Asset accounts
             if ast_acct_name == TRUST_AST_ACCT:
                 ast_parent = root.lookup_by_name(TRUST)
-                print("\n astParent = '{}'".format(ast_parent.GetName()))
+                print("\n ast_parent = '{}'".format(ast_parent.GetName()))
                 rev_acct = root.lookup_by_name(TRUST_REV_ACCT)
-                print("\n revAcct = '{}'".format(rev_acct.GetName()))
+                print("\n rev_acct = '{}'".format(rev_acct.GetName()))
 
             # get the asset account
             ast_acct = ast_parent.lookup_by_name(ast_acct_str)
             if ast_acct is None:
                 raise Exception("Could NOT find acct '{}' under parent '{}'".format(ast_acct_name, ast_parent.GetName()))
             else:
-                print("\n ast_acct = '{}'".format(ast_acct.GetName()))
+                print_info("\n ast_acct = '{}'".format(ast_acct.GetName()), color=CYAN)
 
             # get the dollar value of the tx
             re_match = re.match(reGROSS, mtx[GROSS])
@@ -161,8 +161,8 @@ def create_gnc_txs(mon_rec, gnc_file, mode):
                 if re_match.group(1) != '':
                     gross_curr *= -1
                 print("gross_curr = '{}'".format(gross_curr))
-                grossOpp = gross_curr * -1
-                print("grossOpp = '{}'".format(grossOpp))
+                gross_opp = gross_curr * -1
+                print("gross_opp = '{}'".format(gross_opp))
             else:
                 raise Exception("PROBLEM!! reGROSS DID NOT match with value '{}'!".format(mtx[GROSS]))
 
@@ -205,7 +205,7 @@ def create_gnc_txs(mon_rec, gnc_file, mode):
                 print("transfer")
                 # look for switches in same plan type, company, date and opposite gross value
                 for itx in gncRec[plan_type]:
-                    if itx[FUND_CMPY] == fund_company and itx[TRADE_DATE] == trade_date and itx[GROSS] == grossOpp:
+                    if itx[FUND_CMPY] == fund_company and itx[TRADE_DATE] == trade_date and itx[GROSS] == gross_opp:
                         # already have the first item of the pair
                         have_pair = True
                         pair_tx = itx
@@ -269,7 +269,7 @@ def create_gnc_txs(mon_rec, gnc_file, mode):
                 splRev.SetParent(gtx)
                 # set the account, value and Reconciled of the Revenue split
                 splRev.SetAccount(rev_acct)
-                splRev.SetValue(GncNumeric(grossOpp, 100))
+                splRev.SetValue(GncNumeric(gross_opp, 100))
                 splRev.SetReconcile(CREC)
 
             # roll back if something went wrong and the two splits DO NOT balance
@@ -287,7 +287,7 @@ def create_gnc_txs(mon_rec, gnc_file, mode):
                 gtx.RollbackEdit()
 
         except Exception as ie:
-            print("createGncTx() EXCEPTION!! '{}'\n".format(str(ie)))
+            print_error("createGncTx() EXCEPTION!! '{}'\n".format(str(ie)))
     # end INNER create_gnc_tx()
 
     # gnc_file = PRAC2_GNC
@@ -317,7 +317,7 @@ def create_gnc_txs(mon_rec, gnc_file, mode):
             prepare_accounts(PL_RRSP)
 
             if mode == "PROD":
-                print("Mode = '{}': Save session.".format(mode))
+                print_info("Mode = '{}': Save session.".format(mode), color=GREEN)
                 session.save()
 
         else:
@@ -346,7 +346,7 @@ def create_gnc_txs(mon_rec, gnc_file, mode):
         session.end()
 
     except Exception as e:
-        print("create_gnc_txs() EXCEPTION!! '{}'".format(str(e)))
+        print_error("create_gnc_txs() EXCEPTION!! '{}'".format(str(e)))
         if "session" in locals():
             session.end()
         raise
@@ -356,14 +356,14 @@ def create_gnc_txs(mon_rec, gnc_file, mode):
 def create_gnc_txs_main():
     usage = "usage: python {0} <monarch json file> <gnucash file> <mode: prod|test>".format(argv[0])
     if len(argv) < 4:
-        print("NOT ENOUGH parameters!")
-        print(usage)
+        print_error("NOT ENOUGH parameters!")
+        print_info(usage, color=YELLOW)
         exit()
 
     mon_file = argv[1]
     if not osp.isfile(mon_file):
-        print("File path '{}' does not exist. Exiting...".format(mon_file))
-        print(usage)
+        print_error("File path '{}' does not exist. Exiting...".format(mon_file))
+        print_info(usage, color=YELLOW)
         exit()
 
     # get Monarch record from the Monarch json file
@@ -375,14 +375,14 @@ def create_gnc_txs_main():
 
     gnc_file = argv[2]
     if not osp.isfile(gnc_file):
-        print("File path '{}' does not exist. Exiting...".format(gnc_file))
+        print_error("File path '{}' does not exist. Exiting...".format(gnc_file))
         exit()
 
     mode = argv[3]
 
     create_gnc_txs(record, gnc_file, mode)
 
-    print("\n >>> PROGRAM ENDED.")
+    print_info("\n >>> PROGRAM ENDED.", color=MAGENTA)
 
 
 if __name__ == '__main__':
