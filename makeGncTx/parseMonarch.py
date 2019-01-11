@@ -53,7 +53,7 @@ def parse_monarch_report(file_name, mode):
     print_info("Runtime = " + now, color=MAGENTA)
 
     if mode.lower() == "prod":
-        record = copy.deepcopy(Tx_Record)
+        record = copy.deepcopy(Tx_Collection)
     else:
         # use a short example record
         record = {OWNER: "OWNER_MARK",
@@ -163,7 +163,7 @@ def parse_monarch_report(file_name, mode):
                     # print(re_match.groups())
                     tx_date = re_match.group(1)
                     print("\n\tCurrent tx_date is: '{}'".format(tx_date))
-                    curr_tx = copy.deepcopy(Monarch_Tx)
+                    curr_tx = copy.deepcopy(Tx_Record)
                     curr_tx[FUND_CMPY] = fund_company
                     curr_tx[FUND_CODE] = fund_code
                     curr_tx[TRADE_DATE] = tx_date

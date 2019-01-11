@@ -204,7 +204,7 @@ def create_gnc_txs(mon_rec, gnc_file, mode):
             if transfer:
                 print("transfer")
                 # look for switches in same plan type, company, date and opposite gross value
-                for itx in gncRec[plan_type]:
+                for itx in gnc_collection[plan_type]:
                     if itx[FUND_CMPY] == fund_company and itx[TRADE_DATE] == trade_date and itx[GROSS] == gross_opp:
                         # already have the first item of the pair
                         have_pair = True
@@ -213,7 +213,7 @@ def create_gnc_txs(mon_rec, gnc_file, mode):
 
                 if not have_pair:
                     # create a new switch
-                    pair_tx = copy.deepcopy(Switch_Tx)
+                    pair_tx = copy.deepcopy(Tx_Record)
                     # fill in the fields for the switch tx
                     pair_tx[FUND_CMPY] = fund_company
                     pair_tx[TRADE_DATE] = trade_date
@@ -222,7 +222,7 @@ def create_gnc_txs(mon_rec, gnc_file, mode):
                     pair_tx[GROSS] = gross_curr
                     pair_tx[UNITS] = units
                     # add to the record then return
-                    gncRec[plan_type].append(pair_tx)
+                    gnc_collection[plan_type].append(pair_tx)
                     return
 
             # =================================================================================================
@@ -308,7 +308,7 @@ def create_gnc_txs(mon_rec, gnc_file, mode):
         # EXPERIMENT
         if mode.lower() == 'prod':
 
-            gncRec = copy.deepcopy(Tx_Record)
+            gnc_collection = copy.deepcopy(Tx_Collection)
 
             prepare_accounts(PL_OPEN)
 

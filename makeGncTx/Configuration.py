@@ -79,6 +79,7 @@ NET        = "Net"
 UNITS      = "Units"
 PRICE      = "Price"
 UNIT_BAL   = "Unit Balance"
+ACCT       = "Account" # Fund company & code
 NOTES      = "Notes"
 
 # Fund companies
@@ -155,15 +156,15 @@ TRUST_AST_ACCT = CIG_18140
 TRUST_REV_ACCT = "Trust Base"
 
 # owner and list of transactions for each plan type
-Tx_Record = {
+Tx_Collection = {
     OWNER   : "" ,
     PL_OPEN : [] ,
     PL_TFSA : [] ,
     PL_RRSP : []
 }
 
-# information for each Monarch transaction
-Monarch_Tx = {
+# information for each Monarch/Gnucash transaction
+Tx_Record = {
     FUND_CMPY  : "" ,
     FUND_CODE  : "" ,
     TRADE_DATE : "" ,
@@ -172,7 +173,9 @@ Monarch_Tx = {
     NET        : "" ,
     UNITS      : "" ,
     PRICE      : "" ,
-    UNIT_BAL   : ""
+    UNIT_BAL   : "" ,
+    ACCT       : "" ,
+    NOTES      : ""
 }
 
 REVENUE  = "Revenue"
@@ -183,7 +186,6 @@ MON_LULU = "Louise Robb"
 GNU_MARK = "Mark"
 GNU_LULU = "Lulu"
 
-ACCT     = "Account" # Fund company & code
 DIST     = "Dist"
 SWITCH   = "Switch"
 IN       = "In"
@@ -202,17 +204,6 @@ ACCT_PATHS = {
     MON_MARK : GNU_MARK ,
     MON_LULU : GNU_LULU ,
     TRUST    : [TRUST, "Trust Assets", "Monarch ITF", CMPY_FULL_NAME[CIG]]
-}
-
-# information for each switch/transfer transaction
-Switch_Tx = {
-    "ID"       : SWITCH ,
-    FUND_CMPY  : "" ,
-    TRADE_DATE : "" ,
-    NOTES      : "" ,
-    ACCT       : "" ,
-    GROSS      : "" ,
-    UNITS      : ""
 }
 
 # parsing states
