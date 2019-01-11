@@ -17,7 +17,33 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2019-01-06 09:20"
+__updated__ = "2019-01-07 21:44"
+
+import inspect
+
+RED     = 91
+GREEN   = 92
+YELLOW  = 93
+BLUE    = 94
+MAGENTA = 95
+CYAN    = 96
+
+def printInfo(text, color=False, inspector=True, newline=True):
+    if text is None:
+        text = "================================================================================================================="
+        inspector = False
+        newline = True
+    else:
+        print( ( ("\x1b[" + str(color) + "m") if color != False else "") + 
+               ( ("[" + inspect.getfile(inspect.currentframe().f_back).split("\\")[-1] + "@" +
+               str(inspect.currentframe().f_back.f_lineno) + "]: ") if inspector else " ") +
+               text + "\x1b[0m ", end=('\n' if newline else '') )
+
+def printError(text, newline=True):
+    print( ("\x1b[" + str(RED) + "m") + 
+           ("[" + inspect.getfile(inspect.currentframe().f_back).split("\\")[-1] + "@" +
+           str(inspect.currentframe().f_back.f_lineno) + "]: ") +
+           text + "\x1b[0m ", end=('\n' if newline else '') )
 
 CLIENT_TX = "CLIENT TRANSACTIONS"
 PLAN_TYPE = "Plan Type:"
