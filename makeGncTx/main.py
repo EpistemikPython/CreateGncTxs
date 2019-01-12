@@ -46,10 +46,10 @@ def main():
     mode = argv[3]
 
     # parse an external Monarch report file
-    record = parse_monarch_report(mon_file, mode)
+    tx_colxn = parse_monarch_report(mon_file, mode)
 
     # create gnucash transactions and write to the desired Gnucash file
-    create_gnc_txs(record, gnc_file, mode)
+    create_gnc_txs(tx_colxn, gnc_file, mode)
 
     print_info("\n >>> PROGRAM ENDED.", color=GREEN)
 

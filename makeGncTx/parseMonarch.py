@@ -19,7 +19,7 @@ __created__ = "2018-12-02 07:13"
 __updated__ = "2019-01-11 12:55"
 
 from sys import argv, exit
-import os
+import os.path as osp
 import re
 import copy
 import json
@@ -29,14 +29,15 @@ from Configuration import *
 now = str(datetime.datetime.now())
 
 
+# noinspection PyPep8
 def parse_monarch_report(file_name, mode):
     """
-    :type: (object, object) -> object
+    :type: (str, str) -> Tx_Collection
     ?? look for 'CLIENT TRANSACTIONS' = start of transactions
     loop:
         check for 'Plan Type:'
             next line is either 'OPEN...', 'TFSA...' or 'RRSP...'
-            use that as the key for the record
+            use that as the key for this section of the tx_colxn
         check for $INVESTMENT_COMPANY/$MF_NAME-... :
             use $MF_NAME as the Fund Code in the tx
         look for date: MM/DD/YYYY = 'Trade Date'
@@ -47,16 +48,16 @@ def parse_monarch_report(file_name, mode):
                   line  = 'Units'        : float
                   line  = 'Price'        : Currency float
                   line  = 'Unit Balance' : float
-    :rtype: object
+    :rtype: Tx_Collection
     """
     print_info("parse_monarch_report({})\n".format(file_name), color=GREEN)
     print_info("Runtime = " + now, color=MAGENTA)
 
     if mode.lower() == "prod":
-        record = copy.deepcopy(Tx_Collection)
+        tx_colxn = copy.deepcopy(Tx_Collection)
     else:
-        # use a short example record
-        record = {OWNER: "OWNER_MARK",
+        # use a short example tx_colxn
+        tx_colxn = {OWNER: "OWNER_MARK",
                   PL_OPEN: [
                       {"Trade Date": "10/26/2018", "Gross": "$34.53", "Description": "Reinvested:Distribution/Interest:",
                        "Price": "$8.9732", "Unit Balance": "694.4350", "Units": "3.8480", "Net": "$34.53",
@@ -121,11 +122,11 @@ def parse_monarch_report(file_name, mode):
                 print(re_match.groups())
                 bag_name = re_match.group(1)
                 print("Current bag_name is: '{}'".format(bag_name))
-                bag = record[bag_name]
+                bag = tx_colxn[bag_name]
                 print("Current bag is: {}\n".format(str(bag)))
                 mon_state = FIND_FUND
                 # if state is RRSP or TFSA and Owner not found yet
-                if bag_name != "OPEN" and record[OWNER] == "":
+                if bag_name != "OPEN" and tx_colxn[OWNER] == "":
                     mon_state = FIND_OWNER
                 continue
 
@@ -139,7 +140,7 @@ def parse_monarch_report(file_name, mode):
                 else:
                     owner_name = line.strip()
                     print("Current owner_name is: '{}'".format(owner_name))
-                    record[OWNER] = owner_name
+                    tx_colxn[OWNER] = owner_name
                     own_line = 0
                     mon_state = FIND_FUND
                 continue
@@ -207,17 +208,17 @@ def parse_monarch_report(file_name, mode):
                     mon_state = STATE_SEARCH
                     tx_line = 0
 
-    print("\n\tlen(Monarch record[{}]) = {}".format(PL_OPEN, len(record[PL_OPEN])))
-    # print("\tMonarch record[{}] = {}".format(PL_OPEN, json.dumps(record[PL_OPEN], indent=4)))
+    print("\n\tlen(Monarch tx_colxn[{}]) = {}".format(PL_OPEN, len(tx_colxn[PL_OPEN])))
+    # print("\tMonarch tx_colxn[{}] = {}".format(PL_OPEN, json.dumps(tx_colxn[PL_OPEN], indent=4)))
 
-    print("\n\tMonarch record[{}] = {}".format(OWNER, record[OWNER]))
-    print("\n\tlen(Monarch record[{}]) = {}".format(PL_TFSA, len(record[PL_TFSA])))
-    # print("\tMonarch record[{}] = {}".format(PL_TFSA, json.dumps(record[PL_TFSA], indent=4)))
+    print("\n\tMonarch tx_colxn[{}] = {}".format(OWNER, tx_colxn[OWNER]))
+    print("\n\tlen(Monarch tx_colxn[{}]) = {}".format(PL_TFSA, len(tx_colxn[PL_TFSA])))
+    # print("\tMonarch tx_colxn[{}] = {}".format(PL_TFSA, json.dumps(tx_colxn[PL_TFSA], indent=4)))
 
-    print("\n\tlen(Monarch record[{}]) = {}".format(PL_RRSP, len(record[PL_RRSP])))
-    # print("\tMonarch record[{}] = {}".format(PL_RRSP, json.dumps(record[PL_RRSP], indent=4)))
+    print("\n\tlen(Monarch tx_colxn[{}]) = {}".format(PL_RRSP, len(tx_colxn[PL_RRSP])))
+    # print("\tMonarch tx_colxn[{}] = {}".format(PL_RRSP, json.dumps(tx_colxn[PL_RRSP], indent=4)))
 
-    return record
+    return tx_colxn
 
 
 def parse_monarch_main():
@@ -228,7 +229,7 @@ def parse_monarch_main():
         exit()
 
     mon_file = argv[1]
-    if not os.path.isfile(mon_file):
+    if not osp.isfile(mon_file):
         print_error("File path '{}' does not exist. Exiting...".format(mon_file))
         exit()
 
@@ -237,14 +238,13 @@ def parse_monarch_main():
     # parse an external Monarch report file
     record = parse_monarch_report(mon_file, mode)
 
-    home_dir = '/home/marksa/dev/git/Python/Gnucash/create_gnc_txs/makeGncTx'
     # print record as json file
-    # pluck basename from mon_file to use for saved json file
-    (path, fname) = os.path.split(mon_file)
-    (basename, ext) = os.path.splitext(fname)
+    home_dir = '/home/marksa/dev/git/Python/Gnucash/GncTxs/makeGncTx'
+    # pluck path and basename from mon_file to use for the saved json file
+    (path, fname) = osp.split(mon_file)
+    (basename, ext) = osp.splitext(fname)
     # add a timestamp to get a unique file name
-    out_file = home_dir + basename + "." + now.replace(' ', '_').replace(':', '-') + ".json"
-    # fp = open('/home/marksa/dev/Python/makeGncTx/MonRec.json', 'w')
+    out_file = path + basename + "." + now.replace(' ', '_').replace(':', '-') + ".json"
     fp = open(out_file, 'w')
     json.dump(record, fp, indent=4)
 

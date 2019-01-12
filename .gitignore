@@ -4,6 +4,7 @@
 /py3bindings
 **/out/
 **/logs/
+**/venv/
 **/Downloads
 **/test*/
 **/bin/

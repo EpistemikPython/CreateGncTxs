@@ -56,17 +56,19 @@ def show_account(root, path):
             print("{}".format(subAcct.GetName()))
 
 
-def create_gnc_txs(mon_rec, gnc_file, mode):
+# noinspection PyUnresolvedReferences,PyPep8
+def create_gnc_txs(tx_colxn, gnc_file, mode):
     """
     Take the information from a transaction collection and produce Gnucash transactions to write to a Gnucash file
     """
     # set the regex values needed for matches
-    reGROSS  = re.compile("^(\(?)\$([0-9,]{1,6})\.([0-9]{2})\)?.*")
-    reUNITS  = re.compile("^(\-?)([0-9]{1,5})\.([0-9]{4}).*")
-    reDATE   = re.compile("^([0-9]{2})/([0-9]{2})/([0-9]{4}).*")
-    reSWITCH = re.compile("^(" + SWITCH + ")\-([InOut]{2,3}).*")
-    reINTX   = re.compile("^(" + INTRF + ")\-([InOut]{2,3}).*")
+    re_gross  = re.compile("^(\(?)\$([0-9,]{1,6})\.([0-9]{2})\)?.*")
+    re_units  = re.compile("^(\-?)([0-9]{1,5})\.([0-9]{4}).*")
+    re_date   = re.compile("^([0-9]{2})/([0-9]{2})/([0-9]{4}).*")
+    re_switch = re.compile("^(" + SWITCH + ")\-([InOut]{2,3}).*")
+    re_intrf  = re.compile("^(" + INTRF + ")\-([InOut]{2,3}).*")
 
+    # noinspection PyShadowingNames
     def prepare_accounts(plan_type):
         print("\n\nPlan type = '{}'".format(plan_type))
 
@@ -78,10 +80,10 @@ def create_gnc_txs(mon_rec, gnc_file, mode):
         ast_parent_path.append(plan_type)
 
         if plan_type != PL_OPEN:
-            pl_owner = mon_rec[OWNER]
+            pl_owner = tx_colxn[OWNER]
             if pl_owner == '':
                 raise Exception(
-                    "PROBLEM!! Trying to process plan type '{}' but NO Owner value found in Record!!".format(plan_type))
+                    "PROBLEM!! Trying to process plan type '{}' but NO Owner value found in Tx Collection!!".format(plan_type))
             rev_path.append(ACCT_PATHS[pl_owner])
             ast_parent_path.append(ACCT_PATHS[pl_owner])
 
@@ -93,10 +95,11 @@ def create_gnc_txs(mon_rec, gnc_file, mode):
         ast_parent = account_from_path(root, ast_parent_path)
         print("ast_parent = '{}'".format(ast_parent.GetName()))
 
-        for mtx in mon_rec[plan_type]:
+        for mtx in tx_colxn[plan_type]:
             create_gnc_tx(mtx, plan_type, rev_acct, ast_parent)
     # end INNER prepare_accounts()
 
+    # noinspection PyUnresolvedReferences
     def create_gnc_tx(mtx, plan_type, rev_acct, ast_parent):
         """
            Asset accounts: use the proper path to find the parent then search for the Fund Code in the descendants
@@ -115,8 +118,8 @@ def create_gnc_txs(mon_rec, gnc_file, mode):
             trade_date = str(mtx[TRADE_DATE])
 
             # check if we have a switch/transfer
-            re_mat_switch = re.match(reSWITCH, desc)
-            re_mat_intx = re.match(reINTX, desc)
+            re_mat_switch = re.match(re_switch, desc)
+            re_mat_intx = re.match(re_intrf, desc)
             if re_mat_switch or re_mat_intx:
                 transfer = True
 
@@ -143,7 +146,7 @@ def create_gnc_txs(mon_rec, gnc_file, mode):
                 print_info("\n ast_acct = '{}'".format(ast_acct.GetName()), color=CYAN)
 
             # get the dollar value of the tx
-            re_match = re.match(reGROSS, mtx[GROSS])
+            re_match = re.match(re_gross, mtx[GROSS])
             if re_match:
                 print(re_match.groups())
                 str_gross_curr = re_match.group(2) + re_match.group(3)
@@ -156,10 +159,10 @@ def create_gnc_txs(mon_rec, gnc_file, mode):
                 gross_opp = gross_curr * -1
                 print("gross_opp = '{}'".format(gross_opp))
             else:
-                raise Exception("PROBLEM!! reGROSS DID NOT match with value '{}'!".format(mtx[GROSS]))
+                raise Exception("PROBLEM!! re_gross DID NOT match with value '{}'!".format(mtx[GROSS]))
 
             # get the units of the tx
-            re_match = re.match(reUNITS, mtx[UNITS])
+            re_match = re.match(re_units, mtx[UNITS])
             if re_match:
                 print(re_match.groups())
                 units = int(re_match.group(2) + re_match.group(3))
@@ -168,10 +171,10 @@ def create_gnc_txs(mon_rec, gnc_file, mode):
                     units *= -1
                 print("units = '{}'".format(units))
             else:
-                raise Exception("PROBLEM!! reUNITS DID NOT match with value '{}'!".format(mtx[UNITS]))
+                raise Exception("PROBLEM!! re_units DID NOT match with value '{}'!".format(mtx[UNITS]))
 
             # get the date items
-            re_match = re.match(reDATE, trade_date)
+            re_match = re.match(re_date, trade_date)
             if re_match:
                 print(re_match.groups())
                 trade_mth = int(re_match.group(1))
@@ -359,12 +362,12 @@ def create_gnc_txs_main():
         print_info(usage, color=YELLOW)
         exit()
 
-    # get Monarch record from the Monarch json file
+    # get Monarch transactions from the Monarch json file
     with open(mon_file, 'r') as fp:
-        # PROBLEM: with Python2, the text in the record will be <type unicode> instead of <type string>
+        # PROBLEM: with Python2, the text in the tx_collxn will be <type unicode> instead of <type string>
         # and cause an exception if passed to any of the gnucash functions expecting a <const char*>
         # -- easiest solution seems to be to just cast any of this text to str() on definition...
-        record = json.load(fp)
+        tx_collxn = json.load(fp)
 
     gnc_file = argv[2]
     if not osp.isfile(gnc_file):
@@ -373,7 +376,7 @@ def create_gnc_txs_main():
 
     mode = argv[3]
 
-    create_gnc_txs(record, gnc_file, mode)
+    create_gnc_txs(tx_collxn, gnc_file, mode)
 
     print_info("\n >>> PROGRAM ENDED.", color=MAGENTA)
 
