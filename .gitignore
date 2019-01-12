@@ -3,6 +3,7 @@
 /gnucash
 /py3bindings
 **/out/
+**/logs/
 **/Downloads
 **/test*/
 **/bin/
