@@ -16,7 +16,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2019-01-06 09:49"
+__updated__ = "2019-01-11 12:55"
 
 from sys import argv, exit
 import os
@@ -102,7 +102,7 @@ def parse_monarch_report(file_name, mode):
                   }
 
     # re searches
-    re_own = re.compile(".*({}).*".format(OWNER))
+    re_own  = re.compile(".*({}).*".format(OWNER))
     re_plan = re.compile(r'([OPENTFSAR]{4})(\s?.*)')
     re_fund = re.compile(".*([A-Z]{3})\s?([0-9]{3,5}).*")
     re_date = re.compile(".*([0-9]{2}/[0-9]{2}/[0-9]{4}).*")
@@ -175,8 +175,8 @@ def parse_monarch_report(file_name, mode):
                 tx_line += 1
                 entry = line.strip()
                 if tx_line < 3:
-                    if entry == AUTO_SYS or entry == INTX_IN:
-                        # back up by one as have one MORE line of DESCRIPTION for AUTO_SYS and INT_TFI cases
+                    if entry == AUTO_SYS or entry == INTRF_IN:
+                        # back up by one as have one MORE line of DESCRIPTION for AUTO_SYS and INTRF_IN cases
                         tx_line -= 1
                     elif entry == SW_IN or entry == SW_OUT or entry == FEE:
                         # move forward by one because one FEWER line of DESCRIPTION for these cases
@@ -222,14 +222,14 @@ def parse_monarch_report(file_name, mode):
 
 def parse_monarch_main():
     if len(argv) < 3:
-        print("NOT ENOUGH parameters!")
-        print("usage: python {0} <monarch file> <mode: prod|test>".format(argv[0]))
-        print("Example: {0} '{1}' 'test'".format(argv[0], "in/Monarch-Mark-all.txt"))
+        print_error("NOT ENOUGH parameters!")
+        print_info("usage: python {0} <monarch file> <mode: prod|test>".format(argv[0]), color=YELLOW)
+        print_info("Example: {0} '{1}' 'test'".format(argv[0], "in/Monarch-Mark-all.txt"), color=CYAN)
         exit()
 
     mon_file = argv[1]
     if not os.path.isfile(mon_file):
-        print("File path '{}' does not exist. Exiting...".format(mon_file))
+        print_error("File path '{}' does not exist. Exiting...".format(mon_file))
         exit()
 
     mode = argv[2]
@@ -243,12 +243,12 @@ def parse_monarch_main():
     (path, fname) = os.path.split(mon_file)
     (basename, ext) = os.path.splitext(fname)
     # add a timestamp to get a unique file name
-    out_file = home_dir + basename + "." + now.replace(" ", "_") + ".json"
+    out_file = home_dir + basename + "." + now.replace(' ', '_').replace(':', '-') + ".json"
     # fp = open('/home/marksa/dev/Python/makeGncTx/MonRec.json', 'w')
     fp = open(out_file, 'w')
     json.dump(record, fp, indent=4)
 
-    print("\n >>> PROGRAM ENDED.")
+    print_info("\n >>> PROGRAM ENDED.", color=GREEN)
 
 
 if __name__ == '__main__':

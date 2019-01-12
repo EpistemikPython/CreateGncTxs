@@ -17,7 +17,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2019-01-06 09:44"
+__updated__ = "2019-01-11 12:55"
 
 from sys import argv, exit
 import os.path as osp
@@ -30,17 +30,11 @@ from Configuration import *
 
 
 def account_from_path(top_account, account_path, original_path=None):
-    # mhs | debug
-    # print( "top_account = %s, account_path = %s, original_path = %s" % (top_account.GetName(), account_path, original_path) )
     if original_path is None:
         original_path = account_path
     account, account_path = account_path[0], account_path[1:]
-    # mhs | debug
-    # print( "account = %s; account_path = %s" % (account, account_path) )
 
     account = top_account.lookup_by_name(account)
-    # mhs | debug
-    # print( "account = " + account.GetName() )
     if account is None:
         raise Exception("path " + str(original_path) + " could NOT be found")
     if len(account_path) > 0:
@@ -64,16 +58,14 @@ def show_account(root, path):
 
 def create_gnc_txs(mon_rec, gnc_file, mode):
     """
-       Take the information from a transaction record and produce Gnucash transactions to write to a gnucash file
+    Take the information from a transaction collection and produce Gnucash transactions to write to a Gnucash file
     """
-    # print("monRec = {}".format(monRec))
-
     # set the regex values needed for matches
-    reGROSS = re.compile("^(\(?)\$([0-9,]{1,6})\.([0-9]{2})\)?.*")
-    reUNITS = re.compile("^(\-?)([0-9]{1,5})\.([0-9]{4}).*")
-    reDATE = re.compile("^([0-9]{2})/([0-9]{2})/([0-9]{4}).*")
+    reGROSS  = re.compile("^(\(?)\$([0-9,]{1,6})\.([0-9]{2})\)?.*")
+    reUNITS  = re.compile("^(\-?)([0-9]{1,5})\.([0-9]{4}).*")
+    reDATE   = re.compile("^([0-9]{2})/([0-9]{2})/([0-9]{4}).*")
     reSWITCH = re.compile("^(" + SWITCH + ")\-([InOut]{2,3}).*")
-    reINTX = re.compile("^(" + INTX + ")\-([InOut]{2,3}).*")
+    reINTX   = re.compile("^(" + INTRF + ")\-([InOut]{2,3}).*")
 
     def prepare_accounts(plan_type):
         print("\n\nPlan type = '{}'".format(plan_type))
@@ -192,7 +184,7 @@ def create_gnc_txs(mon_rec, gnc_file, mode):
                 raise Exception("PROBLEM!! reTRADE_DATE DID NOT match with value '{}'!".format(trade_date))
 
             # assemble the Description string
-            descr = str(CMPY_FULL_NAME[fund_company] + ": " + desc + " " + ast_acct_name)
+            descr = str(COMPANY_NAME[fund_company] + ": " + desc + " " + ast_acct_name)
             print("descr = '{}'".format(descr))
 
             # notes field
@@ -239,40 +231,41 @@ def create_gnc_txs(mon_rec, gnc_file, mode):
             gtx.SetDescription(descr)
 
             # create the ASSET split for the Tx
-            splAst = Split(book)
-            splAst.SetParent(gtx)
+            spl_ast = Split(book)
+            spl_ast.SetParent(gtx)
             # set the account, value, and units of the Asset split
-            splAst.SetAccount(ast_acct)
-            splAst.SetValue(GncNumeric(gross_curr, 100))
-            splAst.SetAmount(GncNumeric(units, 10000))
+            spl_ast.SetAccount(ast_acct)
+            spl_ast.SetValue(GncNumeric(gross_curr, 100))
+            spl_ast.SetAmount(GncNumeric(units, 10000))
 
             if transfer:
                 # create the second ASSET split for the Tx
-                splAst2 = Split(book)
-                splAst2.SetParent(gtx)
-                # set the account, value, and units of the second Asset split
-                splAst2.SetAccount(pair_tx[ACCT])
-                splAst2.SetValue(GncNumeric(pair_tx[GROSS], 100))
-                splAst2.SetAmount(GncNumeric(pair_tx[UNITS], 10000))
-                # set actions for the splits
-                splAst2.SetAction("Buy" if units < 0 else "Sell")
-                splAst.SetAction("Buy" if units > 0 else "Sell")
-                # combined Description for the Tx and set memos for the splits
+                spl_ast2 = Split(book)
+                spl_ast2.SetParent(gtx)
+                # set the Account, Value, and Units of the second ASSET split
+                spl_ast2.SetAccount(pair_tx[ACCT])
+                spl_ast2.SetValue(GncNumeric(pair_tx[GROSS], 100))
+                spl_ast2.SetAmount(GncNumeric(pair_tx[UNITS], 10000))
+                # set Actions for the splits
+                spl_ast2.SetAction("Buy" if units < 0 else "Sell")
+                spl_ast.SetAction("Buy" if units > 0 else "Sell")
+                # combine Notes for the Tx and set Memos for the splits
                 gtx.SetNotes(notes + " | " + pair_tx[NOTES])
-                splAst.SetMemo(notes)
-                splAst2.SetMemo(pair_tx[NOTES])
+                spl_ast.SetMemo(notes)
+                spl_ast2.SetMemo(pair_tx[NOTES])
             else:
+                # a Distribution, so second split is for a REVENUE account
+                spl_rev = Split(book)
+                spl_rev.SetParent(gtx)
+                # set the Account, Value and Reconciled of the REVENUE split
+                spl_rev.SetAccount(rev_acct)
+                spl_rev.SetValue(GncNumeric(gross_opp, 100))
+                spl_rev.SetReconcile(CREC)
+                # set Notes for the Tx and Action for the ASSET split
                 gtx.SetNotes(notes)
-                splAst.SetAction(DIST)
-                # create the REVENUE split for the Tx
-                splRev = Split(book)
-                splRev.SetParent(gtx)
-                # set the account, value and Reconciled of the Revenue split
-                splRev.SetAccount(rev_acct)
-                splRev.SetValue(GncNumeric(gross_opp, 100))
-                splRev.SetReconcile(CREC)
+                spl_ast.SetAction(DIST)
 
-            # roll back if something went wrong and the two splits DO NOT balance
+            # ROLL BACK if something went wrong and the two splits DO NOT balance
             if not gtx.GetImbalanceValue().zero_p():
                 print("gtx imbalance = '{}'!! Roll back transaction changes!".format(gtx.GetImbalanceValue().to_string()))
                 gtx.RollbackEdit()

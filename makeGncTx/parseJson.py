@@ -16,7 +16,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 
 __created__ = "2019-01-03 07:59"
-__updated__ = "2019-01-06 09:10"
+__updated__ = "2019-01-11 15:55"
 
 from sys import argv, exit
 import os.path as osp
@@ -26,26 +26,26 @@ from Configuration import *
 
 def parse_json_main():
     if len(argv) < 2:
-        print("NOT ENOUGH parameters!")
-        print("usage: python {0} <json file>".format(argv[0]))
+        print_error("NOT ENOUGH parameters!")
+        print_info("usage: python {0} <json file>".format(argv[0]), color=YELLOW)
         exit()
 
     json_file = argv[1]
     if not osp.isfile(json_file):
-        print("File path '{}' does not exist. Exiting...".format(json_file))
+        print_error("File path '{}' does not exist. Exiting...".format(json_file))
         exit()
 
     with open(json_file, 'r') as fp:
         tx_list = json.load(fp)
 
-    print("len(tx_list) = {}".format(len(tx_list)))
+    print_info("len(tx_list) = {}".format(len(tx_list)), color=CYAN)
     for item in tx_list:
-        print(item[FUND_CMPY])
+        print_info(item[FUND_CMPY])
 
     # print list
-    print("tx_list = {}".format(json.dumps(tx_list, indent=4)))
+    print_info("tx_list = {}".format(json.dumps(tx_list, indent=4)), color=MAGENTA)
 
-    print("\n >>> PROGRAM ENDED.")
+    print_info("\n >>> PROGRAM ENDED.", color=GREEN)
 
 
 if __name__ == '__main__':

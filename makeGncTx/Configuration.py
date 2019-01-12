@@ -20,7 +20,7 @@
 from __future__ import print_function
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2019-01-07 21:44"
+__updated__ = "2019-01-11 15:44"
 
 import inspect
 
@@ -68,7 +68,7 @@ PL_OPEN   = "OPEN"
 PL_TFSA   = "TFSA"
 PL_RRSP   = "RRSP"
 
-# tx categories
+# Tx categories
 FUND       = "Fund"
 FUND_CODE  = FUND + " Code"
 FUND_CMPY  = FUND + " Company"
@@ -79,7 +79,7 @@ NET        = "Net"
 UNITS      = "Units"
 PRICE      = "Price"
 UNIT_BAL   = "Unit Balance"
-ACCT       = "Account" # Fund company & code
+ACCT       = "Account" # in Gnucash
 NOTES      = "Notes"
 
 # Fund companies
@@ -90,7 +90,8 @@ MFC = "MFC"
 MMF = "MMF"
 TML = "TML"
 
-CMPY_FULL_NAME = {
+# Company names
+COMPANY_NAME = {
     ATL : "CIBC Asset Management",
     CIG : "CI Investments",
     DYN : "Dynamic Funds",
@@ -99,7 +100,7 @@ CMPY_FULL_NAME = {
     TML : "Franklin Templeton"
 }
 
-# Fund names
+# Fund codes/names
 ATL_O59   = ATL + " 059"   # Renaissance Global Infrastructure Fund Class A
 CIG_11111 = CIG + " 11111" # Signature Diversified Yield II Fund A
 CIG_11461 = CIG + " 11461" # Signature Diversified Yield II Fund A
@@ -144,7 +145,7 @@ MMF_44424 = MMF + " 44424" # Manulife Yield Opportunities Fund Advisor Series
 MMF_3517  = MMF + " 3517"  # Manulife Conservative Income Fund Advisor Series
 MMF_13417 = MMF + " 13417" # Manulife Conservative Income Fund Advisor Series
 
-FundsList = [
+FUNDS_LIST = [
     CIG_11461, CIG_11111, CIG_18140, CIG_2304, CIG_2321, CIG_6104, CIG_1154, CIG_1304, CIG_1521,
     TML_674, TML_704, TML_180, TML_184, TML_202, TML_203, TML_223, TML_518, TML_519, TML_598, TML_694, TML_707, TML_1017, TML_1018,
     MFC_756, MFC_856, MFC_6129, MFC_6130, MFC_6138, MFC_302, MFC_2238, MFC_3232, MFC_3769, MFC_3689, MFC_1960,
@@ -186,16 +187,16 @@ MON_LULU = "Louise Robb"
 GNU_MARK = "Mark"
 GNU_LULU = "Lulu"
 
-DIST     = "Dist"
-SWITCH   = "Switch"
-IN       = "In"
-OUT      = "Out"
-SW_IN    = SWITCH + "-" + IN
-SW_OUT   = SWITCH + "-" + OUT
-INTX     = "Internal Transfer"
-INTX_IN  = INTX + "-" + IN
-INTX_OUT = INTX + "-" + OUT
-FEE      = "Fee Redemption"
+FEE    = "Fee Redemption"
+DIST   = "Dist"
+IN     = "In"
+OUT    = "Out"
+SWITCH = "Switch"
+SW_IN  = SWITCH + "-" + IN
+SW_OUT = SWITCH + "-" + OUT
+INTRF  = "Internal Transfer"
+INTRF_IN  = INTRF + "-" + IN
+INTRF_OUT = INTRF + "-" + OUT
 
 # find the proper path to the account in the gnucash file
 ACCT_PATHS = {
@@ -203,15 +204,15 @@ ACCT_PATHS = {
     ASSET    : ["FAMILY", "INVEST"] ,# + planType [+ Owner]
     MON_MARK : GNU_MARK ,
     MON_LULU : GNU_LULU ,
-    TRUST    : [TRUST, "Trust Assets", "Monarch ITF", CMPY_FULL_NAME[CIG]]
+    TRUST    : [TRUST, "Trust Assets", "Monarch ITF", COMPANY_NAME[CIG]]
 }
 
 # parsing states
-STATE_SEARCH = 0
-FIND_OWNER   = STATE_SEARCH + 1
-FIND_FUND    = FIND_OWNER   + 1
-FIND_NEXT_TX = FIND_FUND    + 1
-FILL_CURR_TX = FIND_NEXT_TX + 1
+STATE_SEARCH = 1
+FIND_OWNER   = 101
+FIND_FUND    = 201
+FIND_NEXT_TX = 301
+FILL_CURR_TX = 401
 
 # file paths
 GNC_FOLDER = "/home/marksa/dev/git/Python/Gnucash/gncFiles"
