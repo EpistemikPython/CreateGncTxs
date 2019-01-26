@@ -16,54 +16,60 @@
 #
 # @author Mark Sattolo <epistemik@gmail.com>
 
-__updated__ = "2019-01-01 17:01"
+from __future__ import print_function
+
+__updated__ = "2019-01-26 07:53"
 
 from sys import argv, exit
 import collections
 import json
 import PyPDF2
 
-def getPage(readPdf, pageNum):
-    page = readPdf.getPage(pageNum)
+
+def get_page(read_pdf, page_num):
+    page = read_pdf.getPage(page_num)
     page_content = page.extractText()
-    print("content of page #{0}:".format(sys.argv[1]))
-    print page_content.encode('utf-8')
-    
-def getAllPages(readPdf):
-    c = collections.Counter(range(readPdf.getNumPages()))
+    print("content of page #{0}:".format(argv[1]))
+    print( page_content.encode('utf-8') )
+
+
+def get_all_pages(read_pdf):
+    c = collections.Counter(range(read_pdf.getNumPages()))
     for i in c:
-       page = readPdf.getPage(i)
-       page_content = page.extractText()
-       print page_content.encode('utf-8')
-    
-def main():
+        page = read_pdf.getPage(i)
+        page_content = page.extractText()
+        print( page_content.encode('utf-8') )
+
+
+def parse_pdf_main():
     print("len(argv) = {0}".format(len(argv)))
     if len(argv) < 2:
-        print("Usage: python '{}' <reportPath> [pageNum]".format(argv[0]))
+        print("Usage: python '{}' <reportPath> [page_num]".format(argv[0]))
         exit()
-     
+
     monarch = argv[1]
     print("Monarch report is: {}".format(monarch))
-    
-    pageNum = 0
-    readAll = True
+
+    page_num = 0
+    read_all = True
     if len(argv) > 2:
-        pageNum = int(argv[2]) - 1
-        readAll = False
-    
-    pdfFile = open(monarch, 'rb')
-    pdfReader = PyPDF2.PdfFileReader(pdfFile)
-    
-    docInfo = pdfReader.getDocumentInfo()
-    print("docInfo = {0}".format(json.dumps(docInfo)))
-    print("number of pages = {0}".format(pdfReader.getNumPages()))
-    
-    if readAll:
-        getAllPages(pdfReader)
+        page_num = int(argv[2]) - 1
+        read_all = False
+
+    pdf_file = open(monarch, 'rb')
+    pdf_reader = PyPDF2.PdfFileReader(pdf_file)
+
+    doc_info = pdf_reader.getDocumentInfo()
+    print("doc_info = {0}".format(json.dumps(doc_info)))
+    print("number of pages = {0}".format(pdf_reader.getNumPages()))
+
+    if read_all:
+        get_all_pages(pdf_reader)
     else:
-        getPage(pdfReader, pageNum)
-        
+        get_page(pdf_reader, page_num)
+
     print("Bye!\n")
-    
+
+
 if __name__ == "__main__":
-    main()
+    parse_pdf_main()
