@@ -18,27 +18,33 @@
 
 from __future__ import print_function
 
-__updated__ = "2019-01-26 07:53"
+__updated__ = "2019-01-26 08:57"
 
 from sys import argv, exit
+import os.path as osp
 import collections
 import json
+import datetime
 import PyPDF2
+
+now = str(datetime.datetime.now())
 
 
 def get_page(read_pdf, page_num):
     page = read_pdf.getPage(page_num)
     page_content = page.extractText()
-    print("content of page #{0}:".format(argv[1]))
+    print("content of page #{}:".format(page_num+1))
     print( page_content.encode('utf-8') )
 
 
-def get_all_pages(read_pdf):
-    c = collections.Counter(range(read_pdf.getNumPages()))
+def get_all_pages(pdf_reader, fp):
+    c = collections.Counter(range(pdf_reader.getNumPages()))
     for i in c:
-        page = read_pdf.getPage(i)
-        page_content = page.extractText()
-        print( page_content.encode('utf-8') )
+        page = pdf_reader.getPage(i)
+        page_text = page.extractText()
+        page_content = page_text.encode('utf-8')
+        print(page_content)
+        fp.write(page_content)
 
 
 def parse_pdf_main():
@@ -56,6 +62,7 @@ def parse_pdf_main():
         page_num = int(argv[2]) - 1
         read_all = False
 
+    # parse an external Monarch pdf report file
     pdf_file = open(monarch, 'rb')
     pdf_reader = PyPDF2.PdfFileReader(pdf_file)
 
@@ -63,12 +70,27 @@ def parse_pdf_main():
     print("doc_info = {0}".format(json.dumps(doc_info)))
     print("number of pages = {0}".format(pdf_reader.getNumPages()))
 
+    # print info as txt file
+    home_dir = '/home/marksa/dev/git/Python/Gnucash/GncTxs/parsePdf'
+    # pluck path and basename from pdf file name to use for the saved file
+    (path, fname) = osp.split(monarch)
+    # print("path is '{}'".format(path))
+    # save to the output folder
+    path = path.replace('/in', '/out/')
+    print("path is '{}'".format(path))
+    (basename, ext) = osp.splitext(fname)
+    # add a timestamp to get a unique file name
+    out_file = path + basename + "." + now.replace(' ', '_').replace(':', '-') + ".txt"
+    fp = open(out_file, 'w')
+
     if read_all:
-        get_all_pages(pdf_reader)
+        get_all_pages(pdf_reader, fp)
     else:
         get_page(pdf_reader, page_num)
 
-    print("Bye!\n")
+    fp.close()
+
+    print("\n >>> PROGRAM ENDED.")
 
 
 if __name__ == "__main__":
