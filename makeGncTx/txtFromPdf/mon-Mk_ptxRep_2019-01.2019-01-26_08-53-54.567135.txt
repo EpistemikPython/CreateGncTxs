@@ -1,0 +1,489 @@
+** The registered owner of MRS assets is B
+2
+B Trustco, B
+2
+B Bank Financial Services Inc., B
+2
+B Bank Securities Services Inc. or B
+2
+B Bank Intermediary 
+Services Inc.
+*** Indicates investment/insurance products not purchased through [MONARCH] . Unit Price represents market price. Market prices shown are 
+obtained from sources we believe reliable, but we do not guarantee the accuracy of the unit price or book values reflected on this statement. Please 
+review this statement carefully and notify your advisor should there be any discrepancies.
+Advisor :  Rudy Johnson
+Branch :  RocheBanyan
+Phone :  (613)842-7240
+Fax :  (613)746-0720
+Email :  rjohnson@rochebanyan.ca
+137 Marlborough Ave.
+Ottawa ON K1N 8G1
+Mark H. Sattolo
+January 01, 2019 - January 26, 2019
+CLIENT TRANSACTIONS
+No transactions were found for this period.
+Page 1
+Printed on Saturday, January 26, 2019
+Advisor :  Rudy Johnson, CFP
+Dealer :  Monarch Wealth Corporation
+Branch :  RocheBanyan
+Phone :  (613)842-7240
+Fax :  (613)746-0720
+Email :  rjohnson@rochebanyan.ca
+137 Marlborough Ave.
+Ottawa ON K1N 8G1
+Mark H. Sattolo
+January 01, 2019 - January 26, 2019
+CLIENT TRANSACTIONS
+Plan Type:
+TFSA (Individual)
+Plan ID:
+300787
+Registered In:
+Client Name
+Beneficiary:
+Owner(s):
+Mark H. Sattolo
+In-Trust for:
+Description:
+Franklin Templeton Investments/TML 598-Franklin Bissett Small Cap Fund Series A   Account # 4963030
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/15/2019
+Switch-Out
+($956.67)
+($956.67)
+-26.5051
+$36.0937
+10.5889
+Franklin Templeton Investments/TML 203-Franklin Bissett Dividend Income Fund A   Account # 4963030
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/15/2019
+Switch-In
+$3,664.33
+$3,664.33
+139.3668
+$26.2927
+437.5393
+Franklin Templeton Investments/TML 223-Franklin Bissett Small Cap Fund Series A   Account # 4963030
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/15/2019
+Switch-In
+$956.67
+$956.67
+26.5051
+$36.0937
+82.0894
+Franklin Templeton Investments/TML 707-Templeton Global Smaller Companies Fund A   Account # 4963030
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/15/2019
+Switch-In
+$801.69
+$801.69
+32.5970
+$24.5939
+114.1125
+Franklin Templeton Investments/TML 694-Templeton Global Smaller Companies Fund A   Account # 4963030
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/15/2019
+Switch-Out
+($801.69)
+($801.69)
+-32.5970
+$24.5939
+12.3416
+Franklin Templeton Investments/TML 180-Franklin Mutual Global Discovery Fund A   Account # 4963030
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/15/2019
+Switch-In
+$2,585.36
+$2,585.36
+149.2160
+$17.3263
+486.2274
+Page 1
+Printed on Saturday, January 26, 2019
+Franklin Templeton Investments/TML 184-Franklin Mutual Global Discovery Fund A   Account # 4963030
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/15/2019
+Switch-Out
+($2,585.36)
+($2,585.36)
+-149.2160
+$17.3263
+56.5542
+Franklin Templeton Investments/TML 518-Franklin Bissett Canadian Equity Fund Series A   Account # 4963030
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/15/2019
+Switch-Out
+($2,771.23)
+($2,771.23)
+-30.1847
+$91.8092
+11.8570
+Franklin Templeton Investments/TML 519-Franklin Bissett Dividend Income Fund A   Account # 4963030
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/15/2019
+Switch-Out
+($3,664.33)
+($3,664.33)
+-139.3668
+$26.2927
+53.3981
+Franklin Templeton Investments/TML 202-Franklin Bissett Canadian Equity Fund Series A   Account # 4963030
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/15/2019
+Switch-In
+$2,771.23
+$2,771.23
+30.1847
+$91.8092
+99.5165
+Plan Type:
+RRSP (Individual)
+Plan ID:
+278827
+Registered In:
+Client Name
+Beneficiary:
+Louise Robb
+Owner(s):
+Mark H. Sattolo
+In-Trust for:
+Description:
+Mackenzie Financial Corp./MFC 6130-Mackenzie Corporate Bond Fund Series PW   Account # 64665893
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/03/2019
+Switch-In
+$793.62
+$793.62
+88.8880
+$8.9283
+1343.1800
+01/18/2019
+Reinvested 
+Distribution/Interest
+$41.24
+$41.24
+4.5340
+$9.0950
+1347.7140
+Mackenzie Financial Corp./MFC 3232-Mackenzie Strategic Income Fund Series A   Account # 64665893
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/03/2019
+Switch-Out
+($1,873.20)
+($1,873.20)
+-229.3620
+$8.1670
+2048.2250
+01/18/2019
+Reinvested 
+Distribution/Interest
+$70.25
+$70.25
+8.3160
+$8.4476
+2056.5410
+Mackenzie Financial Corp./MFC 6138-Mackenzie Strategic Income Fund Series PW   Account # 64665893
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/03/2019
+Switch-In
+$1,873.20
+$1,873.20
+141.9260
+$13.1984
+2017.3420
+01/18/2019
+Reinvested 
+Distribution/Interest
+$111.76
+$111.76
+8.1860
+$13.6533
+2025.5280
+Mackenzie Financial Corp./MFC 302-Mackenzie Canadian Bond Fund Series A   Account # 64665893
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/03/2019
+Switch-Out
+($1,148.15)
+($1,148.15)
+-84.1460
+$13.6447
+764.3020
+01/18/2019
+Reinvested 
+Distribution/Interest
+$10.47
+$10.47
+0.7740
+$13.5275
+765.0760
+Mackenzie Financial Corp./MFC 6129-Mackenzie Canadian Bond Fund Series PW   Account # 64665893
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/03/2019
+Switch-In
+$1,148.15
+$1,148.15
+111.3470
+$10.3115
+1504.7560
+01/18/2019
+Reinvested 
+Distribution/Interest
+$20.62
+$20.62
+2.0170
+$10.2216
+1506.7730
+Page 2
+Printed on Saturday, January 26, 2019
+For: Mark H. Sattolo 
+** The registered owner of MRS assets is B
+2
+B Trustco, B
+2
+B Bank Financial Services Inc., B
+2
+B Bank Securities Services Inc. or B
+2
+B Bank Intermediary 
+Services Inc.
+*** Indicates investment/insurance products not purchased through [MONARCH] . Unit Price represents market price. Market prices shown are 
+obtained from sources we believe reliable, but we do not guarantee the accuracy of the unit price or book values reflected on this statement. Please 
+review this statement carefully and notify your advisor should there be any discrepancies.
+Mackenzie Financial Corp./MFC 856-Mackenzie Corporate Bond Fund Series A   Account # 64665893
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/03/2019
+Switch-Out
+($793.62)
+($793.62)
+-192.5790
+$4.1210
+1732.8460
+01/18/2019
+Reinvested 
+Distribution/Interest
+$22.53
+$22.53
+5.3650
+$4.1985
+1738.2110
+Dynamic Funds/DYN 1560-Dynamic Strategic Yield Fund Series A   Account # 424767671
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/15/2019
+Switch-In
+$4,724.43
+$4,724.43
+357.9112
+$13.2000
+1242.5283
+Dynamic Funds/DYN 729-Dynamic Equity Income Fund Series A   Account # 424767671
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/15/2019
+Switch-Out
+($5,441.42)
+($5,441.42)
+-270.9873
+$20.0800
+178.7506
+Dynamic Funds/DYN 1562-Dynamic Strategic Yield Fund Series A   Account # 424767671
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/15/2019
+Switch-Out
+($4,724.43)
+($4,724.43)
+-357.9112
+$13.2000
+247.2526
+Franklin Templeton Investments/TML 1018-Franklin Bissett Canadian Dividend Fund A   Account # 4722871
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/15/2019
+Switch-Out
+($4,832.36)
+($4,832.36)
+-356.6235
+$13.5503
+133.8871
+Franklin Templeton Investments/TML 1017-Franklin Bissett Canadian Dividend Fund A   Account # 4722871
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/15/2019
+Switch-In
+$4,832.36
+$4,832.36
+356.6235
+$13.5503
+547.8421
+Dynamic Funds/DYN 029-Dynamic Equity Income Fund Series A   Account # 424767671
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/15/2019
+Switch-In
+$5,441.42
+$5,441.42
+270.9873
+$20.0800
+881.0529
+Manulife Mutual Funds/MMF 44424-Manulife Yield Opportunities Fund Advisor Series   Account # 72562759
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/22/2019
+Switch-Out
+($2,317.93)
+($2,317.93)
+-255.7570
+$9.0630
+324.3860
+Manulife Mutual Funds/MMF 4524-Manulife Yield Opportunities Fund Advisor Series   Account # 72562759
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/22/2019
+Switch-In
+$2,317.93
+$2,317.93
+255.7570
+$9.0630
+3724.2570
+Page 3
+Printed on Saturday, January 26, 2019
+For: Mark H. Sattolo 
