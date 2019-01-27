@@ -32,15 +32,14 @@ now = str(datetime.datetime.now())
 # noinspection PyPep8
 def parse_monarch_report(file_name, mode):
     """
-    :type: (str, str) -> Tx_Collection
-    ?? look for 'CLIENT TRANSACTIONS' = start of transactions
+    :rtype: Configuration.Tx_Collection
     loop:
         check for 'Plan Type:'
             next line is either 'OPEN...', 'TFSA...' or 'RRSP...'
-            use that as the key for this section of the tx_colxn
-        check for $INVESTMENT_COMPANY/$MF_NAME-... :
+            use that as the key for this section of the Tx_Collection
+        check for '$INVESTMENT_COMPANY/$MF_NAME-...' :
             use $MF_NAME as the Fund Code in the tx
-        look for date: MM/DD/YYYY = 'Trade Date'
+        look for date: 'MM/DD/YYYY' becomes 'Trade Date'
             then parse:
                 2 lines = 'Description'  : Text
                   line  = 'Gross'        : Currency float
@@ -48,7 +47,6 @@ def parse_monarch_report(file_name, mode):
                   line  = 'Units'        : float
                   line  = 'Price'        : Currency float
                   line  = 'Unit Balance' : float
-    :rtype: Tx_Collection
     """
     print_info("parse_monarch_report({})\n".format(file_name), color=GREEN)
     print_info("Runtime = " + now, color=MAGENTA)
@@ -241,7 +239,11 @@ def parse_monarch_main():
     # print record as json file
     home_dir = '/home/marksa/dev/git/Python/Gnucash/GncTxs/makeGncTx'
     # pluck path and basename from mon_file to use for the saved json file
-    (path, fname) = osp.split(mon_file)
+    (ospath, fname) = osp.split(mon_file)
+    # print("path is '{}'".format(ospath))
+    # save to the output folder
+    path = ospath.replace('/txtFromPdf', '/jsonFromTxt/')
+    print("path is '{}'".format(path))
     (basename, ext) = osp.splitext(fname)
     # add a timestamp to get a unique file name
     out_file = path + basename + "." + now.replace(' ', '_').replace(':', '-') + ".json"
