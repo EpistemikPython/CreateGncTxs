@@ -118,9 +118,7 @@ def create_gnc_txs(tx_colxn, gnc_file, mode):
             trade_date = str(mtx[TRADE_DATE])
 
             # check if we have a switch/transfer
-            re_mat_switch = re.match(re_switch, desc)
-            re_mat_intx = re.match(re_intrf, desc)
-            if re_mat_switch or re_mat_intx:
+            if re.match(re_switch, desc) or re.match(re_intrf, desc):
                 transfer = True
 
             # get the asset account name
