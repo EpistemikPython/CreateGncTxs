@@ -56,7 +56,7 @@ def show_account(root, path):
             print("{}".format(subAcct.GetName()))
 
 
-# noinspection PyUnresolvedReferences,PyPep8
+# noinspection PyUnresolvedReferences
 def create_gnc_txs(tx_colxn, gnc_file, mode):
     """
     Take the information from a transaction collection and produce Gnucash transactions to write to a Gnucash file
@@ -218,6 +218,7 @@ def create_gnc_txs(tx_colxn, gnc_file, mode):
                     pair_tx[UNITS] = units
                     # add to the record then return
                     gnc_collection[plan_type].append(pair_tx)
+                    print('')
                     return
 
             # =================================================================================================
@@ -275,7 +276,7 @@ def create_gnc_txs(tx_colxn, gnc_file, mode):
                 return
 
             if mode == "PROD":
-                print("Mode = '{}': Commit transaction changes.".format(mode))
+                print("Mode = '{}': Commit transaction changes.\n".format(mode))
                 gtx.CommitEdit()
                 session.save()
             else:
@@ -287,7 +288,7 @@ def create_gnc_txs(tx_colxn, gnc_file, mode):
     # end INNER create_gnc_tx()
 
     # gnc_file = PRAC2_GNC
-    print("\n gncFile = '{}'".format(gnc_file))
+    print("\ngncFile = '{}'".format(gnc_file))
 
     try:
         session = Session(gnc_file)
