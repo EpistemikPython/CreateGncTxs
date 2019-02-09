@@ -30,6 +30,7 @@ import PyPDF2
 now = str(datetime.datetime.now())
 
 
+# noinspection PyPep8,PyPep8
 def get_page(read_pdf, page_num):
     page = read_pdf.getPage(page_num)
     page_content = page.extractText()
@@ -76,11 +77,11 @@ def parse_pdf_main():
     (path, fname) = osp.split(monarch)
     # print("path is '{}'".format(path))
     # save to the output folder
-    path = path.replace('/in', '/out/')
-    print("path is '{}'".format(path))
+    path = path.replace('in', 'out')
     (basename, ext) = osp.splitext(fname)
     # add a timestamp to get a unique file name
-    out_file = path + basename + "." + now.replace(' ', '_').replace(':', '-') + ".txt"
+    out_file = path + '/' + basename + '.' + now.replace(' ', '_').replace(':', '-') + '.txt'
+    print("out_file is '{}'".format(out_file))
     fp = open(out_file, 'w')
 
     if read_all:
