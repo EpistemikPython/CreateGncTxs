@@ -2,6 +2,7 @@
 !.gitignore
 /gnucash
 /py3bindings
+**/in/Monarch
 **/out/
 **/logs/
 **/venv/
