@@ -1,0 +1,571 @@
+Advisor :  Rudy Johnson, CFP
+Dealer :  Monarch Wealth Corporation
+Branch :  RocheBanyan
+Phone :  (613)842-7240
+Fax :  (613)746-0720
+Email :  rjohnson@rochebanyan.ca
+137 Marlborough Ave.
+Ottawa ON K1N 8G1
+Louise Robb
+January 01, 2019 - March 31, 2019
+CLIENT TRANSACTIONS
+Plan Type:
+OPEN (Joint)
+Plan ID:
+78512
+Opened In:
+Client Name
+Beneficiary:
+Owner(s):
+Mark H. Sattolo, Louise Robb
+In-Trust for:
+Description:
+CI Investments/CIG 11461-Signature Diversified Yield II Fund A   Account # 106035991
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/25/2019
+Reinvested 
+Distribution/Interest
+$35.11
+$35.11
+3.8910
+$9.0243
+706.1040
+CI Investments/CIG 11111-Signature Diversified Yield II Fund A   Account # 106035991
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/25/2019
+Reinvested 
+Distribution/Interest
+$5.39
+$5.39
+0.5970
+$9.0243
+108.4690
+Plan Type:
+OPEN (Individual)
+Plan ID:
+78514
+Opened In:
+Client Name
+Beneficiary:
+Owner(s):
+Louise Robb
+In-Trust for:
+Description:
+CI Investments/CIG 18140-Signature Diversified Yield Corporate Class O   Account # 105017156
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/11/2019
+Automatic/Systematic 
+Withdrawal Plan 
+(AWD/SWP)
+($1,000.00)
+($1,000.00)
+-67.2970
+$14.8596
+6332.2800
+Plan Type:
+TFSA (Individual)
+Plan ID:
+278826
+Registered In:
+Client Name
+Beneficiary:
+Mark H. Sattolo
+Owner(s):
+Louise Robb
+In-Trust for:
+Description:
+$458.33 Monthly PAC Day 15
+Page 1
+Printed on Thursday, February 07, 2019
+Mackenzie Financial Corp./MFC 3689-Mackenzie Strategic Income Class T5   Account # 64663089
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/03/2019
+Switch-Out
+($979.54)
+($979.54)
+-82.9670
+$11.8064
+740.8990
+01/18/2019
+Reinvested 
+Distribution/Interest
+$36.67
+$36.67
+3.0030
+$12.2125
+743.9020
+Mackenzie Financial Corp./MFC 1960-Mackenzie Strategic Income Class T5   Account # 64663089
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/03/2019
+Switch-In
+$979.54
+$979.54
+82.9670
+$11.8064
+985.3310
+01/18/2019
+Reinvested 
+Distribution/Interest
+$48.77
+$48.77
+3.9940
+$12.2125
+989.3250
+Mackenzie Financial Corp./MFC 3232-Mackenzie Strategic Income Fund Series A   Account # 64663089
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/03/2019
+Switch-Out
+($973.53)
+($973.53)
+-119.2030
+$8.1670
+1064.4940
+01/18/2019
+Reinvested 
+Distribution/Interest
+$36.51
+$36.51
+4.3220
+$8.4476
+1068.8160
+Mackenzie Financial Corp./MFC 6138-Mackenzie Strategic Income Fund Series PW   Account # 64663089
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/03/2019
+Switch-In
+$973.53
+$973.53
+73.7610
+$13.1984
+1773.8520
+01/18/2019
+Reinvested 
+Distribution/Interest
+$98.27
+$98.27
+7.1980
+$13.6533
+1781.0500
+Plan Type:
+RRSP (Individual)
+Plan ID:
+278825
+Registered In:
+Client Name
+Beneficiary:
+Mark H. Sattolo
+Owner(s):
+Louise Robb
+In-Trust for:
+Description:
+Mackenzie Financial Corp./MFC 6130-Mackenzie Corporate Bond Fund Series PW   Account # 64667227
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/03/2019
+Switch-In
+$668.28
+$668.28
+74.8500
+$8.9283
+816.8210
+01/18/2019
+Reinvested 
+Distribution/Interest
+$25.08
+$25.08
+2.7570
+$9.0950
+819.5780
+Mackenzie Financial Corp./MFC 3232-Mackenzie Strategic Income Fund Series A   Account # 64667227
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/03/2019
+Switch-Out
+($1,560.20)
+($1,560.20)
+-191.0370
+$8.1670
+1705.9800
+01/18/2019
+Reinvested 
+Distribution/Interest
+$58.52
+$58.52
+6.9270
+$8.4476
+1712.9070
+Mackenzie Financial Corp./MFC 6138-Mackenzie Strategic Income Fund Series PW   Account # 64667227
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/03/2019
+Switch-In
+$1,560.20
+$1,560.20
+118.2110
+$13.1984
+1305.5650
+01/18/2019
+Reinvested 
+Distribution/Interest
+$72.33
+$72.33
+5.2970
+$13.6533
+1310.8620
+Mackenzie Financial Corp./MFC 302-Mackenzie Canadian Bond Fund Series A   Account # 64667227
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/03/2019
+Switch-Out
+($963.46)
+($963.46)
+-70.6110
+$13.6447
+641.3550
+01/18/2019
+Reinvested 
+Distribution/Interest
+$8.79
+$8.79
+0.6500
+$13.5275
+642.0050
+Page 2
+Printed on Thursday, February 07, 2019
+For: Louise Robb 
+Mackenzie Financial Corp./MFC 6129-Mackenzie Canadian Bond Fund Series PW   Account # 64667227
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/03/2019
+Switch-In
+$963.46
+$963.46
+93.4350
+$10.3115
+993.5440
+01/18/2019
+Reinvested 
+Distribution/Interest
+$13.61
+$13.61
+1.3320
+$10.2216
+994.8760
+Mackenzie Financial Corp./MFC 856-Mackenzie Corporate Bond Fund Series A   Account # 64667227
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/03/2019
+Switch-Out
+($668.28)
+($668.28)
+-162.1650
+$4.1210
+1459.1670
+01/18/2019
+Reinvested 
+Distribution/Interest
+$18.97
+$18.97
+4.5180
+$4.1985
+1463.6850
+Dynamic Funds/DYN 029-Dynamic Equity Income Fund Series A   Account # 424854693
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/15/2019
+Switch-In
+$5,415.29
+$5,415.29
+269.6858
+$20.0800
+707.1301
+01/25/2019
+Reinvested 
+Distribution/Interest
+$49.50
+$49.50
+2.4372
+$20.3100
+709.5673
+Dynamic Funds/DYN 1562-Dynamic Strategic Yield Fund Series A   Account # 424854693
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/15/2019
+Switch-Out
+($4,754.37)
+($4,754.37)
+-360.1796
+$13.2000
+132.1599
+01/25/2019
+Reinvested 
+Distribution/Interest
+$7.72
+$7.72
+0.5835
+$13.2300
+132.7434
+Dynamic Funds/DYN 729-Dynamic Equity Income Fund Series A   Account # 424854693
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/15/2019
+Switch-Out
+($5,415.29)
+($5,415.29)
+-269.6858
+$20.0800
+107.2700
+01/25/2019
+Reinvested 
+Distribution/Interest
+$7.51
+$7.51
+0.3698
+$20.3100
+107.6398
+Franklin Templeton Investments/TML 1018-Franklin Bissett Canadian Dividend Fund A   Account # 4722845
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/15/2019
+Switch-Out
+($4,497.90)
+($4,497.90)
+-331.9407
+$13.5503
+69.1905
+01/30/2019
+Reinvested 
+Distribution/Interest
+$2.25
+$2.25
+0.1628
+$13.8197
+69.3533
+Franklin Templeton Investments/TML 1017-Franklin Bissett Canadian Dividend Fund A   Account # 4722845
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/15/2019
+Switch-In
+$4,497.90
+$4,497.90
+331.9407
+$13.5503
+423.8556
+01/30/2019
+Reinvested 
+Distribution/Interest
+$13.78
+$13.78
+0.9971
+$13.8197
+424.8527
+Dynamic Funds/DYN 1560-Dynamic Strategic Yield Fund Series A   Account # 424854693
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/15/2019
+Switch-In
+$4,754.37
+$4,754.37
+360.1796
+$13.2000
+937.7491
+01/25/2019
+Reinvested 
+Distribution/Interest
+$54.76
+$54.76
+4.1391
+$13.2300
+941.8882
+Manulife Mutual Funds/MMF 4524-Manulife Yield Opportunities Fund Advisor Series   Account # 72566701
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/22/2019
+Switch-In
+$2,312.10
+$2,312.10
+255.1140
+$9.0630
+2856.5600
+01/25/2019
+Reinvested 
+Distribution/Interest
+$142.83
+$142.83
+15.7930
+$9.0436
+2872.3530
+Page 3
+Printed on Thursday, February 07, 2019
+For: Louise Robb 
+** The registered owner of MRS assets is B
+2
+B Trustco, B
+2
+B Bank Financial Services Inc., B
+2
+B Bank Securities Services Inc. or B
+2
+B Bank Intermediary 
+Services Inc.
+*** Indicates investment/insurance products not purchased through [MONARCH] . Unit Price represents market price. Market prices shown are 
+obtained from sources we believe reliable, but we do not guarantee the accuracy of the unit price or book values reflected on this statement. Please 
+review this statement carefully and notify your advisor should there be any discrepancies.
+Manulife Mutual Funds/MMF 44424-Manulife Yield Opportunities Fund Advisor Series   Account # 72566701
+Trade Date
+Description
+Gross
+Net
+Units
+Price
+Unit Balance
+01/22/2019
+Switch-Out
+($2,312.10)
+($2,312.10)
+-255.1140
+$9.0630
+106.7310
+01/25/2019
+Reinvested 
+Distribution/Interest
+$5.34
+$5.34
+0.5900
+$9.0436
+107.3210
+Page 4
+Printed on Thursday, February 07, 2019
+For: Louise Robb 
+** The registered owner of MRS assets is B
+2
+B Trustco, B
+2
+B Bank Financial Services Inc., B
+2
+B Bank Securities Services Inc. or B
+2
+B Bank Intermediary 
+Services Inc.
+*** Indicates investment/insurance products not purchased through [MONARCH] . Unit Price represents market price. Market prices shown are 
+obtained from sources we believe reliable, but we do not guarantee the accuracy of the unit price or book values reflected on this statement. Please 
+review this statement carefully and notify your advisor should there be any discrepancies.
+Advisor :  Rudy Johnson
+Branch :  RocheBanyan
+Phone :  (613)842-7240
+Fax :  (613)746-0720
+Email :  rjohnson@rochebanyan.ca
+137 Marlborough Ave.
+Ottawa ON K1N 8G1
+Louise Robb
+January 01, 2019 - March 31, 2019
+CLIENT TRANSACTIONS
+No transactions were found for this period.
+Page 1
+Printed on Thursday, February 07, 2019
