@@ -24,13 +24,13 @@ from sys import argv, exit
 import os.path as osp
 import collections
 import json
-import datetime
+import datetime as dt
 import PyPDF2
 
-now = str(datetime.datetime.now())
+now = dt.datetime.strftime(dt.datetime.now(), "%Y-%m-%d_%H-%M-%S")
 
 
-# noinspection PyPep8,PyPep8
+# noinspection PyPep8
 def get_page(read_pdf, page_num):
     page = read_pdf.getPage(page_num)
     page_content = page.extractText()
@@ -80,7 +80,7 @@ def parse_pdf_main():
     path = path.replace('in', 'out')
     (basename, ext) = osp.splitext(fname)
     # add a timestamp to get a unique file name
-    out_file = path + '/' + basename + '.' + now.replace(' ', '_').replace(':', '-') + '.txt'
+    out_file = path + '/' + basename + '.' + now + '.txt'
     print("out_file is '{}'".format(out_file))
     fp = open(out_file, 'w')
 

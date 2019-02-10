@@ -23,10 +23,10 @@ import os.path as osp
 import re
 import copy
 import json
-import datetime
+import datetime as dt
 from Configuration import *
 
-now = str(datetime.datetime.now())
+now = dt.datetime.strftime(dt.datetime.now(), "%Y-%m-%d_%H-%M-%S")
 
 
 # noinspection PyPep8
@@ -222,8 +222,9 @@ def parse_monarch_report(file_name, mode):
 def parse_monarch_main():
     if len(argv) < 3:
         print_error("NOT ENOUGH parameters!")
-        print_info("usage: python {0} <monarch file> <mode: prod|test>".format(argv[0]), color=YELLOW)
-        print_info("Example: {0} '{1}' 'test'".format(argv[0], "in/Monarch-Mark-all.txt"), color=CYAN)
+        binr = argv[0].split('/')[-1]
+        print_info("usage: python {0} <monarch file> <mode: prod|test>".format(binr), color=YELLOW)
+        print_info("Example: {0} '{1}' 'test'".format(binr, "txtFromPdf/Monarch-Mark-all.txt"), color=CYAN)
         exit()
 
     mon_file = argv[1]
@@ -242,11 +243,11 @@ def parse_monarch_main():
     (ospath, fname) = osp.split(mon_file)
     # print("path is '{}'".format(ospath))
     # save to the output folder
-    path = ospath.replace('/txtFromPdf', '/jsonFromTxt/')
-    print("path is '{}'".format(path))
+    path = ospath.replace('txtFromPdf', 'jsonFromTxt')
     (basename, ext) = osp.splitext(fname)
     # add a timestamp to get a unique file name
-    out_file = path + basename + "." + now.replace(' ', '_').replace(':', '-') + ".json"
+    out_file = path + '/' + basename + '.' + now + ".json"
+    print("out_file is '{}'".format(out_file))
     fp = open(out_file, 'w')
     json.dump(record, fp, indent=4)
 
