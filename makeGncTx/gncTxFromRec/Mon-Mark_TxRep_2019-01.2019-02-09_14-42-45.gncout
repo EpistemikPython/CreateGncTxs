@@ -1,0 +1,948 @@
+/home/marksa/dev/PyCharm/Gnucash/venv/bin/python /home/marksa/apps/pycharm-community-2018.3/helpers/pydev/pydevconsole.py --mode=client --port=37911
+
+import sys; print('Python %s on %s' % (sys.version, sys.platform))
+sys.path.extend(['/home/marksa/dev/PyCharm/Gnucash/AcctAnalysis'])
+
+PyDev console: starting.
+
+Python 2.7.15rc1 (default, Nov 12 2018, 14:31:15) 
+[GCC 7.3.0] on linux2
+>>> runfile('/home/marksa/dev/PyCharm/Gnucash/CreateTxs/makeGncTx/createGnucashTxs.py', args=['jsonFromTxt/Mon-Mark_TxRep_2019-01.2019-02-09_14-42-45.json', '/home/marksa/Documents/Financial/Gnucash/HouseHold.gnucash', 'PROD'], wdir='/home/marksa/dev/PyCharm/Gnucash/CreateTxs/makeGncTx')
+
+gncFile = '/home/marksa/Documents/Financial/Gnucash/HouseHold.gnucash'
+
+
+Plan type = 'OPEN'
+rev_path = '['REV', 'REV_Invest', 'Dist', 'OPEN']'
+rev_acct = 'OPEN'
+ast_parent_path = '['FAMILY', 'INVEST', 'OPEN']'
+ast_parent = 'OPEN'
+ast_acct_name = 'CIG 11461'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'CIG 11461'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'CIG 11461' 
+(u'', u'35', u'11')
+gross_curr = '3511'
+gross_opp = '-3511'
+(u'', u'3', u'8910')
+units = '38910'
+('01', '25', '2019')
+trade_mth = '1'
+trade_day = '25'
+trade_yr = '2019'
+descr = 'CI Investments: Reinvested:Distribution/Interest: CIG 11461'
+notes = 'CIG 11461 balance = 706.1040'
+gtx guid = '23a23c6f8129e5d68042819164a7a97a'
+gtx date = '1548413940'
+Mode = 'PROD': Commit transaction changes.
+
+ast_acct_name = 'CIG 11111'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'CIG 11111'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'CIG 11111' 
+(u'', u'5', u'39')
+gross_curr = '539'
+gross_opp = '-539'
+(u'', u'0', u'5970')
+units = '5970'
+('01', '25', '2019')
+trade_mth = '1'
+trade_day = '25'
+trade_yr = '2019'
+descr = 'CI Investments: Reinvested:Distribution/Interest: CIG 11111'
+notes = 'CIG 11111 balance = 108.4690'
+gtx guid = '24ad78e6ad23263989035b2489f3cb13'
+gtx date = '1548413940'
+Mode = 'PROD': Commit transaction changes.
+
+
+
+Plan type = 'TFSA'
+rev_path = '['REV', 'REV_Invest', 'Dist', 'TFSA', 'Mark']'
+rev_acct = 'Mark'
+ast_parent_path = '['FAMILY', 'INVEST', 'TFSA', 'Mark']'
+ast_parent = 'Mark'
+ast_acct_name = 'TML 598'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'TML 598'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'TML 598' 
+(u'(', u'956', u'67')
+gross_curr = '-95667'
+gross_opp = '95667'
+(u'-', u'26', u'5051')
+units = '-265051'
+('01', '15', '2019')
+trade_mth = '1'
+trade_day = '15'
+trade_yr = '2019'
+descr = 'Franklin Templeton: Switch-Out: TML 598'
+notes = 'TML 598 balance = 10.5889'
+transfer
+
+ast_acct_name = 'TML 203'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'TML 203'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'TML 203' 
+(u'', u'3,664', u'33')
+gross_curr = '366433'
+gross_opp = '-366433'
+(u'', u'139', u'3668')
+units = '1393668'
+('01', '15', '2019')
+trade_mth = '1'
+trade_day = '15'
+trade_yr = '2019'
+descr = 'Franklin Templeton: Switch-In: TML 203'
+notes = 'TML 203 balance = 437.5393'
+transfer
+
+ast_acct_name = 'TML 203'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'TML 203'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'TML 203' 
+(u'', u'24', u'06')
+gross_curr = '2406'
+gross_opp = '-2406'
+(u'', u'0', u'9008')
+units = '9008'
+('01', '30', '2019')
+trade_mth = '1'
+trade_day = '30'
+trade_yr = '2019'
+descr = 'Franklin Templeton: Reinvested:Distribution/Interest: TML 203'
+notes = 'TML 203 balance = 438.4401'
+gtx guid = '7fb2466121f81af94d02ccf699861e5b'
+gtx date = '1548845940'
+Mode = 'PROD': Commit transaction changes.
+
+ast_acct_name = 'TML 223'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'TML 223'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'TML 223' 
+(u'', u'956', u'67')
+gross_curr = '95667'
+gross_opp = '-95667'
+(u'', u'26', u'5051')
+units = '265051'
+('01', '15', '2019')
+trade_mth = '1'
+trade_day = '15'
+trade_yr = '2019'
+descr = 'Franklin Templeton: Switch-In: TML 223'
+notes = 'TML 223 balance = 82.0894'
+transfer
+gtx guid = 'c908d98cc916b30a85af93ea96f33c55'
+gtx date = '1547549940'
+Mode = 'PROD': Commit transaction changes.
+
+ast_acct_name = 'TML 707'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'TML 707'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'TML 707' 
+(u'', u'801', u'69')
+gross_curr = '80169'
+gross_opp = '-80169'
+(u'', u'32', u'5970')
+units = '325970'
+('01', '15', '2019')
+trade_mth = '1'
+trade_day = '15'
+trade_yr = '2019'
+descr = 'Franklin Templeton: Switch-In: TML 707'
+notes = 'TML 707 balance = 114.1125'
+transfer
+
+ast_acct_name = 'TML 694'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'TML 694'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'TML 694' 
+(u'(', u'801', u'69')
+gross_curr = '-80169'
+gross_opp = '80169'
+(u'-', u'32', u'5970')
+units = '-325970'
+('01', '15', '2019')
+trade_mth = '1'
+trade_day = '15'
+trade_yr = '2019'
+descr = 'Franklin Templeton: Switch-Out: TML 694'
+notes = 'TML 694 balance = 12.3416'
+transfer
+gtx guid = '61804f18ac99f87a12c6750ef4b4d869'
+gtx date = '1547549940'
+Mode = 'PROD': Commit transaction changes.
+
+ast_acct_name = 'TML 180'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'TML 180'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'TML 180' 
+(u'', u'2,585', u'36')
+gross_curr = '258536'
+gross_opp = '-258536'
+(u'', u'149', u'2160')
+units = '1492160'
+('01', '15', '2019')
+trade_mth = '1'
+trade_day = '15'
+trade_yr = '2019'
+descr = 'Franklin Templeton: Switch-In: TML 180'
+notes = 'TML 180 balance = 486.2274'
+transfer
+
+ast_acct_name = 'TML 184'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'TML 184'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'TML 184' 
+(u'(', u'2,585', u'36')
+gross_curr = '-258536'
+gross_opp = '258536'
+(u'-', u'149', u'2160')
+units = '-1492160'
+('01', '15', '2019')
+trade_mth = '1'
+trade_day = '15'
+trade_yr = '2019'
+descr = 'Franklin Templeton: Switch-Out: TML 184'
+notes = 'TML 184 balance = 56.5542'
+transfer
+gtx guid = 'b5402b69f76de94657674ca66115a13d'
+gtx date = '1547549940'
+Mode = 'PROD': Commit transaction changes.
+
+ast_acct_name = 'TML 518'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'TML 518'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'TML 518' 
+(u'(', u'2,771', u'23')
+gross_curr = '-277123'
+gross_opp = '277123'
+(u'-', u'30', u'1847')
+units = '-301847'
+('01', '15', '2019')
+trade_mth = '1'
+trade_day = '15'
+trade_yr = '2019'
+descr = 'Franklin Templeton: Switch-Out: TML 518'
+notes = 'TML 518 balance = 11.8570'
+transfer
+
+ast_acct_name = 'TML 519'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'TML 519'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'TML 519' 
+(u'(', u'3,664', u'33')
+gross_curr = '-366433'
+gross_opp = '366433'
+(u'-', u'139', u'3668')
+units = '-1393668'
+('01', '15', '2019')
+trade_mth = '1'
+trade_day = '15'
+trade_yr = '2019'
+descr = 'Franklin Templeton: Switch-Out: TML 519'
+notes = 'TML 519 balance = 53.3981'
+transfer
+gtx guid = 'c675e6c016533816a7f90a418c2a3a9b'
+gtx date = '1547549940'
+Mode = 'PROD': Commit transaction changes.
+
+ast_acct_name = 'TML 519'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'TML 519'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'TML 519' 
+(u'', u'2', u'94')
+gross_curr = '294'
+gross_opp = '-294'
+(u'', u'0', u'1101')
+units = '1101'
+('01', '30', '2019')
+trade_mth = '1'
+trade_day = '30'
+trade_yr = '2019'
+descr = 'Franklin Templeton: Reinvested:Distribution/Interest: TML 519'
+notes = 'TML 519 balance = 53.5082'
+gtx guid = 'dd5d3d03c8aae65f5e7c1350f30210c3'
+gtx date = '1548845940'
+Mode = 'PROD': Commit transaction changes.
+
+ast_acct_name = 'TML 202'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'TML 202'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'TML 202' 
+(u'', u'2,771', u'23')
+gross_curr = '277123'
+gross_opp = '-277123'
+(u'', u'30', u'1847')
+units = '301847'
+('01', '15', '2019')
+trade_mth = '1'
+trade_day = '15'
+trade_yr = '2019'
+descr = 'Franklin Templeton: Switch-In: TML 202'
+notes = 'TML 202 balance = 99.5165'
+transfer
+gtx guid = 'ec4227d5116b269725e18f123828e2bf'
+gtx date = '1547549940'
+Mode = 'PROD': Commit transaction changes.
+
+ast_acct_name = 'TML 674'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'TML 674'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'TML 674' 
+(u'', u'5', u'11')
+gross_curr = '511'
+gross_opp = '-511'
+(u'', u'0', u'6059')
+units = '6059'
+('01', '30', '2019')
+trade_mth = '1'
+trade_day = '30'
+trade_yr = '2019'
+descr = 'Franklin Templeton: Reinvested:Distribution/Interest: TML 674'
+notes = 'TML 674 balance = 320.0029'
+gtx guid = '966f105f689b4a2953825898a38f5840'
+gtx date = '1548845940'
+Mode = 'PROD': Commit transaction changes.
+
+ast_acct_name = 'TML 704'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'TML 704'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'TML 704' 
+(u'', u'8', u'16')
+gross_curr = '816'
+gross_opp = '-816'
+(u'', u'0', u'9676')
+units = '9676'
+('01', '30', '2019')
+trade_mth = '1'
+trade_day = '30'
+trade_yr = '2019'
+descr = 'Franklin Templeton: Reinvested:Distribution/Interest: TML 704'
+notes = 'TML 704 balance = 510.8813'
+gtx guid = '5e6122b81cb53b02da68b42fc2b38adc'
+gtx date = '1548845940'
+Mode = 'PROD': Commit transaction changes.
+
+
+
+Plan type = 'RRSP'
+rev_path = '['REV', 'REV_Invest', 'Dist', 'RRSP', 'Mark']'
+rev_acct = 'Mark'
+ast_parent_path = '['FAMILY', 'INVEST', 'RRSP', 'Mark']'
+ast_parent = 'Mark'
+ast_acct_name = 'MFC 6130'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'MFC 6130'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'MFC 6130' 
+(u'', u'793', u'62')
+gross_curr = '79362'
+gross_opp = '-79362'
+(u'', u'88', u'8880')
+units = '888880'
+('01', '03', '2019')
+trade_mth = '1'
+trade_day = '3'
+trade_yr = '2019'
+descr = 'Mackenzie Financial Corp: Switch-In: MFC 6130'
+notes = 'MFC 6130 balance = 1343.1800'
+transfer
+
+ast_acct_name = 'MFC 6130'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'MFC 6130'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'MFC 6130' 
+(u'', u'41', u'24')
+gross_curr = '4124'
+gross_opp = '-4124'
+(u'', u'4', u'5340')
+units = '45340'
+('01', '18', '2019')
+trade_mth = '1'
+trade_day = '18'
+trade_yr = '2019'
+descr = 'Mackenzie Financial Corp: Reinvested:Distribution/Interest: MFC 6130'
+notes = 'MFC 6130 balance = 1347.7140'
+gtx guid = '42fa43448913a0d305dc74d05317af4a'
+gtx date = '1547809140'
+Mode = 'PROD': Commit transaction changes.
+
+ast_acct_name = 'MFC 3232'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'MFC 3232'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'MFC 3232' 
+(u'(', u'1,873', u'20')
+gross_curr = '-187320'
+gross_opp = '187320'
+(u'-', u'229', u'3620')
+units = '-2293620'
+('01', '03', '2019')
+trade_mth = '1'
+trade_day = '3'
+trade_yr = '2019'
+descr = 'Mackenzie Financial Corp: Switch-Out: MFC 3232'
+notes = 'MFC 3232 balance = 2048.2250'
+transfer
+
+ast_acct_name = 'MFC 3232'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'MFC 3232'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'MFC 3232' 
+(u'', u'70', u'25')
+gross_curr = '7025'
+gross_opp = '-7025'
+(u'', u'8', u'3160')
+units = '83160'
+('01', '18', '2019')
+trade_mth = '1'
+trade_day = '18'
+trade_yr = '2019'
+descr = 'Mackenzie Financial Corp: Reinvested:Distribution/Interest: MFC 3232'
+notes = 'MFC 3232 balance = 2056.5410'
+gtx guid = '81b000f82949bcfa162d271c690206dd'
+gtx date = '1547809140'
+Mode = 'PROD': Commit transaction changes.
+
+ast_acct_name = 'MFC 6138'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'MFC 6138'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'MFC 6138' 
+(u'', u'1,873', u'20')
+gross_curr = '187320'
+gross_opp = '-187320'
+(u'', u'141', u'9260')
+units = '1419260'
+('01', '03', '2019')
+trade_mth = '1'
+trade_day = '3'
+trade_yr = '2019'
+descr = 'Mackenzie Financial Corp: Switch-In: MFC 6138'
+notes = 'MFC 6138 balance = 2017.3420'
+transfer
+gtx guid = '75affcfca3bc2230739c831f35321b07'
+gtx date = '1546513140'
+Mode = 'PROD': Commit transaction changes.
+
+ast_acct_name = 'MFC 6138'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'MFC 6138'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'MFC 6138' 
+(u'', u'111', u'76')
+gross_curr = '11176'
+gross_opp = '-11176'
+(u'', u'8', u'1860')
+units = '81860'
+('01', '18', '2019')
+trade_mth = '1'
+trade_day = '18'
+trade_yr = '2019'
+descr = 'Mackenzie Financial Corp: Reinvested:Distribution/Interest: MFC 6138'
+notes = 'MFC 6138 balance = 2025.5280'
+gtx guid = '2b99735a10bf11fdb3b475ae2a371edd'
+gtx date = '1547809140'
+Mode = 'PROD': Commit transaction changes.
+
+ast_acct_name = 'MFC 302'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'MFC 302'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'MFC 302' 
+(u'(', u'1,148', u'15')
+gross_curr = '-114815'
+gross_opp = '114815'
+(u'-', u'84', u'1460')
+units = '-841460'
+('01', '03', '2019')
+trade_mth = '1'
+trade_day = '3'
+trade_yr = '2019'
+descr = 'Mackenzie Financial Corp: Switch-Out: MFC 302'
+notes = 'MFC 302 balance = 764.3020'
+transfer
+
+ast_acct_name = 'MFC 302'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'MFC 302'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'MFC 302' 
+(u'', u'10', u'47')
+gross_curr = '1047'
+gross_opp = '-1047'
+(u'', u'0', u'7740')
+units = '7740'
+('01', '18', '2019')
+trade_mth = '1'
+trade_day = '18'
+trade_yr = '2019'
+descr = 'Mackenzie Financial Corp: Reinvested:Distribution/Interest: MFC 302'
+notes = 'MFC 302 balance = 765.0760'
+gtx guid = '6f3acc967e363a6c1f9415eb1e1a3d20'
+gtx date = '1547809140'
+Mode = 'PROD': Commit transaction changes.
+
+ast_acct_name = 'MFC 6129'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'MFC 6129'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'MFC 6129' 
+(u'', u'1,148', u'15')
+gross_curr = '114815'
+gross_opp = '-114815'
+(u'', u'111', u'3470')
+units = '1113470'
+('01', '03', '2019')
+trade_mth = '1'
+trade_day = '3'
+trade_yr = '2019'
+descr = 'Mackenzie Financial Corp: Switch-In: MFC 6129'
+notes = 'MFC 6129 balance = 1504.7560'
+transfer
+gtx guid = '7b74e7e0331ee2d97afd2ffb6ee7ca19'
+gtx date = '1546513140'
+Mode = 'PROD': Commit transaction changes.
+
+ast_acct_name = 'MFC 6129'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'MFC 6129'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'MFC 6129' 
+(u'', u'20', u'62')
+gross_curr = '2062'
+gross_opp = '-2062'
+(u'', u'2', u'0170')
+units = '20170'
+('01', '18', '2019')
+trade_mth = '1'
+trade_day = '18'
+trade_yr = '2019'
+descr = 'Mackenzie Financial Corp: Reinvested:Distribution/Interest: MFC 6129'
+notes = 'MFC 6129 balance = 1506.7730'
+gtx guid = '2150c7945c9f08c7d5f06e945aa431a4'
+gtx date = '1547809140'
+Mode = 'PROD': Commit transaction changes.
+
+ast_acct_name = 'MFC 856'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'MFC 856'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'MFC 856' 
+(u'(', u'793', u'62')
+gross_curr = '-79362'
+gross_opp = '79362'
+(u'-', u'192', u'5790')
+units = '-1925790'
+('01', '03', '2019')
+trade_mth = '1'
+trade_day = '3'
+trade_yr = '2019'
+descr = 'Mackenzie Financial Corp: Switch-Out: MFC 856'
+notes = 'MFC 856 balance = 1732.8460'
+transfer
+gtx guid = '760c57f56ee345955b6066073888a62d'
+gtx date = '1546513140'
+Mode = 'PROD': Commit transaction changes.
+
+ast_acct_name = 'MFC 856'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'MFC 856'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'MFC 856' 
+(u'', u'22', u'53')
+gross_curr = '2253'
+gross_opp = '-2253'
+(u'', u'5', u'3650')
+units = '53650'
+('01', '18', '2019')
+trade_mth = '1'
+trade_day = '18'
+trade_yr = '2019'
+descr = 'Mackenzie Financial Corp: Reinvested:Distribution/Interest: MFC 856'
+notes = 'MFC 856 balance = 1738.2110'
+gtx guid = 'd6d0a94a979a66ab1f923a2fba646c30'
+gtx date = '1547809140'
+Mode = 'PROD': Commit transaction changes.
+
+ast_acct_name = 'DYN 029'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'DYN 029'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'DYN 029' 
+(u'', u'5,441', u'42')
+gross_curr = '544142'
+gross_opp = '-544142'
+(u'', u'270', u'9873')
+units = '2709873'
+('01', '15', '2019')
+trade_mth = '1'
+trade_day = '15'
+trade_yr = '2019'
+descr = 'Dynamic Funds: Switch-In: DYN 029'
+notes = 'DYN 029 balance = 881.0529'
+transfer
+
+ast_acct_name = 'DYN 029'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'DYN 029'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'DYN 029' 
+(u'', u'61', u'67')
+gross_curr = '6167'
+gross_opp = '-6167'
+(u'', u'3', u'0364')
+units = '30364'
+('01', '25', '2019')
+trade_mth = '1'
+trade_day = '25'
+trade_yr = '2019'
+descr = 'Dynamic Funds: Reinvested:Distribution/Interest: DYN 029'
+notes = 'DYN 029 balance = 884.0893'
+gtx guid = '85b72f7074ad30a707b171b32cd77d0e'
+gtx date = '1548413940'
+Mode = 'PROD': Commit transaction changes.
+
+ast_acct_name = 'DYN 729'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'DYN 729'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'DYN 729' 
+(u'(', u'5,441', u'42')
+gross_curr = '-544142'
+gross_opp = '544142'
+(u'-', u'270', u'9873')
+units = '-2709873'
+('01', '15', '2019')
+trade_mth = '1'
+trade_day = '15'
+trade_yr = '2019'
+descr = 'Dynamic Funds: Switch-Out: DYN 729'
+notes = 'DYN 729 balance = 178.7506'
+transfer
+gtx guid = '8e661fcbf525151652d2046da2aa637d'
+gtx date = '1547549940'
+Mode = 'PROD': Commit transaction changes.
+
+ast_acct_name = 'DYN 729'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'DYN 729'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'DYN 729' 
+(u'', u'12', u'51')
+gross_curr = '1251'
+gross_opp = '-1251'
+(u'', u'0', u'6160')
+units = '6160'
+('01', '25', '2019')
+trade_mth = '1'
+trade_day = '25'
+trade_yr = '2019'
+descr = 'Dynamic Funds: Reinvested:Distribution/Interest: DYN 729'
+notes = 'DYN 729 balance = 179.3666'
+gtx guid = '1014d54a8a210b1caa2f3d87f0c0e6de'
+gtx date = '1548413940'
+Mode = 'PROD': Commit transaction changes.
+
+ast_acct_name = 'DYN 1562'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'DYN 1562'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'DYN 1562' 
+(u'(', u'4,724', u'43')
+gross_curr = '-472443'
+gross_opp = '472443'
+(u'-', u'357', u'9112')
+units = '-3579112'
+('01', '15', '2019')
+trade_mth = '1'
+trade_day = '15'
+trade_yr = '2019'
+descr = 'Dynamic Funds: Switch-Out: DYN 1562'
+notes = 'DYN 1562 balance = 247.2526'
+transfer
+
+ast_acct_name = 'DYN 1562'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'DYN 1562'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'DYN 1562' 
+(u'', u'14', u'44')
+gross_curr = '1444'
+gross_opp = '-1444'
+(u'', u'1', u'0915')
+units = '10915'
+('01', '25', '2019')
+trade_mth = '1'
+trade_day = '25'
+trade_yr = '2019'
+descr = 'Dynamic Funds: Reinvested:Distribution/Interest: DYN 1562'
+notes = 'DYN 1562 balance = 248.3441'
+gtx guid = '9597e49b8c311ecfc2cf14f3883cd6e9'
+gtx date = '1548413940'
+Mode = 'PROD': Commit transaction changes.
+
+ast_acct_name = 'TML 1018'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'TML 1018'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'TML 1018' 
+(u'(', u'4,832', u'36')
+gross_curr = '-483236'
+gross_opp = '483236'
+(u'-', u'356', u'6235')
+units = '-3566235'
+('01', '15', '2019')
+trade_mth = '1'
+trade_day = '15'
+trade_yr = '2019'
+descr = 'Franklin Templeton: Switch-Out: TML 1018'
+notes = 'TML 1018 balance = 133.8871'
+transfer
+
+ast_acct_name = 'TML 1018'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'TML 1018'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'TML 1018' 
+(u'', u'4', u'35')
+gross_curr = '435'
+gross_opp = '-435'
+(u'', u'0', u'3148')
+units = '3148'
+('01', '30', '2019')
+trade_mth = '1'
+trade_day = '30'
+trade_yr = '2019'
+descr = 'Franklin Templeton: Reinvested:Distribution/Interest: TML 1018'
+notes = 'TML 1018 balance = 134.2019'
+gtx guid = '4f8533714f72f0f0ef5be0aafc763bbb'
+gtx date = '1548845940'
+Mode = 'PROD': Commit transaction changes.
+
+ast_acct_name = 'TML 1017'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'TML 1017'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'TML 1017' 
+(u'', u'4,832', u'36')
+gross_curr = '483236'
+gross_opp = '-483236'
+(u'', u'356', u'6235')
+units = '3566235'
+('01', '15', '2019')
+trade_mth = '1'
+trade_day = '15'
+trade_yr = '2019'
+descr = 'Franklin Templeton: Switch-In: TML 1017'
+notes = 'TML 1017 balance = 547.8421'
+transfer
+gtx guid = '4d23939f852865dff7fd8fbd6986d180'
+gtx date = '1547549940'
+Mode = 'PROD': Commit transaction changes.
+
+ast_acct_name = 'TML 1017'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'TML 1017'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'TML 1017' 
+(u'', u'17', u'80')
+gross_curr = '1780'
+gross_opp = '-1780'
+(u'', u'1', u'2880')
+units = '12880'
+('01', '30', '2019')
+trade_mth = '1'
+trade_day = '30'
+trade_yr = '2019'
+descr = 'Franklin Templeton: Reinvested:Distribution/Interest: TML 1017'
+notes = 'TML 1017 balance = 549.1301'
+gtx guid = 'eb438d10ec2ecb44c065381cab491b8b'
+gtx date = '1548845940'
+Mode = 'PROD': Commit transaction changes.
+
+ast_acct_name = 'DYN 1560'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'DYN 1560'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'DYN 1560' 
+(u'', u'4,724', u'43')
+gross_curr = '472443'
+gross_opp = '-472443'
+(u'', u'357', u'9112')
+units = '3579112'
+('01', '15', '2019')
+trade_mth = '1'
+trade_day = '15'
+trade_yr = '2019'
+descr = 'Dynamic Funds: Switch-In: DYN 1560'
+notes = 'DYN 1560 balance = 1242.5283'
+transfer
+gtx guid = '08c07374631ff1360e169aeefbdaee2a'
+gtx date = '1547549940'
+Mode = 'PROD': Commit transaction changes.
+
+ast_acct_name = 'DYN 1560'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'DYN 1560'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'DYN 1560' 
+(u'', u'72', u'56')
+gross_curr = '7256'
+gross_opp = '-7256'
+(u'', u'5', u'4845')
+units = '54845'
+('01', '25', '2019')
+trade_mth = '1'
+trade_day = '25'
+trade_yr = '2019'
+descr = 'Dynamic Funds: Reinvested:Distribution/Interest: DYN 1560'
+notes = 'DYN 1560 balance = 1248.0128'
+gtx guid = '9396caaad17c4469c923b53bf7ca3364'
+gtx date = '1548413940'
+Mode = 'PROD': Commit transaction changes.
+
+ast_acct_name = 'MMF 4524'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'MMF 4524'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'MMF 4524' 
+(u'', u'2,317', u'93')
+gross_curr = '231793'
+gross_opp = '-231793'
+(u'', u'255', u'7570')
+units = '2557570'
+('01', '22', '2019')
+trade_mth = '1'
+trade_day = '22'
+trade_yr = '2019'
+descr = 'Manulife Mutual Funds: Switch-In: MMF 4524'
+notes = 'MMF 4524 balance = 3724.2570'
+transfer
+
+ast_acct_name = 'MMF 4524'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'MMF 4524'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'MMF 4524' 
+(u'', u'186', u'21')
+gross_curr = '18621'
+gross_opp = '-18621'
+(u'', u'20', u'5900')
+units = '205900'
+('01', '25', '2019')
+trade_mth = '1'
+trade_day = '25'
+trade_yr = '2019'
+descr = 'Manulife Mutual Funds: Reinvested:Distribution/Interest: MMF 4524'
+notes = 'MMF 4524 balance = 3744.8470'
+gtx guid = '35c06be0c0736d1b7de34fea5d99e8a8'
+gtx date = '1548413940'
+Mode = 'PROD': Commit transaction changes.
+
+ast_acct_name = 'MMF 44424'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'MMF 44424'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'MMF 44424' 
+(u'(', u'2,317', u'93')
+gross_curr = '-231793'
+gross_opp = '231793'
+(u'-', u'255', u'7570')
+units = '-2557570'
+('01', '22', '2019')
+trade_mth = '1'
+trade_day = '22'
+trade_yr = '2019'
+descr = 'Manulife Mutual Funds: Switch-Out: MMF 44424'
+notes = 'MMF 44424 balance = 324.3860'
+transfer
+gtx guid = '7e26179906ea68738d28ac008ba92589'
+gtx date = '1548154740'
+Mode = 'PROD': Commit transaction changes.
+
+ast_acct_name = 'MMF 44424'
+type(ast_acct_name) = '<type 'unicode'>'
+ast_acct_str = 'MMF 44424'
+type(ast_acct_str) = '<type 'str'>'
+[createGnucashTxs.py@144]: 
+ ast_acct = 'MMF 44424' 
+(u'', u'16', u'22')
+gross_curr = '1622'
+gross_opp = '-1622'
+(u'', u'1', u'7940')
+units = '17940'
+('01', '25', '2019')
+trade_mth = '1'
+trade_day = '25'
+trade_yr = '2019'
+descr = 'Manulife Mutual Funds: Reinvested:Distribution/Interest: MMF 44424'
+notes = 'MMF 44424 balance = 326.1800'
+gtx guid = '7ee2fb1f3f39c545bce2115238ae5967'
+gtx date = '1548413940'
+Mode = 'PROD': Commit transaction changes.
+
+[createGnucashTxs.py@315]: Mode = 'PROD': Save session. 
+[createGnucashTxs.py@383]: 
+ >>> PROGRAM ENDED. 
