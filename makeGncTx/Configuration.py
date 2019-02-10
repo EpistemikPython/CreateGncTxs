@@ -43,7 +43,7 @@ def print_info(text, color=WHITE, inspector=True, newline=True):
         inspector = False
         newline = True
     print( "\x1b[" + color + "m" +
-           ( ("[" + inspect.getfile(inspect.currentframe().f_back).split("\\")[-1] + "@" +
+           ( ("[" + inspect.getfile(inspect.currentframe().f_back).split('/')[-1] + "@" +
              str(inspect.currentframe().f_back.f_lineno) + "]: ") if inspector else " ") +
            text + "\x1b[0m ", end=('\n' if newline else '') )
 
@@ -53,7 +53,7 @@ def print_error(text, newline=True):
     Print Error information in RED
     """
     print( ("\x1b[" + RED + "m") +
-           ("[" + inspect.getfile(inspect.currentframe().f_back).split("\\")[-1] + "@" +
+           ("[" + inspect.getfile(inspect.currentframe().f_back).split('/')[-1] + "@" +
             str(inspect.currentframe().f_back.f_lineno) + "]: ") +
            text + "\x1b[0m ", end=('\n' if newline else '') )
 
@@ -216,7 +216,7 @@ FILL_CURR_TX = 401
 
 # file paths
 GNC_FOLDER = "/home/marksa/dev/git/Python/Gnucash/gncFiles"
-PRAC1_GNC  = GNC_FOLDER + "practice1.gnc"
-PRAC2_GNC  = GNC_FOLDER + "practice2.gnc"
-PRAC3_GNC  = GNC_FOLDER + "practice3.gnc"
-PRAC4_GNC  = GNC_FOLDER + "practice4.gnc"
+TEST1_GNC  = GNC_FOLDER + "test1.gnc"
+TEST2_GNC  = GNC_FOLDER + "test2.gnc"
+TEST3_GNC  = GNC_FOLDER + "test3.gnc"
+TEST4_GNC  = GNC_FOLDER + "test4.gnc"
