@@ -56,7 +56,7 @@ def show_account(root, path):
             print("{}".format(subAcct.GetName()))
 
 
-# noinspection PyUnresolvedReferences
+# noinspection PyUnresolvedReferences,PyPep8,PyPep8,PyPep8,PyPep8,PyPep8,PyPep8,PyPep8,PyPep8,PyPep8,PyPep8,PyPep8,PyPep8
 def create_gnc_txs(tx_colxn, gnc_file, mode):
     """
     Take the information from a transaction collection and produce Gnucash transactions to write to a Gnucash file
@@ -269,23 +269,22 @@ def create_gnc_txs(tx_colxn, gnc_file, mode):
 
             # ROLL BACK if something went wrong and the two splits DO NOT balance
             if not gtx.GetImbalanceValue().zero_p():
-                print("gtx imbalance = '{}'!! Roll back transaction changes!".format(gtx.GetImbalanceValue().to_string()))
+                print("gtx Imbalance = '{}'!! Roll back transaction changes!".format(gtx.GetImbalanceValue().to_string()))
                 gtx.RollbackEdit()
                 return
 
             if mode == "PROD":
                 print("Mode = '{}': Commit transaction changes.\n".format(mode))
                 gtx.CommitEdit()
-                session.save()
+                # NO >> session.save()
             else:
                 print("Mode = '{}': Roll back transaction changes!\n".format(mode))
                 gtx.RollbackEdit()
 
         except Exception as ie:
-            print_error("createGncTx() EXCEPTION!! '{}'\n".format(str(ie)))
+            print_error("create_gnc_tx() EXCEPTION!! '{}'\n".format(str(ie)))
     # end INNER create_gnc_tx()
 
-    # gnc_file = PRAC2_GNC
     print("\ngncFile = '{}'".format(gnc_file))
 
     try:
@@ -296,8 +295,9 @@ def create_gnc_txs(tx_colxn, gnc_file, mode):
         root.get_instance()
 
         commod_tab = book.get_table()
-        session.save()  # really needed?
+        # session.save()  # really needed?
 
+        # noinspection PyPep8Naming
         CAD = commod_tab.lookup("ISO4217", "CAD")
 
         # EXPERIMENT
@@ -313,6 +313,7 @@ def create_gnc_txs(tx_colxn, gnc_file, mode):
 
             if mode == "PROD":
                 print_info("Mode = '{}': Save session.".format(mode), color=GREEN)
+                # only ONE session save for the entire run
                 session.save()
 
         else:
@@ -339,17 +340,19 @@ def create_gnc_txs(tx_colxn, gnc_file, mode):
             show_account(root, ast_path)
 
         session.end()
+        session.destroy()
 
     except Exception as e:
         print_error("create_gnc_txs() EXCEPTION!! '{}'".format(str(e)))
-        if "session" in locals():
-            session.end()
+        if "session" in locals() and session is not None:
+                session.end()
+                session.destroy()
         raise
 # end create_gnc_txs()
 
 
 def create_gnc_txs_main():
-    usage = "usage: python {0} <monarch json file> <gnucash file> <mode: prod|test>".format(argv[0])
+    usage = "usage: python {0} <monarch json file> <gnucash file> <mode: prod|test>".format(argv[0].split('/')[-1])
     if len(argv) < 4:
         print_error("NOT ENOUGH parameters!")
         print_info(usage, color=YELLOW)
@@ -364,7 +367,7 @@ def create_gnc_txs_main():
     # get Monarch transactions from the Monarch json file
     with open(mon_file, 'r') as fp:
         # PROBLEM: with Python2, the text in the tx_collxn will be <type unicode> instead of <type string>
-        # and cause an exception if passed to any of the gnucash functions expecting a <const char*>
+        # and cause an exception if passed to any of the C++ gnucash functions expecting a <const char*>
         # -- easiest solution seems to be to just cast any of this text to str() on definition...
         tx_collxn = json.load(fp)
 
