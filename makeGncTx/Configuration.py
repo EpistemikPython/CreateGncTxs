@@ -24,38 +24,43 @@ __updated__ = "2019-01-11 15:44"
 
 import inspect
 
-BLACK   = '30'
-RED     = '91'
-GREEN   = '92'
-YELLOW  = '93'
-BLUE    = '94'
-MAGENTA = '95'
-CYAN    = '96'
-WHITE   = '97'
+COLOR_FLAG = '\x1b['
+BLACK   = COLOR_FLAG + '30m'
+RED     = COLOR_FLAG + '91m'
+GREEN   = COLOR_FLAG + '92m'
+YELLOW  = COLOR_FLAG + '93m'
+BLUE    = COLOR_FLAG + '94m'
+MAGENTA = COLOR_FLAG + '95m'
+CYAN    = COLOR_FLAG + '96m'
+WHITE   = COLOR_FLAG + '97m'
+COLOR_OFF = COLOR_FLAG + '0m'
 
 
-def print_info(text, color=WHITE, inspector=True, newline=True):
+def print_info(text, color='', inspector=True, newline=True):
     """
     Print information with choices of color, inspection info, newline
     """
+    inspect_line = ''
     if text is None:
         text = "================================================================================================================="
         inspector = False
-        newline = True
-    print( "\x1b[" + color + "m" +
-           ( ("[" + inspect.getfile(inspect.currentframe().f_back).split('/')[-1] + "@" +
-             str(inspect.currentframe().f_back.f_lineno) + "]: ") if inspector else " ") +
-           text + "\x1b[0m ", end=('\n' if newline else '') )
+    if inspector:
+        calling_frame = inspect.currentframe().f_back
+        calling_file  = inspect.getfile(calling_frame).split('/')[-1]
+        calling_line  = str(inspect.getlineno(calling_frame))
+        inspect_line  = "[" + calling_file + "@" + calling_line + "]: "
+    print(inspect_line + color + text + COLOR_OFF, end=('\n' if newline else ''))
 
 
 def print_error(text, newline=True):
     """
-    Print Error information in RED
+    Print Error information in RED with inspection info
     """
-    print( ("\x1b[" + RED + "m") +
-           ("[" + inspect.getfile(inspect.currentframe().f_back).split('/')[-1] + "@" +
-            str(inspect.currentframe().f_back.f_lineno) + "]: ") +
-           text + "\x1b[0m ", end=('\n' if newline else '') )
+    calling_frame = inspect.currentframe().f_back
+    calling_file = inspect.getfile(calling_frame).split('/')[-1]
+    calling_line = str(inspect.getlineno(calling_frame))
+    inspect_line = "[" + calling_file + "@" + calling_line + "]: "
+    print(RED + inspect_line + text + COLOR_OFF, end=('\n' if newline else ''))
 
 
 CLIENT_TX = "CLIENT TRANSACTIONS"
@@ -208,11 +213,11 @@ ACCT_PATHS = {
 }
 
 # parsing states
-STATE_SEARCH = 1
-FIND_OWNER   = 101
-FIND_FUND    = 201
-FIND_NEXT_TX = 301
-FILL_CURR_TX = 401
+STATE_SEARCH = 0x0001
+FIND_OWNER   = 0x0002
+FIND_FUND    = 0x0004
+FIND_NEXT_TX = 0x0008
+FILL_CURR_TX = 0x0010
 
 # file paths
 GNC_FOLDER = "/home/marksa/dev/git/Python/Gnucash/gncFiles"
