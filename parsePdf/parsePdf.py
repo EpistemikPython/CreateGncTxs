@@ -1,24 +1,16 @@
-#!/usr/bin/env python
-
+#
 # parsePdf.py -- parse a PDF file and recover the text
 #
-# Copyright (c) 2018, 2019 Mark Sattolo <epistemik@gmail.com>
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License as
-# published by the Free Software Foundation; either version 2 of
-# the License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# Copyright (c) 2018,2019 Mark Sattolo <epistemik@gmail.com>
 #
 # @author Mark Sattolo <epistemik@gmail.com>
+# @revised 2019-03-02
+#
+
 
 from __future__ import print_function
 
-__updated__ = "2019-01-26 08:57"
+__updated__ = "2019-03-02 06:39"
 
 from sys import argv, exit
 import os.path as osp
@@ -49,9 +41,9 @@ def get_all_pages(pdf_reader, fp):
 
 
 def parse_pdf_main():
-    print("len(argv) = {0}".format(len(argv)))
+    print("len(argv) = {}".format(len(argv)))
     if len(argv) < 2:
-        print("Usage: python '{}' <reportPath> [page_num]".format(argv[0]))
+        print("Usage: python {} <pdf_input_path> [page_num]".format(argv[0].split('/')[-1]))
         exit()
 
     monarch = argv[1]
