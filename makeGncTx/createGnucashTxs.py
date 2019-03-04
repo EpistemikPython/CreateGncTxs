@@ -1,23 +1,16 @@
+#
 # createGnucashTxs.py -- parse a Monarch record, possibly from a json file,
 #                        create Gnucash transactions from the data
 #                        and write to a Gnucash file
 #
-# Copyright (c) 2018, 2019 Mark Sattolo <epistemik@gmail.com>
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License as
-# published by the Free Software Foundation; either version 2 of
-# the License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# Copyright (c) 2018,2019 Mark Sattolo <epistemik@gmail.com>
 #
 # @author Mark Sattolo <epistemik@gmail.com>
+# @revised 2019-03-02
+#
 
 __created__ = "2018-12-02 07:13"
-__updated__ = "2019-01-11 12:55"
+__updated__ = "2019-03-02 09:36"
 
 from sys import argv, exit
 import os.path as osp
@@ -46,17 +39,17 @@ def account_from_path(top_account, account_path, original_path=None):
 def show_account(root, path):
     acct = account_from_path(root, path)
     acct_name = acct.GetName()
-    print("account = " + acct_name)
+    print_info("account = " + acct_name)
     descendants = acct.get_descendants()
     if len(descendants) == 0:
-        print("{} has NO Descendants!".format(acct_name))
+        print_info("{} has NO Descendants!".format(acct_name))
     else:
-        print("Descendants of {}:".format(acct_name))
+        print_info("Descendants of {}:".format(acct_name))
         for subAcct in descendants:
-            print("{}".format(subAcct.GetName()))
+            print_info("{}".format(subAcct.GetName()))
 
 
-# noinspection PyUnresolvedReferences,PyPep8,PyPep8,PyPep8,PyPep8,PyPep8,PyPep8,PyPep8,PyPep8,PyPep8,PyPep8,PyPep8,PyPep8
+# noinspection PyUnresolvedReferences,PyPep8
 def create_gnc_txs(tx_colxn, gnc_file, mode):
     """
     Take the information from a transaction collection and produce Gnucash transactions to write to a Gnucash file
@@ -70,12 +63,12 @@ def create_gnc_txs(tx_colxn, gnc_file, mode):
 
     # noinspection PyShadowingNames
     def prepare_accounts(plan_type):
-        print("\n\nPlan type = '{}'".format(plan_type))
+        print_info("\n\nPlan type = '{}'".format(plan_type))
 
         rev_path = copy.copy(ACCT_PATHS[REVENUE])
-        # print("rev_path = '{}'".format(str(rev_path)))
+        # print_info("rev_path = '{}'".format(str(rev_path)))
         rev_path.append(plan_type)
-        # print("rev_path = '{}'".format(str(rev_path)))
+        # print_info("rev_path = '{}'".format(str(rev_path)))
         ast_parent_path = copy.copy(ACCT_PATHS[ASSET])
         ast_parent_path.append(plan_type)
 
@@ -87,13 +80,13 @@ def create_gnc_txs(tx_colxn, gnc_file, mode):
             rev_path.append(ACCT_PATHS[pl_owner])
             ast_parent_path.append(ACCT_PATHS[pl_owner])
 
-        print("rev_path = '{}'".format(str(rev_path)))
+        print_info("rev_path = '{}'".format(str(rev_path)))
         rev_acct = account_from_path(root, rev_path)
-        print("rev_acct = '{}'".format(rev_acct.GetName()))
+        print_info("rev_acct = '{}'".format(rev_acct.GetName()))
 
-        print("ast_parent_path = '{}'".format(str(ast_parent_path)))
+        print_info("ast_parent_path = '{}'".format(str(ast_parent_path)))
         ast_parent = account_from_path(root, ast_parent_path)
-        print("ast_parent = '{}'".format(ast_parent.GetName()))
+        print_info("ast_parent = '{}'".format(ast_parent.GetName()))
 
         for mtx in tx_colxn[plan_type]:
             create_gnc_tx(mtx, plan_type, rev_acct, ast_parent)
@@ -116,6 +109,7 @@ def create_gnc_txs(tx_colxn, gnc_file, mode):
             fund_company = str(mtx[FUND_CMPY])
             desc = str(mtx[DESC])
             trade_date = str(mtx[TRADE_DATE])
+            gross_value = str(mtx[GROSS])
 
             # check if we have a switch/transfer
             if re.match(re_switch, desc) or re.match(re_intrf, desc):
@@ -123,79 +117,81 @@ def create_gnc_txs(tx_colxn, gnc_file, mode):
 
             # get the asset account name
             ast_acct_name = fund_company + " " + mtx[FUND_CODE]
-            print("ast_acct_name = '{}'".format(ast_acct_name))
-            print("type(ast_acct_name) = '{}'".format(type(ast_acct_name)))
+            print_info("ast_acct_name = '{}'".format(ast_acct_name))
+            print_info("type(ast_acct_name) = '{}'".format(type(ast_acct_name)))
             ast_acct_str = str(ast_acct_name)
-            print("ast_acct_str = '{}'".format(ast_acct_str))
-            print("type(ast_acct_str) = '{}'".format(type(ast_acct_str)))
+            print_info("ast_acct_str = '{}'".format(ast_acct_str))
+            print_info("type(ast_acct_str) = '{}'".format(type(ast_acct_str)))
 
             # special locations for Trust Revenue and Asset accounts
             if ast_acct_name == TRUST_AST_ACCT:
                 ast_parent = root.lookup_by_name(TRUST)
-                print("\n ast_parent = '{}'".format(ast_parent.GetName()))
+                print_info("ast_parent = '{}'".format(ast_parent.GetName()))
                 rev_acct = root.lookup_by_name(TRUST_REV_ACCT)
-                print("\n rev_acct = '{}'".format(rev_acct.GetName()))
+                print_info("rev_acct = '{}'".format(rev_acct.GetName()))
 
             # get the asset account
             ast_acct = ast_parent.lookup_by_name(ast_acct_str)
             if ast_acct is None:
                 raise Exception("Could NOT find acct '{}' under parent '{}'".format(ast_acct_name, ast_parent.GetName()))
             else:
-                print_info("\n ast_acct = '{}'".format(ast_acct.GetName()), color=CYAN)
+                print_info("ast_acct = '{}'".format(ast_acct.GetName()), color=CYAN)
 
             # get the dollar value of the tx
-            re_match = re.match(re_gross, mtx[GROSS])
+            print_info('flag1')
+            re_match = re.match(re_gross, gross_value)
+            print_info('flag2')
             if re_match:
-                print(re_match.groups())
+                # print(re_match.groups())
                 str_gross_curr = re_match.group(2) + re_match.group(3)
                 # remove possible comma
                 gross_curr = int(str_gross_curr.replace(',', ''))
                 # if match group 1 is not empty, amount is negative
                 if re_match.group(1) != '':
                     gross_curr *= -1
-                print("gross_curr = '{}'".format(gross_curr))
+                print_info("gross_curr = '{}'".format(gross_curr))
                 gross_opp = gross_curr * -1
-                print("gross_opp = '{}'".format(gross_opp))
+                print_info("gross_opp = '{}'".format(gross_opp))
             else:
-                raise Exception("PROBLEM!! re_gross DID NOT match with value '{}'!".format(mtx[GROSS]))
+                raise Exception("PROBLEM!! re_gross DID NOT match with value '{}'!".format(gross_value))
 
             # get the units of the tx
             re_match = re.match(re_units, mtx[UNITS])
             if re_match:
-                print(re_match.groups())
+                # print(re_match.groups())
                 units = int(re_match.group(2) + re_match.group(3))
                 # if match group 1 is not empty, units is negative
                 if re_match.group(1) != '':
                     units *= -1
-                print("units = '{}'".format(units))
+                print_info("units = '{}'".format(units))
             else:
                 raise Exception("PROBLEM!! re_units DID NOT match with value '{}'!".format(mtx[UNITS]))
 
             # get the date items
             re_match = re.match(re_date, trade_date)
             if re_match:
-                print(re_match.groups())
+                # print(re_match.groups())
                 trade_mth = int(re_match.group(1))
-                print("trade_mth = '{}'".format(trade_mth))
+                print_info("trade_mth = '{}'".format(trade_mth))
                 trade_day = int(re_match.group(2))
-                print("trade_day = '{}'".format(trade_day))
+                print_info("trade_day = '{}'".format(trade_day))
                 trade_yr = int(re_match.group(3))
-                print("trade_yr = '{}'".format(trade_yr))
+                print_info("trade_yr = '{}'".format(trade_yr))
             else:
                 raise Exception("PROBLEM!! reTRADE_DATE DID NOT match with value '{}'!".format(trade_date))
 
             # assemble the Description string
             descr = str(COMPANY_NAME[fund_company] + ": " + desc + " " + ast_acct_name)
-            print("descr = '{}'".format(descr))
+            print_info("descr = '{}'".format(descr))
 
             # notes field
             notes = str(ast_acct_name + " balance = " + mtx[UNIT_BAL])
-            print("notes = '{}'".format(notes))
+            print_info("notes = '{}'".format(notes))
 
             # check the type of tx -- a Distribution OR the first or second item of a switch/transfer pair
             have_pair = False
             if transfer:
-                print("transfer")
+                print_info("transfer")
                 # look for switches in same plan type, company, date and opposite gross value
                 for itx in gnc_collection[plan_type]:
                     if itx[FUND_CMPY] == fund_company and itx[TRADE_DATE] == trade_date and itx[GROSS] == gross_opp:
@@ -216,20 +212,20 @@ def create_gnc_txs(tx_colxn, gnc_file, mode):
                     pair_tx[UNITS] = units
                     # add to the record then return
                     gnc_collection[plan_type].append(pair_tx)
-                    print('')
+                    print_info('')
                     return
 
             # =================================================================================================
             # create a gnucash Tx
             gtx = Transaction(book)
             # gets a guid on construction
-            print("gtx guid = '{}'".format(gtx.GetGUID().to_string()))
+            print_info("gtx guid = '{}'".format(gtx.GetGUID().to_string()))
 
             gtx.BeginEdit()
 
             gtx.SetCurrency(CAD)
             gtx.SetDate(trade_day, trade_mth, trade_yr)
-            print("gtx date = '{}'".format(gtx.GetDate()))
+            print_info("gtx date = '{}'".format(gtx.GetDate()))
             gtx.SetDescription(descr)
 
             # create the ASSET split for the Tx
@@ -269,23 +265,23 @@ def create_gnc_txs(tx_colxn, gnc_file, mode):
 
             # ROLL BACK if something went wrong and the two splits DO NOT balance
             if not gtx.GetImbalanceValue().zero_p():
-                print("gtx Imbalance = '{}'!! Roll back transaction changes!".format(gtx.GetImbalanceValue().to_string()))
+                print_error("gtx Imbalance = '{}'!! Roll back transaction changes!".format(gtx.GetImbalanceValue().to_string()))
                 gtx.RollbackEdit()
                 return
 
             if mode == "PROD":
-                print("Mode = '{}': Commit transaction changes.\n".format(mode))
+                print_info("Mode = '{}': Commit transaction changes.\n".format(mode))
                 gtx.CommitEdit()
                 # NO >> session.save()
             else:
-                print("Mode = '{}': Roll back transaction changes!\n".format(mode))
+                print_info("Mode = '{}': Roll back transaction changes!\n".format(mode))
                 gtx.RollbackEdit()
 
         except Exception as ie:
             print_error("create_gnc_tx() EXCEPTION!! '{}'\n".format(str(ie)))
     # end INNER create_gnc_tx()
 
-    print("\ngncFile = '{}'".format(gnc_file))
+    print_info("\ngncFile = '{}'".format(gnc_file))
 
     try:
         session = Session(gnc_file)
@@ -355,13 +351,13 @@ def create_gnc_txs_main():
     usage = "usage: python {0} <monarch json file> <gnucash file> <mode: prod|test>".format(argv[0].split('/')[-1])
     if len(argv) < 4:
         print_error("NOT ENOUGH parameters!")
-        print_info(usage, color=YELLOW)
+        print_info(usage, color=MAGENTA)
         exit()
 
     mon_file = argv[1]
     if not osp.isfile(mon_file):
         print_error("File path '{}' does not exist. Exiting...".format(mon_file))
-        print_info(usage, color=YELLOW)
+        print_info(usage, color=GREEN)
         exit()
 
     # get Monarch transactions from the Monarch json file
