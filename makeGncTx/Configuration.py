@@ -1,20 +1,12 @@
-
+#
 # Configuration.py -- static defines to help parse a Monarch text file
 #                     and write the transactions to a gnucash file
 #
-# Copyright (c) 2018, 2019 Mark Sattolo <epistemik@gmail.com>
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License as
-# published by the Free Software Foundation; either version 2 of
-# the License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# Copyright (c) 2018,2019 Mark Sattolo <epistemik@gmail.com>
 #
 # @author Mark Sattolo <epistemik@gmail.com>
+# @revised 2019-03-02
+#
 
 # NEED for Python2 as its 'print' is actually NOT a function...
 from __future__ import print_function
@@ -42,13 +34,13 @@ def print_info(text, color='', inspector=True, newline=True):
     """
     inspect_line = ''
     if text is None:
-        text = "================================================================================================================="
+        text = '================================================================================================================='
         inspector = False
     if inspector:
         calling_frame = inspect.currentframe().f_back
         calling_file  = inspect.getfile(calling_frame).split('/')[-1]
         calling_line  = str(inspect.getlineno(calling_frame))
-        inspect_line  = "[" + calling_file + "@" + calling_line + "]: "
+        inspect_line  = '[' + calling_file + '@' + calling_line + ']: '
     print(inspect_line + color + text + COLOR_OFF, end=('\n' if newline else ''))
 
 
@@ -57,9 +49,11 @@ def print_error(text, newline=True):
     Print Error information in RED with inspection info
     """
     calling_frame = inspect.currentframe().f_back
+    parent_frame = calling_frame.f_back
     calling_file = inspect.getfile(calling_frame).split('/')[-1]
     calling_line = str(inspect.getlineno(calling_frame))
-    inspect_line = "[" + calling_file + "@" + calling_line + "]: "
+    parent_line = str(inspect.getlineno(parent_frame))
+    inspect_line = '[' + calling_file + '@' + calling_line + '/' + parent_line + ']: '
     print(RED + inspect_line + text + COLOR_OFF, end=('\n' if newline else ''))
 
 
@@ -205,7 +199,7 @@ INTRF_OUT = INTRF + "-" + OUT
 
 # find the proper path to the account in the gnucash file
 ACCT_PATHS = {
-    REVENUE  : ["REV", "REV_Invest", DIST] ,# + planType [+ Owner]
+    REVENUE  : ["REV_Invest", DIST] ,# + planType [+ Owner]
     ASSET    : ["FAMILY", "INVEST"] ,# + planType [+ Owner]
     MON_MARK : GNU_MARK ,
     MON_LULU : GNU_LULU ,

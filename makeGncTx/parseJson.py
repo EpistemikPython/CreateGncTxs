@@ -1,22 +1,14 @@
-
+#
 # parseJson.py -- parse a Monarch json file to a list
 #
-# Copyright (c) 2018, 2019 Mark Sattolo <epistemik@gmail.com>
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License as
-# published by the Free Software Foundation; either version 2 of
-# the License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# Copyright (c) 2018,2019 Mark Sattolo <epistemik@gmail.com>
 #
 # @author Mark Sattolo <epistemik@gmail.com>
+# @revised 2019-03-02
+#
 
 __created__ = "2019-01-03 07:59"
-__updated__ = "2019-01-11 15:55"
+__updated__ = "2019-03-02 08:07"
 
 from sys import argv, exit
 import os.path as osp
