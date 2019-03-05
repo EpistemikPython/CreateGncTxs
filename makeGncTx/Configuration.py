@@ -215,6 +215,7 @@ FILL_CURR_TX = 0x0010
 
 # file paths
 GNC_FOLDER = "/home/marksa/dev/git/Python/Gnucash/gncFiles"
+MAIN_GNC   = GNC_FOLDER + 'main.gnucash'
 TEST1_GNC  = GNC_FOLDER + "test1.gnc"
 TEST2_GNC  = GNC_FOLDER + "test2.gnc"
 TEST3_GNC  = GNC_FOLDER + "test3.gnc"

@@ -110,7 +110,7 @@ def parse_monarch_report(file_name, mode):
             ct += 1
             re_match = re.match(re_plan, line)
             if re_match:
-                print_info(re_match.groups())
+                print(re_match.groups())
                 bag_name = re_match.group(1)
                 print_info("Current bag_name is: '{}'".format(bag_name))
                 bag = tx_colxn[bag_name]
@@ -140,7 +140,7 @@ def parse_monarch_report(file_name, mode):
                 re_match = re.match(re_fund, line)
                 if re_match:
                     # print_info("FIND_FUND line {} = {}".format(ct, line.strip()))
-                    # print_info(re_match.groups())
+                    # print(re_match.groups())
                     fund_company = re_match.group(1)
                     fund_code = re_match.group(2)
                     fund_name = fund_company + " " + fund_code
@@ -152,7 +152,7 @@ def parse_monarch_report(file_name, mode):
                 re_match = re.match(re_date, line)
                 if re_match:
                     # print_info("FIND_NEXT_TX line {} = {}".format(ct, line.strip()))
-                    # print_info(re_match.groups())
+                    # print(re_match.groups())
                     tx_date = re_match.group(1)
                     print_info("\n\tCurrent tx_date is: '{}'".format(tx_date))
                     curr_tx = copy.deepcopy(Tx_Record)
