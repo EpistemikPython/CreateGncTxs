@@ -5,11 +5,9 @@
 # Copyright (c) 2018,2019 Mark Sattolo <epistemik@gmail.com>
 #
 # @author Mark Sattolo <epistemik@gmail.com>
-# @revised 2019-03-02
+# @revised 2019-03-11
+# @version Python3.6
 #
-
-__created__ = "2018-12-02 07:13"
-__updated__ = "2019-03-02 02:03"
 
 from sys import argv, exit
 import os.path as osp
@@ -41,57 +39,14 @@ def parse_monarch_report(file_name, mode):
                   line  = 'Price'        : Currency float
                   line  = 'Unit Balance' : float
     """
-    print_info("parse_monarch_report({})\n".format(file_name), color=GREEN)
-    print_info("Runtime = " + now, color=MAGENTA)
+    print_info("parse_monarch_report({})\n".format(file_name), GREEN)
+    print_info("Runtime = " + now, MAGENTA)
 
     if mode.lower() == "prod":
         tx_colxn = copy.deepcopy(Tx_Collection)
     else:
         # use a short example tx_colxn
-        tx_colxn = {OWNER: "OWNER_MARK",
-                  PL_OPEN: [
-                      {"Trade Date": "10/26/2018", "Gross": "$34.53", "Description": "Reinvested:Distribution/Interest:",
-                       "Price": "$8.9732", "Unit Balance": "694.4350", "Units": "3.8480", "Net": "$34.53",
-                       "Fund Code": "CIG 11461"},
-                      {"Trade Date": "11/23/2018", "Gross": "$34.73", "Description": "Reinvested:Distribution/Interest:",
-                       "Price": "$8.9957", "Unit Balance": "698.2960", "Units": "3.8610", "Net": "$34.73",
-                       "Fund Code": "CIG 11461"},
-                      {"Trade Date": "10/26/2018", "Gross": "$5.30", "Description": "Reinvested:Distribution/Interest:",
-                       "Price": "$8.9732", "Unit Balance": "106.6770", "Units": "0.5910", "Net": "$5.30",
-                       "Fund Code": "CIG 11111"},
-                      {"Trade Date": "11/23/2018", "Gross": "$5.33", "Description": "Reinvested:Distribution/Interest:",
-                       "Price": "$8.9957", "Unit Balance": "107.2700", "Units": "0.5930", "Net": "$5.33",
-                       "Fund Code": "CIG 11111"}
-                  ],
-                  PL_TFSA: [
-                      {"Trade Date": "10/30/2018", "Gross": "$4.93", "Description": "Reinvested:Distribution/Interest:",
-                       "Price": "$8.4422", "Unit Balance": "308.6739", "Units": "0.5840", "Net": "$4.93",
-                       "Fund Code": "TML 674"},
-                      {"Trade Date": "11/29/2018", "Gross": "$4.94", "Description": "Reinvested:Distribution/Interest:",
-                       "Price": "$8.5672", "Unit Balance": "309.2505", "Units": "0.5766", "Net": "$4.94",
-                       "Fund Code": "TML 674"},
-                      {"Trade Date": "10/30/2018", "Gross": "$7.87", "Description": "Reinvested:Distribution/Interest:",
-                       "Price": "$8.4422", "Unit Balance": "492.7939", "Units": "0.9322", "Net": "$7.87",
-                       "Fund Code": "TML 704"},
-                      {"Trade Date": "11/29/2018", "Gross": "$7.88", "Description": "Reinvested:Distribution/Interest:",
-                       "Price": "$8.5672", "Unit Balance": "493.7137", "Units": "0.9198", "Net": "$7.88",
-                       "Fund Code": "TML 704"}
-                  ],
-                  PL_RRSP: [
-                      {"Trade Date": "10/19/2018", "Gross": "$26.28", "Description": "Reinvested:Distribution/Interest:",
-                       "Price": "$4.2733", "Unit Balance": "1910.3030", "Units": "6.1490", "Net": "$26.28",
-                       "Fund Code": "MFC 856"},
-                      {"Trade Date": "11/23/2018", "Gross": "$33.43", "Description": "Reinvested:Distribution/Interest:",
-                       "Price": "$4.1890", "Unit Balance": "1918.2830", "Units": "7.9800", "Net": "$33.43",
-                       "Fund Code": "MFC 856"},
-                      {"Trade Date": "10/19/2018", "Gross": "$20.49", "Description": "Reinvested:Distribution/Interest:",
-                       "Price": "$10.1337", "Unit Balance": "1386.5420", "Units": "2.0220", "Net": "$20.49",
-                       "Fund Code": "MFC 6129"},
-                      {"Trade Date": "11/23/2018", "Gross": "$22.88", "Description": "Reinvested:Distribution/Interest:",
-                       "Price": "$10.1511", "Unit Balance": "1388.7960", "Units": "2.2540", "Net": "$22.88",
-                       "Fund Code": "MFC 6129"}
-                  ]
-                  }
+        tx_colxn = EXAMPLE_COLLECTION
 
     # re searches
     re_own  = re.compile(".*({}).*".format(OWNER))
@@ -216,8 +171,8 @@ def parse_monarch_main():
     if len(argv) < 3:
         print_error("NOT ENOUGH parameters!")
         binr = argv[0].split('/')[-1]
-        print_info("usage: python {0} <monarch file> <mode: prod|test>".format(binr), color=MAGENTA)
-        print_info("Example: {0} '{1}' 'test'".format(binr, "txtFromPdf/Monarch-Mark-all.txt"), color=GREEN)
+        print_info("usage: python {0} <monarch file> <mode: prod|test>".format(binr), MAGENTA)
+        print_info("Example: {0} '{1}' 'test'".format(binr, "txtFromPdf/Monarch-Mark-all.txt"), GREEN)
         exit()
 
     mon_file = argv[1]
@@ -230,8 +185,7 @@ def parse_monarch_main():
     # parse an external Monarch report file
     record = parse_monarch_report(mon_file, mode)
 
-    # print record as json file
-    home_dir = '/home/marksa/dev/git/Python/Gnucash/GncTxs/makeGncTx'
+    # PRINT RECORD AS JSON FILE
     # pluck path and basename from mon_file to use for the saved json file
     (ospath, fname) = osp.split(mon_file)
     # print_info("path is '{}'".format(ospath))
@@ -244,7 +198,7 @@ def parse_monarch_main():
     fp = open(out_file, 'w')
     json.dump(record, fp, indent=4)
 
-    print_info("\n >>> PROGRAM ENDED.", color=GREEN)
+    print_info("\n >>> PROGRAM ENDED.", GREEN)
 
 
 if __name__ == '__main__':

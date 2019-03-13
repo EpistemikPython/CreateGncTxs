@@ -4,11 +4,9 @@
 # Copyright (c) 2018,2019 Mark Sattolo <epistemik@gmail.com>
 #
 # @author Mark Sattolo <epistemik@gmail.com>
-# @revised 2019-03-02
+# @revised 2019-03-11
+# @version Python3.6
 #
-
-__created__ = "2019-01-03 07:59"
-__updated__ = "2019-03-02 08:07"
 
 from sys import argv, exit
 import os.path as osp
