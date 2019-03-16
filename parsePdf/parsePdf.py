@@ -5,12 +5,10 @@
 #
 # @author Mark Sattolo <epistemik@gmail.com>
 # @revised 2019-03-02
-#
+# @version Python 3.6
 
 
-from __future__ import print_function
-
-__updated__ = "2019-03-02 06:39"
+__updated__ = "2019-03-16"
 
 from sys import argv, exit
 import os.path as osp
@@ -19,7 +17,7 @@ import json
 import datetime as dt
 import PyPDF2
 
-now = dt.datetime.strftime(dt.datetime.now(), "%Y-%m-%d_%H-%M-%S")
+now = dt.datetime.strftime(dt.datetime.now(), "%Y-%m-%dT%H-%M-%S")
 
 
 # noinspection PyPep8
@@ -35,9 +33,11 @@ def get_all_pages(pdf_reader, fp):
     for i in c:
         page = pdf_reader.getPage(i)
         page_text = page.extractText()
-        page_content = page_text.encode('utf-8')
-        print(page_content)
-        fp.write(page_content)
+        # fix Python 2 to Python 3
+        # CANNOT change page text to utf-8 with Python 3 or lose newlines...
+        # page_content = page_text.encode('utf-8')
+        print(page_text)
+        fp.write(page_text)
 
 
 def parse_pdf_main():
@@ -64,7 +64,6 @@ def parse_pdf_main():
     print("number of pages = {0}".format(pdf_reader.getNumPages()))
 
     # print info as txt file
-    home_dir = '/home/marksa/dev/git/Python/Gnucash/GncTxs/parsePdf'
     # pluck path and basename from pdf file name to use for the saved file
     (path, fname) = osp.split(monarch)
     # print("path is '{}'".format(path))
