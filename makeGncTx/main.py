@@ -5,9 +5,9 @@
 # Copyright (c) 2018, 2019 Mark Sattolo <epistemik@gmail.com>
 #
 # @author Mark Sattolo <epistemik@gmail.com>
-# @revised 2019-03-11
+# @revised 2019-03-16
 # @version Python3.6
-#
+
 
 import os.path as osp
 from sys import argv, exit

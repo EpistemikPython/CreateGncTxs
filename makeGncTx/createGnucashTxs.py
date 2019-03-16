@@ -8,7 +8,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 # @revised 2019-03-11
 # @version Python3.6
-#
+
 
 from sys import argv, exit
 import os.path as osp
@@ -47,17 +47,17 @@ def show_account(root, path):
             print_info("{}".format(subAcct.GetName()))
 
 
-# noinspection PyUnresolvedReferences,PyPep8
+# noinspection PyPep8,PyUnresolvedReferences
 def create_gnc_txs(tx_colxn, gnc_file, mode):
     """
     Take the information from a transaction collection and produce Gnucash transactions to write to a Gnucash file
     """
     # set the regex values needed for matches
     re_gross  = re.compile("^(\(?)\$([0-9,]{1,6})\.([0-9]{2})\)?.*")
-    re_units  = re.compile("^(\-?)([0-9]{1,5})\.([0-9]{4}).*")
+    re_units  = re.compile("^(-?)([0-9]{1,5})\.([0-9]{4}).*")
     re_date   = re.compile("^([0-9]{2})/([0-9]{2})/([0-9]{4}).*")
-    re_switch = re.compile("^(" + SWITCH + ")\-([InOut]{2,3}).*")
-    re_intrf  = re.compile("^(" + INTRF + ")\-([InOut]{2,3}).*")
+    re_switch = re.compile("^(" + SWITCH + ")-([InOut]{2,3}).*")
+    re_intrf  = re.compile("^(" + INTRF + ")-([InOut]{2,3}).*")
 
     # noinspection PyShadowingNames
     def prepare_accounts(plan_type):
@@ -306,7 +306,7 @@ def create_gnc_txs(tx_colxn, gnc_file, mode):
             prepare_accounts(PL_RRSP)
 
             if mode == "PROD":
-                print_info("Mode = '{}': Save session.".format(mode), color=GREEN)
+                print_info("Mode = '{}': Save session.".format(mode), GREEN)
                 # only ONE session save for the entire run
                 session.save()
 
@@ -349,13 +349,13 @@ def create_gnc_txs_main():
     usage = "usage: python {0} <monarch json file> <gnucash file> <mode: prod|test>".format(argv[0].split('/')[-1])
     if len(argv) < 4:
         print_error("NOT ENOUGH parameters!")
-        print_info(usage, color=MAGENTA)
+        print_info(usage, MAGENTA)
         exit()
 
     mon_file = argv[1]
     if not osp.isfile(mon_file):
         print_error("File path '{}' does not exist. Exiting...".format(mon_file))
-        print_info(usage, color=GREEN)
+        print_info(usage, GREEN)
         exit()
 
     # get Monarch transactions from the Monarch json file
@@ -365,7 +365,7 @@ def create_gnc_txs_main():
         # -- easiest solution seems to be to just cast any of this text to str() on definition...
         tx_collxn = json.load(fp)
 
-    gnc_file = argv[2]
+    gnc_file = TEST1_GNC # argv[2]
     if not osp.isfile(gnc_file):
         print_error("File path '{}' does not exist. Exiting...".format(gnc_file))
         exit()
@@ -374,7 +374,7 @@ def create_gnc_txs_main():
 
     create_gnc_txs(tx_collxn, gnc_file, mode)
 
-    print_info("\n >>> PROGRAM ENDED.", color=MAGENTA)
+    print_info("\n >>> PROGRAM ENDED.", MAGENTA)
 
 
 if __name__ == '__main__':
