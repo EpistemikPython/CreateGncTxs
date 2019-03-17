@@ -170,9 +170,9 @@ def parse_monarch_report(file_name, mode):
 def parse_monarch_main():
     if len(argv) < 3:
         print_error("NOT ENOUGH parameters!")
-        binr = argv[0].split('/')[-1]
-        print_info("usage: python {0} <monarch file> <mode: prod|test>".format(binr), MAGENTA)
-        print_info("Example: {0} '{1}' 'test'".format(binr, "txtFromPdf/Monarch-Mark-all.txt"), GREEN)
+        exe = argv[0].split('/')[-1]
+        print_info("usage: python {0} <monarch file> <mode: prod|test>".format(exe), MAGENTA)
+        print_info("Example: {0} '{1}' 'test'".format(exe, "txtFromPdf/Monarch-Mark-all.txt"), GREEN)
         exit()
 
     mon_file = argv[1]

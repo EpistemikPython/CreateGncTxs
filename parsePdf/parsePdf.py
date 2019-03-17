@@ -41,9 +41,10 @@ def get_all_pages(pdf_reader, fp):
 
 
 def parse_pdf_main():
+    exe = argv[0].split('/')[-1]
     print("len(argv) = {}".format(len(argv)))
     if len(argv) < 2:
-        print("Usage: python {} <pdf_input_path> [page_num]".format(argv[0].split('/')[-1]))
+        print("Usage: python {} <pdf_input_path> [page_num]".format(exe))
         exit()
 
     monarch = argv[1]

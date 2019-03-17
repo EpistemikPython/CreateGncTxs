@@ -7,7 +7,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 # @revised 2019-03-11
 # @version Python3.6
-#
+
 
 import inspect
 
@@ -73,7 +73,7 @@ NET        = "Net"
 UNITS      = "Units"
 PRICE      = "Price"
 UNIT_BAL   = "Unit Balance"
-ACCT       = "Account" # in Gnucash
+ACCT       = "Account"  # in Gnucash
 NOTES      = "Notes"
 
 # Fund companies
@@ -194,8 +194,8 @@ INTRF_OUT = INTRF + "-" + OUT
 
 # find the proper path to the account in the gnucash file
 ACCT_PATHS = {
-    REVENUE  : ["REV_Invest", DIST] ,# + planType [+ Owner]
-    ASSET    : ["FAMILY", "INVEST"] ,# + planType [+ Owner]
+    REVENUE  : ["REV_Invest", DIST] ,  # + planType [+ Owner]
+    ASSET    : ["FAMILY", "INVEST"] ,  # + planType [+ Owner]
     MON_MARK : GNU_MARK ,
     MON_LULU : GNU_LULU ,
     TRUST    : [TRUST, "Trust Assets", "Monarch ITF", COMPANY_NAME[CIG]]

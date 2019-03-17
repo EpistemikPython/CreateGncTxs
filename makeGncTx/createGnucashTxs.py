@@ -346,7 +346,8 @@ def create_gnc_txs(tx_colxn, gnc_file, mode):
 
 
 def create_gnc_txs_main():
-    usage = "usage: python {0} <monarch json file> <gnucash file> <mode: prod|test>".format(argv[0].split('/')[-1])
+    exe = argv[0].split('/')[-1]
+    usage = "usage: python {} <monarch json file> <gnucash file> <mode: prod|test>".format(exe)
     if len(argv) < 4:
         print_error("NOT ENOUGH parameters!")
         print_info(usage, MAGENTA)
@@ -365,7 +366,7 @@ def create_gnc_txs_main():
         # -- easiest solution seems to be to just cast any of this text to str() on definition...
         tx_collxn = json.load(fp)
 
-    gnc_file = TEST1_GNC # argv[2]
+    gnc_file = argv[2]
     if not osp.isfile(gnc_file):
         print_error("File path '{}' does not exist. Exiting...".format(gnc_file))
         exit()
