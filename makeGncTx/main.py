@@ -20,8 +20,8 @@ def main():
     exe = argv[0].split('/')[-1]
     if len(argv) < 4:
         print_error("NOT ENOUGH parameters!")
-        print_info("usage: python {0} <monarch file> <gnucash file> <mode: prod|test>".format(exe), CYAN)
-        print_info("Example: {0} '{1}' '{2}' 'test'".format(exe, "txtFromPdf/Monarch-Mark-all.txt", TEST1_GNC), CYAN)
+        print_info("usage: python {0} <monarch file> <gnucash file> <mode: prod|test>".format(exe), MAGENTA)
+        print_info("Example: {0} '{1}' '{2}' 'test'".format(exe, "txtFromPdf/Monarch-Mark-all.txt", TEST1_GNC), GREEN)
         exit(4)
 
     mon_file = argv[1]
