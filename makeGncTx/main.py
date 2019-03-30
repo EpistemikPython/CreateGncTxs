@@ -1,13 +1,12 @@
 #
-# main.py -- parse a Monarch text file
-#            and create Gnucash transactions from the data
+# main.py -- parse a Monarch text file and create Gnucash transactions from the data
 #
 # Copyright (c) 2018, 2019 Mark Sattolo <epistemik@gmail.com>
 #
 # @author Mark Sattolo <epistemik@gmail.com>
-# @revised 2019-03-16
-# @version Python3.6
-
+# @version Python 3.6
+# @created 2019-01
+# @updated 2019-03-11
 
 import os.path as osp
 from sys import argv, exit

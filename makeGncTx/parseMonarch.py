@@ -1,13 +1,12 @@
 #
-# parseMonarch.py -- parse a Monarch text file to a Monarch record
-#                    and save as a json file
+# parseMonarch.py -- parse a Monarch text file to a Monarch record and save as a json file
 #
 # Copyright (c) 2018,2019 Mark Sattolo <epistemik@gmail.com>
 #
 # @author Mark Sattolo <epistemik@gmail.com>
-# @revised 2019-03-11
-# @version Python3.6
-#
+# @version Python 3.6
+# @created 2018
+# @updated 2019-03-29
 
 from sys import argv, exit
 import os.path as osp
@@ -39,8 +38,8 @@ def parse_monarch_report(file_name, mode):
                   line  = 'Price'        : Currency float
                   line  = 'Unit Balance' : float
     """
-    print_info("parse_monarch_report({})\n".format(file_name), GREEN)
-    print_info("Runtime = " + now, MAGENTA)
+
+    print_info("parse_monarch_report({})\nRuntime = {}\n".format(file_name, now), MAGENTA)
 
     if mode.lower() == "prod":
         tx_colxn = copy.deepcopy(Tx_Collection)
@@ -69,7 +68,7 @@ def parse_monarch_report(file_name, mode):
                 bag_name = re_match.group(1)
                 print_info("Current bag_name is: '{}'".format(bag_name))
                 bag = tx_colxn[bag_name]
-                print_info("Current bag is: {}\n".format(str(bag)))
+                # print_info("Current bag is: {}\n".format(str(bag)))
                 mon_state = FIND_FUND
                 # if state is RRSP or TFSA and Owner not found yet
                 if bag_name != "OPEN" and tx_colxn[OWNER] == "":
@@ -187,11 +186,11 @@ def parse_monarch_main():
 
     # PRINT RECORD AS JSON FILE
     # pluck path and basename from mon_file to use for the saved json file
-    (ospath, fname) = osp.split(mon_file)
+    ospath, fname = osp.split(mon_file)
     # print_info("path is '{}'".format(ospath))
     # save to the output folder
     path = ospath.replace('txtFromPdf', 'jsonFromTxt')
-    (basename, ext) = osp.splitext(fname)
+    basename, ext = osp.splitext(fname)
     # add a timestamp to get a unique file name
     out_file = path + '/' + basename + '.' + now + ".json"
     print_info("out_file is '{}'".format(out_file))

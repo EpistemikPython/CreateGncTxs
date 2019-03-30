@@ -1,14 +1,13 @@
 #
 # createGnucashTxs.py -- parse a Monarch record, possibly from a json file,
-#                        create Gnucash transactions from the data
-#                        and write to a Gnucash file
+#                        create Gnucash transactions from the data and write to a Gnucash file
 #
 # Copyright (c) 2018,2019 Mark Sattolo <epistemik@gmail.com>
 #
 # @author Mark Sattolo <epistemik@gmail.com>
-# @revised 2019-03-11
-# @version Python3.6
-
+# @version Python 3.6
+# @created 2018
+# @updated 2019-03-29
 
 from sys import argv, exit
 import os.path as osp
@@ -93,13 +92,13 @@ def create_gnc_txs(tx_colxn, gnc_file, mode):
     # noinspection PyUnresolvedReferences
     def create_gnc_tx(mtx, plan_type, rev_acct, ast_parent):
         """
-           Asset accounts: use the proper path to find the parent then search for the Fund Code in the descendants
-           Revenue accounts: pick the proper account based on owner and plan type
-           gross_curr: re match to Gross then concatenate the two match groups
-           date: re match to get day, month and year then re-assemble to form Gnc date
-           Units: re match and concatenate the two groups on either side of decimal point
-           Description: use DESC and Fund Code
-           Notes: use 'Unit Balance' and UNIT_BAL
+        Asset accounts: use the proper path to find the parent then search for the Fund Code in the descendants
+        Revenue accounts: pick the proper account based on owner and plan type
+        gross_curr: re match to Gross then concatenate the two match groups
+        date: re match to get day, month and year then re-assemble to form Gnc date
+        Units: re match and concatenate the two groups on either side of decimal point
+        Description: use DESC and Fund Code
+        Notes: use 'Unit Balance' and UNIT_BAL
         """
         transfer = False
         try:
@@ -136,9 +135,9 @@ def create_gnc_txs(tx_colxn, gnc_file, mode):
                 print_info("ast_acct = '{}'".format(ast_acct.GetName()), color=CYAN)
 
             # get the dollar value of the tx
-            print_info('flag1')
+            # print_info('flag1')
             re_match = re.match(re_gross, gross_value)
-            print_info('flag2')
+            # print_info('flag2')
             if re_match:
                 # print(re_match.groups())
                 str_gross_curr = re_match.group(2) + re_match.group(3)

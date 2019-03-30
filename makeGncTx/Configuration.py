@@ -5,9 +5,9 @@
 # Copyright (c) 2018,2019 Mark Sattolo <epistemik@gmail.com>
 #
 # @author Mark Sattolo <epistemik@gmail.com>
-# @revised 2019-03-11
-# @version Python3.6
-
+# @version Python 3.6
+# @created 2018
+# @updated 2019-03-11
 
 import inspect
 
@@ -49,7 +49,7 @@ def print_error(text, newline=True):
     calling_line = str(inspect.getlineno(calling_frame))
     parent_line = str(inspect.getlineno(parent_frame))
     inspect_line = '[' + calling_file + '@' + calling_line + '/' + parent_line + ']: '
-    print(RED + inspect_line + text + COLOR_OFF, end=('\n' if newline else ''))
+    print(inspect_line + RED + text + COLOR_OFF, end=('\n' if newline else ''))
 
 
 CLIENT_TX = "CLIENT TRANSACTIONS"
