@@ -10,7 +10,7 @@
 
 import os.path as osp
 from sys import argv, exit
-from parseMonarch import parse_monarch_report
+from parseMonarchTxRep import parse_monarch_tx_rep
 from createGnucashTxs import create_gnc_txs
 from Configuration import *
 
@@ -20,7 +20,7 @@ def main():
     if len(argv) < 4:
         print_error("NOT ENOUGH parameters!")
         print_info("usage: python {0} <monarch file> <gnucash file> <mode: prod|test>".format(exe), MAGENTA)
-        print_info("Example: {0} '{1}' '{2}' 'test'".format(exe, "txtFromPdf/Monarch-Mark-all.txt", TEST1_GNC), GREEN)
+        print_info("Example: {0} '{1}' '{2}' 'test'".format(exe, "txtFromPdf/Monarch-Mark-all.txt", READER_GNC), GREEN)
         exit(4)
 
     mon_file = argv[1]
@@ -36,7 +36,7 @@ def main():
     mode = argv[3]
 
     # parse an external Monarch report file
-    tx_colxn = parse_monarch_report(mon_file, mode)
+    tx_colxn = parse_monarch_tx_rep(mon_file, mode)
 
     # create gnucash transactions and write to the desired Gnucash file
     create_gnc_txs(tx_colxn, gnc_file, mode)

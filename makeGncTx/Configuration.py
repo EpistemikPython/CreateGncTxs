@@ -7,7 +7,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 # @version Python 3.6
 # @created 2018
-# @updated 2019-03-11
+# @updated 2019-04-28
 
 import inspect
 
@@ -36,7 +36,7 @@ def print_info(text, color='', inspector=True, newline=True):
         calling_file  = inspect.getfile(calling_frame).split('/')[-1]
         calling_line  = str(inspect.getlineno(calling_frame))
         inspect_line  = '[' + calling_file + '@' + calling_line + ']: '
-    print(inspect_line + color + text + COLOR_OFF, end=('\n' if newline else ''))
+    print(inspect_line + color + str(text) + COLOR_OFF, end=('\n' if newline else ''))
 
 
 def print_error(text, newline=True):
@@ -49,7 +49,7 @@ def print_error(text, newline=True):
     calling_line = str(inspect.getlineno(calling_frame))
     parent_line = str(inspect.getlineno(parent_frame))
     inspect_line = '[' + calling_file + '@' + calling_line + '/' + parent_line + ']: '
-    print(inspect_line + RED + text + COLOR_OFF, end=('\n' if newline else ''))
+    print(inspect_line + RED + str(text) + COLOR_OFF, end=('\n' if newline else ''))
 
 
 CLIENT_TX = "CLIENT TRANSACTIONS"
@@ -203,18 +203,15 @@ ACCT_PATHS = {
 
 # parsing states
 STATE_SEARCH = 0x0001
-FIND_OWNER   = 0x0002
-FIND_FUND    = 0x0004
-FIND_NEXT_TX = 0x0008
-FILL_CURR_TX = 0x0010
+FIND_OWNER   = 0x0008
+FIND_FUND    = 0x0010
+FIND_NEXT_TX = 0x0018
+FILL_CURR_TX = 0x0020
 
 # file paths
 GNC_FOLDER = "/home/marksa/dev/git/Python/Gnucash/gncFiles/"
-MAIN_GNC   = GNC_FOLDER + 'main.gnucash'
-TEST1_GNC  = GNC_FOLDER + "test1.gnc"
-TEST2_GNC  = GNC_FOLDER + "test2.gnc"
-TEST3_GNC  = GNC_FOLDER + "test3.gnc"
-TEST4_GNC  = GNC_FOLDER + "test4.gnc"
+READER_GNC = GNC_FOLDER + 'reader.gnc'
+RUNNER_GNC = GNC_FOLDER + 'runner.gnc'
 
 EXAMPLE_COLLECTION = {
     OWNER: "OWNER_MARK",
