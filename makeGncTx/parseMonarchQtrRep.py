@@ -1,28 +1,31 @@
 #
-# parseMonarch.py -- parse a Monarch text file to a Monarch record and save as a json file
+# parseMonarchQtrRep.py -- parse a text file with Monarch Quarterly Report information,
+#                          save as a dictionary and print out as a json file
 #
 # Copyright (c) 2018,2019 Mark Sattolo <epistemik@gmail.com>
 #
 # @author Mark Sattolo <epistemik@gmail.com>
 # @version Python 3.6
-# @created 2018
-# @updated 2019-03-29
+# @created 2019-04-28
+# @updated 2019-04-28
 
 from sys import argv, exit
 import os.path as osp
 import re
 import copy
 import json
-import datetime as dt
+from datetime import datetime as dt
 from Configuration import *
 
-now = dt.datetime.strftime(dt.datetime.now(), "%Y-%m-%d_%H-%M-%S")
+now = dt.now().strftime("%Y-%m-%d_%H-%M-%S")
 
 
 # noinspection PyPep8
 def parse_monarch_report(file_name, mode):
     """
-    :rtype: Configuration.Tx_Collection
+    :param file_name: string: monarch quarterly report text file to parse
+    :param mode: string: prod or test
+    PARSE FOR PRICES TO ADD TO THE PRICE DB
     loop:
         check for 'Plan Type:'
             next line is either 'OPEN...', 'TFSA...' or 'RRSP...'
@@ -37,8 +40,8 @@ def parse_monarch_report(file_name, mode):
                   line  = 'Units'        : float
                   line  = 'Price'        : Currency float
                   line  = 'Unit Balance' : float
+    :return: Configuration.Tx_Collection
     """
-
     print_info("parse_monarch_report({})\nRuntime = {}\n".format(file_name, now), MAGENTA)
 
     if mode.lower() == "prod":
@@ -166,7 +169,7 @@ def parse_monarch_report(file_name, mode):
     return tx_colxn
 
 
-def parse_monarch_main():
+def mon_qtr_rep_main():
     if len(argv) < 3:
         print_error("NOT ENOUGH parameters!")
         exe = argv[0].split('/')[-1]
@@ -201,4 +204,4 @@ def parse_monarch_main():
 
 
 if __name__ == '__main__':
-    parse_monarch_main()
+    mon_qtr_rep_main()
