@@ -7,7 +7,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 # @version Python 3.6
 # @created 2018
-# @updated 2019-03-29
+# @updated 2019-04-28
 
 from sys import argv, exit
 import os.path as osp
@@ -46,7 +46,7 @@ def show_account(root, path):
             print_info("{}".format(subAcct.GetName()))
 
 
-# noinspection PyPep8,PyUnresolvedReferences
+# noinspection PyPep8,PyUnresolvedReferences,PyUnboundLocalVariable
 def create_gnc_txs(tx_colxn, gnc_file, mode):
     """
     Take the information from a transaction collection and produce Gnucash transactions to write to a Gnucash file
@@ -89,7 +89,7 @@ def create_gnc_txs(tx_colxn, gnc_file, mode):
             create_gnc_tx(mtx, plan_type, rev_acct, ast_parent)
     # end INNER prepare_accounts()
 
-    # noinspection PyUnresolvedReferences
+    # noinspection PyUnresolvedReferences,PyUnboundLocalVariable
     def create_gnc_tx(mtx, plan_type, rev_acct, ast_parent):
         """
         Asset accounts: use the proper path to find the parent then search for the Fund Code in the descendants
@@ -102,11 +102,10 @@ def create_gnc_txs(tx_colxn, gnc_file, mode):
         """
         transfer = False
         try:
-            # see note in create_gnc_txs_main() regarding json.load()
-            fund_company = str(mtx[FUND_CMPY])
-            desc = str(mtx[DESC])
-            trade_date = str(mtx[TRADE_DATE])
-            gross_value = str(mtx[GROSS])
+            fund_company = mtx[FUND_CMPY]
+            desc = mtx[DESC]
+            trade_date = mtx[TRADE_DATE]
+            gross_value = mtx[GROSS]
 
             # check if we have a switch/transfer
             if re.match(re_switch, desc) or re.match(re_intrf, desc):
@@ -198,7 +197,7 @@ def create_gnc_txs(tx_colxn, gnc_file, mode):
                         break
 
                 if not have_pair:
-                    # create a new switch
+                    # create a new switch tx
                     pair_tx = copy.deepcopy(Tx_Record)
                     # fill in the fields for the switch tx
                     pair_tx[FUND_CMPY] = fund_company
@@ -213,6 +212,9 @@ def create_gnc_txs(tx_colxn, gnc_file, mode):
                     return
 
             # =================================================================================================
+            # MOVE TO A SEPARATE FUNCTION TO CREATE A GNC TX
+            # AND CREATE ANOTHER FUNCTION TO CREATE PRICES TO ADD TO THE PRICE DB
+
             # create a gnucash Tx
             gtx = Transaction(book)
             # gets a guid on construction
@@ -288,12 +290,9 @@ def create_gnc_txs(tx_colxn, gnc_file, mode):
         root.get_instance()
 
         commod_tab = book.get_table()
-        # session.save()  # really needed?
-
         # noinspection PyPep8Naming
         CAD = commod_tab.lookup("ISO4217", "CAD")
 
-        # EXPERIMENT
         if mode.lower() == 'prod':
 
             gnc_collection = copy.deepcopy(Tx_Collection)
@@ -360,9 +359,6 @@ def create_gnc_txs_main():
 
     # get Monarch transactions from the Monarch json file
     with open(mon_file, 'r') as fp:
-        # PROBLEM: with Python2, the text in the tx_collxn will be <type unicode> instead of <type string>
-        # and cause an exception if passed to any of the C++ gnucash functions expecting a <const char*>
-        # -- easiest solution seems to be to just cast any of this text to str() on definition...
         tx_collxn = json.load(fp)
 
     gnc_file = argv[2]
