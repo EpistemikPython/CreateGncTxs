@@ -14,7 +14,8 @@ import os.path as osp
 import re
 import copy
 import json
-from gnucash import Session, Transaction, Split, GncNumeric
+from datetime import datetime as dt
+from gnucash import Session, Transaction, Split, GncNumeric, GncPrice, GncPriceDB
 from gnucash.gnucash_core_c import CREC
 from Configuration import *
 
@@ -42,11 +43,11 @@ def show_account(root, path):
         print_info("{} has NO Descendants!".format(acct_name))
     else:
         print_info("Descendants of {}:".format(acct_name))
-        for subAcct in descendants:
-            print_info("{}".format(subAcct.GetName()))
+        # for subAcct in descendants:
+            # print_info("{}".format(subAcct.GetName()))
 
 
-# noinspection PyPep8,PyUnresolvedReferences,PyUnboundLocalVariable
+# noinspection PyPep8,PyUnboundLocalVariable
 def create_gnc_txs(tx_colxn, gnc_file, mode):
     """
     Take the information from a transaction collection and produce Gnucash transactions to write to a Gnucash file
@@ -60,36 +61,37 @@ def create_gnc_txs(tx_colxn, gnc_file, mode):
 
     # noinspection PyShadowingNames
     def prepare_accounts(plan_type):
-        print_info("\n\nPlan type = '{}'".format(plan_type))
+        if plan_type in tx_colxn:
+            print_info("\n\nPlan type = '{}'".format(plan_type))
 
-        rev_path = copy.copy(ACCT_PATHS[REVENUE])
-        # print_info("rev_path = '{}'".format(str(rev_path)))
-        rev_path.append(plan_type)
-        # print_info("rev_path = '{}'".format(str(rev_path)))
-        ast_parent_path = copy.copy(ACCT_PATHS[ASSET])
-        ast_parent_path.append(plan_type)
+            rev_path = copy.copy(ACCT_PATHS[REVENUE])
+            # print_info("rev_path = '{}'".format(str(rev_path)))
+            rev_path.append(plan_type)
+            # print_info("rev_path = '{}'".format(str(rev_path)))
+            ast_parent_path = copy.copy(ACCT_PATHS[ASSET])
+            ast_parent_path.append(plan_type)
 
-        if plan_type != PL_OPEN:
-            pl_owner = tx_colxn[OWNER]
-            if pl_owner == '':
-                raise Exception(
-                    "PROBLEM!! Trying to process plan type '{}' but NO Owner value found in Tx Collection!!".format(plan_type))
-            rev_path.append(ACCT_PATHS[pl_owner])
-            ast_parent_path.append(ACCT_PATHS[pl_owner])
+            if plan_type != PL_OPEN:
+                pl_owner = tx_colxn[OWNER]
+                if pl_owner == '':
+                    raise Exception(
+                        "PROBLEM!! Trying to process plan type '{}' but NO Owner value found in Tx Collection!!".format(plan_type))
+                rev_path.append(ACCT_PATHS[pl_owner])
+                ast_parent_path.append(ACCT_PATHS[pl_owner])
 
-        print_info("rev_path = '{}'".format(str(rev_path)))
-        rev_acct = account_from_path(root, rev_path)
-        print_info("rev_acct = '{}'".format(rev_acct.GetName()))
+            print_info("rev_path = '{}'".format(str(rev_path)))
+            rev_acct = account_from_path(root, rev_path)
+            print_info("rev_acct = '{}'".format(rev_acct.GetName()))
 
-        print_info("ast_parent_path = '{}'".format(str(ast_parent_path)))
-        ast_parent = account_from_path(root, ast_parent_path)
-        print_info("ast_parent = '{}'".format(ast_parent.GetName()))
+            print_info("ast_parent_path = '{}'".format(str(ast_parent_path)))
+            ast_parent = account_from_path(root, ast_parent_path)
+            print_info("ast_parent = '{}'".format(ast_parent.GetName()))
 
-        for mtx in tx_colxn[plan_type]:
-            create_gnc_tx(mtx, plan_type, rev_acct, ast_parent)
+            for mtx in tx_colxn[plan_type]:
+                create_gnc_tx(mtx, plan_type, rev_acct, ast_parent)
     # end INNER prepare_accounts()
 
-    # noinspection PyUnresolvedReferences,PyUnboundLocalVariable
+    # noinspection PyUnboundLocalVariable
     def create_gnc_tx(mtx, plan_type, rev_acct, ast_parent):
         """
         Asset accounts: use the proper path to find the parent then search for the Fund Code in the descendants
@@ -212,8 +214,34 @@ def create_gnc_txs(tx_colxn, gnc_file, mode):
                     return
 
             # =================================================================================================
+            # MOVE TO A SEPARATE FUNCTION TO CREATE PRICES TO ADD TO THE PRICE DB
+
+            pdb.begin_edit()
+            p_new = GncPrice(book)
+
+            pr_date = dt(trade_yr, trade_mth, trade_day)
+            int_price = int((gross_curr*100) // (units/10000))
+            val = GncNumeric(int_price, 10000)
+            print_info("Adding '{}' @ '{}' @ '{}'".format(ast_acct_name, pr_date, val))
+
+            p_new.set_time64(pr_date)
+            comm = ast_acct.GetCommodity()
+            print_info("Commodity = '{}' / '{}'".format(comm.get_namespace(), comm.get_printname()))
+            p_new.set_commodity(comm)
+            p_new.set_currency(CAD)
+            p_new.set_value(val)
+            p_new.set_source_string("user:price")
+            p_new.set_typestr('nav')
+
+            if mode == "PROD":
+                print_info("Mode = '{}': Commit Price DB changes.\n".format(mode))
+                pdb.add_price(p_new)
+                pdb.commit_edit()
+            else:
+                print_info("Mode = '{}': ABANDON Price DB changes!\n".format(mode))
+
+            # =================================================================================================
             # MOVE TO A SEPARATE FUNCTION TO CREATE A GNC TX
-            # AND CREATE ANOTHER FUNCTION TO CREATE PRICES TO ADD TO THE PRICE DB
 
             # create a gnucash Tx
             gtx = Transaction(book)
@@ -288,6 +316,8 @@ def create_gnc_txs(tx_colxn, gnc_file, mode):
 
         root = book.get_root_account()
         root.get_instance()
+
+        pdb = book.get_price_db()
 
         commod_tab = book.get_table()
         # noinspection PyPep8Naming
