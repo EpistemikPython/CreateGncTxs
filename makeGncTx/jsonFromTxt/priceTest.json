@@ -1,0 +1,72 @@
+{
+    "Owner": "Mark H. Sattolo", 
+    "RRSP": [
+        {
+            "Trade Date": "01/18/2020", 
+            "Gross": "$41.24", 
+            "Account": "", 
+            "Description": "Reinvested:Distribution/Interest:", 
+            "Notes": "", 
+            "Fund Code": "6130", 
+            "Fund Company": "MFC", 
+            "Unit Balance": "1347.7140", 
+            "Units": "4.5340", 
+            "Net": "$41.24", 
+            "Price": "$9.0950"
+        }, 
+        {
+            "Trade Date": "01/03/2020", 
+            "Gross": "($1,873.20)", 
+            "Account": "", 
+            "Description": "Switch-Out:", 
+            "Notes": "", 
+            "Fund Code": "3232", 
+            "Fund Company": "MFC", 
+            "Unit Balance": "2048.2250", 
+            "Units": "-229.3620", 
+            "Net": "($1,873.20)", 
+            "Price": "$8.1670"
+        }, 
+        {
+            "Trade Date": "01/18/2020", 
+            "Gross": "$70.25", 
+            "Account": "", 
+            "Description": "Reinvested:Distribution/Interest:", 
+            "Notes": "", 
+            "Fund Code": "3232", 
+            "Fund Company": "MFC", 
+            "Unit Balance": "2056.5410", 
+            "Units": "8.3160", 
+            "Net": "$70.25", 
+            "Price": "$8.4476"
+        }, 
+        {
+            "Trade Date": "01/03/2020", 
+            "Gross": "$1,873.20", 
+            "Account": "", 
+            "Description": "Switch-In:", 
+            "Notes": "", 
+            "Fund Code": "6138", 
+            "Fund Company": "MFC", 
+            "Unit Balance": "2017.3420", 
+            "Units": "141.9260", 
+            "Net": "$1,873.20", 
+            "Price": "$13.1984"
+        }, 
+        {
+            "Trade Date": "01/18/2020", 
+            "Gross": "$111.76", 
+            "Account": "", 
+            "Description": "Reinvested:Distribution/Interest:", 
+            "Notes": "", 
+            "Fund Code": "6138", 
+            "Fund Company": "MFC", 
+            "Unit Balance": "2025.5280", 
+            "Units": "8.1860", 
+            "Net": "$111.76", 
+            "Price": "$13.6533"
+        }
+    ], 
+    "TFSA": [ ], 
+    "OPEN": [ ]
+}
