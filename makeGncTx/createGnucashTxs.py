@@ -7,15 +7,15 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 # @version Python 3.6
 # @created 2018
-# @updated 2019-04-28
+# @updated 2019-05-05
 
-from sys import argv, exit
-import os.path as osp
-import re
 import copy
 import json
+import os.path as osp
+import re
 from datetime import datetime as dt
-from gnucash import Session, Transaction, Split, GncNumeric, GncPrice, GncPriceDB
+from sys import argv
+from gnucash import Session, Transaction, Split, GncNumeric, GncPrice
 from gnucash.gnucash_core_c import CREC
 from Configuration import *
 
@@ -216,27 +216,50 @@ def create_gnc_txs(tx_colxn, gnc_file, mode):
             # =================================================================================================
             # MOVE TO A SEPARATE FUNCTION TO CREATE PRICES TO ADD TO THE PRICE DB
 
-            pdb.begin_edit()
-            p_new = GncPrice(book)
-
             pr_date = dt(trade_yr, trade_mth, trade_day)
-            int_price = int((gross_curr*100) // (units/10000))
-            val = GncNumeric(int_price, 10000)
-            print_info("Adding '{}' @ '{}' @ '{}'".format(ast_acct_name, pr_date, val))
+            datestring = pr_date.strftime("%Y-%m-%d")
 
-            p_new.set_time64(pr_date)
+            int_price = int((gross_curr*100) / (units/10000))
+            val = GncNumeric(int_price, 10000)
+            print_info("Adding: {}[{}] @ ${}".format(ast_acct_name, datestring, val))
+
+            pr1 = GncPrice(book)
+            pr1.begin_edit()
+            pr1.set_time64(pr_date)
             comm = ast_acct.GetCommodity()
-            print_info("Commodity = '{}' / '{}'".format(comm.get_namespace(), comm.get_printname()))
-            p_new.set_commodity(comm)
-            p_new.set_currency(CAD)
-            p_new.set_value(val)
-            p_new.set_source_string("user:price")
-            p_new.set_typestr('nav')
+            print_info("Commodity = '{}:{}'".format(comm.get_namespace(), comm.get_printname()))
+            pr1.set_commodity(comm)
+
+            pr1.set_currency(CAD)
+            pr1.set_value(val)
+            pr1.set_source_string("user:price")
+            pr1.set_typestr('nav')
+            pr1.commit_edit()
+
+            if transfer:
+                # get the price for the paired Tx
+                int_price = int((pair_tx[GROSS] * 100) / (pair_tx[UNITS] / 10000))
+                val = GncNumeric(int_price, 10000)
+                print_info("Adding: {}[{}] @ ${}".format(pair_tx[ACCT].GetName(), datestring, val))
+
+                pr2 = GncPrice(book)
+                pr2.begin_edit()
+                pr2.set_time64(pr_date)
+                comm = pair_tx[ACCT].GetCommodity()
+                print_info("Commodity = '{}:{}'".format(comm.get_namespace(), comm.get_printname()))
+                pr2.set_commodity(comm)
+
+                pr2.set_currency(CAD)
+                pr2.set_value(val)
+                pr2.set_source_string("user:price")
+                pr2.set_typestr('nav')
+                pr2.commit_edit()
 
             if mode == "PROD":
                 print_info("Mode = '{}': Commit Price DB changes.\n".format(mode))
-                pdb.add_price(p_new)
-                pdb.commit_edit()
+                pdb.add_price(pr1)
+                if transfer:
+                    pdb.add_price(pr2)
             else:
                 print_info("Mode = '{}': ABANDON Price DB changes!\n".format(mode))
 
@@ -318,6 +341,7 @@ def create_gnc_txs(tx_colxn, gnc_file, mode):
         root.get_instance()
 
         pdb = book.get_price_db()
+        pdb.begin_edit()
 
         commod_tab = book.get_table()
         # noinspection PyPep8Naming
@@ -335,6 +359,7 @@ def create_gnc_txs(tx_colxn, gnc_file, mode):
 
             if mode == "PROD":
                 print_info("Mode = '{}': Save session.".format(mode), GREEN)
+                pdb.commit_edit()
                 # only ONE session save for the entire run
                 session.save()
 
@@ -367,8 +392,8 @@ def create_gnc_txs(tx_colxn, gnc_file, mode):
     except Exception as e:
         print_error("create_gnc_txs() EXCEPTION!! '{}'".format(str(e)))
         if "session" in locals() and session is not None:
-                session.end()
-                session.destroy()
+            session.end()
+            session.destroy()
         raise
 # end create_gnc_txs()
 
