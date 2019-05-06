@@ -26,20 +26,18 @@ def parse_monarch_report(file_name, mode):
     :param file_name: string: monarch quarterly report text file to parse
     :param mode: string: prod or test
     PARSE FOR PRICES TO ADD TO THE PRICE DB
+    - look for Q1 or Q2 or Q3 or Q4 in filename to get the date
     loop:
-        check for 'Plan Type:'
-            next line is either 'OPEN...', 'TFSA...' or 'RRSP...'
+        find MON_MARK or MON_LULU as OWNER
+        check for 'Page 1' as the key to start finding prices
+        next check for 'OPEN...' or 'TFSA...' or 'RRSP...' as Plan Type
             use that as the key for this section of the Tx_Collection
-        check for '$INVESTMENT_COMPANY/$MF_NAME-...' :
-            use $MF_NAME as the Fund Code in the tx
-        look for date: 'MM/DD/YYYY' becomes 'Trade Date'
-            then parse:
-                2 lines = 'Description'  : Text
-                  line  = 'Gross'        : Currency float
-                  line  = 'Net'          : Currency float
-                  line  = 'Units'        : float
-                  line  = 'Price'        : Currency float
-                  line  = 'Unit Balance' : float
+        next check for '(match1) - (match2)...
+            if match1 in values() of COMPANY_NAMES:
+                use key to match1 as Fund Company, match2 as Fund Code for the account
+        next look for '$price'
+        next check for 'Summary of Investments' as key to search for next Plan Type
+        or another match of 'Fund Company - Fund Code'
     :return: Configuration.Tx_Collection
     """
     print_info("parse_monarch_report({})\nRuntime = {}\n".format(file_name, now), MAGENTA)
@@ -112,7 +110,7 @@ def parse_monarch_report(file_name, mode):
                     # print(re_match.groups())
                     tx_date = re_match.group(1)
                     print_info("\n\tCurrent tx_date is: '{}'".format(tx_date))
-                    curr_tx = copy.deepcopy(Tx_Record)
+                    curr_tx = copy.deepcopy(Monarch_Tx)
                     curr_tx[FUND_CMPY] = fund_company
                     curr_tx[FUND_CODE] = fund_code
                     curr_tx[TRADE_DATE] = tx_date
