@@ -7,7 +7,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 # @version Python 3.6
 # @created 2018
-# @updated 2019-04-28
+# @updated 2019-05-05
 
 import inspect
 
@@ -67,7 +67,11 @@ FUND       = "Fund"
 FUND_CODE  = FUND + " Code"
 FUND_CMPY  = FUND + " Company"
 TRADE_DATE = "Trade Date"
+TRADE_DAY  = "Trade Day"
+TRADE_MTH  = "Trade Month"
+TRADE_YR   = "Trade Year"
 DESC       = "Description"
+SWITCH     = "Switch"
 GROSS      = "Gross"
 NET        = "Net"
 UNITS      = "Units"
@@ -158,8 +162,8 @@ Tx_Collection = {
     PL_RRSP : []
 }
 
-# information for each Monarch/Gnucash transaction
-Tx_Record = {
+# information for each Monarch transaction
+Monarch_Tx = {
     FUND_CMPY  : "" ,
     FUND_CODE  : "" ,
     TRADE_DATE : "" ,
@@ -170,6 +174,24 @@ Tx_Record = {
     PRICE      : "" ,
     UNIT_BAL   : "" ,
     ACCT       : "" ,
+    NOTES      : ""
+}
+
+# information for each Gnucash transaction
+Gnucash_Tx = {
+    FUND_CMPY  : ""   ,
+    FUND_CODE  : ""   ,
+    TRADE_DAY  : 0    ,
+    TRADE_MTH  : 0    ,
+    TRADE_YR   : 0    ,
+    DESC       : ""   ,
+    SWITCH     : False ,
+    GROSS      : 0    ,
+    NET        : 0    ,
+    UNITS      : 0    ,
+    PRICE      : 0.0  ,
+    UNIT_BAL   : 0    ,
+    ACCT       : None ,
     NOTES      : ""
 }
 
@@ -212,6 +234,9 @@ FILL_CURR_TX = 0x0020
 GNC_FOLDER = "/home/marksa/dev/git/Python/Gnucash/gncFiles/"
 READER_GNC = GNC_FOLDER + 'reader.gnc'
 RUNNER_GNC = GNC_FOLDER + 'runner.gnc'
+TEST1_GNC  = GNC_FOLDER + 'test1.gnc'
+TEST2_GNC  = GNC_FOLDER + 'test2.gnc'
+TEST3_GNC  = GNC_FOLDER + 'test3.gnc'
 
 EXAMPLE_COLLECTION = {
     OWNER: "OWNER_MARK",

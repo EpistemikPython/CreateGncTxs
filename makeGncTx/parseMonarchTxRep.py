@@ -111,7 +111,7 @@ def parse_monarch_tx_rep(file_name, mode):
                     # print(re_match.groups())
                     tx_date = re_match.group(1)
                     print_info("\n\tCurrent tx_date is: '{}'".format(tx_date))
-                    curr_tx = copy.deepcopy(Tx_Record)
+                    curr_tx = copy.deepcopy(Monarch_Tx)
                     curr_tx[FUND_CMPY] = fund_company
                     curr_tx[FUND_CODE] = fund_code
                     curr_tx[TRADE_DATE] = tx_date
