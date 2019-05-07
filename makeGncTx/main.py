@@ -11,7 +11,7 @@
 import os.path as osp
 from sys import argv, exit
 from parseMonarchTxRep import parse_monarch_tx_rep
-from createGnucashTxs import create_gnc_txs
+from createGnucashTxs import GncTxCreator
 from Configuration import *
 
 
@@ -39,7 +39,8 @@ def main():
     tx_colxn = parse_monarch_tx_rep(mon_file, mode)
 
     # create gnucash transactions and write to the desired Gnucash file
-    create_gnc_txs(tx_colxn, gnc_file, mode)
+    gtc = GncTxCreator(tx_colxn, gnc_file, mode)
+    gtc.create_gnc_txs()
 
     print_info("\n >>> PROGRAM ENDED.", GREEN)
 
