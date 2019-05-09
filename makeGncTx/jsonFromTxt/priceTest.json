@@ -2,7 +2,7 @@
     "Owner": "Mark H. Sattolo", 
     "RRSP": [
         {
-            "Trade Date": "01/18/2020", 
+            "Trade Date": "01/10/2010", 
             "Gross": "$41.24", 
             "Account": "", 
             "Description": "Reinvested:Distribution/Interest:", 
@@ -15,7 +15,7 @@
             "Price": "$9.0950"
         }, 
         {
-            "Trade Date": "01/03/2020", 
+            "Trade Date": "02/13/2013", 
             "Gross": "($1,873.20)", 
             "Account": "", 
             "Description": "Switch-Out:", 
@@ -28,7 +28,7 @@
             "Price": "$8.1670"
         }, 
         {
-            "Trade Date": "01/18/2020", 
+            "Trade Date": "01/11/2011", 
             "Gross": "$70.25", 
             "Account": "", 
             "Description": "Reinvested:Distribution/Interest:", 
@@ -41,7 +41,7 @@
             "Price": "$8.4476"
         }, 
         {
-            "Trade Date": "01/03/2020", 
+            "Trade Date": "02/13/2013", 
             "Gross": "$1,873.20", 
             "Account": "", 
             "Description": "Switch-In:", 
@@ -54,7 +54,7 @@
             "Price": "$13.1984"
         }, 
         {
-            "Trade Date": "01/18/2020", 
+            "Trade Date": "01/10/2010", 
             "Gross": "$111.76", 
             "Account": "", 
             "Description": "Reinvested:Distribution/Interest:", 

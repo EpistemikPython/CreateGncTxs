@@ -22,7 +22,7 @@ from Configuration import *
 
 class ReportInfo:
     def __init__(self, own):
-        self.owner = own,
+        self.owner = str(own)
         self.plans = {
             PL_OPEN : [],
             PL_TFSA : [],
@@ -107,7 +107,7 @@ class GncUtilities:
             # print_info("{}".format(subAcct.GetName()))
 
 
-# noinspection PyUnresolvedReferences
+# noinspection PyUnresolvedReferences,PyUnboundLocalVariable
 class GncTxCreator:
     """
     create Gnucash transactions and prices from Monarch json
@@ -154,7 +154,7 @@ class GncTxCreator:
         # check if we have a switch/transfer
         switch = True if (re.match(re_switch, mtx[DESC]) or re.match(re_intrf, mtx[DESC])) else False
         init_tx[SWITCH] = switch
-        print_info("{} Have a Switch!".format('DO NOT' if not switch else ''), BLUE)
+        print_info("{}Have a Switch!".format('DO NOT ' if not switch else '>>> '), BLUE)
 
         # get the asset account name
         asset_acct_name = mtx[FUND_CMPY] + " " + mtx[FUND_CODE]
@@ -286,12 +286,13 @@ class GncTxCreator:
             pr2.commit_edit()
 
         if self.mode == "PROD":
-            print_info("Mode = '{}': Commit Price DB changes.\n".format(self.mode), GREEN)
+            print_info("Mode = '{}': Add Price1 to DB.\n".format(self.mode), GREEN)
             self.price_db.add_price(pr1)
             if tx1[SWITCH]:
+                print_info("Mode = '{}': Add Price2 to DB.\n".format(self.mode), GREEN)
                 self.price_db.add_price(pr2)
         else:
-            print_info("Mode = '{}': ABANDON Price DB changes!\n".format(self.mode), RED)
+            print_info("Mode = '{}': ABANDON Prices!\n".format(self.mode), RED)
 
     def make_gnc_tx_and_save(self, tx1, tx2, rev_acct):
         """
@@ -310,7 +311,8 @@ class GncTxCreator:
 
         gtx.SetCurrency(self.cur)
         gtx.SetDate(tx1[TRADE_DAY], tx1[TRADE_MTH], tx1[TRADE_YR])
-        print_info("gtx date = '{}'".format(gtx.GetDate()))
+        print_info("gtx date = '{}'".format(gtx.GetDate()), BLUE)
+        print_info("tx1[DESC] = '{}'".format(tx1[DESC]), MAGENTA)
         gtx.SetDescription(tx1[DESC])
 
         # create the ASSET split for the Tx
@@ -396,19 +398,24 @@ class GncTxCreator:
             print_error("extract_gnc_info() EXCEPTION!! '{}'\n".format(str(ie)))
 
     def prepare_accounts(self):
+        self.root = self.book.get_root_account()
+        self.root.get_instance()
+
+        self.price_db = self.book.get_price_db()
+        self.price_db.begin_edit()
+        print_info("self.price_db.begin_edit()", MAGENTA)
+
+        commod_tab = self.book.get_table()
+        self.cur = commod_tab.lookup("ISO4217", "CAD")
+
         for key in self.tx_coll:
             if key != OWNER:
                 plan_type = key
                 print_info("\n\nPlan type = '{}'".format(plan_type))
 
-                self.root = self.book.get_root_account()
-                self.root.get_instance()
-
-                self.price_db = self.book.get_price_db()
-                self.price_db.begin_edit()
-
-                commod_tab = self.book.get_table()
-                self.cur = commod_tab.lookup("ISO4217", "CAD")
+                # print_info(json.dumps(ACCT_PATHS, indent=4))
+                # for key in ACCT_PATHS:
+                #     print_info("type ACCT_PATHS key '{}' = '{}'".format(key, type(key)))
 
                 rev_path = copy.copy(ACCT_PATHS[REVENUE])
                 rev_path.append(plan_type)
@@ -417,6 +424,7 @@ class GncTxCreator:
                 ast_parent_path.append(plan_type)
 
                 pl_owner = self.report_info.get_owner()
+                # print_info("type pl_owner = '{}'".format(type(pl_owner)))
                 if plan_type != PL_OPEN:
                     if pl_owner == '':
                         raise Exception("PROBLEM!! Trying to process plan type '{}' but NO Owner value found"
@@ -435,7 +443,6 @@ class GncTxCreator:
                 for mtx in self.tx_coll[plan_type]:
                     self.extract_gnc_info(mtx, plan_type, asset_parent, rev_acct)
 
-    # noinspection PyPep8,PyUnboundLocalVariable
     def create_gnc_txs(self):
         """
         Take the information from a transaction collection and produce Gnucash transactions to write to a Gnucash file
@@ -447,12 +454,13 @@ class GncTxCreator:
             session = Session(self.gnc_file)
             self.book = session.book
 
+            print_info("Owner = '{}'".format(self.tx_coll[OWNER]), GREEN)
             self.report_info = ReportInfo(self.tx_coll[OWNER])
 
             self.prepare_accounts()
 
             if self.mode == "PROD":
-                print_info("Mode = '{}': Save session.".format(self.mode), GREEN)
+                print_info("Mode = '{}': COMMIT Price DB edits and Save session.".format(self.mode), GREEN)
                 self.price_db.commit_edit()
                 # only ONE session save for the entire run
                 session.save()
