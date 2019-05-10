@@ -6,7 +6,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 # @version Python 3.6
 # @created 2019-01
-# @updated 2019-03-11
+# @updated 2019-05-09
 
 import os.path as osp
 from sys import argv, exit
@@ -36,10 +36,10 @@ def main():
     mode = argv[3]
 
     # parse an external Monarch report file
-    tx_colxn = parse_monarch_tx_rep(mon_file, mode)
+    tx_coll = parse_monarch_tx_rep(mon_file, mode)
 
     # create gnucash transactions and write to the desired Gnucash file
-    gtc = GncTxCreator(tx_colxn, gnc_file, mode)
+    gtc = GncTxCreator(tx_coll, gnc_file, mode)
     gtc.create_gnc_txs()
 
     print_info("\n >>> PROGRAM ENDED.", GREEN)

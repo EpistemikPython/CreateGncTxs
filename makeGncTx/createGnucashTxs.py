@@ -188,9 +188,6 @@ class GncTxCreator:
                 gross_curr *= -1
             print_info("gross_curr = '{}'".format(gross_curr))
             init_tx[GROSS] = gross_curr
-
-            gross_opp = gross_curr * -1
-            print_info("gross_opp = '{}'".format(gross_opp))
         else:
             raise Exception("PROBLEM!! re_gross DID NOT match with value '{}'!".format(mtx[GROSS]))
 
@@ -221,9 +218,9 @@ class GncTxCreator:
         have_pair = False
         if switch:
             print_info("Tx is a Switch to OTHER Monarch account.", BLUE)
-            # look for switches in same plan type, company, date and opposite gross value
+            # look for switches in this plan type with same company, day, month and opposite gross value
             for itx in self.report_info.plans[plan_type]:
-                if itx[FUND_CMPY] == init_tx[FUND_CMPY] and itx[GROSS] == gross_opp \
+                if itx[SWITCH] and itx[FUND_CMPY] == init_tx[FUND_CMPY] and itx[GROSS] == (gross_curr * -1) \
                         and itx[TRADE_DAY] == init_tx[TRADE_DAY] and itx[TRADE_MTH] == init_tx[TRADE_MTH] :
                     # ALREADY HAVE THE FIRST ITEM OF THE PAIR
                     have_pair = True
