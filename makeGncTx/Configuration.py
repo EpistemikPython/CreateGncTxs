@@ -7,19 +7,19 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 # @version Python 3.6
 # @created 2018
-# @updated 2019-05-05
+# @updated 2019-05-10
 
 import inspect
 
 COLOR_FLAG = '\x1b['
 BLACK   = COLOR_FLAG + '30m'
-RED     = COLOR_FLAG + '91m'
-GREEN   = COLOR_FLAG + '92m'
-YELLOW  = COLOR_FLAG + '93m'
-BLUE    = COLOR_FLAG + '94m'
-MAGENTA = COLOR_FLAG + '95m'
-CYAN    = COLOR_FLAG + '96m'
-WHITE   = COLOR_FLAG + '97m'
+RED     = COLOR_FLAG + '31m'
+GREEN   = COLOR_FLAG + '32m'
+YELLOW  = COLOR_FLAG + '33m'
+BLUE    = COLOR_FLAG + '34m'
+MAGENTA = COLOR_FLAG + '35m'
+CYAN    = COLOR_FLAG + '36m'
+WHITE   = COLOR_FLAG + '37m'
 COLOR_OFF = COLOR_FLAG + '0m'
 
 
@@ -225,10 +225,14 @@ ACCT_PATHS = {
 
 # parsing states
 STATE_SEARCH = 0x0001
+FIND_START   = 0x0004
 FIND_OWNER   = 0x0008
+FIND_PLAN    = 0x000c
 FIND_FUND    = 0x0010
-FIND_NEXT_TX = 0x0018
-FILL_CURR_TX = 0x0020
+FIND_PRICE   = 0x0014
+FIND_COMPANY = 0x0018
+FIND_NEXT_TX = 0x0020
+FILL_CURR_TX = 0x0030
 
 # file paths
 GNC_FOLDER = "/home/marksa/dev/git/Python/Gnucash/gncFiles/"
@@ -237,6 +241,7 @@ RUNNER_GNC = GNC_FOLDER + 'runner.gnc'
 TEST1_GNC  = GNC_FOLDER + 'test1.gnc'
 TEST2_GNC  = GNC_FOLDER + 'test2.gnc'
 TEST3_GNC  = GNC_FOLDER + 'test3.gnc'
+TEST4_GNC  = GNC_FOLDER + 'test4.gnc'
 
 EXAMPLE_COLLECTION = {
     OWNER: "OWNER_MARK",
