@@ -7,7 +7,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 # @version Python 3.6
 # @created 2019-04-28
-# @updated 2019-04-28
+# @updated 2019-05-10
 
 from sys import argv, exit
 import os.path as osp
@@ -20,151 +20,106 @@ from Configuration import *
 now = dt.now().strftime("%Y-%m-%d_%H-%M-%S")
 
 
-# noinspection PyPep8
-def parse_monarch_report(file_name, mode):
+def parse_monarch_qtrep(file_name):
     """
     :param file_name: string: monarch quarterly report text file to parse
-    :param mode: string: prod or test
     PARSE FOR PRICES TO ADD TO THE PRICE DB
     - look for Q1 or Q2 or Q3 or Q4 in filename to get the date
     loop:
-        find MON_MARK or MON_LULU as OWNER
-        check for 'Page 1' as the key to start finding prices
-        next check for 'OPEN...' or 'TFSA...' or 'RRSP...' as Plan Type
-            use that as the key for this section of the Tx_Collection
-        next check for '(match1) - (match2)...
-            if match1 in values() of COMPANY_NAMES:
-                use key to match1 as Fund Company, match2 as Fund Code for the account
-        next look for '$price'
-        next check for 'Summary of Investments' as key to search for next Plan Type
-        or another match of 'Fund Company - Fund Code'
+        find: MON_MARK or MON_LULU as OWNER
+        find: 'Page 1' as the key to start finding prices
+        find: 'OPEN...' or 'TFSA...' or 'RRSP...' as Plan Type
+              use that as the key for this section of the Tx_Collection
+        find: '(match1) - (match2) (match3)...'
+                1) use match1 as Fund Company, match2 as Fund Code for the account
+                2) use match3 as Fund Company, match2 as Fund Code for the account
+        find: '$price'
+        find: 'Transaction Details' as key to search for next Plan Type
+            OR: another match of 'Fund Company & Fund Code'
     :return: Configuration.Tx_Collection
     """
     print_info("parse_monarch_report({})\nRuntime = {}\n".format(file_name, now), MAGENTA)
 
-    if mode.lower() == "prod":
-        tx_colxn = copy.deepcopy(Tx_Collection)
-    else:
-        # use a short example tx_colxn
-        tx_colxn = EXAMPLE_COLLECTION
+    tx_coll = copy.deepcopy(Tx_Collection)
 
     # re searches
-    re_own  = re.compile(".*({}).*".format(OWNER))
-    re_plan = re.compile(r'([OPENTFSAR]{4})(\s?.*)')
-    re_fund = re.compile(".*([A-Z]{3})\s?([0-9]{3,5}).*")
-    re_date = re.compile(".*([0-9]{2}/[0-9]{2}/[0-9]{4}).*")
+    re_mark    = re.compile(".*({}).*".format(MON_MARK))
+    re_lulu    = re.compile(".*({}).*".format(MON_LULU))
+    re_start   = re.compile(r"^Page 1.*")
+    re_comp1   = re.compile(r"^(.*) - ([0-9ATL]{3,5}).*")
+    re_comp2   = re.compile(r"^(- )?([0-9]{3,5}) - (.*)")
+    re_price   = re.compile(r"^\$([0-9,]{1,5})\.([0-9]{2,4}).*")
+    re_endsum  = re.compile(r"^Transaction Details.*")
+    re_plan    = re.compile(r"([OPENTFSAR]{4})(\s?.*)")
 
     curr_tx = {}
-    bag = list()
-    own_line = 0
-    tx_line = 0
-    mon_state = STATE_SEARCH
+    mon_state = FIND_OWNER
     with open(file_name) as fp:
         ct = 0
         for line in fp:
             ct += 1
-            re_match = re.match(re_plan, line)
-            if re_match:
-                print(re_match.groups())
-                bag_name = re_match.group(1)
-                print_info("Current bag_name is: '{}'".format(bag_name))
-                bag = tx_colxn[bag_name]
-                # print_info("Current bag is: {}\n".format(str(bag)))
-                mon_state = FIND_FUND
-                # if state is RRSP or TFSA and Owner not found yet
-                if bag_name != "OPEN" and tx_colxn[OWNER] == "":
-                    mon_state = FIND_OWNER
-                continue
-
-            # for RRSP and TFSA need to find owner after finding plan type
             if mon_state == FIND_OWNER:
-                # print_info("FIND_OWNER line {} = {}".format(ct, line))
-                if own_line == 0:
-                    re_match = re.match(re_own, line)
-                    if re_match:
-                        own_line += 1
-                else:
-                    owner_name = line.strip()
-                    print_info("Current owner_name is: '{}'".format(owner_name))
-                    tx_colxn[OWNER] = owner_name
-                    own_line = 0
-                    mon_state = FIND_FUND
-                continue
+                match_mark = re.match(re_mark, line)
+                if match_mark:
+                    owner = match_mark.group(1)
+                    print_info("{}/ Owner is: '{}'".format(ct, owner), CYAN)
+                    mon_state = FIND_START
+                    continue
+                match_lulu = re.match(re_lulu, line)
+                if match_lulu:
+                    owner = match_lulu.group(1)
+                    print_info("{}/ Owner is: '{}'".format(ct, owner), RED)
+                    mon_state = FIND_START
+                    continue
 
-            if mon_state <= FIND_FUND:
-                re_match = re.match(re_fund, line)
-                if re_match:
-                    # print_info("FIND_FUND line {} = {}".format(ct, line.strip()))
-                    # print(re_match.groups())
-                    fund_company = re_match.group(1)
-                    fund_code = re_match.group(2)
-                    fund_name = fund_company + " " + fund_code
-                    print_info("\n\tCurrent fund_name is: {}".format(fund_name))
+            if mon_state == FIND_START:
+                match_start = re.match(re_start, line)
+                if match_start:
+                    print_info("{}/ Found Start!".format(ct), GREEN)
+                    mon_state = FIND_PLAN
+                    continue
+
+            if mon_state == FIND_PLAN:
+                match_plan = re.match(re_plan, line)
+                if match_plan:
+                    plan_type = match_plan.group(1)
+                    print_info("{}/ Plan type is: '{}'".format(ct, plan_type), BLUE)
+                    mon_state = FIND_COMPANY
+                    continue
+
+            if mon_state >= FIND_COMPANY:
+                match_comp1 = re.match(re_comp1, line)
+                if match_comp1:
+                    company = match_comp1.group(1)
+                    fund_code = match_comp1.group(2)
+                    print_info("{}/ Fund is: '{}-{}'".format(ct, company, fund_code), YELLOW)
+                    mon_state = FIND_PRICE
+                    continue
+                match_comp2 = re.match(re_comp2, line)
+                if match_comp2:
+                    company = match_comp2.group(3)
+                    fund_code = match_comp2.group(2)
+                    print_info("{}/ Fund is: '{}-{}'".format(ct, company, fund_code), MAGENTA)
+                    mon_state = FIND_PRICE
+                    continue
+                match_endsum = re.match(re_endsum, line)
+                if match_endsum:
+                    print_info("{}/ END of '{}' plan.".format(ct, plan_type), BLUE)
+                    mon_state = FIND_PLAN
+                    continue
+
+            if mon_state == FIND_PRICE:
+                match_price = re.match(re_price, line)
+                if match_price:
+                    dollar_str = match_price.group(1)
+                    cents_str = match_price.group(2)
+                    print_info("{}/ price = '${}.{}'".format(ct, dollar_str, cents_str), GREEN)
                     mon_state = FIND_NEXT_TX
                     continue
 
-            if mon_state <= FIND_NEXT_TX:
-                re_match = re.match(re_date, line)
-                if re_match:
-                    # print_info("FIND_NEXT_TX line {} = {}".format(ct, line.strip()))
-                    # print(re_match.groups())
-                    tx_date = re_match.group(1)
-                    print_info("\n\tCurrent tx_date is: '{}'".format(tx_date))
-                    curr_tx = copy.deepcopy(Monarch_Tx)
-                    curr_tx[FUND_CMPY] = fund_company
-                    curr_tx[FUND_CODE] = fund_code
-                    curr_tx[TRADE_DATE] = tx_date
-                    mon_state = FILL_CURR_TX
-                    continue
+    # package vars and send to price fxn
 
-            if mon_state == FILL_CURR_TX:
-                # print_info("FILL_CURR_TX line {} = {}".format(ct, line.strip()))
-                tx_line += 1
-                entry = line.strip()
-                if tx_line < 3:
-                    if entry == AUTO_SYS or entry == INTRF_IN:
-                        # back up by one as have one MORE line of DESCRIPTION for AUTO_SYS and INTRF_IN cases
-                        tx_line -= 1
-                    elif entry == SW_IN or entry == SW_OUT or entry == FEE:
-                        # move forward by one because one FEWER line of DESCRIPTION for these cases
-                        tx_line += 1
-                    # TODO: match number to proceed to looking for GROSS?
-                    curr_tx[DESC] += (entry + ":")
-                    print_info("curr_tx[DESC] is: '{}'".format(curr_tx[DESC]))
-                    continue
-                if tx_line == 3:
-                    curr_tx[GROSS] = entry
-                    print_info("curr_tx[GROSS] is: '{}'".format(curr_tx[GROSS]))
-                if tx_line == 4:
-                    curr_tx[NET] = entry
-                    if curr_tx[NET] != curr_tx[GROSS]:
-                        print_info("curr_tx[NET] is: '{}'".format(curr_tx[NET]))
-                        print_info("\n>>> PROBLEM!!! GROSS and NET do NOT match!!!\n")
-                        continue
-                if tx_line == 5:
-                    curr_tx[UNITS] = entry
-                    print_info("curr_tx[UNITS] is: '{}'".format(curr_tx[UNITS]))
-                if tx_line == 6:
-                    curr_tx[PRICE] = entry
-                    print_info("curr_tx[PRICE] is: '{}'".format(curr_tx[PRICE]))
-                if tx_line == 7:
-                    curr_tx[UNIT_BAL] = entry
-                    print_info("curr_tx[UNIT_BAL] is: '{}'".format(curr_tx[UNIT_BAL]))
-                    bag.append(curr_tx)
-                    mon_state = STATE_SEARCH
-                    tx_line = 0
-
-    print_info("\n\tlen(Monarch tx_colxn[{}]) = {}".format(PL_OPEN, len(tx_colxn[PL_OPEN])))
-    # print_info("\tMonarch tx_colxn[{}] = {}".format(PL_OPEN, json.dumps(tx_colxn[PL_OPEN], indent=4)))
-
-    print_info("\n\tMonarch tx_colxn[{}] = {}".format(OWNER, tx_colxn[OWNER]))
-    print_info("\n\tlen(Monarch tx_colxn[{}]) = {}".format(PL_TFSA, len(tx_colxn[PL_TFSA])))
-    # print_info("\tMonarch tx_colxn[{}] = {}".format(PL_TFSA, json.dumps(tx_colxn[PL_TFSA], indent=4)))
-
-    print_info("\n\tlen(Monarch tx_colxn[{}]) = {}".format(PL_RRSP, len(tx_colxn[PL_RRSP])))
-    # print_info("\tMonarch tx_colxn[{}] = {}".format(PL_RRSP, json.dumps(tx_colxn[PL_RRSP], indent=4)))
-
-    return tx_colxn
+    return tx_coll
 
 
 def mon_qtr_rep_main():
@@ -180,23 +135,24 @@ def mon_qtr_rep_main():
         print_error("File path '{}' does not exist. Exiting...".format(mon_file))
         exit()
 
-    mode = argv[2]
+    mode = argv[2].upper()
 
     # parse an external Monarch report file
-    record = parse_monarch_report(mon_file, mode)
+    record = parse_monarch_qtrep(mon_file)
 
     # PRINT RECORD AS JSON FILE
-    # pluck path and basename from mon_file to use for the saved json file
-    ospath, fname = osp.split(mon_file)
-    # print_info("path is '{}'".format(ospath))
-    # save to the output folder
-    path = ospath.replace('txtFromPdf', 'jsonFromTxt')
-    basename, ext = osp.splitext(fname)
-    # add a timestamp to get a unique file name
-    out_file = path + '/' + basename + '.' + now + ".json"
-    print_info("out_file is '{}'".format(out_file))
-    fp = open(out_file, 'w')
-    json.dump(record, fp, indent=4)
+    if mode == 'PROD':
+        # pluck path and basename from mon_file to use for the saved json file
+        ospath, fname = osp.split(mon_file)
+        # print_info("path is '{}'".format(ospath))
+        # save to the output folder
+        path = ospath.replace('txtFromPdf', 'jsonFromTxt')
+        basename, ext = osp.splitext(fname)
+        # add a timestamp to get a unique file name
+        out_file = path + '/' + basename + '.' + now + ".json"
+        print_info("out_file is '{}'".format(out_file))
+        fp = open(out_file, 'w')
+        json.dump(record, fp, indent=4)
 
     print_info("\n >>> PROGRAM ENDED.", GREEN)
 
