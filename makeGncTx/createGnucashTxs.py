@@ -7,7 +7,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 # @version Python 3.6
 # @created 2018
-# @updated 2019-05-05
+# @updated 2019-05-11
 
 import copy
 import json
@@ -20,106 +20,19 @@ from gnucash.gnucash_core_c import CREC
 from Configuration import *
 
 
-class ReportInfo:
-    def __init__(self, own):
-        self.owner = str(own)
-        self.plans = {
-            PL_OPEN : [],
-            PL_TFSA : [],
-            PL_RRSP : []
-        }
-
-    def get_owner(self):
-        return self.owner
-
-
-class MonarchRecord:
-    def __init__(self, cy, fc, td, desc, gr, net, un, pr, ub, acc, nt):
-        self.fund_company = cy,
-        self.fund_code    = fc,
-        self.trade_date   = td,
-        self.description  = desc,
-        self.gross_amount = gr,
-        self.net_amount   = net,
-        self.units        = un,
-        self.price        = pr,
-        self.unit_balance = ub,
-        self.account      = acc,
-        self.notes        = nt
-
-
-class GnucashRecord:
-    def __init__(self, cy, fc, td, tm, ty, sw, desc, gr, net, un, pr, ub, acc, nt):
-        self.fund_company = cy,
-        self.fund_code    = fc,
-        self.trade_day    = td,
-        self.trade_mth    = tm,
-        self.trade_yr     = ty,
-        self.switch       = sw,
-        self.description  = desc,
-        self.gross_amount = gr,
-        self.net_amount   = net,
-        self.units        = un,
-        self.price        = pr,
-        self.unit_balance = ub,
-        self.account      = acc,
-        self.notes        = nt
-
-
-class GncUtilities:
-
-    def account_from_path(self, top_account, account_path, original_path=None):
-        """
-        get a Gnucash account from the given path
-        :param   top_account: String: start
-        :param  account_path: String: path
-        :param original_path: String: recursive
-        :return: Gnucash account
-        """
-        if original_path is None:
-            original_path = account_path
-        account, account_path = account_path[0], account_path[1:]
-
-        account = top_account.lookup_by_name(account)
-        if account is None:
-            raise Exception("path " + str(original_path) + " could NOT be found")
-        if len(account_path) > 0:
-            return self.account_from_path(account, account_path, original_path)
-        else:
-            return account
-
-    def show_account(self, root, path):
-        """
-        display an account and its descendants
-        :param root: Gnucash root
-        :param path: to the account
-        :return: nil
-        """
-        acct = self.account_from_path(root, path)
-        acct_name = acct.GetName()
-        print_info("account = " + acct_name)
-        descendants = acct.get_descendants()
-        if len(descendants) == 0:
-            print_info("{} has NO Descendants!".format(acct_name))
-        else:
-            print_info("Descendants of {}:".format(acct_name))
-            # for subAcct in descendants:
-            # print_info("{}".format(subAcct.GetName()))
-
-
 # noinspection PyUnresolvedReferences,PyUnboundLocalVariable
 class GncTxCreator:
     """
     create Gnucash transactions and prices from Monarch json
     """
-    def __init__(self, tx_colxn, gnc_f, md, pdb=None, bk=None, rt=None, curr=None):
+    def __init__(self, tx_colxn, gnc_f, md, pdb=None, bk=None, rt=None, cur=None):
         self.tx_coll  = tx_colxn
         self.gnc_file = gnc_f
         self.mode     = md
         self.price_db = pdb
         self.book     = bk
         self.root     = rt
-        self.cur      = curr
+        self.curr     = cur
 
     gncu = GncUtilities()
 
@@ -179,7 +92,6 @@ class GncTxCreator:
         # get the dollar value of the tx
         re_match = re.match(re_gross, mtx[GROSS])
         if re_match:
-            # print(re_match.groups())
             str_gross_curr = re_match.group(2) + re_match.group(3)
             # remove possible comma
             gross_curr = int(str_gross_curr.replace(',', ''))
@@ -194,7 +106,6 @@ class GncTxCreator:
         # get the units of the tx
         re_match = re.match(re_units, mtx[UNITS])
         if re_match:
-            # print(re_match.groups())
             units = int(re_match.group(2) + re_match.group(3))
             # if match group 1 is not empty, units is negative
             if re_match.group(1) != '':
@@ -257,7 +168,7 @@ class GncTxCreator:
         print_info("Commodity = '{}:{}'".format(comm.get_namespace(), comm.get_printname()))
         pr1.set_commodity(comm)
 
-        pr1.set_currency(self.cur)
+        pr1.set_currency(self.curr)
         pr1.set_value(val)
         pr1.set_source_string("user:price")
         pr1.set_typestr('nav')
@@ -276,7 +187,7 @@ class GncTxCreator:
             print_info("Commodity = '{}:{}'".format(comm.get_namespace(), comm.get_printname()))
             pr2.set_commodity(comm)
 
-            pr2.set_currency(self.cur)
+            pr2.set_currency(self.curr)
             pr2.set_value(val)
             pr2.set_source_string("user:price")
             pr2.set_typestr('nav')
@@ -306,7 +217,7 @@ class GncTxCreator:
 
         gtx.BeginEdit()
 
-        gtx.SetCurrency(self.cur)
+        gtx.SetCurrency(self.curr)
         gtx.SetDate(tx1[TRADE_DAY], tx1[TRADE_MTH], tx1[TRADE_YR])
         print_info("gtx date = '{}'".format(gtx.GetDate()), BLUE)
         print_info("tx1[DESC] = '{}'".format(tx1[DESC]), MAGENTA)
@@ -403,7 +314,7 @@ class GncTxCreator:
         print_info("self.price_db.begin_edit()", MAGENTA)
 
         commod_tab = self.book.get_table()
-        self.cur = commod_tab.lookup("ISO4217", "CAD")
+        self.curr = commod_tab.lookup("ISO4217", "CAD")
 
         for key in self.tx_coll:
             if key != OWNER:

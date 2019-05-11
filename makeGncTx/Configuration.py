@@ -7,7 +7,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 # @version Python 3.6
 # @created 2018
-# @updated 2019-05-10
+# @updated 2019-05-11
 
 import inspect
 
@@ -52,10 +52,109 @@ def print_error(text, newline=True):
     print(inspect_line + RED + str(text) + COLOR_OFF, end=('\n' if newline else ''))
 
 
+class MonarchRecord:
+    def __init__(self, cy, fc, td, desc, gr, net, un, pr, ub, acc, nt):
+        self.fund_company = cy,
+        self.fund_code    = fc,
+        self.trade_date   = td,
+        self.description  = desc,
+        self.gross_amount = gr,
+        self.net_amount   = net,
+        self.units        = un,
+        self.price        = pr,
+        self.unit_balance = ub,
+        self.account      = acc,
+        self.notes        = nt
+
+
+class GnucashRecord:
+    def __init__(self, cy, fc, td, tm, ty, sw, desc, gr, net, un, pr, ub, acc, nt):
+        self.fund_company = cy,
+        self.fund_code    = fc,
+        self.trade_day    = td,
+        self.trade_mth    = tm,
+        self.trade_yr     = ty,
+        self.switch       = sw,
+        self.description  = desc,
+        self.gross_amount = gr,
+        self.net_amount   = net,
+        self.units        = un,
+        self.price        = pr,
+        self.unit_balance = ub,
+        self.account      = acc,
+        self.notes        = nt
+
+
+class GncUtilities:
+
+    def account_from_path(self, top_account, account_path, original_path=None):
+        """
+        get a Gnucash account from the given path
+        :param   top_account: String: start
+        :param  account_path: String: path
+        :param original_path: String: recursive
+        :return: Gnucash account
+        """
+        if original_path is None:
+            original_path = account_path
+        account, account_path = account_path[0], account_path[1:]
+
+        account = top_account.lookup_by_name(account)
+        if account is None:
+            raise Exception("path " + str(original_path) + " could NOT be found")
+        if len(account_path) > 0:
+            return self.account_from_path(account, account_path, original_path)
+        else:
+            return account
+
+    def show_account(self, root, path):
+        """
+        display an account and its descendants
+        :param root: Gnucash root
+        :param path: to the account
+        :return: nil
+        """
+        acct = self.account_from_path(root, path)
+        acct_name = acct.GetName()
+        print_info("account = " + acct_name)
+        descendants = acct.get_descendants()
+        if len(descendants) == 0:
+            print_info("{} has NO Descendants!".format(acct_name))
+        else:
+            print_info("Descendants of {}:".format(acct_name))
+            # for subAcct in descendants:
+            # print_info("{}".format(subAcct.GetName()))
+
+
+class ReportInfo:
+    def __init__(self, own):
+        self.owner = str(own)
+        self.plans = {
+            PL_OPEN : [],
+            PL_TFSA : [],
+            PL_RRSP : []
+        }
+
+    def get_owner(self):
+        if self.owner is None or self.owner == '':
+            return None
+        return self.owner
+
+    def get_size(self):
+        return len(self.plans[PL_OPEN]) + len(self.plans[PL_TFSA]) + len(self.plans[PL_RRSP])
+
+    def add(self, plan, obj):
+        if isinstance(plan, str) and plan in self.plans.keys():
+            if obj is not None:
+                self.plans[plan].append(obj)
+
+
 CLIENT_TX = "CLIENT TRANSACTIONS"
 PLAN_TYPE = "Plan Type:"
 OWNER     = "Owner"
 AUTO_SYS  = "Automatic/Systematic"
+DOLLARS   = "$$"
+CENTS     = "c|"
 
 # Plan types
 PL_OPEN   = "OPEN"
@@ -153,47 +252,6 @@ FUNDS_LIST = [
 
 TRUST_AST_ACCT = CIG_18140
 TRUST_REV_ACCT = "Trust Base"
-
-# owner and list of transactions for each plan type
-Tx_Collection = {
-    OWNER   : "" ,
-    PL_OPEN : [] ,
-    PL_TFSA : [] ,
-    PL_RRSP : []
-}
-
-# information for each Monarch transaction
-Monarch_Tx = {
-    FUND_CMPY  : "" ,
-    FUND_CODE  : "" ,
-    TRADE_DATE : "" ,
-    DESC       : "" ,
-    GROSS      : "" ,
-    NET        : "" ,
-    UNITS      : "" ,
-    PRICE      : "" ,
-    UNIT_BAL   : "" ,
-    ACCT       : "" ,
-    NOTES      : ""
-}
-
-# information for each Gnucash transaction
-Gnucash_Tx = {
-    FUND_CMPY  : ""   ,
-    FUND_CODE  : ""   ,
-    TRADE_DAY  : 0    ,
-    TRADE_MTH  : 0    ,
-    TRADE_YR   : 0    ,
-    DESC       : ""   ,
-    SWITCH     : False ,
-    GROSS      : 0    ,
-    NET        : 0    ,
-    UNITS      : 0    ,
-    PRICE      : 0.0  ,
-    UNIT_BAL   : 0    ,
-    ACCT       : None ,
-    NOTES      : ""
-}
 
 REVENUE  = "Revenue"
 ASSET    = "Asset"
