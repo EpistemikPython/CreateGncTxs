@@ -1,4 +1,6 @@
 #
+# coding=utf-8
+#
 # Configuration.py -- static defines to help parse a Monarch text file
 #                     and write the transactions to a gnucash file
 #
@@ -10,6 +12,10 @@
 # @updated 2019-05-11
 
 import inspect
+from datetime import datetime as dt
+
+dtnow = dt.now()
+strnow = dtnow.strftime("%Y-%m-%d_%H-%M-%S")
 
 COLOR_FLAG = '\x1b['
 BLACK   = COLOR_FLAG + '30m'
@@ -127,8 +133,11 @@ class GncUtilities:
 
 
 class ReportInfo:
-    def __init__(self, own):
+    def __init__(self, own, dte=None):
         self.owner = str(own)
+        if dte is not None:
+            assert isinstance(dte, dt), 'Must be a valid datetime'
+        self.date = dte
         self.plans = {
             PL_OPEN : [],
             PL_TFSA : [],
@@ -137,8 +146,22 @@ class ReportInfo:
 
     def get_owner(self):
         if self.owner is None or self.owner == '':
-            return None
+            return UNKNOWN
         return self.owner
+
+    def set_date(self, dte):
+        if isinstance(dte, dt):
+            self.date = dte
+        else:
+            print_error("dte is type: {}".format(type(dte)))
+
+    def get_date(self):
+        return self.date
+
+    def get_date_str(self):
+        if isinstance(self.date, dt):
+            return self.date.strftime("%Y-%m-%d_%H-%M-%S")
+        return strnow
 
     def get_size(self):
         return len(self.plans[PL_OPEN]) + len(self.plans[PL_TFSA]) + len(self.plans[PL_RRSP])
@@ -148,13 +171,25 @@ class ReportInfo:
             if obj is not None:
                 self.plans[plan].append(obj)
 
+    def to_json(self):
+        return {
+            "__class__"  : self.__class__.__name__ ,
+            "__module__" : self.__module__ ,
+            "owner"      : self.owner      ,
+            "date"       : self.get_date_str() ,
+            "plans"      : self.plans
+        }
+
 
 CLIENT_TX = "CLIENT TRANSACTIONS"
 PLAN_TYPE = "Plan Type:"
 OWNER     = "Owner"
 AUTO_SYS  = "Automatic/Systematic"
-DOLLARS   = "$$"
-CENTS     = "c|"
+DOLLARS   = '$'
+CENTS     = '\u00A2'
+UNKNOWN   = "UNKNOWN"
+
+print("CENTS = {}".format(CENTS))
 
 # Plan types
 PL_OPEN   = "OPEN"
@@ -195,6 +230,17 @@ COMPANY_NAME = {
     MFC : "Mackenzie Financial Corp",
     MMF : "Manulife Mutual Funds",
     TML : "Franklin Templeton"
+}
+
+# Company name codes
+FUND_NAME_CODE = {
+    "CIBC"      : ATL ,
+    "CI"        : CIG ,
+    "Dynamic"   : DYN ,
+    "Mackenzie" : MFC ,
+    "Manulife"  : MMF ,
+    "Franklin"  : TML ,
+    "Templeton" : TML
 }
 
 # Fund codes/names
@@ -265,7 +311,6 @@ FEE    = "Fee Redemption"
 DIST   = "Dist"
 IN     = "In"
 OUT    = "Out"
-SWITCH = "Switch"
 SW_IN  = SWITCH + "-" + IN
 SW_OUT = SWITCH + "-" + OUT
 INTRF  = "Internal Transfer"
