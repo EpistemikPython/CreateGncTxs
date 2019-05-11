@@ -24,8 +24,8 @@ def parse_monarch_qtrep(file_name):
     """
     :param file_name: string: monarch quarterly report text file to parse
     PARSE FOR PRICES TO ADD TO THE PRICE DB
-    - look for Q1 or Q2 or Q3 or Q4 in filename to get the date
     loop:
+        - look for 'For the Period <date1> to <date2>' for the date for the prices
         find: MON_MARK or MON_LULU as OWNER
         find: 'Page 1' as the key to start finding prices
         find: 'OPEN...' or 'TFSA...' or 'RRSP...' as Plan Type
@@ -43,14 +43,16 @@ def parse_monarch_qtrep(file_name):
     tx_coll = copy.deepcopy(Tx_Collection)
 
     # re searches
+    re_date    = re.compile(r"^For the period (.*) to (\w{3}) (\d{1,2}), (\d{4})")
     re_mark    = re.compile(".*({}).*".format(MON_MARK))
     re_lulu    = re.compile(".*({}).*".format(MON_LULU))
     re_start   = re.compile(r"^Page 1.*")
     re_comp1   = re.compile(r"^(.*) - ([0-9ATL]{3,5}).*")
-    re_comp2   = re.compile(r"^(- )?([0-9]{3,5}) - (.*)")
-    re_price   = re.compile(r"^\$([0-9,]{1,5})\.([0-9]{2,4}).*")
-    re_endsum  = re.compile(r"^Transaction Details.*")
-    re_plan    = re.compile(r"([OPENTFSAR]{4})(\s?.*)")
+    re_comp2   = re.compile(r"^(- )?(\d{3,5}) - (.*)")
+    re_price   = re.compile(r"^\$([0-9,]{1,5})\.(\d{2,4}).*")
+    re_plan    = re.compile(r"(OPEN|TFSA|RRSP)(\s?.*)")
+    re_endplan = re.compile(r"^Transaction Details.*")
+    re_finish  = re.compile(r"^Disclosure.*")
 
     curr_tx = {}
     mon_state = FIND_OWNER
@@ -76,10 +78,24 @@ def parse_monarch_qtrep(file_name):
                 match_start = re.match(re_start, line)
                 if match_start:
                     print_info("{}/ Found Start!".format(ct), GREEN)
+                    mon_state = FIND_DATE
+                    continue
+
+            if mon_state == FIND_DATE:
+                match_date = re.match(re_date, line)
+                if match_date:
+                    day = match_date.group(3)
+                    month = match_date.group(2)
+                    year = match_date.group(4)
+                    print_info("{}/ Found Date: {}-{}-{}".format(ct, month, day, year), CYAN)
                     mon_state = FIND_PLAN
                     continue
 
             if mon_state == FIND_PLAN:
+                match_finish = re.match(re_finish, line)
+                if match_finish:
+                    print_info("{}/ FINISHED!".format(ct), RED)
+                    break
                 match_plan = re.match(re_plan, line)
                 if match_plan:
                     plan_type = match_plan.group(1)
@@ -102,7 +118,7 @@ def parse_monarch_qtrep(file_name):
                     print_info("{}/ Fund is: '{}-{}'".format(ct, company, fund_code), MAGENTA)
                     mon_state = FIND_PRICE
                     continue
-                match_endsum = re.match(re_endsum, line)
+                match_endsum = re.match(re_endplan, line)
                 if match_endsum:
                     print_info("{}/ END of '{}' plan.".format(ct, plan_type), BLUE)
                     mon_state = FIND_PLAN
