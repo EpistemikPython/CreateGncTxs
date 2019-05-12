@@ -2,7 +2,8 @@
 # coding=utf-8
 #
 # parseMonarchQtrRep.py -- parse a text file with Monarch Quarterly Report information,
-#                          save as a dictionary and print out as a json file
+#                          then take the saved transaction information and create Gnucash prices
+#                          and save to the specified Gnucash file
 #
 # Copyright (c) 2018,2019 Mark Sattolo <epistemik@gmail.com>
 #
@@ -20,13 +21,13 @@ from gnucash import Session, GncNumeric, GncPrice
 from Configuration import *
 
 
+# noinspection PyUnresolvedReferences
 class MonarchQrepToGncPrices:
-    def __init__(self, fmon, fgnc, md):
+    def __init__(self, fmon, gnc_file, mode):
+        self.prod = (mode == "PROD")
         self.mon_file = fmon
-        self.mode = md
 
-        self.gnc_file = fgnc
-        self.session = Session(self.gnc_file)
+        self.session = Session(gnc_file)
         self.book = self.session.book
 
         self.root = self.book.get_root_account()
@@ -41,7 +42,7 @@ class MonarchQrepToGncPrices:
         """
         PARSE FOR PRICES TO ADD TO THE PRICE DB
         loop:
-            - look for 'For the Period <date1> to <date2>' for the date for the prices
+            find: 'For the Period <date1> to <date2>' for the date for the prices
             find: MON_MARK or MON_LULU as OWNER
             find: 'Page 1' as the key to start finding prices
             find: 'OPEN...' or 'TFSA...' or 'RRSP...' as Plan Type
@@ -52,7 +53,7 @@ class MonarchQrepToGncPrices:
             find: '$price'
             find: 'Transaction Details' as key to search for next Plan Type
                 OR: another match of 'Fund Company & Fund Code'
-        :return: Configuration.Tx_Collection
+        :return: Configuration.ReportInfo object
         """
         print_info("parse_monarch_report({})\nRuntime = {}\n".format(self.mon_file, strnow), MAGENTA)
 
@@ -155,8 +156,8 @@ class MonarchQrepToGncPrices:
 
     def get_prices_and_save(self, tx_coll):
         """
-        create and load Gnucash prices to the Gnucash PriceDB
-        :param tx_coll: list: transactions to extract prices
+        create and load Gnucash prices to the Gnucash file's PriceDB
+        :param tx_coll: ReportInfo object: transactions to use to extract Gnucash prices
         :return: nil
         """
         print_info('get_prices_and_save()', MAGENTA)
@@ -190,6 +191,7 @@ class MonarchQrepToGncPrices:
                     print_info("name_key = '{}'".format(name_key), YELLOW)
                     if name_key in FUND_NAME_CODE.keys():
                         name_code = FUND_NAME_CODE[name_key]
+                        # special case
                         if name_code == ATL:
                             asset_acct_name = ATL_O59
                         else:
@@ -228,14 +230,14 @@ class MonarchQrepToGncPrices:
                     pr.set_typestr('last')
                     pr.commit_edit()
 
-                    if self.mode == "PROD":
-                        print_info("Mode = '{}': Add Price to DB.\n".format(self.mode), GREEN)
+                    if self.prod:
+                        print_info("PROD: Add Price to DB.\n", GREEN)
                         self.price_db.add_price(pr)
                     else:
-                        print_info("Mode = '{}': ABANDON Prices!\n".format(self.mode), RED)
+                        print_info("PROD: ABANDON Prices!\n", RED)
 
-            if self.mode == "PROD":
-                print_info("Mode = '{}': COMMIT Price DB edits and Save session.".format(self.mode), GREEN)
+            if self.prod:
+                print_info("PROD: COMMIT Price DB edits and Save session.", GREEN)
                 self.price_db.commit_edit()
                 # only ONE session save for the entire run
                 self.session.save()

@@ -13,7 +13,6 @@ import copy
 import json
 import os.path as osp
 import re
-from datetime import datetime as dt
 from sys import argv
 from gnucash import Session, Transaction, Split, GncNumeric, GncPrice
 from gnucash.gnucash_core_c import CREC
@@ -25,7 +24,7 @@ class GncTxCreator:
     """
     create Gnucash transactions and prices from Monarch json
     """
-    def __init__(self, tx_colxn, gnc_f, md, pdb=None, bk=None, rt=None, cur=None):
+    def __init__(self, tx_colxn, gnc_f, md, pdb=None, bk=None, rt=None, cur=None, rpinfo=None):
         self.tx_coll  = tx_colxn
         self.gnc_file = gnc_f
         self.mode     = md
@@ -33,6 +32,7 @@ class GncTxCreator:
         self.book     = bk
         self.root     = rt
         self.curr     = cur
+        self.report_info = rpinfo
 
     gncu = GncUtilities()
 
@@ -44,7 +44,7 @@ class GncTxCreator:
         parse the Monarch transactions
         :param        mtx:   dict: Monarch transaction information
         :param  plan_type: String:
-        :param ast_parent: String: 
+        :param ast_parent: String:
         :return: dict, dict
         """
         print_info('get_monarch_info()', MAGENTA)
