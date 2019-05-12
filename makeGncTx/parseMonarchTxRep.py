@@ -80,7 +80,7 @@ def parse_monarch_tx_rep(file_name):
                 if re_match:
                     fund_company = re_match.group(1)
                     fund_code = re_match.group(2)
-                    curr_tx = {FUND_CMPY: fund_company, FUND_CODE: fund_code}
+                    curr_tx = {FUND_CMPY: fund_company, FUND_CODE: fund_code, DESC: ''}
                     print_info("Current fund is: {}".format(fund_company + " " + fund_code), BLUE)
                     mon_state = FIND_NEXT_TX
                     continue
@@ -95,7 +95,6 @@ def parse_monarch_tx_rep(file_name):
                     continue
 
             if mon_state == FILL_CURR_TX:
-                curr_tx[DESC] = ''
                 tx_line += 1
                 entry = line.strip()
                 if tx_line < 3:
