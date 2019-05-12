@@ -1,15 +1,15 @@
-#
+##############################################################################################################################
 # coding=utf-8
 #
-# Configuration.py -- static defines to help parse a Monarch text file
-#                     and write the transactions to a gnucash file
+# Configuration.py -- constants and utility functions used to parse a Monarch text file
+#                     and write the transactions and/or prices to a Gnucash file
 #
 # Copyright (c) 2018,2019 Mark Sattolo <epistemik@gmail.com>
 #
 # @author Mark Sattolo <epistemik@gmail.com>
 # @version Python 3.6
 # @created 2018
-# @updated 2019-05-11
+# @updated 2019-05-12
 
 import inspect
 from datetime import datetime as dt
@@ -132,14 +132,17 @@ class GncUtilities:
             # print_info("{}".format(subAcct.GetName()))
 
 
-class ReportInfo:
-    def __init__(self, own=None, dte=None):
+class InvestmentRecord:
+    def __init__(self, own=None, dte=None, fn=None):
         if own is not None:
             assert isinstance(own, str), 'Must be a valid string'
-        self.owner = str(own)
+        self.owner = own
         if dte is not None:
             assert isinstance(dte, dt), 'Must be a valid datetime'
         self.date = dte
+        if fn is not None:
+            assert isinstance(fn, str), 'Must be a valid string'
+        self.filename = fn
         self.plans = {
             PL_OPEN : [],
             PL_TFSA : [],
@@ -161,12 +164,22 @@ class ReportInfo:
             print_error("dte is type: {}".format(type(dte)))
 
     def get_date(self):
-        return self.date
+        if isinstance(self.date, dt):
+            return self.date
+        return dtnow
 
     def get_date_str(self):
         if isinstance(self.date, dt):
             return self.date.strftime("%Y-%m-%d_%H-%M-%S")
         return strnow
+
+    def set_filename(self, fn):
+        self.filename = str(fn)
+
+    def get_filename(self):
+        if self.filename is None or self.filename == '':
+            return UNKNOWN
+        return self.filename
 
     def get_size(self):
         return len(self.plans[PL_OPEN]) + len(self.plans[PL_TFSA]) + len(self.plans[PL_RRSP])
@@ -178,12 +191,13 @@ class ReportInfo:
 
     def to_json(self):
         return {
-            "__class__"  : self.__class__.__name__ ,
-            "__module__" : self.__module__         ,
-            "owner"      : self.owner              ,
-            "date"       : self.get_date_str()     ,
-            "size"       : str(self.get_size())    ,
-            "plans"      : self.plans
+            "__class__"    : self.__class__.__name__ ,
+            "__module__"   : self.__module__         ,
+            "owner"        : self.get_owner()        ,
+            "source file"  : self.get_filename()     ,
+            "date"         : self.get_date_str()     ,
+            "size"         : str(self.get_size())    ,
+            "plan data"    : self.plans
         }
 
 

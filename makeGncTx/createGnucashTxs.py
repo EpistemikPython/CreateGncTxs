@@ -363,7 +363,7 @@ class GncTxCreator:
             self.book = session.book
 
             print_info("Owner = '{}'".format(self.tx_coll[OWNER]), GREEN)
-            self.report_info = ReportInfo(self.tx_coll[OWNER])
+            self.report_info = InvestmentRecord(self.tx_coll[OWNER])
 
             self.prepare_accounts()
 

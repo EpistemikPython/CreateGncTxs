@@ -1,4 +1,4 @@
-#
+##############################################################################################################################
 # coding=utf-8
 #
 # parseMonarchQtrRep.py -- parse a text file with Monarch Quarterly Report information,
@@ -10,7 +10,7 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 # @version Python 3.6
 # @created 2019-04-28
-# @updated 2019-05-11
+# @updated 2019-05-12
 
 from sys import argv, exit
 import os.path as osp
@@ -53,7 +53,7 @@ class MonarchQrepToGncPrices:
             find: '$price'
             find: 'Transaction Details' as key to search for next Plan Type
                 OR: another match of 'Fund Company & Fund Code'
-        :return: Configuration.ReportInfo object
+        :return: Configuration.InvestmentRecord object
         """
         print_info("parse_monarch_report({})\nRuntime = {}\n".format(self.mon_file, strnow), MAGENTA)
 
@@ -83,7 +83,7 @@ class MonarchQrepToGncPrices:
                         elif match_lulu:
                             owner = match_lulu.group(1)
                         print_info("{}/ Owner is: '{}'".format(ct, owner), RED)
-                        tx_coll = ReportInfo(owner)
+                        tx_coll = InvestmentRecord(owner)
                         mon_state = FIND_START
                         continue
 
@@ -156,8 +156,8 @@ class MonarchQrepToGncPrices:
 
     def get_prices_and_save(self, tx_coll):
         """
-        create and load Gnucash prices to the Gnucash file's PriceDB
-        :param tx_coll: ReportInfo object: transactions to use to extract Gnucash prices
+        create Gnucash prices and load to the Gnucash file's PriceDB
+        :param tx_coll: InvestmentRecord object: transactions to use to extract Gnucash prices
         :return: nil
         """
         print_info('get_prices_and_save()', MAGENTA)
@@ -178,8 +178,8 @@ class MonarchQrepToGncPrices:
                     ast_parent_path.append(plan_type)
 
                     if plan_type != PL_OPEN:
-                        if tx_coll.get_owner() is None:
-                            raise Exception("PROBLEM!! Trying to process plan type '{}' but NO Owner value found"
+                        if tx_coll.get_owner() == UNKNOWN:
+                            raise Exception("PROBLEM!! Trying to process plan type '{}' but NO Owner information found"
                                             " in Tx Collection!!".format(plan_type))
                         ast_parent_path.append(ACCT_PATHS[tx_coll.get_owner()])
 
@@ -279,6 +279,7 @@ def mon_qtr_rep_main():
 
     pr_creator = MonarchQrepToGncPrices(mon_file, gnc_file, mode)
     record = pr_creator.parse_monarch_qtrep()
+    record.set_filename(mon_file)
 
     # PRINT RECORD AS JSON FILE
     if mode == 'PROD':

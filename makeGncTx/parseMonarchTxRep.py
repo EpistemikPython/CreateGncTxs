@@ -36,7 +36,7 @@ def parse_monarch_tx_rep(file_name):
                   line  = 'Units'        : float
                   line  = 'Price'        : Currency float
                   line  = 'Unit Balance' : float
-    :return: Configuration.Tx_Collection
+    :return: Configuration.InvestmentRecord object
     """
     print_info("parse_monarch_report({})\nRuntime = {}\n".format(file_name, now), MAGENTA)
 
@@ -46,7 +46,7 @@ def parse_monarch_tx_rep(file_name):
     re_fund = re.compile(r".*([A-Z]{3})\s?([0-9]{3,5}).*")
     re_date = re.compile(r".*([0-9]{2}/[0-9]{2}/[0-9]{4}).*")
 
-    tx_coll = ReportInfo()
+    tx_coll = InvestmentRecord()
     own_line = 0
     tx_line = 0
     mon_state = STATE_SEARCH
@@ -151,6 +151,7 @@ def mon_tx_rep_main():
 
     # parse an external Monarch report file
     record = parse_monarch_tx_rep(mon_file)
+    record.set_filename(mon_file)
 
     # PRINT RECORD AS JSON FILE
     if mode == 'PROD':
@@ -162,7 +163,7 @@ def mon_tx_rep_main():
         # add a timestamp to get a unique file name
         out_file = path + '/' + basename + '.' + now + ".json"
         print_info("out_file is '{}'".format(out_file))
-        fp = open(out_file, 'w')
+        fp = open(out_file, 'w', encoding='utf-8')
         json.dump(record.to_json(), fp, indent=4)
 
     print_info("\n >>> PROGRAM ENDED.", GREEN)
