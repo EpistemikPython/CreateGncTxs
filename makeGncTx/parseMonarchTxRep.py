@@ -14,13 +14,11 @@ import os.path as osp
 import re
 import copy
 import json
-from datetime import datetime as dt
 from Configuration import *
 
 now = dt.now().strftime("%Y-%m-%d_%H-%M-%S")
 
 
-# noinspection PyPep8
 def parse_monarch_tx_rep(file_name):
     """
     :param file_name: string: monarch transaction report text file to parse
@@ -42,15 +40,13 @@ def parse_monarch_tx_rep(file_name):
     """
     print_info("parse_monarch_report({})\nRuntime = {}\n".format(file_name, now), MAGENTA)
 
-    tx_coll = copy.deepcopy(Tx_Collection)
-
     # re searches
     re_own  = re.compile(".*({}).*".format(OWNER))
     re_plan = re.compile(r"([OPENTFSAR]{4})(\s?.*)")
     re_fund = re.compile(r".*([A-Z]{3})\s?([0-9]{3,5}).*")
     re_date = re.compile(r".*([0-9]{2}/[0-9]{2}/[0-9]{4}).*")
 
-    bag = list()
+    tx_coll = ReportInfo()
     own_line = 0
     tx_line = 0
     mon_state = STATE_SEARCH
@@ -58,30 +54,23 @@ def parse_monarch_tx_rep(file_name):
         ct = 0
         for line in fp:
             ct += 1
-            re_match = re.match(re_plan, line)
-            if re_match:
-                print(re_match.groups())
-                bag_name = re_match.group(1)
-                print_info("Current bag_name is: '{}'".format(bag_name))
-                bag = tx_coll[bag_name]
-                # print_info("Current bag is: {}\n".format(str(bag)))
-                mon_state = FIND_FUND
-                # if state is RRSP or TFSA and Owner not found yet
-                if bag_name != "OPEN" and tx_coll[OWNER] == "":
+            if mon_state == STATE_SEARCH:
+                re_match = re.match(re_plan, line)
+                if re_match:
+                    plan_type = re_match.group(1)
+                    print_info("\n\tCurrent plan_type is: '{}'".format(plan_type), MAGENTA)
                     mon_state = FIND_OWNER
-                continue
+                    continue
 
-            # for RRSP and TFSA need to find owner after finding plan type
             if mon_state == FIND_OWNER:
-                # print_info("FIND_OWNER line {} = {}".format(ct, line))
                 if own_line == 0:
                     re_match = re.match(re_own, line)
                     if re_match:
                         own_line += 1
                 else:
                     owner_name = line.strip()
-                    print_info("Current owner_name is: '{}'".format(owner_name))
-                    tx_coll[OWNER] = owner_name
+                    print_info("Current owner_name is: '{}'".format(owner_name), GREEN)
+                    tx_coll.set_owner(owner_name)
                     own_line = 0
                     mon_state = FIND_FUND
                 continue
@@ -89,28 +78,24 @@ def parse_monarch_tx_rep(file_name):
             if mon_state <= FIND_FUND:
                 re_match = re.match(re_fund, line)
                 if re_match:
-                    # print_info("FIND_FUND line {} = {}".format(ct, line.strip()))
-                    # print(re_match.groups())
                     fund_company = re_match.group(1)
                     fund_code = re_match.group(2)
                     curr_tx = {FUND_CMPY: fund_company, FUND_CODE: fund_code}
-                    print_info("\n\tCurrent fund is: {}".format(fund_company + " " + fund_code))
+                    print_info("Current fund is: {}".format(fund_company + " " + fund_code), BLUE)
                     mon_state = FIND_NEXT_TX
                     continue
 
             if mon_state <= FIND_NEXT_TX:
                 re_match = re.match(re_date, line)
                 if re_match:
-                    # print_info("FIND_NEXT_TX line {} = {}".format(ct, line.strip()))
-                    # print(re_match.groups())
                     tx_date = re_match.group(1)
-                    print_info("\n\tCurrent tx_date is: '{}'".format(tx_date))
+                    print_info("Current tx_date is: '{}'".format(tx_date), YELLOW)
                     curr_tx[TRADE_DATE] = tx_date
                     mon_state = FILL_CURR_TX
                     continue
 
             if mon_state == FILL_CURR_TX:
-                # print_info("FILL_CURR_TX line {} = {}".format(ct, line.strip()))
+                curr_tx[DESC] = ''
                 tx_line += 1
                 entry = line.strip()
                 if tx_line < 3:
@@ -122,9 +107,9 @@ def parse_monarch_tx_rep(file_name):
                         tx_line += 1
                     # TODO: match number to proceed to looking for GROSS?
                     curr_tx[DESC] += (entry + ":")
-                    print_info("curr_tx[DESC] is: '{}'".format(curr_tx[DESC]))
                     continue
                 if tx_line == 3:
+                    print_info("curr_tx[DESC] is: '{}'".format(curr_tx[DESC]))
                     curr_tx[GROSS] = entry
                     print_info("curr_tx[GROSS] is: '{}'".format(curr_tx[GROSS]))
                 if tx_line == 4:
@@ -142,19 +127,9 @@ def parse_monarch_tx_rep(file_name):
                 if tx_line == 7:
                     curr_tx[UNIT_BAL] = entry
                     print_info("curr_tx[UNIT_BAL] is: '{}'".format(curr_tx[UNIT_BAL]))
-                    bag.append(curr_tx)
+                    tx_coll.add(plan_type, curr_tx)
                     mon_state = STATE_SEARCH
                     tx_line = 0
-
-    print_info("\n\tlen(Monarch tx_coll[{}]) = {}".format(PL_OPEN, len(tx_coll[PL_OPEN])))
-    # print_info("\tMonarch tx_coll[{}] = {}".format(PL_OPEN, json.dumps(tx_coll[PL_OPEN], indent=4)))
-
-    print_info("\n\tMonarch tx_coll[{}] = {}".format(OWNER, tx_coll[OWNER]))
-    print_info("\n\tlen(Monarch tx_coll[{}]) = {}".format(PL_TFSA, len(tx_coll[PL_TFSA])))
-    # print_info("\tMonarch tx_coll[{}] = {}".format(PL_TFSA, json.dumps(tx_coll[PL_TFSA], indent=4)))
-
-    print_info("\n\tlen(Monarch tx_coll[{}]) = {}".format(PL_RRSP, len(tx_coll[PL_RRSP])))
-    # print_info("\tMonarch tx_coll[{}] = {}".format(PL_RRSP, json.dumps(tx_coll[PL_RRSP], indent=4)))
 
     return tx_coll
 
@@ -188,7 +163,7 @@ def mon_tx_rep_main():
         out_file = path + '/' + basename + '.' + now + ".json"
         print_info("out_file is '{}'".format(out_file))
         fp = open(out_file, 'w')
-        json.dump(record, fp, indent=4)
+        json.dump(record.to_json(), fp, indent=4)
 
     print_info("\n >>> PROGRAM ENDED.", GREEN)
 

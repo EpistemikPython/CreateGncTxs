@@ -133,7 +133,9 @@ class GncUtilities:
 
 
 class ReportInfo:
-    def __init__(self, own, dte=None):
+    def __init__(self, own=None, dte=None):
+        if own is not None:
+            assert isinstance(own, str), 'Must be a valid string'
         self.owner = str(own)
         if dte is not None:
             assert isinstance(dte, dt), 'Must be a valid datetime'
@@ -143,6 +145,9 @@ class ReportInfo:
             PL_TFSA : [],
             PL_RRSP : []
         }
+
+    def set_owner(self, own):
+        self.owner = str(own)
 
     def get_owner(self):
         if self.owner is None or self.owner == '':
@@ -174,9 +179,10 @@ class ReportInfo:
     def to_json(self):
         return {
             "__class__"  : self.__class__.__name__ ,
-            "__module__" : self.__module__ ,
-            "owner"      : self.owner      ,
-            "date"       : self.get_date_str() ,
+            "__module__" : self.__module__         ,
+            "owner"      : self.owner              ,
+            "date"       : self.get_date_str()     ,
+            "size"       : str(self.get_size())    ,
             "plans"      : self.plans
         }
 
@@ -188,8 +194,6 @@ AUTO_SYS  = "Automatic/Systematic"
 DOLLARS   = '$'
 CENTS     = '\u00A2'
 UNKNOWN   = "UNKNOWN"
-
-print("CENTS = {}".format(CENTS))
 
 # Plan types
 PL_OPEN   = "OPEN"
