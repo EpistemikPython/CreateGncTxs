@@ -1,0 +1,225 @@
+{
+    "__class__": "InvestmentRecord",
+    "__module__": "Configuration",
+    "owner": "Louise Robb",
+    "source file": "txtFromPdf/Mon-Lulu_TxRep_2019-04.rev.txt",
+    "date": "2019-05-12_11-25-32",
+    "size": "19",
+    "plan data": {
+        "OPEN": [
+            {
+                "Fund Company": "CIG",
+                "Fund Code": "18140",
+                "Description": "Automatic/Systematic:Withdrawal Plan:(AWD/SWP):",
+                "Trade Date": "04/12/2019",
+                "Gross": "($1,000.00)",
+                "Net": "($1,000.00)",
+                "Units": "-63.3370",
+                "Price": "$15.7886",
+                "Unit Balance": "6226.8000"
+            }
+        ],
+        "TFSA": [
+            {
+                "Fund Company": "MFC",
+                "Fund Code": "1960",
+                "Description": "Reinvested:Distribution/Interest:",
+                "Trade Date": "04/18/2019",
+                "Gross": "$49.84",
+                "Net": "$49.84",
+                "Units": "3.9410",
+                "Price": "$12.6480",
+                "Unit Balance": "1010.8350"
+            },
+            {
+                "Fund Company": "MFC",
+                "Fund Code": "6138",
+                "Description": "Reinvested:Distribution/Interest:",
+                "Trade Date": "04/18/2019",
+                "Gross": "$99.45",
+                "Net": "$99.45",
+                "Units": "6.9620",
+                "Price": "$14.2848",
+                "Unit Balance": "1802.1670"
+            },
+            {
+                "Fund Company": "MFC",
+                "Fund Code": "3232",
+                "Description": "Reinvested:Distribution/Interest:",
+                "Trade Date": "04/18/2019",
+                "Gross": "$36.95",
+                "Net": "$36.95",
+                "Units": "4.1830",
+                "Price": "$8.8329",
+                "Unit Balance": "1081.5020"
+            },
+            {
+                "Fund Company": "MFC",
+                "Fund Code": "3689",
+                "Description": "Reinvested:Distribution/Interest:",
+                "Trade Date": "04/18/2019",
+                "Gross": "$37.48",
+                "Net": "$37.48",
+                "Units": "2.9630",
+                "Price": "$12.6480",
+                "Unit Balance": "760.0750"
+            }
+        ],
+        "RRSP": [
+            {
+                "Fund Company": "MFC",
+                "Fund Code": "856",
+                "Description": "Reinvested:Distribution/Interest:",
+                "Trade Date": "04/18/2019",
+                "Gross": "$25.23",
+                "Net": "$25.23",
+                "Units": "5.8930",
+                "Price": "$4.2813",
+                "Unit Balance": "1481.2650"
+            },
+            {
+                "Fund Company": "MFC",
+                "Fund Code": "6129",
+                "Description": "Reinvested:Distribution/Interest:",
+                "Trade Date": "04/18/2019",
+                "Gross": "$13.87",
+                "Net": "$13.87",
+                "Units": "1.3220",
+                "Price": "$10.4927",
+                "Unit Balance": "998.9700"
+            },
+            {
+                "Fund Company": "MFC",
+                "Fund Code": "6138",
+                "Description": "Reinvested:Distribution/Interest:",
+                "Trade Date": "04/18/2019",
+                "Gross": "$73.20",
+                "Net": "$73.20",
+                "Units": "5.1240",
+                "Price": "$14.2848",
+                "Unit Balance": "1326.4040"
+            },
+            {
+                "Fund Company": "MFC",
+                "Fund Code": "302",
+                "Description": "Reinvested:Distribution/Interest:",
+                "Trade Date": "04/18/2019",
+                "Gross": "$8.56",
+                "Net": "$8.56",
+                "Units": "0.6160",
+                "Price": "$13.8862",
+                "Unit Balance": "643.8800"
+            },
+            {
+                "Fund Company": "MFC",
+                "Fund Code": "6130",
+                "Description": "Reinvested:Distribution/Interest:",
+                "Trade Date": "04/18/2019",
+                "Gross": "$33.07",
+                "Net": "$33.07",
+                "Units": "3.5660",
+                "Price": "$9.2735",
+                "Unit Balance": "830.2750"
+            },
+            {
+                "Fund Company": "MFC",
+                "Fund Code": "3232",
+                "Description": "Reinvested:Distribution/Interest:",
+                "Trade Date": "04/18/2019",
+                "Gross": "$59.22",
+                "Net": "$59.22",
+                "Units": "6.7040",
+                "Price": "$8.8329",
+                "Unit Balance": "1733.2370"
+            },
+            {
+                "Fund Company": "DYN",
+                "Fund Code": "1560",
+                "Description": "Reinvested:Distribution/Interest:",
+                "Trade Date": "04/26/2019",
+                "Gross": "$55.48",
+                "Net": "$55.48",
+                "Units": "4.0203",
+                "Price": "$13.8000",
+                "Unit Balance": "954.0732"
+            },
+            {
+                "Fund Company": "DYN",
+                "Fund Code": "729",
+                "Description": "Reinvested:Distribution/Interest:",
+                "Trade Date": "04/26/2019",
+                "Gross": "$7.59",
+                "Net": "$7.59",
+                "Units": "0.3496",
+                "Price": "$21.7100",
+                "Unit Balance": "108.7082"
+            },
+            {
+                "Fund Company": "DYN",
+                "Fund Code": "1562",
+                "Description": "Reinvested:Distribution/Interest:",
+                "Trade Date": "04/26/2019",
+                "Gross": "$7.82",
+                "Net": "$7.82",
+                "Units": "0.5667",
+                "Price": "$13.8000",
+                "Unit Balance": "134.4608"
+            },
+            {
+                "Fund Company": "MMF",
+                "Fund Code": "44424",
+                "Description": "Reinvested:Distribution/Interest:",
+                "Trade Date": "04/26/2019",
+                "Gross": "$5.42",
+                "Net": "$5.42",
+                "Units": "0.5760",
+                "Price": "$9.4042",
+                "Unit Balance": "109.0610"
+            },
+            {
+                "Fund Company": "MMF",
+                "Fund Code": "4524",
+                "Description": "Reinvested:Distribution/Interest:",
+                "Trade Date": "04/26/2019",
+                "Gross": "$145.17",
+                "Net": "$145.17",
+                "Units": "15.4370",
+                "Price": "$9.4042",
+                "Unit Balance": "2918.9280"
+            },
+            {
+                "Fund Company": "DYN",
+                "Fund Code": "029",
+                "Description": "Reinvested:Distribution/Interest:",
+                "Trade Date": "04/26/2019",
+                "Gross": "$50.00",
+                "Net": "$50.00",
+                "Units": "2.3031",
+                "Price": "$21.7100",
+                "Unit Balance": "716.6102"
+            },
+            {
+                "Fund Company": "TML",
+                "Fund Code": "1018",
+                "Description": "Reinvested:Distribution/Interest:",
+                "Trade Date": "04/29/2019",
+                "Gross": "$2.26",
+                "Net": "$2.26",
+                "Units": "0.1537",
+                "Price": "$14.7075",
+                "Unit Balance": "69.8451"
+            },
+            {
+                "Fund Company": "TML",
+                "Fund Code": "1017",
+                "Description": "Reinvested:Distribution/Interest:",
+                "Trade Date": "04/29/2019",
+                "Gross": "$13.88",
+                "Net": "$13.88",
+                "Units": "0.9437",
+                "Price": "$14.7075",
+                "Unit Balance": "427.8686"
+            }
+        ]
+    }
+}
