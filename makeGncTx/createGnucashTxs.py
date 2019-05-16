@@ -36,15 +36,13 @@ class GncTxCreator:
 
     gncu = GncUtilities()
 
-    def set_pdb(self, pdb):
-        self.price_db = pdb
-
-    def get_monarch_info(self, mtx, plan_type, ast_parent):
+    def get_monarch_info(self, mtx, plan_type, ast_parent, rev_acct):
         """
         parse the Monarch transactions
         :param        mtx:   dict: Monarch transaction information
         :param  plan_type: String:
         :param ast_parent: String:
+        :param   rev_acct: Gnucash account
         :return: dict, dict
         """
         print_info('get_monarch_info()', MAGENTA)
@@ -80,6 +78,8 @@ class GncTxCreator:
             print_info("asset_parent = '{}'".format(asset_parent.GetName()))
             rev_acct = self.root.lookup_by_name(TRUST_REV_ACCT)
             print_info("rev_acct = '{}'".format(rev_acct.GetName()))
+        # save the (possibly modified) Revenue account to the Gnc tx
+        init_tx[REVENUE] = rev_acct
 
         # get the asset account
         asset_acct = asset_parent.lookup_by_name(asset_acct_name)
@@ -146,14 +146,14 @@ class GncTxCreator:
 
         return init_tx, pair_tx
 
-    def make_gnc_price_and_save(self, tx1, tx2):
+    def make_gnc_prices(self, tx1, tx2):
         """
         create and load Gnucash prices to the Gnucash PriceDB
         :param tx1: first transaction
         :param tx2: matching transaction, if exists
         :return: nil
         """
-        print_info('make_gnc_price_and_save()', MAGENTA)
+        print_info('make_gnc_prices()', MAGENTA)
         pr_date = dt(tx1[TRADE_YR], tx1[TRADE_MTH], tx1[TRADE_DAY])
         datestring = pr_date.strftime("%Y-%m-%d")
 
@@ -202,15 +202,14 @@ class GncTxCreator:
         else:
             print_info("Mode = '{}': ABANDON Prices!\n".format(self.mode), RED)
 
-    def make_gnc_tx_and_save(self, tx1, tx2, rev_acct):
+    def make_gnc_txs(self, tx1, tx2):
         """
         create and load Gnucash transactions to the Gnucash file
         :param tx1: first transaction
         :param tx2: matching transaction if a switch
-        :param rev_acct: revenue account to use if a distribution
         :return: nil
         """
-        print_info('make_gnc_tx_and_save()', MAGENTA)
+        print_info('make_gnc_txs()', MAGENTA)
         # create a gnucash Tx
         gtx = Transaction(self.book)
         # gets a guid on construction
@@ -251,7 +250,7 @@ class GncTxCreator:
             spl_rev = Split(self.book)
             spl_rev.SetParent(gtx)
             # set the Account, Value and Reconciled of the REVENUE split
-            spl_rev.SetAccount(rev_acct)
+            spl_rev.SetAccount(tx1[REVENUE])
             rev_gross = tx1[GROSS] * -1
             print_info("rev gross = '{}'".format(rev_gross))
             spl_rev.SetValue(GncNumeric(rev_gross, 100))
@@ -292,15 +291,15 @@ class GncTxCreator:
             print_info('extract_gnc_info()', MAGENTA)
 
             # get the additional required information from the Monarch json
-            tx1, tx2 = self.get_monarch_info(mtx, plan_type, ast_parent)
+            tx1, tx2 = self.get_monarch_info(mtx, plan_type, ast_parent, rev_acct)
 
             # just return if there is a matching tx but we don't have it yet
             if tx1[SWITCH] and tx2 is None:
                 return
 
-            self.make_gnc_price_and_save(tx1, tx2)
+            self.make_gnc_prices(tx1, tx2)
 
-            self.make_gnc_tx_and_save(tx1, tx2, rev_acct)
+            self.make_gnc_txs(tx1, tx2)
 
         except Exception as ie:
             print_error("extract_gnc_info() EXCEPTION!! '{}'\n".format(str(ie)))
@@ -316,40 +315,38 @@ class GncTxCreator:
         commod_tab = self.book.get_table()
         self.curr = commod_tab.lookup("ISO4217", "CAD")
 
-        for key in self.tx_coll:
-            if key != OWNER:
-                plan_type = key
-                print_info("\n\nPlan type = '{}'".format(plan_type))
+        for plan_type in self.tx_coll[PLAN_DATA]:
+            print_info("\n\nPlan type = '{}'".format(plan_type))
 
-                # print_info(json.dumps(ACCT_PATHS, indent=4))
-                # for key in ACCT_PATHS:
-                #     print_info("type ACCT_PATHS key '{}' = '{}'".format(key, type(key)))
+            # print_info(json.dumps(ACCT_PATHS, indent=4))
+            # for key in ACCT_PATHS:
+            #     print_info("type ACCT_PATHS key '{}' = '{}'".format(key, type(key)))
 
-                rev_path = copy.copy(ACCT_PATHS[REVENUE])
-                rev_path.append(plan_type)
+            rev_path = copy.copy(ACCT_PATHS[REVENUE])
+            rev_path.append(plan_type)
 
-                ast_parent_path = copy.copy(ACCT_PATHS[ASSET])
-                ast_parent_path.append(plan_type)
+            ast_parent_path = copy.copy(ACCT_PATHS[ASSET])
+            ast_parent_path.append(plan_type)
 
-                pl_owner = self.report_info.get_owner()
-                # print_info("type pl_owner = '{}'".format(type(pl_owner)))
-                if plan_type != PL_OPEN:
-                    if pl_owner == '':
-                        raise Exception("PROBLEM!! Trying to process plan type '{}' but NO Owner value found"
-                                        " in Tx Collection!!".format(plan_type))
-                    rev_path.append(ACCT_PATHS[pl_owner])
-                    ast_parent_path.append(ACCT_PATHS[pl_owner])
+            pl_owner = self.report_info.get_owner()
+            # print_info("type pl_owner = '{}'".format(type(pl_owner)))
+            if plan_type != PL_OPEN:
+                if pl_owner == '':
+                    raise Exception("PROBLEM!! Trying to process plan type '{}' but NO Owner value found"
+                                    " in Tx Collection!!".format(plan_type))
+                rev_path.append(ACCT_PATHS[pl_owner])
+                ast_parent_path.append(ACCT_PATHS[pl_owner])
 
-                print_info("rev_path = '{}'".format(str(rev_path)))
-                rev_acct = self.gncu.account_from_path(self.root, rev_path)
-                print_info("rev_acct = '{}'".format(rev_acct.GetName()))
+            print_info("rev_path = '{}'".format(str(rev_path)))
+            rev_acct = self.gncu.account_from_path(self.root, rev_path)
+            print_info("rev_acct = '{}'".format(rev_acct.GetName()))
 
-                print_info("ast_parent_path = '{}'".format(str(ast_parent_path)))
-                asset_parent = self.gncu.account_from_path(self.root, ast_parent_path)
-                print_info("ast_parent = '{}'".format(asset_parent.GetName()))
+            print_info("asset_parent_path = '{}'".format(str(ast_parent_path)))
+            asset_parent = self.gncu.account_from_path(self.root, ast_parent_path)
+            print_info("asset_parent = '{}'".format(asset_parent.GetName()))
 
-                for mtx in self.tx_coll[plan_type]:
-                    self.extract_gnc_info(mtx, plan_type, asset_parent, rev_acct)
+            for mtx in self.tx_coll[PLAN_DATA][plan_type]:
+                self.extract_gnc_info(mtx, plan_type, asset_parent, rev_acct)
 
     def create_gnc_txs(self):
         """

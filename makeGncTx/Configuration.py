@@ -193,11 +193,11 @@ class InvestmentRecord:
         return {
             "__class__"    : self.__class__.__name__ ,
             "__module__"   : self.__module__         ,
-            "owner"        : self.get_owner()        ,
-            "source file"  : self.get_filename()     ,
-            "date"         : self.get_date_str()     ,
-            "size"         : str(self.get_size())    ,
-            "plan data"    : self.plans
+            OWNER          : self.get_owner()        ,
+            "Source File"  : self.get_filename()     ,
+            "Date"         : self.get_date_str()     ,
+            "Size"         : str(self.get_size())    ,
+            PLAN_DATA      : self.plans
         }
 
 
@@ -210,6 +210,7 @@ CENTS     = '\u00A2'
 UNKNOWN   = "UNKNOWN"
 
 # Plan types
+PLAN_DATA = "Plan Data"
 PL_OPEN   = "OPEN"
 PL_TFSA   = "TFSA"
 PL_RRSP   = "RRSP"
