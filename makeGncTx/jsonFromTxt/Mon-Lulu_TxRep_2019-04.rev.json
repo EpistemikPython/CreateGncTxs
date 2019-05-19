@@ -1,11 +1,11 @@
 {
     "__class__": "InvestmentRecord",
     "__module__": "Configuration",
-    "owner": "Louise Robb",
-    "source file": "txtFromPdf/Mon-Lulu_TxRep_2019-04.rev.txt",
-    "date": "2019-05-12_11-25-32",
-    "size": "19",
-    "plan data": {
+    "Owner": "Louise Robb",
+    "Source File": "txtFromPdf/Mon-Lulu_TxRep_2019-04.rev.txt",
+    "Date": "2019-05-12_11-25-32",
+    "Size": "19",
+    "Plan Data": {
         "OPEN": [
             {
                 "Fund Company": "CIG",

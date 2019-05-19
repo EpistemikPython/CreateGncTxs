@@ -1,11 +1,11 @@
 {
     "__class__": "InvestmentRecord",
     "__module__": "Configuration",
-    "owner": "Mark H. Sattolo",
-    "source file": "txtFromPdf/Mon-Mark_TxRep_2019-04.txt",
-    "date": "2019-05-12_11-26-11",
-    "size": "20",
-    "plan data": {
+    "Owner": "Mark H. Sattolo",
+    "Source File": "txtFromPdf/Mon-Mark_TxRep_2019-04.txt",
+    "Date": "2019-05-12_11-26-11",
+    "Size": "20",
+    "Plan Data": {
         "OPEN": [
             {
                 "Fund Company": "CIG",

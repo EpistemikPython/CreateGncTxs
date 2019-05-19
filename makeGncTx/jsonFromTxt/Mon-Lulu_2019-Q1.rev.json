@@ -1,0 +1,136 @@
+{
+    "__class__": "InvestmentRecord",
+    "__module__": "Configuration",
+    "Owner": "Louise Robb",
+    "Source File": "txtFromPdf/Mon-Lulu_2019-Q1.rev.txt",
+    "Date": "2019-03-31_00-00-00",
+    "Size": "20",
+    "Plan Data": {
+        "OPEN": [
+            {
+                "Fund Company": "CI Investments",
+                "Fund Code": "18140",
+                "$": "15",
+                "\u00a2": "6076"
+            }
+        ],
+        "TFSA": [
+            {
+                "Fund Company": "Mackenzie Strategic ",
+                "Fund Code": "1960",
+                "$": "12",
+                "\u00a2": "5035"
+            },
+            {
+                "Fund Company": "Mackenzie Strategic ",
+                "Fund Code": "3232",
+                "$": "8",
+                "\u00a2": "7320"
+            },
+            {
+                "Fund Company": "Mackenzie Strategic ",
+                "Fund Code": "3689",
+                "$": "12",
+                "\u00a2": "5035"
+            },
+            {
+                "Fund Company": "Mackenzie Strategic ",
+                "Fund Code": "6138",
+                "$": "14",
+                "\u00a2": "1196"
+            }
+        ],
+        "RRSP": [
+            {
+                "Fund Company": "CIBC Asset Management",
+                "Fund Code": "ATL",
+                "$": "10",
+                "\u00a2": "8659"
+            },
+            {
+                "Fund Company": "Dynamic Funds",
+                "Fund Code": "029",
+                "$": "21",
+                "\u00a2": "1200"
+            },
+            {
+                "Fund Company": "Dynamic Funds",
+                "Fund Code": "1560",
+                "$": "13",
+                "\u00a2": "6000"
+            },
+            {
+                "Fund Company": "Dynamic Funds",
+                "Fund Code": "1562",
+                "$": "13",
+                "\u00a2": "6000"
+            },
+            {
+                "Fund Company": "Dynamic Funds",
+                "Fund Code": "729",
+                "$": "21",
+                "\u00a2": "1200"
+            },
+            {
+                "Fund Company": "Mackenzie Financial Corp.",
+                "Fund Code": "302",
+                "$": "13",
+                "\u00a2": "9824"
+            },
+            {
+                "Fund Company": "Mackenzie Strategic ",
+                "Fund Code": "3232",
+                "$": "8",
+                "\u00a2": "7320"
+            },
+            {
+                "Fund Company": "Mackenzie Canadian ",
+                "Fund Code": "6129",
+                "$": "10",
+                "\u00a2": "5665"
+            },
+            {
+                "Fund Company": "Mackenzie Corporate ",
+                "Fund Code": "6130",
+                "$": "9",
+                "\u00a2": "2509"
+            },
+            {
+                "Fund Company": "Mackenzie Strategic ",
+                "Fund Code": "6138",
+                "$": "14",
+                "\u00a2": "1196"
+            },
+            {
+                "Fund Company": "Mackenzie Financial Corp.",
+                "Fund Code": "856",
+                "$": "4",
+                "\u00a2": "2703"
+            },
+            {
+                "Fund Company": "Manulife Mutual Funds",
+                "Fund Code": "44424",
+                "$": "9",
+                "\u00a2": "2876"
+            },
+            {
+                "Fund Company": "Manulife Mutual Funds",
+                "Fund Code": "4524",
+                "$": "9",
+                "\u00a2": "2876"
+            },
+            {
+                "Fund Company": "Franklin Bissett ",
+                "Fund Code": "1017",
+                "$": "14",
+                "\u00a2": "4176"
+            },
+            {
+                "Fund Company": "Franklin Bissett ",
+                "Fund Code": "1018",
+                "$": "14",
+                "\u00a2": "4176"
+            }
+        ]
+    }
+}
