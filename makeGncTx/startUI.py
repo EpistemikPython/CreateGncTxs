@@ -10,8 +10,8 @@
 
 import sys
 import json
-from PyQt5.QtWidgets import ( QApplication, QComboBox, QVBoxLayout, QGroupBox, QDialog, QFileDialog,
-                              QPushButton, QFormLayout, QDialogButtonBox, QLabel, QTextEdit )
+from PyQt5.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QGroupBox, QDialog, QFileDialog,
+                             QPushButton, QFormLayout, QDialogButtonBox, QLabel, QTextEdit)
 from functools import partial
 from Configuration import *
 from parseMonarchTxRep import mon_tx_rep_main
@@ -43,14 +43,15 @@ MAIN_FXNS = {
 }
 
 
+# noinspection PyUnresolvedReferences,PyAttributeOutsideInit
 class CreateGncTxsAndPrices(QDialog):
     def __init__(self):
         super().__init__()
         self.title = 'Gnucash Txs & Prices'
-        self.left = 780
+        self.left = 480
         self.top = 160
-        self.width = 400
-        self.height = 600
+        self.width = 600
+        self.height = 800
         self.pdf_file = None
         self.mon_file = None
         self.gnc_file = None
@@ -126,6 +127,7 @@ class CreateGncTxsAndPrices(QDialog):
         self.gnc_label    = QLabel(GNC+FILE_LABEL)
         self.gnc_file_btn.clicked.connect(partial(self.open_file_name_dialog, GNC))
 
+    # noinspection PyUnboundLocalVariable
     def open_file_name_dialog(self, label):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
@@ -228,10 +230,6 @@ class CreateGncTxsAndPrices(QDialog):
                 reply = msg
 
         self.response_box.setText(json.dumps(reply, indent=4))
-
-    @staticmethod
-    def selection_change(cb):
-        print_info("Selection changed to '{}'.".format(cb.currentText()), MAGENTA)
 
 
 # TODO: print debug output to ui screen

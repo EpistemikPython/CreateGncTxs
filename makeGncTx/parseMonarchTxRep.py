@@ -150,6 +150,7 @@ def mon_tx_rep_main(args):
     record = parse_monarch_tx_rep(mon_file)
     record.set_filename(mon_file)
 
+    msg = TEST
     # PRINT RECORD AS JSON FILE
     if mode == PROD:
         # pluck path and basename from mon_file to use for the saved json file
@@ -162,9 +163,10 @@ def mon_tx_rep_main(args):
         print_info("out_file is '{}'".format(out_file))
         fp = open(out_file, 'w', encoding='utf-8')
         json.dump(record.to_json(), fp, indent=4)
+        msg = "parseMonarchTxRep created file: {}".format(out_file)
 
     print_info("\n >>> PROGRAM ENDED.", GREEN)
-    return "parseMonarchTxRep created file: {}".format(out_file)
+    return msg
 
 
 if __name__ == '__main__':
