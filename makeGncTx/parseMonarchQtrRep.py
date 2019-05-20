@@ -1,4 +1,4 @@
-##############################################################################################################################
+###############################################################################################################################
 # coding=utf-8
 #
 # parseMonarchQtrRep.py -- parse a text file with Monarch Quarterly Report information,
@@ -10,9 +10,8 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 # @version Python 3.6
 # @created 2019-04-28
-# @updated 2019-05-12
+# @updated 2019-05-20
 
-from sys import argv, exit
 import os.path as osp
 import re
 import copy
@@ -24,7 +23,7 @@ from Configuration import *
 # noinspection PyUnresolvedReferences
 class MonarchQrepToGncPrices:
     def __init__(self, fmon, gnc_file, mode):
-        self.prod = (mode == "PROD")
+        self.prod = (mode == PROD)
         self.mon_file = fmon
 
         self.session = Session(gnc_file)
@@ -135,7 +134,7 @@ class MonarchQrepToGncPrices:
                             company = match_comp2.group(3)
                             fund_code = match_comp2.group(2)
                         curr_tx = {FUND_CMPY: company, FUND_CODE: fund_code}
-                        print_info("{}/ Fund is: '{}-{}'".format(ct, company, fund_code), MAGENTA)
+                        print_info("{}/ Fund is: '{}:{}'".format(ct, company, fund_code), MAGENTA)
                         mon_state = FIND_PRICE
                         continue
 
@@ -156,14 +155,15 @@ class MonarchQrepToGncPrices:
 
     def get_prices_and_save(self, tx_coll):
         """
-        create Gnucash prices and load to the Gnucash file's PriceDB
+        create Gnucash prices, load and save to the Gnucash file's PriceDB
         :param tx_coll: InvestmentRecord object: transactions to use to extract Gnucash prices
-        :return: nil
+        :return: message
         """
         print_info('get_prices_and_save()', MAGENTA)
 
         gncu = GncUtilities()
 
+        msg = TEST
         self.price_db.begin_edit()
         print_info("self.price_db.begin_edit()", MAGENTA)
         try:
@@ -237,6 +237,7 @@ class MonarchQrepToGncPrices:
                         print_info("PROD: ABANDON Prices!\n", RED)
 
             if self.prod:
+                msg = "PROD: COMMIT Price DB edits and Save session."
                 print_info("PROD: COMMIT Price DB edits and Save session.", GREEN)
                 self.price_db.commit_edit()
                 # only ONE session save for the entire run
@@ -246,43 +247,45 @@ class MonarchQrepToGncPrices:
             self.session.destroy()
 
         except Exception as e:
-            print_error("get_prices_and_save() EXCEPTION!! '{}'".format(str(e)))
+            msg = "get_prices_and_save() EXCEPTION!! '{}'".format(str(e))
+            print_error(msg)
             if "session" in locals() and self.session is not None:
                 self.session.end()
                 self.session.destroy()
             raise
 
+        return msg
 
-def mon_qtr_rep_main():
-    exe = argv[0].split('/')[-1]
-    usage = "usage: python {} <monarch json file> <gnucash file> <mode: prod|test>".format(exe)
-    if len(argv) < 4:
+
+def mon_qtr_rep_main(args):
+    usage = "usage: py36 parseMonarchQtrRep.py <monarch json file> <gnucash file> <mode: prod|test>"
+    if len(args) < 3:
         print_error("NOT ENOUGH parameters!")
         print_info(usage, MAGENTA)
         exit()
 
-    mon_file = argv[1]
+    mon_file = args[0]
     if not osp.isfile(mon_file):
         print_error("File path '{}' does not exist. Exiting...".format(mon_file))
         print_info(usage, GREEN)
         exit()
     print_info("mon_file = '{}'".format(mon_file))
 
-    gnc_file = argv[2]
+    gnc_file = args[1]
     if not osp.isfile(gnc_file):
         print_error("File path '{}' does not exist. Exiting...".format(gnc_file))
         print_info(usage, GREEN)
         exit()
     print_info("gnc_file = '{}'".format(gnc_file))
 
-    mode = argv[3].upper()
+    mode = args[2].upper()
 
     pr_creator = MonarchQrepToGncPrices(mon_file, gnc_file, mode)
     record = pr_creator.parse_monarch_qtrep()
     record.set_filename(mon_file)
 
     # PRINT RECORD AS JSON FILE
-    if mode == 'PROD':
+    if mode == PROD:
         # pluck path and basename from mon_file to use for the saved json file
         ospath, fname = osp.split(mon_file)
         # print_info("path is '{}'".format(ospath))
@@ -295,10 +298,12 @@ def mon_qtr_rep_main():
         fp = open(out_file, 'w', encoding='utf-8')
         json.dump(record.to_json(), fp, indent=4)
 
-    pr_creator.get_prices_and_save(record)
+    msg = pr_creator.get_prices_and_save(record)
 
     print_info("\n >>> PROGRAM ENDED.", GREEN)
+    return msg
 
 
 if __name__ == '__main__':
-    mon_qtr_rep_main()
+    import sys
+    mon_qtr_rep_main(sys.argv[1:])

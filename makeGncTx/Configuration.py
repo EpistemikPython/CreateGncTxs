@@ -1,21 +1,25 @@
 ##############################################################################################################################
 # coding=utf-8
 #
-# Configuration.py -- constants and utility functions used to parse a Monarch text file
-#                     and write the transactions and/or prices to a Gnucash file
+# Configuration.py -- constants and utility functions used to parse an initial Monarch pdf file,
+#                     extract the information and create transactions and/or prices to write to a Gnucash file
 #
 # Copyright (c) 2018,2019 Mark Sattolo <epistemik@gmail.com>
 #
 # @author Mark Sattolo <epistemik@gmail.com>
 # @version Python 3.6
 # @created 2018
-# @updated 2019-05-12
+# @updated 2019-05-20
 
 import inspect
 from datetime import datetime as dt
 
 dtnow = dt.now()
 strnow = dtnow.strftime("%Y-%m-%d_%H-%M-%S")
+
+# constant strings
+TEST = 'test'
+PROD = 'PROD'
 
 COLOR_FLAG = '\x1b['
 BLACK   = COLOR_FLAG + '30m'
@@ -35,7 +39,7 @@ def print_info(text, color='', inspector=True, newline=True):
     """
     inspect_line = ''
     if text is None:
-        text = '================================================================================================================='
+        text = '==============================================================================================================='
         inspector = False
     if inspector:
         calling_frame = inspect.currentframe().f_back

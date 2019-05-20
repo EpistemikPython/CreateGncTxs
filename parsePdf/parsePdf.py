@@ -1,22 +1,20 @@
+###############################################################################################################################
+# coding=utf-8
 #
-# parsePdf.py -- parse a PDF file and recover the text
+# parsePdf.py -- parse a PDF file and recover the text; mainly for Monarch Pdf reports
 #
 # Copyright (c) 2018,2019 Mark Sattolo <epistemik@gmail.com>
 #
 # @author Mark Sattolo <epistemik@gmail.com>
 # @version Python 3.6
 # @created 2018-12
-# @updated 2019-04-28
+# @updated 2019-05-20
 
-from sys import argv, exit
 import os.path as osp
 import collections
 import json
-from datetime import datetime as dt
 import PyPDF2
 from Configuration import *
-
-now = dt.now().strftime("%Y-%m-%dT%H-%M-%S")
 
 
 # noinspection PyPep8
@@ -32,27 +30,23 @@ def get_all_pages(pdf_reader, fp):
     for i in c:
         page = pdf_reader.getPage(i)
         page_text = page.extractText()
-        # fix Python 2 to Python 3
-        # CANNOT change page text to utf-8 with Python 3 or lose newlines...
-        # page_content = page_text.encode('utf-8')
         print_info(page_text, BLUE)
         fp.write(page_text)
 
 
-def parse_pdf_main():
-    exe = argv[0].split('/')[-1]
-    print_info("len(argv) = {}".format(len(argv)))
-    if len(argv) < 2:
-        print_error("Usage: python {} <pdf_input_path> [page_num]".format(exe))
+def parse_pdf_main(args):
+    print_info("len(args) = {}".format(len(args)))
+    if len(args) < 1:
+        print_error("Usage: py36 parsePdf.py <pdf_input_path> [page_num]")
         exit()
 
-    monarch = argv[1]
+    monarch = args[0]
     print_info("Monarch report is: {}".format(monarch), MAGENTA)
 
     page_num = 0
     read_all = True
-    if len(argv) > 2:
-        page_num = int(argv[2]) - 1
+    if len(args) > 1:
+        page_num = int(args[1]) - 1
         read_all = False
 
     # parse an external Monarch pdf report file
@@ -72,7 +66,7 @@ def parse_pdf_main():
     path = path.replace('in', 'out')
     (basename, ext) = osp.splitext(fname)
     # add a timestamp to get a unique file name
-    out_file = path + '/' + basename + '.' + now + '.txt'
+    out_file = path + '/' + basename + '.' + strnow + '.txt'
     print_info("out_file is '{}'".format(out_file), GREEN)
     fp = open(out_file, 'w')
 
@@ -84,7 +78,9 @@ def parse_pdf_main():
     fp.close()
 
     print_info("\n >>> PROGRAM ENDED.", CYAN)
+    return "parsePdf created file: {}".format(out_file)
 
 
 if __name__ == "__main__":
-    parse_pdf_main()
+    import sys
+    parse_pdf_main(sys.argv[1:])

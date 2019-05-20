@@ -1,3 +1,5 @@
+###############################################################################################################################
+# coding=utf-8
 #
 # parseMonarchTxRep.py -- parse a text file with Monarch Transaction Report information,
 #                         save as a dictionary and print out as a json file
@@ -7,12 +9,10 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 # @version Python 3.6
 # @created 2018
-# @updated 2019-04-28
+# @updated 2019-05-20
 
-from sys import argv, exit
 import os.path as osp
 import re
-import copy
 import json
 from Configuration import *
 
@@ -133,27 +133,25 @@ def parse_monarch_tx_rep(file_name):
     return tx_coll
 
 
-def mon_tx_rep_main():
-    if len(argv) < 3:
+def mon_tx_rep_main(args):
+    if len(args) < 2:
         print_error("NOT ENOUGH parameters!")
-        exe = argv[0].split('/')[-1]
-        print_info("usage: python {0} <monarch file> <mode: prod|test>".format(exe), MAGENTA)
-        print_info("Example: {0} '{1}' 'test'".format(exe, "txtFromPdf/Monarch-Mark-all.txt"), GREEN)
+        print_info("usage: py36 parseMonarchTxRep.py <monarch file> <mode: prod|test>", MAGENTA)
         exit()
 
-    mon_file = argv[1]
+    mon_file = args[0]
     if not osp.isfile(mon_file):
         print_error("File path '{}' does not exist. Exiting...".format(mon_file))
         exit()
 
-    mode = argv[2].upper()
+    mode = args[1].upper()
 
     # parse an external Monarch report file
     record = parse_monarch_tx_rep(mon_file)
     record.set_filename(mon_file)
 
     # PRINT RECORD AS JSON FILE
-    if mode == 'PROD':
+    if mode == PROD:
         # pluck path and basename from mon_file to use for the saved json file
         ospath, fname = osp.split(mon_file)
         # save to the output folder
@@ -166,7 +164,9 @@ def mon_tx_rep_main():
         json.dump(record.to_json(), fp, indent=4)
 
     print_info("\n >>> PROGRAM ENDED.", GREEN)
+    return "parseMonarchTxRep created file: {}".format(out_file)
 
 
 if __name__ == '__main__':
-    mon_tx_rep_main()
+    import sys
+    mon_tx_rep_main(sys.argv[1:])

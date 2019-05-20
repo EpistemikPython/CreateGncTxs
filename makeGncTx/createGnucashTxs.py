@@ -1,3 +1,5 @@
+###############################################################################################################################
+# coding=utf-8
 #
 # createGnucashTxs.py -- parse a Monarch record, possibly from a json file,
 #                        create Gnucash transactions from the data and write to a Gnucash file
@@ -7,13 +9,12 @@
 # @author Mark Sattolo <epistemik@gmail.com>
 # @version Python 3.6
 # @created 2018
-# @updated 2019-05-11
+# @updated 2019-05-20
 
 import copy
 import json
 import os.path as osp
 import re
-from sys import argv
 from gnucash import Session, Transaction, Split, GncNumeric, GncPrice
 from gnucash.gnucash_core_c import CREC
 from Configuration import *
@@ -193,7 +194,7 @@ class GncTxCreator:
             pr2.set_typestr('nav')
             pr2.commit_edit()
 
-        if self.mode == "PROD":
+        if self.mode == PROD:
             print_info("Mode = '{}': Add Price1 to DB.\n".format(self.mode), GREEN)
             self.price_db.add_price(pr1)
             if tx1[SWITCH]:
@@ -265,7 +266,7 @@ class GncTxCreator:
             gtx.RollbackEdit()
             return
 
-        if self.mode == "PROD":
+        if self.mode == PROD:
             print_info("Mode = '{}': Commit transaction changes.\n".format(self.mode))
             gtx.CommitEdit()
         else:
@@ -351,10 +352,10 @@ class GncTxCreator:
     def create_gnc_txs(self):
         """
         Take the information from a transaction collection and produce Gnucash transactions to write to a Gnucash file
-        :return: nil
+        :return: message
         """
         print_info("\ngncFile = '{}'".format(self.gnc_file))
-
+        msg = TEST
         try:
             session = Session(self.gnc_file)
             self.book = session.book
@@ -364,8 +365,9 @@ class GncTxCreator:
 
             self.prepare_accounts()
 
-            if self.mode == "PROD":
-                print_info("Mode = '{}': COMMIT Price DB edits and Save session.".format(self.mode), GREEN)
+            if self.mode == PROD:
+                msg = "Mode = '{}': COMMIT Price DB edits and Save session.".format(self.mode)
+                print_info(msg, GREEN)
                 self.price_db.commit_edit()
                 # only ONE session save for the entire run
                 session.save()
@@ -374,22 +376,24 @@ class GncTxCreator:
             session.destroy()
 
         except Exception as e:
-            print_error("create_gnc_txs() EXCEPTION!! '{}'".format(str(e)))
+            msg = "create_gnc_txs() EXCEPTION!! '{}'".format(str(e))
+            print_error(msg)
             if "session" in locals() and session is not None:
                 session.end()
                 session.destroy()
             raise
 
+        return msg
 
-def create_gnc_txs_main():
-    exe = argv[0].split('/')[-1]
-    usage = "usage: python {} <monarch json file> <gnucash file> <mode: prod|test>".format(exe)
-    if len(argv) < 4:
+
+def create_gnc_txs_main(args):
+    usage = "usage: py36 createGnucashTxs.py <monarch json file> <gnucash file> <mode: prod|test>"
+    if len(args) < 3:
         print_error("NOT ENOUGH parameters!")
         print_info(usage, MAGENTA)
         exit()
 
-    mon_file = argv[1]
+    mon_file = args[0]
     if not osp.isfile(mon_file):
         print_error("File path '{}' does not exist. Exiting...".format(mon_file))
         print_info(usage, GREEN)
@@ -399,18 +403,20 @@ def create_gnc_txs_main():
     with open(mon_file, 'r') as fp:
         tx_coll = json.load(fp)
 
-    gnc_file = argv[2]
+    gnc_file = args[1]
     if not osp.isfile(gnc_file):
         print_error("File path '{}' does not exist. Exiting...".format(gnc_file))
         exit()
 
-    mode = argv[3].upper()
+    mode = args[2].upper()
 
     gtc = GncTxCreator(tx_coll, gnc_file, mode)
-    gtc.create_gnc_txs()
+    msg = gtc.create_gnc_txs()
 
     print_info("\n >>> PROGRAM ENDED.", MAGENTA)
+    return msg
 
 
 if __name__ == '__main__':
-    create_gnc_txs_main()
+    import sys
+    create_gnc_txs_main(sys.argv[1:])
