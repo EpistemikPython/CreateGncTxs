@@ -3,10 +3,12 @@
 #
 # startUI.py -- run the UI for the functions
 #
+# Copyright (c) 2019 Mark Sattolo <epistemik@gmail.com>
+#
 # @author Mark Sattolo <epistemik@gmail.com>
 # @version Python 3.6
 # @created 2019-05-19
-# @updated 2019-05-20
+# @updated 2019-05-25
 
 import sys
 import json
@@ -22,35 +24,34 @@ from parsePdf import parse_pdf_main
 
 
 # constant strings
-QTRS       = 'Quarters'
-SHEET_1    = 'Sheet 1'
-SHEET_2    = 'Sheet 2'
-PDF        = 'PDF'
-TX         = 'Transactions'
-GNC        = 'Gnucash'
-MON        = 'Monarch'
+QTRS       = MON + ' Quarterly Report'
+PDF        = MON + ' PDF Report'
+TX         = MON + ' Txs Report'
+GNC_TXS    = 'Create Gnc Txs'
 FILE_LABEL = ' File:'
 GNC_SFX    = 'gnc'
 MON_SFX    = 'txt'
+PDF_SFX    = 'pdf'
 JSON       = 'json'
 NO_NEED    = 'NOT NEEDED'
 
 MAIN_FXNS = {
-    GNC   : create_gnc_txs_main ,
-    PDF   : parse_pdf_main      ,
-    TX    : mon_tx_rep_main     ,
-    QTRS  : mon_qtr_rep_main
+    GNC_TXS : create_gnc_txs_main ,
+    PDF     : parse_pdf_main      ,
+    TX      : mon_tx_rep_main     ,
+    QTRS    : mon_qtr_rep_main
 }
 
 
 # noinspection PyUnresolvedReferences,PyAttributeOutsideInit
 class CreateGncTxsAndPrices(QDialog):
     def __init__(self):
+        print_info("startUI:CreateGncTxsAndPrices()\nRuntime = {}\n".format(strnow), MAGENTA)
         super().__init__()
         self.title = 'Gnucash Txs & Prices'
         self.left = 480
         self.top = 160
-        self.width = 600
+        self.width = 800
         self.height = 800
         self.pdf_file = None
         self.mon_file = None
@@ -85,7 +86,7 @@ class CreateGncTxsAndPrices(QDialog):
         self.layout = QFormLayout()
 
         self.cb_script = QComboBox()
-        self.cb_script.addItems([x for x in MAIN_FXNS])
+        self.cb_script.addItems(x for x in MAIN_FXNS)
         self.cb_script.currentIndexChanged.connect(partial(self.script_change))
         self.layout.addRow(QLabel("Script:"), self.cb_script)
         self.script = self.cb_script.currentText()
@@ -137,7 +138,7 @@ class CreateGncTxsAndPrices(QDialog):
         if label == PDF:
             print_info(PDF)
             caption = base_caption.format(PDF)
-            ffilter = base_filter.format(PDF, PDF.lower())
+            ffilter = base_filter.format(PDF, PDF_SFX)
         elif label == MON:
             print_info(MON)
             caption = base_caption.format(MON)
