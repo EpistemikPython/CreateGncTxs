@@ -4,18 +4,19 @@
 # Configuration.py -- constants and utility functions used to parse an initial Monarch pdf file,
 #                     extract the information and create transactions and/or prices to write to a Gnucash file
 #
-# Copyright (c) 2018,2019 Mark Sattolo <epistemik@gmail.com>
+# Copyright (c) 2019 Mark Sattolo <epistemik@gmail.com>
 #
 # @author Mark Sattolo <epistemik@gmail.com>
 # @version Python 3.6
 # @created 2018
-# @updated 2019-05-20
+# @updated 2019-05-25
 
 import inspect
 from datetime import datetime as dt
 
+DATE_STR_FORMAT = "D%Y-%m-%dT%H-%M-%S"
 dtnow = dt.now()
-strnow = dtnow.strftime("%Y-%m-%d_%H-%M-%S")
+strnow = dtnow.strftime(DATE_STR_FORMAT)
 
 # constant strings
 TEST = 'test'
@@ -138,14 +139,13 @@ class GncUtilities:
 
 class InvestmentRecord:
     def __init__(self, own=None, dte=None, fn=None):
+        print_info("InvestmentRecord()\nRuntime = {}\n".format(strnow), MAGENTA)
         if own is not None:
-            assert isinstance(own, str), 'Must be a valid string'
+            assert isinstance(own, str), 'Must be a valid string!'
         self.owner = own
-        if dte is not None:
-            assert isinstance(dte, dt), 'Must be a valid datetime'
-        self.date = dte
+        self.date = dte if dte is not None and isinstance(dte, dt) else dtnow
         if fn is not None:
-            assert isinstance(fn, str), 'Must be a valid string'
+            assert isinstance(fn, str), 'Must be a valid string!'
         self.filename = fn
         self.plans = {
             PL_OPEN : [],
@@ -157,9 +157,7 @@ class InvestmentRecord:
         self.owner = str(own)
 
     def get_owner(self):
-        if self.owner is None or self.owner == '':
-            return UNKNOWN
-        return self.owner
+        return UNKNOWN if self.owner is None or self.owner == '' else self.owner
 
     def set_date(self, dte):
         if isinstance(dte, dt):
@@ -168,27 +166,25 @@ class InvestmentRecord:
             print_error("dte is type: {}".format(type(dte)))
 
     def get_date(self):
-        if isinstance(self.date, dt):
-            return self.date
-        return dtnow
+        return self.date
 
     def get_date_str(self):
-        if isinstance(self.date, dt):
-            return self.date.strftime("%Y-%m-%d_%H-%M-%S")
-        return strnow
+        return self.date.strftime(DATE_STR_FORMAT)
 
     def set_filename(self, fn):
         self.filename = str(fn)
 
     def get_filename(self):
-        if self.filename is None or self.filename == '':
-            return UNKNOWN
-        return self.filename
+        return UNKNOWN if self.filename is None or self.filename == '' else self.filename
 
     def get_size(self):
         return len(self.plans[PL_OPEN]) + len(self.plans[PL_TFSA]) + len(self.plans[PL_RRSP])
 
-    def add(self, plan, obj):
+    def get_size_str(self):
+        return "{} = {}:{} + {}:{} + {}:{}".format(str(self.get_size()), PL_OPEN, len(self.plans[PL_OPEN]),
+                                                   PL_TFSA, len(self.plans[PL_TFSA]), PL_RRSP, len(self.plans[PL_RRSP]))
+
+    def add_tx(self, plan, obj):
         if isinstance(plan, str) and plan in self.plans.keys():
             if obj is not None:
                 self.plans[plan].append(obj)
@@ -200,11 +196,13 @@ class InvestmentRecord:
             OWNER          : self.get_owner()        ,
             "Source File"  : self.get_filename()     ,
             "Date"         : self.get_date_str()     ,
-            "Size"         : str(self.get_size())    ,
+            "Size"         : self.get_size_str()     ,
             PLAN_DATA      : self.plans
         }
 
 
+GNC       = 'Gnucash'
+MON       = 'Monarch'
 CLIENT_TX = "CLIENT TRANSACTIONS"
 PLAN_TYPE = "Plan Type:"
 OWNER     = "Owner"
@@ -327,8 +325,8 @@ ASSET    = "Asset"
 TRUST    = "TRUST"
 MON_MARK = "Mark H. Sattolo"
 MON_LULU = "Louise Robb"
-GNU_MARK = "Mark"
-GNU_LULU = "Lulu"
+GNC_MARK = "Mark"
+GNC_LULU = "Lulu"
 
 FEE    = "Fee Redemption"
 DIST   = "Dist"
@@ -344,8 +342,8 @@ INTRF_OUT = INTRF + "-" + OUT
 ACCT_PATHS = {
     REVENUE  : ["REV_Invest", DIST] ,  # + planType [+ Owner]
     ASSET    : ["FAMILY", "INVEST"] ,  # + planType [+ Owner]
-    MON_MARK : GNU_MARK ,
-    MON_LULU : GNU_LULU ,
+    MON_MARK : GNC_MARK ,
+    MON_LULU : GNC_LULU ,
     TRUST    : [TRUST, "Trust Assets", "Monarch ITF", COMPANY_NAME[CIG]]
 }
 
