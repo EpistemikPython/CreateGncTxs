@@ -4,24 +4,23 @@
 # parseMonarchTxRep.py -- parse a text file with Monarch Transaction Report information,
 #                         save as a dictionary and print out as a json file
 #
-# Copyright (c) 2018,2019 Mark Sattolo <epistemik@gmail.com>
+# Copyright (c) 2019 Mark Sattolo <epistemik@gmail.com>
 #
 # @author Mark Sattolo <epistemik@gmail.com>
 # @version Python 3.6
 # @created 2018
-# @updated 2019-05-20
+# @updated 2019-05-25
 
 import os.path as osp
 import re
 import json
 from Configuration import *
 
-now = dt.now().strftime("%Y-%m-%d_%H-%M-%S")
 
-
-def parse_monarch_tx_rep(file_name):
+def parse_monarch_tx_rep(file_name, now):
     """
     :param file_name: string: monarch transaction report text file to parse
+    :param       now: string: timestamp for file name
     loop:
         check for 'Plan Type:'
             next line is either 'OPEN...', 'TFSA...' or 'RRSP...'
@@ -38,7 +37,7 @@ def parse_monarch_tx_rep(file_name):
                   line  = 'Unit Balance' : float
     :return: Configuration.InvestmentRecord object
     """
-    print_info("parse_monarch_report({})\nRuntime = {}\n".format(file_name, now), MAGENTA)
+    print_info("\nparse_monarch_report({})\nRuntime = {}\n".format(file_name, now), MAGENTA)
 
     # re searches
     re_own  = re.compile(".*({}).*".format(OWNER))
@@ -80,7 +79,6 @@ def parse_monarch_tx_rep(file_name):
                 if re_match:
                     fund_company = re_match.group(1)
                     fund_code = re_match.group(2)
-                    curr_tx = {FUND_CMPY: fund_company, FUND_CODE: fund_code, DESC: ''}
                     print_info("Current fund is: {}".format(fund_company + " " + fund_code), BLUE)
                     mon_state = FIND_NEXT_TX
                     continue
@@ -89,8 +87,9 @@ def parse_monarch_tx_rep(file_name):
                 re_match = re.match(re_date, line)
                 if re_match:
                     tx_date = re_match.group(1)
-                    print_info("Current tx_date is: '{}'".format(tx_date), YELLOW)
-                    curr_tx[TRADE_DATE] = tx_date
+                    print_info("FOUND a NEW tx! Date is: {}".format(tx_date), YELLOW)
+                    curr_tx = {FUND_CMPY: fund_company, FUND_CODE: fund_code, TRADE_DATE: tx_date, DESC: ''}
+                    # curr_tx[TRADE_DATE] = tx_date
                     mon_state = FILL_CURR_TX
                     continue
 
@@ -108,25 +107,26 @@ def parse_monarch_tx_rep(file_name):
                     curr_tx[DESC] += (entry + ":")
                     continue
                 if tx_line == 3:
-                    print_info("curr_tx[DESC] is: '{}'".format(curr_tx[DESC]))
+                    print_info("curr_tx[DESC] is: {}".format(curr_tx[DESC]))
                     curr_tx[GROSS] = entry
-                    print_info("curr_tx[GROSS] is: '{}'".format(curr_tx[GROSS]))
+                    print_info("curr_tx[GROSS] is: {}".format(curr_tx[GROSS]))
                 if tx_line == 4:
                     curr_tx[NET] = entry
                     if curr_tx[NET] != curr_tx[GROSS]:
-                        print_info("curr_tx[NET] is: '{}'".format(curr_tx[NET]))
-                        print_info("\n>>> PROBLEM!!! GROSS and NET do NOT match!!!\n")
+                        print_info("curr_tx[NET] is: {}".format(curr_tx[NET]))
+                        print_error("\n>>> PROBLEM!!! GROSS and NET do NOT match!!!\n")
                         continue
                 if tx_line == 5:
                     curr_tx[UNITS] = entry
-                    print_info("curr_tx[UNITS] is: '{}'".format(curr_tx[UNITS]))
+                    print_info("curr_tx[UNITS] is: {}".format(curr_tx[UNITS]))
                 if tx_line == 6:
                     curr_tx[PRICE] = entry
-                    print_info("curr_tx[PRICE] is: '{}'".format(curr_tx[PRICE]))
+                    print_info("curr_tx[PRICE] is: {}".format(curr_tx[PRICE]))
                 if tx_line == 7:
                     curr_tx[UNIT_BAL] = entry
-                    print_info("curr_tx[UNIT_BAL] is: '{}'".format(curr_tx[UNIT_BAL]))
+                    print_info("curr_tx[UNIT_BAL] is: {}".format(curr_tx[UNIT_BAL]))
                     tx_coll.add(plan_type, curr_tx)
+                    print_info('ADD current Tx to Collection!', GREEN)
                     mon_state = STATE_SEARCH
                     tx_line = 0
 
@@ -146,8 +146,10 @@ def mon_tx_rep_main(args):
 
     mode = args[1].upper()
 
+    now = dt.now().strftime("%Y-%m-%d_%H-%M-%S")
+
     # parse an external Monarch report file
-    record = parse_monarch_tx_rep(mon_file)
+    record = parse_monarch_tx_rep(mon_file, now)
     record.set_filename(mon_file)
 
     msg = TEST
@@ -160,7 +162,7 @@ def mon_tx_rep_main(args):
         basename, ext = osp.splitext(fname)
         # add a timestamp to get a unique file name
         out_file = path + '/' + basename + '.' + now + ".json"
-        print_info("out_file is '{}'".format(out_file))
+        print_info("\nout_file is '{}'".format(out_file))
         fp = open(out_file, 'w', encoding='utf-8')
         json.dump(record.to_json(), fp, indent=4)
         msg = "parseMonarchTxRep created file: {}".format(out_file)
