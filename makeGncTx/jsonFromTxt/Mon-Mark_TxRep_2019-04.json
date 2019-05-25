@@ -3,15 +3,15 @@
     "__module__": "Configuration",
     "Owner": "Mark H. Sattolo",
     "Source File": "txtFromPdf/Mon-Mark_TxRep_2019-04.txt",
-    "Date": "2019-05-12_11-26-11",
-    "Size": "20",
+    "Date": "D2019-05-25T12-51-30",
+    "Size": "20 = OPEN:2 + TFSA:4 + RRSP:14",
     "Plan Data": {
         "OPEN": [
             {
                 "Fund Company": "CIG",
                 "Fund Code": "11111",
-                "Description": "Reinvested:Distribution/Interest:",
                 "Trade Date": "04/26/2019",
+                "Description": "Reinvested:Distribution/Interest:",
                 "Gross": "$30.36",
                 "Net": "$30.36",
                 "Units": "3.2010",
@@ -21,8 +21,8 @@
             {
                 "Fund Company": "CIG",
                 "Fund Code": "11461",
-                "Description": "Reinvested:Distribution/Interest:",
                 "Trade Date": "04/26/2019",
+                "Description": "Reinvested:Distribution/Interest:",
                 "Gross": "$10.81",
                 "Net": "$10.81",
                 "Units": "1.1400",
@@ -34,8 +34,8 @@
             {
                 "Fund Company": "TML",
                 "Fund Code": "674",
-                "Description": "Reinvested:Distribution/Interest:",
                 "Trade Date": "04/29/2019",
+                "Description": "Reinvested:Distribution/Interest:",
                 "Gross": "$1.35",
                 "Net": "$1.35",
                 "Units": "0.1603",
@@ -45,8 +45,8 @@
             {
                 "Fund Company": "TML",
                 "Fund Code": "704",
-                "Description": "Reinvested:Distribution/Interest:",
                 "Trade Date": "04/29/2019",
+                "Description": "Reinvested:Distribution/Interest:",
                 "Gross": "$12.00",
                 "Net": "$12.00",
                 "Units": "1.4252",
@@ -56,8 +56,8 @@
             {
                 "Fund Company": "TML",
                 "Fund Code": "203",
-                "Description": "Reinvested:Distribution/Interest:",
                 "Trade Date": "04/29/2019",
+                "Description": "Reinvested:Distribution/Interest:",
                 "Gross": "$24.22",
                 "Net": "$24.22",
                 "Units": "0.8559",
@@ -67,8 +67,8 @@
             {
                 "Fund Company": "TML",
                 "Fund Code": "519",
-                "Description": "Reinvested:Distribution/Interest:",
                 "Trade Date": "04/29/2019",
+                "Description": "Reinvested:Distribution/Interest:",
                 "Gross": "$2.96",
                 "Net": "$2.96",
                 "Units": "0.1046",
@@ -80,8 +80,8 @@
             {
                 "Fund Company": "MFC",
                 "Fund Code": "856",
-                "Description": "Reinvested:Distribution/Interest:",
                 "Trade Date": "04/18/2019",
+                "Description": "Reinvested:Distribution/Interest:",
                 "Gross": "$29.96",
                 "Net": "$29.96",
                 "Units": "6.9980",
@@ -91,8 +91,8 @@
             {
                 "Fund Company": "MFC",
                 "Fund Code": "6129",
-                "Description": "Reinvested:Distribution/Interest:",
                 "Trade Date": "04/18/2019",
+                "Description": "Reinvested:Distribution/Interest:",
                 "Gross": "$21.00",
                 "Net": "$21.00",
                 "Units": "2.0020",
@@ -102,8 +102,8 @@
             {
                 "Fund Company": "MFC",
                 "Fund Code": "6138",
-                "Description": "Reinvested:Distribution/Interest:",
                 "Trade Date": "04/18/2019",
+                "Description": "Reinvested:Distribution/Interest:",
                 "Gross": "$113.11",
                 "Net": "$113.11",
                 "Units": "7.9180",
@@ -113,8 +113,8 @@
             {
                 "Fund Company": "MFC",
                 "Fund Code": "302",
-                "Description": "Reinvested:Distribution/Interest:",
                 "Trade Date": "04/18/2019",
+                "Description": "Reinvested:Distribution/Interest:",
                 "Gross": "$10.20",
                 "Net": "$10.20",
                 "Units": "0.7340",
@@ -124,8 +124,8 @@
             {
                 "Fund Company": "MFC",
                 "Fund Code": "6130",
-                "Description": "Reinvested:Distribution/Interest:",
                 "Trade Date": "04/18/2019",
+                "Description": "Reinvested:Distribution/Interest:",
                 "Gross": "$54.38",
                 "Net": "$54.38",
                 "Units": "5.8640",
@@ -135,8 +135,8 @@
             {
                 "Fund Company": "MFC",
                 "Fund Code": "3232",
-                "Description": "Reinvested:Distribution/Interest:",
                 "Trade Date": "04/18/2019",
+                "Description": "Reinvested:Distribution/Interest:",
                 "Gross": "$71.10",
                 "Net": "$71.10",
                 "Units": "8.0500",
@@ -146,8 +146,8 @@
             {
                 "Fund Company": "DYN",
                 "Fund Code": "029",
-                "Description": "Reinvested:Distribution/Interest:",
                 "Trade Date": "04/26/2019",
+                "Description": "Reinvested:Distribution/Interest:",
                 "Gross": "$62.30",
                 "Net": "$62.30",
                 "Units": "2.8696",
@@ -157,8 +157,8 @@
             {
                 "Fund Company": "DYN",
                 "Fund Code": "729",
-                "Description": "Reinvested:Distribution/Interest:",
                 "Trade Date": "04/26/2019",
+                "Description": "Reinvested:Distribution/Interest:",
                 "Gross": "$12.64",
                 "Net": "$12.64",
                 "Units": "0.5822",
@@ -168,8 +168,8 @@
             {
                 "Fund Company": "DYN",
                 "Fund Code": "1562",
-                "Description": "Reinvested:Distribution/Interest:",
                 "Trade Date": "04/26/2019",
+                "Description": "Reinvested:Distribution/Interest:",
                 "Gross": "$14.63",
                 "Net": "$14.63",
                 "Units": "1.0601",
@@ -179,8 +179,8 @@
             {
                 "Fund Company": "MMF",
                 "Fund Code": "44424",
-                "Description": "Reinvested:Distribution/Interest:",
                 "Trade Date": "04/26/2019",
+                "Description": "Reinvested:Distribution/Interest:",
                 "Gross": "$16.49",
                 "Net": "$16.49",
                 "Units": "1.7530",
@@ -190,8 +190,8 @@
             {
                 "Fund Company": "MMF",
                 "Fund Code": "4524",
-                "Description": "Reinvested:Distribution/Interest:",
                 "Trade Date": "04/26/2019",
+                "Description": "Reinvested:Distribution/Interest:",
                 "Gross": "$189.27",
                 "Net": "$189.27",
                 "Units": "20.1260",
@@ -201,8 +201,8 @@
             {
                 "Fund Company": "DYN",
                 "Fund Code": "1560",
-                "Description": "Reinvested:Distribution/Interest:",
                 "Trade Date": "04/26/2019",
+                "Description": "Reinvested:Distribution/Interest:",
                 "Gross": "$73.52",
                 "Net": "$73.52",
                 "Units": "5.3275",
@@ -212,8 +212,8 @@
             {
                 "Fund Company": "TML",
                 "Fund Code": "1018",
-                "Description": "Reinvested:Distribution/Interest:",
                 "Trade Date": "04/29/2019",
+                "Description": "Reinvested:Distribution/Interest:",
                 "Gross": "$4.38",
                 "Net": "$4.38",
                 "Units": "0.2978",
@@ -223,8 +223,8 @@
             {
                 "Fund Company": "TML",
                 "Fund Code": "1017",
-                "Description": "Reinvested:Distribution/Interest:",
                 "Trade Date": "04/29/2019",
+                "Description": "Reinvested:Distribution/Interest:",
                 "Gross": "$17.93",
                 "Net": "$17.93",
                 "Units": "1.2191",
