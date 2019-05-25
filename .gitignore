@@ -18,6 +18,4 @@
 *.exe
 *.x
 # find <dir/>* -type l >> .gitignore
-makeGncTx/jsonFromTxt/Mon_Mk_pre-txRep_2019-01-26_13-55-26.json
-makeGncTx/txtFromPdf/Monarch_Mark_prelim-txRep_2019-01-26.txt
-parsePdf/in/mon-Mk_ptxRep_2019-01.pdf
+
