@@ -4,12 +4,12 @@
 # createGnucashTxs.py -- parse a Monarch record, possibly from a json file,
 #                        create Gnucash transactions from the data and write to a Gnucash file
 #
-# Copyright (c) 2018,2019 Mark Sattolo <epistemik@gmail.com>
+# Copyright (c) 2019 Mark Sattolo <epistemik@gmail.com>
 #
 # @author Mark Sattolo <epistemik@gmail.com>
 # @version Python 3.6
 # @created 2018
-# @updated 2019-05-20
+# @updated 2019-05-25
 
 import copy
 import json
@@ -26,6 +26,7 @@ class GncTxCreator:
     create Gnucash transactions and prices from Monarch json
     """
     def __init__(self, tx_colxn, gnc_f, md, pdb=None, bk=None, rt=None, cur=None, rpinfo=None):
+        print_info("createGnucashTxs:GncTxCreator()\nRuntime = {}\n".format(strnow), MAGENTA)
         self.tx_coll  = tx_colxn
         self.gnc_file = gnc_f
         self.mode     = md
@@ -56,7 +57,7 @@ class GncTxCreator:
 
         init_tx = {FUND_CMPY: mtx[FUND_CMPY]}
 
-        print_info("trade date = '{}'".format(mtx[TRADE_DATE]))
+        print_info("trade date = {}".format(mtx[TRADE_DATE]))
         trade_date = mtx[TRADE_DATE].split('/')
         init_tx[TRADE_DAY] = int(trade_date[1])
         init_tx[TRADE_MTH] = int(trade_date[0])
@@ -70,15 +71,15 @@ class GncTxCreator:
 
         # get the asset account name
         asset_acct_name = mtx[FUND_CMPY] + " " + mtx[FUND_CODE]
-        print_info("asset_acct_name = '{}'".format(asset_acct_name))
+        print_info("asset_acct_name = {}".format(asset_acct_name))
 
         asset_parent = ast_parent
         # special locations for Trust Revenue and Asset accounts
         if asset_acct_name == TRUST_AST_ACCT:
             asset_parent = self.root.lookup_by_name(TRUST)
-            print_info("asset_parent = '{}'".format(asset_parent.GetName()))
+            print_info("asset_parent = {}".format(asset_parent.GetName()))
             rev_acct = self.root.lookup_by_name(TRUST_REV_ACCT)
-            print_info("rev_acct = '{}'".format(rev_acct.GetName()))
+            print_info("rev_acct = {}".format(rev_acct.GetName()))
         # save the (possibly modified) Revenue account to the Gnc tx
         init_tx[REVENUE] = rev_acct
 
@@ -88,7 +89,7 @@ class GncTxCreator:
             raise Exception("Could NOT find acct '{}' under parent '{}'".format(asset_acct_name, asset_parent.GetName()))
         else:
             init_tx[ACCT] = asset_acct
-            print_info("asset_acct = '{}'".format(asset_acct.GetName()), color=CYAN)
+            print_info("asset_acct = {}".format(asset_acct.GetName()), color=CYAN)
 
         # get the dollar value of the tx
         re_match = re.match(re_gross, mtx[GROSS])
@@ -99,7 +100,7 @@ class GncTxCreator:
             # if match group 1 is not empty, amount is negative
             if re_match.group(1) != '':
                 gross_curr *= -1
-            print_info("gross_curr = '{}'".format(gross_curr))
+            print_info("gross_curr = {}".format(gross_curr))
             init_tx[GROSS] = gross_curr
         else:
             raise Exception("PROBLEM!! re_gross DID NOT match with value '{}'!".format(mtx[GROSS]))
@@ -112,19 +113,19 @@ class GncTxCreator:
             if re_match.group(1) != '':
                 units *= -1
             init_tx[UNITS] = units
-            print_info("units = '{}'".format(units))
+            print_info("units = {}".format(units))
         else:
             raise Exception("PROBLEM!! re_units DID NOT match with value '{}'!".format(mtx[UNITS]))
 
         # assemble the Description string
         descr = "{}: {} {}".format(COMPANY_NAME[init_tx[FUND_CMPY]], mtx[DESC], asset_acct_name)
         init_tx[DESC] = descr
-        print_info("descr = '{}'".format(descr))
+        print_info("descr = {}".format(descr))
 
         # notes field
         notes = str(asset_acct_name + " balance = " + mtx[UNIT_BAL])
         init_tx[NOTES] = notes
-        print_info("notes = '{}'".format(notes))
+        print_info("notes = {}".format(notes))
 
         pair_tx = None
         have_pair = False
@@ -166,7 +167,7 @@ class GncTxCreator:
         pr1.begin_edit()
         pr1.set_time64(pr_date)
         comm = tx1[ACCT].GetCommodity()
-        print_info("Commodity = '{}:{}'".format(comm.get_namespace(), comm.get_printname()))
+        print_info("Commodity = {}:{}".format(comm.get_namespace(), comm.get_printname()))
         pr1.set_commodity(comm)
 
         pr1.set_currency(self.curr)
@@ -185,7 +186,7 @@ class GncTxCreator:
             pr2.begin_edit()
             pr2.set_time64(pr_date)
             comm = tx2[ACCT].GetCommodity()
-            print_info("Commodity = '{}:{}'".format(comm.get_namespace(), comm.get_printname()))
+            print_info("Commodity = {}:{}".format(comm.get_namespace(), comm.get_printname()))
             pr2.set_commodity(comm)
 
             pr2.set_currency(self.curr)
@@ -195,13 +196,13 @@ class GncTxCreator:
             pr2.commit_edit()
 
         if self.mode == PROD:
-            print_info("Mode = '{}': Add Price1 to DB.\n".format(self.mode), GREEN)
+            print_info("Mode = {}: Add Price1 to DB.\n".format(self.mode), GREEN)
             self.price_db.add_price(pr1)
             if tx1[SWITCH]:
-                print_info("Mode = '{}': Add Price2 to DB.\n".format(self.mode), GREEN)
+                print_info("Mode = {}: Add Price2 to DB.\n".format(self.mode), GREEN)
                 self.price_db.add_price(pr2)
         else:
-            print_info("Mode = '{}': ABANDON Prices!\n".format(self.mode), RED)
+            print_info("Mode = {}: ABANDON Prices!\n".format(self.mode), RED)
 
     def make_gnc_txs(self, tx1, tx2):
         """
@@ -219,8 +220,8 @@ class GncTxCreator:
 
         gtx.SetCurrency(self.curr)
         gtx.SetDate(tx1[TRADE_DAY], tx1[TRADE_MTH], tx1[TRADE_YR])
-        print_info("gtx date = '{}'".format(gtx.GetDate()), BLUE)
-        print_info("tx1[DESC] = '{}'".format(tx1[DESC]), MAGENTA)
+        print_info("gtx date = {}".format(gtx.GetDate()), BLUE)
+        print_info("tx1[DESC] = {}".format(tx1[DESC]), MAGENTA)
         gtx.SetDescription(tx1[DESC])
 
         # create the ASSET split for the Tx
@@ -253,7 +254,7 @@ class GncTxCreator:
             # set the Account, Value and Reconciled of the REVENUE split
             spl_rev.SetAccount(tx1[REVENUE])
             rev_gross = tx1[GROSS] * -1
-            print_info("rev gross = '{}'".format(rev_gross))
+            print_info("rev gross = {}".format(rev_gross))
             spl_rev.SetValue(GncNumeric(rev_gross, 100))
             spl_rev.SetReconcile(CREC)
             # set Notes for the Tx and Action for the ASSET split
@@ -262,15 +263,15 @@ class GncTxCreator:
 
         # ROLL BACK if something went wrong and the two splits DO NOT balance
         if not gtx.GetImbalanceValue().zero_p():
-            print_error("gtx Imbalance = '{}'!! Roll back transaction changes!".format(gtx.GetImbalanceValue().to_string()))
+            print_error("gtx Imbalance = {}!! Roll back transaction changes!".format(gtx.GetImbalanceValue().to_string()))
             gtx.RollbackEdit()
             return
 
         if self.mode == PROD:
-            print_info("Mode = '{}': Commit transaction changes.\n".format(self.mode))
+            print_info("Mode = {}: Commit transaction changes.\n".format(self.mode))
             gtx.CommitEdit()
         else:
-            print_info("Mode = '{}': Roll back transaction changes!\n".format(self.mode))
+            print_info("Mode = {}: Roll back transaction changes!\n".format(self.mode))
             gtx.RollbackEdit()
 
     def extract_gnc_info(self, mtx, plan_type, ast_parent, rev_acct):
@@ -317,11 +318,11 @@ class GncTxCreator:
         self.curr = commod_tab.lookup("ISO4217", "CAD")
 
         for plan_type in self.tx_coll[PLAN_DATA]:
-            print_info("\n\nPlan type = '{}'".format(plan_type))
+            print_info("\n\nPlan type = {}".format(plan_type))
 
             # print_info(json.dumps(ACCT_PATHS, indent=4))
             # for key in ACCT_PATHS:
-            #     print_info("type ACCT_PATHS key '{}' = '{}'".format(key, type(key)))
+            #     print_info("type ACCT_PATHS key '{}' = {}".format(key, type(key)))
 
             rev_path = copy.copy(ACCT_PATHS[REVENUE])
             rev_path.append(plan_type)
@@ -330,7 +331,7 @@ class GncTxCreator:
             ast_parent_path.append(plan_type)
 
             pl_owner = self.report_info.get_owner()
-            # print_info("type pl_owner = '{}'".format(type(pl_owner)))
+            # print_info("type pl_owner = {}".format(type(pl_owner)))
             if plan_type != PL_OPEN:
                 if pl_owner == '':
                     raise Exception("PROBLEM!! Trying to process plan type '{}' but NO Owner value found"
@@ -338,13 +339,13 @@ class GncTxCreator:
                 rev_path.append(ACCT_PATHS[pl_owner])
                 ast_parent_path.append(ACCT_PATHS[pl_owner])
 
-            print_info("rev_path = '{}'".format(str(rev_path)))
+            print_info("rev_path = {}".format(str(rev_path)))
             rev_acct = self.gncu.account_from_path(self.root, rev_path)
-            print_info("rev_acct = '{}'".format(rev_acct.GetName()))
+            print_info("rev_acct = {}".format(rev_acct.GetName()))
 
-            print_info("asset_parent_path = '{}'".format(str(ast_parent_path)))
+            print_info("asset_parent_path = {}".format(str(ast_parent_path)))
             asset_parent = self.gncu.account_from_path(self.root, ast_parent_path)
-            print_info("asset_parent = '{}'".format(asset_parent.GetName()))
+            print_info("asset_parent = {}".format(asset_parent.GetName()))
 
             for mtx in self.tx_coll[PLAN_DATA][plan_type]:
                 self.extract_gnc_info(mtx, plan_type, asset_parent, rev_acct)
@@ -354,19 +355,19 @@ class GncTxCreator:
         Take the information from a transaction collection and produce Gnucash transactions to write to a Gnucash file
         :return: message
         """
-        print_info("\ngncFile = '{}'".format(self.gnc_file))
+        print_info("\ngncFile = {}".format(self.gnc_file))
         msg = TEST
         try:
             session = Session(self.gnc_file)
             self.book = session.book
 
-            print_info("Owner = '{}'".format(self.tx_coll[OWNER]), GREEN)
+            print_info("Owner = {}".format(self.tx_coll[OWNER]), GREEN)
             self.report_info = InvestmentRecord(self.tx_coll[OWNER])
 
             self.prepare_accounts()
 
             if self.mode == PROD:
-                msg = "Mode = '{}': COMMIT Price DB edits and Save session.".format(self.mode)
+                msg = "Mode = {}: COMMIT Price DB edits and Save session.".format(self.mode)
                 print_info(msg, GREEN)
                 self.price_db.commit_edit()
                 # only ONE session save for the entire run
@@ -376,7 +377,7 @@ class GncTxCreator:
             session.destroy()
 
         except Exception as e:
-            msg = "create_gnc_txs() EXCEPTION!! '{}'".format(str(e))
+            msg = "create_gnc_txs() EXCEPTION!! '{}'".format(repr(e))
             print_error(msg)
             if "session" in locals() and session is not None:
                 session.end()
@@ -409,6 +410,9 @@ def create_gnc_txs_main(args):
         exit()
 
     mode = args[2].upper()
+
+    global strnow
+    strnow = dt.now().strftime(DATE_STR_FORMAT)
 
     gtc = GncTxCreator(tx_coll, gnc_file, mode)
     msg = gtc.create_gnc_txs()

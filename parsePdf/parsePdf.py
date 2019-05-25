@@ -3,12 +3,12 @@
 #
 # parsePdf.py -- parse a PDF file and recover the text; mainly for Monarch Pdf reports
 #
-# Copyright (c) 2018,2019 Mark Sattolo <epistemik@gmail.com>
+# Copyright (c) 2019 Mark Sattolo <epistemik@gmail.com>
 #
 # @author Mark Sattolo <epistemik@gmail.com>
 # @version Python 3.6
 # @created 2018-12
-# @updated 2019-05-20
+# @updated 2019-05-25
 
 import os.path as osp
 import collections
@@ -41,7 +41,7 @@ def parse_pdf_main(args):
         exit()
 
     monarch = args[0]
-    print_info("Monarch report is: {}".format(monarch), MAGENTA)
+    print_info("Monarch report: {}".format(monarch), MAGENTA)
 
     page_num = 0
     read_all = True
@@ -54,7 +54,7 @@ def parse_pdf_main(args):
     pdf_reader = PyPDF2.PdfFileReader(pdf_file)
 
     doc_info = pdf_reader.getDocumentInfo()
-    print_info("doc_info = {0}".format(json.dumps(doc_info)), BLUE)
+    print_info("doc_info: {0}".format(json.dumps(doc_info)), BLUE)
     print_info("number of pages = {0}".format(pdf_reader.getNumPages()), CYAN)
 
     # print info as txt file
@@ -63,11 +63,12 @@ def parse_pdf_main(args):
     # print_info("path is '{}'".format(path))
 
     # save to the output folder
+    now = dt.now().strftime(DATE_STR_FORMAT)
     path = path.replace('in', 'out')
     (basename, ext) = osp.splitext(fname)
     # add a timestamp to get a unique file name
-    out_file = path + '/' + basename + '.' + strnow + '.txt'
-    print_info("out_file is '{}'".format(out_file), GREEN)
+    out_file = path + '/' + basename + '_' + now + '.txt'
+    print_info("\nout_file: {}".format(out_file), GREEN)
     fp = open(out_file, 'w')
 
     if read_all:

@@ -5,12 +5,12 @@
 #                          then take the saved transaction information and create Gnucash prices
 #                          and save to the specified Gnucash file
 #
-# Copyright (c) 2018,2019 Mark Sattolo <epistemik@gmail.com>
+# Copyright (c) 2019 Mark Sattolo <epistemik@gmail.com>
 #
 # @author Mark Sattolo <epistemik@gmail.com>
 # @version Python 3.6
 # @created 2019-04-28
-# @updated 2019-05-20
+# @updated 2019-05-25
 
 import os.path as osp
 import re
@@ -54,7 +54,7 @@ class MonarchQrepToGncPrices:
                 OR: another match of 'Fund Company & Fund Code'
         :return: Configuration.InvestmentRecord object
         """
-        print_info("parse_monarch_report({})\nRuntime = {}\n".format(self.mon_file, strnow), MAGENTA)
+        print_info("parse_monarch_qtrep()\nRuntime = {}\n".format(strnow), MAGENTA)
 
         # re searches
         re_date    = re.compile(r"^For the period (.*) to (\w{3}) (\d{1,2}), (\d{4})")
@@ -81,7 +81,7 @@ class MonarchQrepToGncPrices:
                             owner = match_mark.group(1)
                         elif match_lulu:
                             owner = match_lulu.group(1)
-                        print_info("{}/ Owner is: '{}'".format(ct, owner), RED)
+                        print_info("{}/ Owner: {}".format(ct, owner), RED)
                         tx_coll = InvestmentRecord(owner)
                         mon_state = FIND_START
                         continue
@@ -114,7 +114,7 @@ class MonarchQrepToGncPrices:
                     match_plan = re.match(re_plan, line)
                     if match_plan:
                         plan_type = match_plan.group(1)
-                        print_info("{}/ Plan type is: '{}'".format(ct, plan_type), BLUE)
+                        print_info("{}/ Plan type: {}".format(ct, plan_type), BLUE)
                         mon_state = FIND_COMPANY
                         continue
 
@@ -146,7 +146,7 @@ class MonarchQrepToGncPrices:
                         print_info("{}/ price = '${}.{}'".format(ct, dollar_str, cents_str), GREEN)
                         curr_tx[DOLLARS] = dollar_str
                         curr_tx[CENTS] = cents_str
-                        tx_coll.add(plan_type, curr_tx)
+                        tx_coll.add_tx(plan_type, curr_tx)
                         mon_state = FIND_COMPANY
                         continue
 
@@ -168,7 +168,7 @@ class MonarchQrepToGncPrices:
         print_info("self.price_db.begin_edit()", MAGENTA)
         try:
             for plan_type in tx_coll.plans:
-                print_info("\n\nPlan type = '{}'".format(plan_type))
+                print_info("\n\nPlan type = {}".format(plan_type))
                 for tx in tx_coll.plans[plan_type]:
                     base = pow(10, len(tx[CENTS]))
                     int_price = int(tx[DOLLARS] + tx[CENTS])
@@ -183,12 +183,12 @@ class MonarchQrepToGncPrices:
                                             " in Tx Collection!!".format(plan_type))
                         ast_parent_path.append(ACCT_PATHS[tx_coll.get_owner()])
 
-                    print_info("ast_parent_path = '{}'".format(str(ast_parent_path)), BLUE)
+                    print_info("ast_parent_path = {}".format(str(ast_parent_path)), BLUE)
                     asset_parent = gncu.account_from_path(self.root, ast_parent_path)
 
                     # get the asset account name
                     name_key = tx[FUND_CMPY].split(' ')[0]
-                    print_info("name_key = '{}'".format(name_key), YELLOW)
+                    print_info("name_key = {}".format(name_key), YELLOW)
                     if name_key in FUND_NAME_CODE.keys():
                         name_code = FUND_NAME_CODE[name_key]
                         # special case
@@ -198,12 +198,12 @@ class MonarchQrepToGncPrices:
                             asset_acct_name = name_code + " " + tx[FUND_CODE]
                     else:
                         raise Exception("Could NOT find name key {}!".format(name_key))
-                    print_info("asset_acct_name = '{}'".format(asset_acct_name), BLUE)
+                    print_info("asset_acct_name = {}".format(asset_acct_name), BLUE)
 
                     # special location for Trust Asset account
                     if asset_acct_name == TRUST_AST_ACCT:
                         asset_parent = self.root.lookup_by_name(TRUST)
-                    print_info("asset_parent = '{}'".format(asset_parent.GetName()), BLUE)
+                    print_info("asset_parent = {}".format(asset_parent.GetName()), BLUE)
 
                     # get the asset account
                     asset_acct = asset_parent.lookup_by_name(asset_acct_name)
@@ -221,7 +221,7 @@ class MonarchQrepToGncPrices:
                     pr.begin_edit()
                     pr.set_time64(tx_coll.get_date())
                     comm = asset_acct.GetCommodity()
-                    print_info("Commodity = '{}:{}'".format(comm.get_namespace(), comm.get_printname()), YELLOW)
+                    print_info("Commodity = {}:{}".format(comm.get_namespace(), comm.get_printname()), YELLOW)
                     pr.set_commodity(comm)
 
                     pr.set_currency(self.currency)
@@ -269,16 +269,19 @@ def mon_qtr_rep_main(args):
         print_error("File path '{}' does not exist. Exiting...".format(mon_file))
         print_info(usage, GREEN)
         exit()
-    print_info("mon_file = '{}'".format(mon_file))
+    print_info("mon_file = {}".format(mon_file))
 
     gnc_file = args[1]
     if not osp.isfile(gnc_file):
         print_error("File path '{}' does not exist. Exiting...".format(gnc_file))
         print_info(usage, GREEN)
         exit()
-    print_info("gnc_file = '{}'".format(gnc_file))
+    print_info("gnc_file = {}".format(gnc_file))
 
     mode = args[2].upper()
+
+    global strnow
+    strnow = dt.now().strftime(DATE_STR_FORMAT)
 
     pr_creator = MonarchQrepToGncPrices(mon_file, gnc_file, mode)
     record = pr_creator.parse_monarch_qtrep()
@@ -288,13 +291,13 @@ def mon_qtr_rep_main(args):
     if mode == PROD:
         # pluck path and basename from mon_file to use for the saved json file
         ospath, fname = osp.split(mon_file)
-        # print_info("path is '{}'".format(ospath))
+        # print_info("path: {}".format(ospath))
         # save to the output folder
         path = ospath.replace('txtFromPdf', 'jsonFromTxt')
         basename, ext = osp.splitext(fname)
         # add a timestamp to get a unique file name
-        out_file = path + '/' + basename + '.' + strnow + ".json"
-        print_info("out_file is '{}'".format(out_file))
+        out_file = path + '/' + basename + '_' + strnow + ".json"
+        print_info("\nout_file: {}".format(out_file))
         fp = open(out_file, 'w', encoding='utf-8')
         json.dump(record.to_json(), fp, indent=4)
 
