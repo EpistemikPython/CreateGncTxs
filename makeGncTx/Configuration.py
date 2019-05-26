@@ -33,21 +33,36 @@ CYAN    = COLOR_FLAG + '36m'
 WHITE   = COLOR_FLAG + '37m'
 COLOR_OFF = COLOR_FLAG + '0m'
 
+log_text: [str] = []
 
-def print_info(text, color='', inspector=True, newline=True):
+
+def clear_log():
+    global log_text
+    log_text = []
+
+
+def print_info(info, color='', inspector=True, newline=True):
     """
     Print information with choices of color, inspection info, newline
     """
+    global log_text
     inspect_line = ''
-    if text is None:
-        text = '==============================================================================================================='
+    if info is None:
+        info = '==============================================================================================================='
         inspector = False
+    text = str(info)
     if inspector:
         calling_frame = inspect.currentframe().f_back
         calling_file  = inspect.getfile(calling_frame).split('/')[-1]
         calling_line  = str(inspect.getlineno(calling_frame))
         inspect_line  = '[' + calling_file + '@' + calling_line + ']: '
-    print(inspect_line + color + str(text) + COLOR_OFF, end=('\n' if newline else ''))
+    print(inspect_line + color + text + COLOR_OFF, end=('\n' if newline else ''))
+    log_text.append(text)
+
+
+def get_log():
+    global log_text
+    return log_text
 
 
 def print_error(text, newline=True):

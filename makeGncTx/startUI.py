@@ -220,15 +220,16 @@ class CreateGncTxsAndPrices(QDialog):
 
         if mode == TEST:
             print_info('TEST mode', GREEN)
-            reply = ['TEST mode']
+            reply = {'mode': 'TEST', 'log': get_log()}
         else:
             if callable(main_fxn):
                 print_info('Sending...', MAGENTA)
-                reply = main_fxn(cl_params)
+                response = main_fxn(cl_params)
+                reply = {'response': response, 'log': get_log()}
             else:
                 msg = "Problem with main??!! '{}'".format(main_fxn)
                 print_error(msg)
-                reply = msg
+                reply = {'msg': msg, 'log': get_log()}
 
         self.response_box.setText(json.dumps(reply, indent=4))
 
