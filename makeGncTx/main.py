@@ -40,7 +40,7 @@ def main():
 
     # create gnucash transactions and write to the desired Gnucash file
     gtc = GncTxCreator(tx_coll, gnc_file, mode)
-    gtc.create_gnc_txs()
+    gtc.prepare_session()
 
     print_info("\n >>> PROGRAM ENDED.", GREEN)
 

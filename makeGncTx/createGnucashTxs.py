@@ -69,10 +69,7 @@ class GncTxCreator:
         init_tx[SWITCH] = switch
         print_info("{}Have a Switch!".format('DO NOT ' if not switch else '>>> '), BLUE)
 
-        # get the asset account name
         asset_acct_name = mtx[FUND_CMPY] + " " + mtx[FUND_CODE]
-        print_info("asset_acct_name = {}".format(asset_acct_name))
-
         asset_parent = ast_parent
         # special locations for Trust Revenue and Asset accounts
         if asset_acct_name == TRUST_AST_ACCT:
@@ -148,14 +145,14 @@ class GncTxCreator:
 
         return init_tx, pair_tx
 
-    def make_gnc_prices(self, tx1, tx2):
+    def create_gnc_prices(self, tx1, tx2):
         """
         create and load Gnucash prices to the Gnucash PriceDB
         :param tx1: first transaction
         :param tx2: matching transaction, if exists
         :return: nil
         """
-        print_info('make_gnc_prices()', MAGENTA)
+        print_info('create_gnc_prices()', MAGENTA)
         pr_date = dt(tx1[TRADE_YR], tx1[TRADE_MTH], tx1[TRADE_DAY])
         datestring = pr_date.strftime("%Y-%m-%d")
 
@@ -204,14 +201,14 @@ class GncTxCreator:
         else:
             print_info("Mode = {}: ABANDON Prices!\n".format(self.mode), RED)
 
-    def make_gnc_txs(self, tx1, tx2):
+    def create_gnc_txs(self, tx1, tx2):
         """
         create and load Gnucash transactions to the Gnucash file
         :param tx1: first transaction
         :param tx2: matching transaction if a switch
         :return: nil
         """
-        print_info('make_gnc_txs()', MAGENTA)
+        print_info('create_gnc_txs()', MAGENTA)
         # create a gnucash Tx
         gtx = Transaction(self.book)
         # gets a guid on construction
@@ -221,7 +218,7 @@ class GncTxCreator:
         gtx.SetCurrency(self.curr)
         gtx.SetDate(tx1[TRADE_DAY], tx1[TRADE_MTH], tx1[TRADE_YR])
         print_info("gtx date = {}".format(gtx.GetDate()), BLUE)
-        print_info("tx1[DESC] = {}".format(tx1[DESC]), MAGENTA)
+        print_info("tx1[DESC] = {}".format(tx1[DESC]), YELLOW)
         gtx.SetDescription(tx1[DESC])
 
         # create the ASSET split for the Tx
@@ -254,7 +251,7 @@ class GncTxCreator:
             # set the Account, Value and Reconciled of the REVENUE split
             spl_rev.SetAccount(tx1[REVENUE])
             rev_gross = tx1[GROSS] * -1
-            print_info("rev gross = {}".format(rev_gross))
+            print_info("revenue gross = {}".format(rev_gross))
             spl_rev.SetValue(GncNumeric(rev_gross, 100))
             spl_rev.SetReconcile(CREC)
             # set Notes for the Tx and Action for the ASSET split
@@ -268,13 +265,13 @@ class GncTxCreator:
             return
 
         if self.mode == PROD:
-            print_info("Mode = {}: Commit transaction changes.\n".format(self.mode))
+            print_info("Mode = {}: Commit transaction changes.\n".format(self.mode), GREEN)
             gtx.CommitEdit()
         else:
-            print_info("Mode = {}: Roll back transaction changes!\n".format(self.mode))
+            print_info("Mode = {}: Roll back transaction changes!\n".format(self.mode), RED)
             gtx.RollbackEdit()
 
-    def extract_gnc_info(self, mtx, plan_type, ast_parent, rev_acct):
+    def process_monarch_txs(self, mtx, plan_type, ast_parent, rev_acct):
         """
         Asset accounts: use the proper path to find the parent then search for the Fund Code in the descendants
         Revenue accounts: pick the proper account based on owner and plan type
@@ -289,9 +286,8 @@ class GncTxCreator:
         :param ast_parent:
         :return: nil
         """
+        print_info('process_monarch_txs()', MAGENTA)
         try:
-            print_info('extract_gnc_info()', MAGENTA)
-
             # get the additional required information from the Monarch json
             tx1, tx2 = self.get_monarch_info(mtx, plan_type, ast_parent, rev_acct)
 
@@ -299,63 +295,72 @@ class GncTxCreator:
             if tx1[SWITCH] and tx2 is None:
                 return
 
-            self.make_gnc_prices(tx1, tx2)
+            self.create_gnc_prices(tx1, tx2)
 
-            self.make_gnc_txs(tx1, tx2)
+            self.create_gnc_txs(tx1, tx2)
 
         except Exception as ie:
-            print_error("extract_gnc_info() EXCEPTION!! '{}'\n".format(str(ie)))
+            print_error("process_monarch_txs() EXCEPTION!! '{}'\n".format(str(ie)))
 
-    def prepare_accounts(self):
+    def create_gnucash_info(self):
+        """
+        process each transaction in the Monarch input file to get the required Gnucash information
+        :return: nil
+        """
+        print_info("create_gnucash_info()", MAGENTA)
         self.root = self.book.get_root_account()
         self.root.get_instance()
 
         self.price_db = self.book.get_price_db()
         self.price_db.begin_edit()
-        print_info("self.price_db.begin_edit()", MAGENTA)
+        print_info("self.price_db.begin_edit()", CYAN)
 
         commod_tab = self.book.get_table()
         self.curr = commod_tab.lookup("ISO4217", "CAD")
 
         for plan_type in self.tx_coll[PLAN_DATA]:
-            print_info("\n\nPlan type = {}".format(plan_type))
+            print_info("\n\t\u0022Plan type = {}\u0022".format(plan_type), YELLOW)
 
-            # print_info(json.dumps(ACCT_PATHS, indent=4))
-            # for key in ACCT_PATHS:
-            #     print_info("type ACCT_PATHS key '{}' = {}".format(key, type(key)))
+            asset_parent, rev_acct = self.get_plan_info(plan_type)
 
-            rev_path = copy.copy(ACCT_PATHS[REVENUE])
-            rev_path.append(plan_type)
+            for mon_tx in self.tx_coll[PLAN_DATA][plan_type]:
+                self.process_monarch_txs(mon_tx, plan_type, asset_parent, rev_acct)
 
-            ast_parent_path = copy.copy(ACCT_PATHS[ASSET])
-            ast_parent_path.append(plan_type)
+    def get_plan_info(self, plan_type):
+        """
+        get the required asset and/or revenue information from each plan
+        :param plan_type: string: see Configuration
+        :return: Gnucash account, Gnucash account: revenue account and asset parent account
+        """
+        print_info("get_plan_info()", MAGENTA)
+        rev_path = copy.copy(ACCT_PATHS[REVENUE])
+        rev_path.append(plan_type)
+        ast_parent_path = copy.copy(ACCT_PATHS[ASSET])
+        ast_parent_path.append(plan_type)
 
-            pl_owner = self.report_info.get_owner()
-            # print_info("type pl_owner = {}".format(type(pl_owner)))
-            if plan_type != PL_OPEN:
-                if pl_owner == '':
-                    raise Exception("PROBLEM!! Trying to process plan type '{}' but NO Owner value found"
-                                    " in Tx Collection!!".format(plan_type))
-                rev_path.append(ACCT_PATHS[pl_owner])
-                ast_parent_path.append(ACCT_PATHS[pl_owner])
+        pl_owner = self.report_info.get_owner()
+        if plan_type != PL_OPEN:
+            if pl_owner == '':
+                raise Exception("PROBLEM!! Trying to process plan type '{}' but NO Owner value found"
+                                " in Tx Collection!!".format(plan_type))
+            rev_path.append(ACCT_PATHS[pl_owner])
+            ast_parent_path.append(ACCT_PATHS[pl_owner])
+        print_info("rev_path = {}".format(str(rev_path)))
 
-            print_info("rev_path = {}".format(str(rev_path)))
-            rev_acct = self.gncu.account_from_path(self.root, rev_path)
-            print_info("rev_acct = {}".format(rev_acct.GetName()))
+        rev_acct = self.gncu.account_from_path(self.root, rev_path)
+        print_info("rev_acct = {}".format(rev_acct.GetName()))
+        print_info("asset_parent_path = {}".format(str(ast_parent_path)))
+        asset_parent = self.gncu.account_from_path(self.root, ast_parent_path)
+        print_info("asset_parent = {}".format(asset_parent.GetName()))
 
-            print_info("asset_parent_path = {}".format(str(ast_parent_path)))
-            asset_parent = self.gncu.account_from_path(self.root, ast_parent_path)
-            print_info("asset_parent = {}".format(asset_parent.GetName()))
+        return asset_parent, rev_acct
 
-            for mtx in self.tx_coll[PLAN_DATA][plan_type]:
-                self.extract_gnc_info(mtx, plan_type, asset_parent, rev_acct)
-
-    def create_gnc_txs(self):
+    def prepare_session(self):
         """
         Take the information from a transaction collection and produce Gnucash transactions to write to a Gnucash file
         :return: message
         """
-        print_info("\ngncFile = {}".format(self.gnc_file))
+        print_info("prepare_session()", MAGENTA)
         msg = TEST
         try:
             session = Session(self.gnc_file)
@@ -364,7 +369,7 @@ class GncTxCreator:
             print_info("Owner = {}".format(self.tx_coll[OWNER]), GREEN)
             self.report_info = InvestmentRecord(self.tx_coll[OWNER])
 
-            self.prepare_accounts()
+            self.create_gnucash_info()
 
             if self.mode == PROD:
                 msg = "Mode = {}: COMMIT Price DB edits and Save session.".format(self.mode)
@@ -377,7 +382,7 @@ class GncTxCreator:
             session.destroy()
 
         except Exception as e:
-            msg = "create_gnc_txs() EXCEPTION!! '{}'".format(repr(e))
+            msg = "prepare_session() EXCEPTION!! '{}'".format(repr(e))
             print_error(msg)
             if "session" in locals() and session is not None:
                 session.end()
@@ -399,6 +404,7 @@ def create_gnc_txs_main(args):
         print_error("File path '{}' does not exist. Exiting...".format(mon_file))
         print_info(usage, GREEN)
         exit()
+    print_info("\nMonarch file = {}".format(mon_file), GREEN)
 
     # get Monarch transactions from the Monarch json file
     with open(mon_file, 'r') as fp:
@@ -408,6 +414,7 @@ def create_gnc_txs_main(args):
     if not osp.isfile(gnc_file):
         print_error("File path '{}' does not exist. Exiting...".format(gnc_file))
         exit()
+    print_info("\nGnucash file = {}".format(gnc_file), GREEN)
 
     mode = args[2].upper()
 
@@ -415,7 +422,7 @@ def create_gnc_txs_main(args):
     strnow = dt.now().strftime(DATE_STR_FORMAT)
 
     gtc = GncTxCreator(tx_coll, gnc_file, mode)
-    msg = gtc.create_gnc_txs()
+    msg = gtc.prepare_session()
 
     print_info("\n >>> PROGRAM ENDED.", MAGENTA)
     return msg
