@@ -14,7 +14,7 @@
 import inspect
 from datetime import datetime as dt
 
-DATE_STR_FORMAT = "D%Y-%m-%dT%H-%M-%S"
+DATE_STR_FORMAT = "$%Y-%m-%d:%H-%M-%S"
 dtnow = dt.now()
 strnow = dtnow.strftime(DATE_STR_FORMAT)
 
@@ -61,39 +61,6 @@ def print_error(text, newline=True):
     parent_line = str(inspect.getlineno(parent_frame))
     inspect_line = '[' + calling_file + '@' + calling_line + '/' + parent_line + ']: '
     print(inspect_line + RED + str(text) + COLOR_OFF, end=('\n' if newline else ''))
-
-
-class MonarchRecord:
-    def __init__(self, cy, fc, td, desc, gr, net, un, pr, ub, acc, nt):
-        self.fund_company = cy,
-        self.fund_code    = fc,
-        self.trade_date   = td,
-        self.description  = desc,
-        self.gross_amount = gr,
-        self.net_amount   = net,
-        self.units        = un,
-        self.price        = pr,
-        self.unit_balance = ub,
-        self.account      = acc,
-        self.notes        = nt
-
-
-class GnucashRecord:
-    def __init__(self, cy, fc, td, tm, ty, sw, desc, gr, net, un, pr, ub, acc, nt):
-        self.fund_company = cy,
-        self.fund_code    = fc,
-        self.trade_day    = td,
-        self.trade_mth    = tm,
-        self.trade_yr     = ty,
-        self.switch       = sw,
-        self.description  = desc,
-        self.gross_amount = gr,
-        self.net_amount   = net,
-        self.units        = un,
-        self.price        = pr,
-        self.unit_balance = ub,
-        self.account      = acc,
-        self.notes        = nt
 
 
 class GncUtilities:
@@ -367,49 +334,3 @@ TEST1_GNC  = GNC_FOLDER + 'test1.gnc'
 TEST2_GNC  = GNC_FOLDER + 'test2.gnc'
 TEST3_GNC  = GNC_FOLDER + 'test3.gnc'
 TEST4_GNC  = GNC_FOLDER + 'test4.gnc'
-
-EXAMPLE_COLLECTION = {
-    OWNER: "OWNER_MARK",
-    PL_OPEN: [
-        {"Trade Date": "10/26/2018", "Gross": "$34.53", "Description": "Reinvested:Distribution/Interest:",
-         "Price": "$8.9732", "Unit Balance": "694.4350", "Units": "3.8480", "Net": "$34.53",
-         "Fund Code": "CIG 11461"},
-        {"Trade Date": "11/23/2018", "Gross": "$34.73", "Description": "Reinvested:Distribution/Interest:",
-         "Price": "$8.9957", "Unit Balance": "698.2960", "Units": "3.8610", "Net": "$34.73",
-         "Fund Code": "CIG 11461"},
-        {"Trade Date": "10/26/2018", "Gross": "$5.30", "Description": "Reinvested:Distribution/Interest:",
-         "Price": "$8.9732", "Unit Balance": "106.6770", "Units": "0.5910", "Net": "$5.30",
-         "Fund Code": "CIG 11111"},
-        {"Trade Date": "11/23/2018", "Gross": "$5.33", "Description": "Reinvested:Distribution/Interest:",
-         "Price": "$8.9957", "Unit Balance": "107.2700", "Units": "0.5930", "Net": "$5.33",
-         "Fund Code": "CIG 11111"}
-    ],
-    PL_TFSA: [
-        {"Trade Date": "10/30/2018", "Gross": "$4.93", "Description": "Reinvested:Distribution/Interest:",
-         "Price": "$8.4422", "Unit Balance": "308.6739", "Units": "0.5840", "Net": "$4.93",
-         "Fund Code": "TML 674"},
-        {"Trade Date": "11/29/2018", "Gross": "$4.94", "Description": "Reinvested:Distribution/Interest:",
-         "Price": "$8.5672", "Unit Balance": "309.2505", "Units": "0.5766", "Net": "$4.94",
-         "Fund Code": "TML 674"},
-        {"Trade Date": "10/30/2018", "Gross": "$7.87", "Description": "Reinvested:Distribution/Interest:",
-         "Price": "$8.4422", "Unit Balance": "492.7939", "Units": "0.9322", "Net": "$7.87",
-         "Fund Code": "TML 704"},
-        {"Trade Date": "11/29/2018", "Gross": "$7.88", "Description": "Reinvested:Distribution/Interest:",
-         "Price": "$8.5672", "Unit Balance": "493.7137", "Units": "0.9198", "Net": "$7.88",
-         "Fund Code": "TML 704"}
-    ],
-    PL_RRSP: [
-        {"Trade Date": "10/19/2018", "Gross": "$26.28", "Description": "Reinvested:Distribution/Interest:",
-         "Price": "$4.2733", "Unit Balance": "1910.3030", "Units": "6.1490", "Net": "$26.28",
-         "Fund Code": "MFC 856"},
-        {"Trade Date": "11/23/2018", "Gross": "$33.43", "Description": "Reinvested:Distribution/Interest:",
-         "Price": "$4.1890", "Unit Balance": "1918.2830", "Units": "7.9800", "Net": "$33.43",
-         "Fund Code": "MFC 856"},
-        {"Trade Date": "10/19/2018", "Gross": "$20.49", "Description": "Reinvested:Distribution/Interest:",
-         "Price": "$10.1337", "Unit Balance": "1386.5420", "Units": "2.0220", "Net": "$20.49",
-         "Fund Code": "MFC 6129"},
-        {"Trade Date": "11/23/2018", "Gross": "$22.88", "Description": "Reinvested:Distribution/Interest:",
-         "Price": "$10.1511", "Unit Balance": "1388.7960", "Units": "2.2540", "Net": "$22.88",
-         "Fund Code": "MFC 6129"}
-    ]
-}
