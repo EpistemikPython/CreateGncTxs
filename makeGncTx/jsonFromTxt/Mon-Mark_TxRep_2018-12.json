@@ -3,8 +3,8 @@
     "__module__": "Configuration",
     "Owner": "Mark H. Sattolo",
     "Source File": "/home/marksa/dev/git/Python/Gnucash/createGncTxs/makeGncTx/txtFromPdf/Monarch-Mk_txRep_2018-12.txt",
-    "Date": "2019-05-25_06-20-41",
-    "Size": "34",
+    "Date": "$2019-05-26:15-26-55",
+    "Size": "34 = OPEN:8 + TFSA:10 + RRSP:16",
     "Plan Data": {
         "OPEN": [
             {
