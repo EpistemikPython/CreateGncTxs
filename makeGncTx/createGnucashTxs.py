@@ -6,10 +6,11 @@
 #
 # Copyright (c) 2019 Mark Sattolo <epistemik@gmail.com>
 #
-# @author Mark Sattolo <epistemik@gmail.com>
-# @version Python 3.6
-# @created 2018
-# @updated 2019-05-25
+__author__ = 'Mark Sattolo'
+__author_email__ = 'epistemik@gmail.com'
+__python_version__ = 3.6
+__created__ = '2018'
+__updated__ = '2019-06-02'
 
 import copy
 import json
@@ -38,16 +39,22 @@ class GncTxCreator:
 
     gncu = GncUtilities()
 
-    def get_monarch_info(self, mtx, plan_type, ast_parent, rev_acct):
+    def get_mon_pdf_info(self, mtx, plan_type, ast_parent, rev_acct):
         """
-        parse the Monarch transactions
+        Asset accounts: use the proper path to find the parent then search for the Fund Code in the descendants
+        Revenue accounts: pick the proper account based on owner and plan type
+        gross_curr: re match to Gross then concatenate the two match groups
+        date: re match to get day, month and year then re-assemble to form Gnc date
+        Units: re match and concatenate the two groups on either side of decimal point
+        Description: use DESC and Fund Code
+        Notes: use 'Unit Balance' and UNIT_BAL
         :param        mtx:   dict: Monarch transaction information
         :param  plan_type: String:
         :param ast_parent: String:
         :param   rev_acct: Gnucash account
         :return: dict, dict
         """
-        print_info('get_monarch_info()', MAGENTA)
+        print_info('get_mon_pdf_info()', MAGENTA)
 
         # set the regex needed to match the required groups in each value
         re_switch = re.compile(r"^(" + SWITCH + ")-([InOut]{2,3}).*")
@@ -123,6 +130,118 @@ class GncTxCreator:
         notes = str(asset_acct_name + " balance = " + mtx[UNIT_BAL])
         init_tx[NOTES] = notes
         print_info("notes = {}".format(notes))
+
+        pair_tx = None
+        have_pair = False
+        if switch:
+            print_info("Tx is a Switch to OTHER Monarch account.", BLUE)
+            # look for switches in this plan type with same company, day, month and opposite gross value
+            for itx in self.report_info.plans[plan_type]:
+                if itx[SWITCH] and itx[FUND_CMPY] == init_tx[FUND_CMPY] and itx[GROSS] == (gross_curr * -1) \
+                        and itx[TRADE_DAY] == init_tx[TRADE_DAY] and itx[TRADE_MTH] == init_tx[TRADE_MTH] :
+                    # ALREADY HAVE THE FIRST ITEM OF THE PAIR
+                    have_pair = True
+                    pair_tx = itx
+                    print_info('Found the MATCH of a pair...', YELLOW)
+                    break
+
+            if not have_pair:
+                # store the tx until we find the matching tx
+                self.report_info.plans[plan_type].append(init_tx)
+                print_info('Found the FIRST of a pair...\n', YELLOW)
+
+        return init_tx, pair_tx
+
+    def get_mon_copy_info(self, mtx, plan_type, ast_parent, rev_acct):
+        """
+        parse the Monarch transactions from a copy&paste json file
+        Asset accounts: use the proper path to find the parent then search for the Fund Code in the descendants
+        Revenue accounts: pick the proper account based on owner and plan type
+        gross_curr: re match to Gross then concatenate the two match groups
+        date: convert the date then get day, month and year to form a Gnc date
+        Units: re match and concatenate the two groups on either side of decimal point
+        Description: use DESC and Fund Company
+        :param        mtx:   dict: Monarch copied transaction information
+        :param  plan_type: String:
+        :param ast_parent: String:
+        :param   rev_acct: Gnucash account
+        :return: dict, dict
+        """
+        print_info('get_mon_copy_info()', MAGENTA)
+
+        # set the regex needed to match the required groups in each value
+        re_gross  = re.compile(r"^(-?)\$([0-9,]{1,6})\.([0-9]{2}).*")
+        re_units  = re.compile(r"^(-?)([0-9]{1,5})\.([0-9]{4}).*")
+
+        init_tx = {FUND_CMPY: mtx[FUND_CMPY]}
+
+        print_info("trade date = {}".format(mtx[TRADE_DATE]))
+        conv_date = dt.strptime(mtx[TRADE_DATE], "%d-%b-%Y")
+        print_info("converted date = {}".format(conv_date))
+        init_tx[TRADE_DAY] = conv_date.day
+        init_tx[TRADE_MTH] = conv_date.month
+        init_tx[TRADE_YR]  = conv_date.year
+        print_info("trade day-month-year = '{}-{}-{}'".format(init_tx[TRADE_DAY],init_tx[TRADE_MTH],init_tx[TRADE_YR]))
+
+        # check if we have a switch/transfer
+        switch = True if mtx[DESC] == SW_IN or mtx[DESC] == SW_OUT else False
+        init_tx[SWITCH] = switch
+        print_info("{}Have a Switch!".format('DO NOT ' if not switch else '>>> '), BLUE)
+
+        asset_acct_name = mtx[FUND_CMPY] + " " + mtx[FUND_CODE]
+        asset_parent = ast_parent
+        # special locations for Trust Revenue and Asset accounts
+        if asset_acct_name == TRUST_AST_ACCT:
+            asset_parent = self.root.lookup_by_name(TRUST)
+            print_info("asset_parent = {}".format(asset_parent.GetName()))
+            rev_acct = self.root.lookup_by_name(TRUST_REV_ACCT)
+            print_info("rev_acct = {}".format(rev_acct.GetName()))
+        # save the (possibly modified) Revenue account to the Gnc tx
+        init_tx[REVENUE] = rev_acct
+
+        # get the asset account
+        asset_acct = asset_parent.lookup_by_name(asset_acct_name)
+        if asset_acct is None:
+            raise Exception("Could NOT find acct '{}' under parent '{}'".format(asset_acct_name, asset_parent.GetName()))
+        else:
+            init_tx[ACCT] = asset_acct
+            print_info("asset_acct = {}".format(asset_acct.GetName()), color=CYAN)
+
+        # get the dollar value of the tx
+        re_match = re.match(re_gross, mtx[GROSS])
+        if re_match:
+            str_gross_curr = re_match.group(2) + re_match.group(3)
+            # remove possible comma
+            gross_curr = int(str_gross_curr.replace(',', ''))
+            # if match group 1 is not empty, amount is negative
+            if re_match.group(1) != '':
+                gross_curr *= -1
+            print_info("gross_curr = {}".format(gross_curr))
+            init_tx[GROSS] = gross_curr
+        else:
+            raise Exception("PROBLEM!! re_gross DID NOT match with value '{}'!".format(mtx[GROSS]))
+
+        # get the units of the tx
+        re_match = re.match(re_units, mtx[UNITS])
+        if re_match:
+            units = int(re_match.group(2) + re_match.group(3))
+            # if match group 1 is not empty, units is negative
+            if re_match.group(1) != '':
+                units *= -1
+            init_tx[UNITS] = units
+            print_info("units = {}".format(units))
+        else:
+            raise Exception("PROBLEM!! re_units DID NOT match with value '{}'!".format(mtx[UNITS]))
+
+        # assemble the Description string
+        descr = "{}: {} {}".format(COMPANY_NAME[init_tx[FUND_CMPY]], mtx[DESC], asset_acct_name)
+        init_tx[DESC] = descr
+        print_info("descr = {}".format(init_tx[DESC]))
+
+        # notes/load field
+        load = str(asset_acct_name + " load = " + mtx[LOAD])
+        init_tx[NOTES] = load
+        print_info("notes = {}".format(init_tx[NOTES]))
 
         pair_tx = None
         have_pair = False
@@ -245,7 +364,7 @@ class GncTxCreator:
             spl_ast.SetMemo(tx1[NOTES])
             spl_ast2.SetMemo(tx2[NOTES])
         else:
-            # a Distribution, so the second split is for a REVENUE account
+            # the second split is for a REVENUE account
             spl_rev = Split(self.book)
             spl_rev.SetParent(gtx)
             # set the Account, Value and Reconciled of the REVENUE split
@@ -254,9 +373,12 @@ class GncTxCreator:
             print_info("revenue gross = {}".format(rev_gross))
             spl_rev.SetValue(GncNumeric(rev_gross, 100))
             spl_rev.SetReconcile(CREC)
-            # set Notes for the Tx and Action for the ASSET split
+            # set Notes for the Tx
             gtx.SetNotes(tx1[NOTES])
-            spl_ast.SetAction(DIST)
+            # set Action for the ASSET split
+            action = FEE if FEE in tx1[DESC] else ("Sell" if tx1[UNITS] < 0 else DIST)
+            print_info("action = {}".format(action))
+            spl_ast.SetAction(action)
 
         # ROLL BACK if something went wrong and the two splits DO NOT balance
         if not gtx.GetImbalanceValue().zero_p():
@@ -289,7 +411,7 @@ class GncTxCreator:
         print_info('process_monarch_txs()', MAGENTA)
         try:
             # get the additional required information from the Monarch json
-            tx1, tx2 = self.get_monarch_info(mtx, plan_type, ast_parent, rev_acct)
+            tx1, tx2 = self.get_mon_copy_info(mtx, plan_type, ast_parent, rev_acct)
 
             # just return if there is a matching tx but we don't have it yet
             if tx1[SWITCH] and tx2 is None:

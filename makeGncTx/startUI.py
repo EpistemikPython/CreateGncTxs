@@ -5,10 +5,11 @@
 #
 # Copyright (c) 2019 Mark Sattolo <epistemik@gmail.com>
 #
-# @author Mark Sattolo <epistemik@gmail.com>
-# @version Python 3.6
-# @created 2019-05-19
-# @updated 2019-05-25
+__author__ = 'Mark Sattolo'
+__author_email__ = 'epistemik@gmail.com'
+__python_version__ = 3.6
+__created__ = '2018'
+__updated__ = '2019-06-02'
 
 import sys
 import json
@@ -151,7 +152,7 @@ class CreateGncTxsAndPrices(QDialog):
 
         file_name, _ = QFileDialog.getOpenFileName(self, caption, "", ffilter, options=options)
         if file_name:
-            print_info("File selected: {}".format(file_name), BLUE)
+            print_info("\nFile selected: {}".format(file_name), BLUE)
             if label == PDF:
                 self.pdf_file = file_name
                 self.pdf_file_display = file_name.split('/')[-1]
@@ -216,7 +217,7 @@ class CreateGncTxsAndPrices(QDialog):
                     return
                 cl_params = [self.mon_file, self.gnc_file, mode]
 
-        print_info(cl_params, GREEN)
+        print_info("Parameters = \n{}".format(json.dumps(cl_params, indent=4)), GREEN)
 
         if mode == TEST:
             print_info('TEST mode', GREEN)

@@ -6,15 +6,16 @@
 #
 # Copyright (c) 2019 Mark Sattolo <epistemik@gmail.com>
 #
-# @author Mark Sattolo <epistemik@gmail.com>
-# @version Python 3.6
-# @created 2018
-# @updated 2019-05-25
+__author__ = 'Mark Sattolo'
+__author_email__ = 'epistemik@gmail.com'
+__python_version__ = 3.6
+__created__ = '2018'
+__updated__ = '2019-06-02'
 
 import inspect
 from datetime import datetime as dt
 
-DATE_STR_FORMAT = "$%Y-%m-%d:%H-%M-%S"
+DATE_STR_FORMAT = "\u0023%Y-%m-%d\u0025\u0025%H-%M-%S"
 dtnow = dt.now()
 strnow = dtnow.strftime(DATE_STR_FORMAT)
 
@@ -79,7 +80,6 @@ def print_error(text, newline=True):
 
 
 class GncUtilities:
-
     def account_from_path(self, top_account, account_path, original_path=None):
         """
         get a Gnucash account from the given path
@@ -117,6 +117,8 @@ class GncUtilities:
             print_info("Descendants of {}:".format(acct_name))
             # for subAcct in descendants:
             # print_info("{}".format(subAcct.GetName()))
+
+    # END class GncUtilities
 
 
 class InvestmentRecord:
@@ -182,16 +184,27 @@ class InvestmentRecord:
             PLAN_DATA      : self.plans
         }
 
+    # END class InvestmentRecord
 
-GNC       = 'Gnucash'
-MON       = 'Monarch'
-CLIENT_TX = "CLIENT TRANSACTIONS"
-PLAN_TYPE = "Plan Type:"
-OWNER     = "Owner"
-AUTO_SYS  = "Automatic/Systematic"
-DOLLARS   = '$'
-CENTS     = '\u00A2'
-UNKNOWN   = "UNKNOWN"
+
+GNC: str       = 'Gnucash'
+MON: str       = 'Monarch'
+TX: str        = "TRANSACTIONS"
+CLIENT_TX:str  = "CLIENT " + TX
+PLAN_TYPE: str = "Plan Type:"
+OWNER: str     = "Owner"
+AUTO_SYS: str  = "Automatic/Systematic"
+DOLLARS: str   = '$'
+CENTS: str     = '\u00A2'
+UNKNOWN: str   = "UNKNOWN"
+
+REVENUE  = "Revenue"
+ASSET    = "Asset"
+TRUST    = "TRUST"
+MON_MARK = "Mark H. Sattolo"
+MON_LULU = "Louise Robb"
+GNC_MARK = "Mark"
+GNC_LULU = "Lulu"
 
 # Plan types
 PLAN_DATA = "Plan Data"
@@ -216,6 +229,17 @@ PRICE      = "Price"
 UNIT_BAL   = "Unit Balance"
 ACCT       = "Account"  # in Gnucash
 NOTES      = "Notes"
+LOAD: str  = "Load"
+
+FEE    = 'Fee'
+FEE_RD = FEE + " Redemption"
+DIST   = "Dist"
+SW_IN  = SWITCH + "-in"
+SW_OUT = SWITCH + "-out"
+INTRF  = "Internal Transfer"
+INTRF_IN  = INTRF + "-In"
+INTRF_OUT = INTRF + "-Out"
+REINV: str = 'Reinvested'
 
 # Fund companies
 ATL = "ATL"
@@ -224,6 +248,14 @@ DYN = "DYN"
 MFC = "MFC"
 MMF = "MMF"
 TML = "TML"
+
+TX_TYPES = {
+    FEE    : FEE_RD ,
+    SW_IN  : SW_IN  ,
+    SW_OUT : SW_OUT ,
+    REINV  : REINV + ' Distribution' ,
+    AUTO_SYS : AUTO_SYS + ' Withdrawal Plan'
+}
 
 # Company names
 COMPANY_NAME = {
@@ -301,24 +333,6 @@ FUNDS_LIST = [
 
 TRUST_AST_ACCT = CIG_18140
 TRUST_REV_ACCT = "Trust Base"
-
-REVENUE  = "Revenue"
-ASSET    = "Asset"
-TRUST    = "TRUST"
-MON_MARK = "Mark H. Sattolo"
-MON_LULU = "Louise Robb"
-GNC_MARK = "Mark"
-GNC_LULU = "Lulu"
-
-FEE    = "Fee Redemption"
-DIST   = "Dist"
-IN     = "In"
-OUT    = "Out"
-SW_IN  = SWITCH + "-" + IN
-SW_OUT = SWITCH + "-" + OUT
-INTRF  = "Internal Transfer"
-INTRF_IN  = INTRF + "-" + IN
-INTRF_OUT = INTRF + "-" + OUT
 
 # find the proper path to the account in the gnucash file
 ACCT_PATHS = {
