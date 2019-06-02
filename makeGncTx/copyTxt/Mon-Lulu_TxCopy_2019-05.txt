@@ -1,0 +1,30 @@
+Louise Robb
+TRANSACTIONS OPEN Plan ID: 78514
+Date		Type											Account				Load	Gross		Net			Price	Units
+10-May-2019	Automatic/Systematic Withdrawal Plan (AWD/SWP)	CIG 18140 105017156	NL		-$1,000.00	-$1,000.00	$15.82	-63.2160
+
+TRANSACTIONS RRSP Plan ID: 278825
+Date		Type					Account			  Load 	Gross	Net		Price	Units
+24-May-2019	Reinvested Distribution	MFC 302 64667227	DSC	$12.36	$12.36	$14.03	0.8810
+24-May-2019	Reinvested Distribution	MFC 6130 64667227	FE	$34.87	$34.87	$9.22	3.7840
+24-May-2019	Reinvested Distribution	MFC 3232 64667227	DSC	$59.45	$59.45	$8.76	6.7890
+24-May-2019	Reinvested Distribution	MFC 6129 64667227	FE	$19.38	$19.38	$10.61	1.8270
+24-May-2019	Reinvested Distribution	MFC 856 64667227	DSC	$26.37	$26.37	$4.25	6.1970
+24-May-2019	Reinvested Distribution	MFC 6138 64667227	FE	$73.48	$73.48	$14.17	5.1880
+30-May-2019	Reinvested Distribution	TML 1017 4722845	FE	$13.91	$13.91	$14.28	0.9739
+30-May-2019	Reinvested Distribution	TML 1018 4722845	DSC	$2.27	$2.27	$14.28	0.1589
+31-May-2019	Reinvested Distribution	MMF 44424 72566701	DSC	$5.45	$5.45	$9.26	0.5890
+31-May-2019	Reinvested Distribution	MMF 4524 72566701	FE	$145.95	$145.95	$9.26	15.7610
+31-May-2019	Reinvested Distribution	DYN 029 424854693	FE	$50.16	$50.16	$21.13	2.3739
+31-May-2019	Reinvested Distribution	DYN 1560 424854693	FE	$55.72	$55.72	$13.60	4.0971
+31-May-2019	Reinvested Distribution	DYN 1562 424854693	DSC	$7.85	$7.85	$13.60	0.5772
+31-May-2019	Reinvested Distribution	DYN 729 424854693	DSC	$7.61	$7.61	$21.13	0.3602
+
+TRANSACTIONS TFSA Plan ID: 278826
+Date		Type					Account			  Load	Gross		Net			Price	Units
+10-May-2019	Switch-in				MFC 1960 64663089	FE	$9,592.98	$9,592.98	$12.62	760.0750
+10-May-2019	Switch-out				MFC 3689 64663089	DSC	-$9,592.98	-$9,592.98	$12.62	-760.0750
+17-May-2019	Reinvested Distribution	MFC 1960 64663089	FE	$969.57		$969.57		$12.09	80.1690
+24-May-2019	Reinvested Distribution	MFC 3232 64663089	DSC	$37.10		$37.10		$8.76	4.2360
+24-May-2019	Reinvested Distribution	MFC 6138 64663089	FE	$99.84		$99.84		$14.17	7.0480
+24-May-2019	Reinvested Distribution	MFC 1960 64663089	FE	$91.63		$91.63		$11.99	7.6400

@@ -1,0 +1,216 @@
+{
+    "__class__": "InvestmentRecord",
+    "__module__": "Configuration",
+    "Owner": "Mark H. Sattolo",
+    "Source File": "/home/marksa/dev/git/Python/Gnucash/createGncTxs/makeGncTx/copyTxt/Mon-Mark_TxCopy_2019-05.txt",
+    "Date": "#2019-06-02%05-25-22",
+    "Size": "20 = OPEN:2 + TFSA:4 + RRSP:14",
+    "Plan Data": {
+        "OPEN": [
+            {
+                "Trade Date": "24-May-2019",
+                "Description": "Reinvested Distribution",
+                "Gross": "$10.86",
+                "Units": "1.1620",
+                "Price": "$9.35",
+                "Load": "LL3",
+                "Fund Code": "11461",
+                "Fund Company": "CIG"
+            },
+            {
+                "Trade Date": "24-May-2019",
+                "Description": "Reinvested Distribution",
+                "Gross": "$30.53",
+                "Units": "3.2660",
+                "Price": "$9.35",
+                "Load": "FE",
+                "Fund Code": "11111",
+                "Fund Company": "CIG"
+            }
+        ],
+        "TFSA": [
+            {
+                "Trade Date": "30-May-2019",
+                "Description": "Reinvested Distribution",
+                "Gross": "$24.27",
+                "Units": "0.8812",
+                "Price": "$27.54",
+                "Load": "FE",
+                "Fund Code": "203",
+                "Fund Company": "TML"
+            },
+            {
+                "Trade Date": "30-May-2019",
+                "Description": "Reinvested Distribution",
+                "Gross": "$2.96",
+                "Units": "0.1075",
+                "Price": "$27.54",
+                "Load": "LL",
+                "Fund Code": "519",
+                "Fund Company": "TML"
+            },
+            {
+                "Trade Date": "30-May-2019",
+                "Description": "Reinvested Distribution",
+                "Gross": "$1.35",
+                "Units": "0.1620",
+                "Price": "$8.33",
+                "Load": "LL",
+                "Fund Code": "674",
+                "Fund Company": "TML"
+            },
+            {
+                "Trade Date": "30-May-2019",
+                "Description": "Reinvested Distribution",
+                "Gross": "$12.03",
+                "Units": "1.4435",
+                "Price": "$8.33",
+                "Load": "FE",
+                "Fund Code": "704",
+                "Fund Company": "TML"
+            }
+        ],
+        "RRSP": [
+            {
+                "Trade Date": "24-May-2019",
+                "Description": "Reinvested Distribution",
+                "Gross": "$14.73",
+                "Units": "1.0500",
+                "Price": "$14.03",
+                "Load": "DSC",
+                "Fund Code": "302",
+                "Fund Company": "MFC"
+            },
+            {
+                "Trade Date": "24-May-2019",
+                "Description": "Reinvested Distribution",
+                "Gross": "$57.34",
+                "Units": "6.2220",
+                "Price": "$9.22",
+                "Load": "FE",
+                "Fund Code": "6130",
+                "Fund Company": "MFC"
+            },
+            {
+                "Trade Date": "24-May-2019",
+                "Description": "Reinvested Distribution",
+                "Gross": "$71.38",
+                "Units": "8.1510",
+                "Price": "$8.76",
+                "Load": "DSC",
+                "Fund Code": "3232",
+                "Fund Company": "MFC"
+            },
+            {
+                "Trade Date": "24-May-2019",
+                "Description": "Reinvested Distribution",
+                "Gross": "$29.35",
+                "Units": "2.7680",
+                "Price": "$10.61",
+                "Load": "FE",
+                "Fund Code": "6129",
+                "Fund Company": "MFC"
+            },
+            {
+                "Trade Date": "24-May-2019",
+                "Description": "Reinvested Distribution",
+                "Gross": "$31.31",
+                "Units": "7.3590",
+                "Price": "$4.25",
+                "Load": "DSC",
+                "Fund Code": "856",
+                "Fund Company": "MFC"
+            },
+            {
+                "Trade Date": "24-May-2019",
+                "Description": "Reinvested Distribution",
+                "Gross": "$113.54",
+                "Units": "8.0160",
+                "Price": "$14.17",
+                "Load": "FE",
+                "Fund Code": "6138",
+                "Fund Company": "MFC"
+            },
+            {
+                "Trade Date": "30-May-2019",
+                "Description": "Reinvested Distribution",
+                "Gross": "$17.97",
+                "Units": "1.2582",
+                "Price": "$14.28",
+                "Load": "FE",
+                "Fund Code": "1017",
+                "Fund Company": "TML"
+            },
+            {
+                "Trade Date": "30-May-2019",
+                "Description": "Reinvested Distribution",
+                "Gross": "$4.39",
+                "Units": "0.3074",
+                "Price": "$14.28",
+                "Load": "DSC",
+                "Fund Code": "1018",
+                "Fund Company": "TML"
+            },
+            {
+                "Trade Date": "31-May-2019",
+                "Description": "Reinvested Distribution",
+                "Gross": "$16.57",
+                "Units": "1.7890",
+                "Price": "$9.26",
+                "Load": "DSC",
+                "Fund Code": "44424",
+                "Fund Company": "MMF"
+            },
+            {
+                "Trade Date": "31-May-2019",
+                "Description": "Reinvested Distribution",
+                "Gross": "$190.28",
+                "Units": "20.5480",
+                "Price": "$9.26",
+                "Load": "FE",
+                "Fund Code": "4524",
+                "Fund Company": "MMF"
+            },
+            {
+                "Trade Date": "31-May-2019",
+                "Description": "Reinvested Distribution",
+                "Gross": "$62.50",
+                "Units": "2.9579",
+                "Price": "$21.13",
+                "Load": "FE",
+                "Fund Code": "029",
+                "Fund Company": "DYN"
+            },
+            {
+                "Trade Date": "31-May-2019",
+                "Description": "Reinvested Distribution",
+                "Gross": "$73.83",
+                "Units": "5.4287",
+                "Price": "$13.60",
+                "Load": "FE",
+                "Fund Code": "1560",
+                "Fund Company": "DYN"
+            },
+            {
+                "Trade Date": "31-May-2019",
+                "Description": "Reinvested Distribution",
+                "Gross": "$12.68",
+                "Units": "0.6001",
+                "Price": "$21.13",
+                "Load": "DSC",
+                "Fund Code": "729",
+                "Fund Company": "DYN"
+            },
+            {
+                "Trade Date": "31-May-2019",
+                "Description": "Reinvested Distribution",
+                "Gross": "$14.69",
+                "Units": "1.0801",
+                "Price": "$13.60",
+                "Load": "DSC",
+                "Fund Code": "1562",
+                "Fund Company": "DYN"
+            }
+        ]
+    }
+}

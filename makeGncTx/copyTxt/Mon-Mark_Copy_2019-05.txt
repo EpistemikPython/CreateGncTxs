@@ -1,0 +1,92 @@
+Mark H. Sattolo
+PLAN DESCRIPTION	Net Invested
+Since Inception	Gain / Loss
+Since Inception	Book Value	Market Value
+01-Jun-2019	%  
+OPEN Plan ID: 78512 Joint with: Robb Louise	$24,849.37 	$1,333.98 	$26,527.19 	$26,183.35 	9.4 
+RRSP Plan ID: 278827	$163,632.16 	$39,933.27 	$194,282.68 	$203,565.43 	73.4 
+TFSA Plan ID: 300787	$44,304.16 	$3,220.55 	$50,263.70 	$47,524.71 	17.1 
+ PORTFOLIO TOTAL	$232,785.69	$44,487.80	$271,073.57	$277,273.49	 
+
+FUND ACCOUNTS OPEN Plan ID: 78512 Joint with: Robb Louise
+Investments	Account #	Quantity	Price	Gain / Loss
+Since Inception	First Trx Date	Net Invested
+Since Inception	Market Value
+01-Jun-2019
+Cambridge Canadian Equity Corporate Class A - CIG-1521	106035991	125.6020	$16.6885	$320.74	Mar 1, 2018	$1,775.37	$2,096.11
+Cambridge Canadian Equity Corporate Class A - CIG-2321	106035991	370.1390	$16.6885	($20.13)	Mar 1, 2018	$6,197.19	$6,177.06
+CI Can-Am Small Cap Corporate Class A - CIG-1154	106035991	33.9260	$17.6053	($135.12)	Mar 1, 2018	$732.40	$597.28
+CI Can-Am Small Cap Corporate Class A - CIG-6104	106035991	99.8740	$17.6053	($53.77)	Mar 1, 2018	$1,812.08	$1,758.31
+Signature Diversified Yield II Fund Class A - CIG-11111	106035991	613.6960	$9.2696	$127.81	Mar 1, 2018	$5,560.91	$5,688.72
+Signature Diversified Yield II Fund Class A - CIG-11461	106035991	218.4920	$9.2696	$437.89	Mar 1, 2018	$1,587.44	$2,025.33
+Signature High Income Corporate Class A - CIG-1304	106035991	75.0660	$27.3284	$511.26	Mar 1, 2018	$1,540.17	$2,051.43
+Signature High Income Corporate Class A - CIG-2304	106035991	211.8350	$27.3284	$145.30	Mar 1, 2018	$5,643.81	$5,789.11
+  	 	 	$26,183.35
+TRANSACTIONS OPEN Plan ID: 78512 Joint with: Robb Louise
+Date	Type	Account	Load	Gross	Net	Price	Units
+24-May-2019	Reinvested Distribution	CIG 11461 106035991	LL3	$10.86	$10.86	$9.35	1.1620
+24-May-2019	Reinvested Distribution	CIG 11111 106035991	FE	$30.53	$30.53	$9.35	3.2660
+
+FUND ACCOUNTS RRSP Plan ID: 278827
+Investments	Account #	Quantity	Price	Gain / Loss
+Since Inception	First Trx Date	Net Invested
+Since Inception	Market Value
+01-Jun-2019
+Dynamic Equity Income Fund Series A - DYN-029	424767671	895.8222	$21.1300	$3,719.15	Jun 8, 2012	$15,209.57	$18,928.72
+Dynamic Equity Income Fund Series A - DYN-729	424767671	181.7473	$21.1300	$4,401.53	May 15, 2012	($561.21)	$3,840.32
+Dynamic Strategic Yield Fund Series A - DYN-1560	424767671	1269.5862	$13.6000	$2,143.62	Jun 8, 2012	$15,122.75	$17,266.37
+Dynamic Strategic Yield Fund Series A - DYN-1562	424767671	252.6369	$13.6000	$2,942.45	May 15, 2012	$493.41	$3,435.86
+Franklin Bissett Canadian Dividend Fund A - TML-1017	4722871	554.2857	$14.2826	$416.54	Nov 15, 2016	$7,500.10	$7,916.64
+Franklin Bissett Canadian Dividend Fund A - TML-1018	4722871	135.4612	$14.2826	$930.57	Apr 22, 2016	$1,004.17	$1,934.74
+Mackenzie Canadian Bond Fund Series A - MFC-302	64665893	768.3610	$14.1236	$1,879.82	May 15, 2012	$8,972.20	$10,852.02
+Mackenzie Canadian Bond Fund Series PW - MFC-6129	64665893	1515.7410	$10.6731	$744.65	Jul 13, 2018	$15,433.01	$16,177.66
+Mackenzie Canadian Money Market Fund Series C - MFC-4378	64665893	0.0410	$10.0000	$0.41	Nov 10, 2016	$0.00	$0.41
+Mackenzie Corporate Bond Fund Series A - MFC-856	64665893	1766.4460	$4.2349	$1,933.36	May 15, 2012	$5,547.36	$7,480.72
+Mackenzie Corporate Bond Fund Series PW - MFC-6130	64665893	1371.5250	$9.1737	$308.97	Jul 13, 2018	$12,272.99	$12,581.96
+Mackenzie Strategic Income Fund Series A - MFC-3232	64665893	2089.1030	$8.6849	$7,539.96	May 15, 2012	$10,603.69	$18,143.65
+Mackenzie Strategic Income Fund Series PW - MFC-6138	64665893	2057.5600	$14.0495	$646.88	Jul 13, 2018	$28,260.81	$28,907.69
+Manulife Yield Opportunities Fund Advisor Series - MMF-44424	72562759	333.2580	$9.2603	$56.87	May 25, 2018	$3,029.20	$3,086.07
+Manulife Yield Opportunities Fund Advisor Series - MMF-4524	72562759	3826.1160	$9.2603	$1,144.16	May 25, 2018	$34,286.82	$35,430.98
+Renaissance Global Infrastructure Fund Class A - ATL-059	3089478001	1603.7380	$10.9629	$2,837.53	Jan 14, 2016	$14,744.09	$17,581.62
+  	 	 	$203,565.43
+TRANSACTIONS RRSP Plan ID: 278827
+Date	Type	Account	Load	Gross	Net	Price	Units
+24-May-2019	Reinvested Distribution	MFC 302 64665893	DSC	$14.73	$14.73	$14.03	1.0500
+24-May-2019	Reinvested Distribution	MFC 6130 64665893	FE	$57.34	$57.34	$9.22	6.2220
+24-May-2019	Reinvested Distribution	MFC 3232 64665893	DSC	$71.38	$71.38	$8.76	8.1510
+24-May-2019	Reinvested Distribution	MFC 6129 64665893	FE	$29.35	$29.35	$10.61	2.7680
+24-May-2019	Reinvested Distribution	MFC 856 64665893	DSC	$31.31	$31.31	$4.25	7.3590
+24-May-2019	Reinvested Distribution	MFC 6138 64665893	FE	$113.54	$113.54	$14.17	8.0160
+30-May-2019	Reinvested Distribution	TML 1017 4722871	FE	$17.97	$17.97	$14.28	1.2582
+30-May-2019	Reinvested Distribution	TML 1018 4722871	DSC	$4.39	$4.39	$14.28	0.3074
+31-May-2019	Reinvested Distribution	MMF 44424 72562759	DSC	$16.57	$16.57	$9.26	1.7890
+31-May-2019	Reinvested Distribution	MMF 4524 72562759	FE	$190.28	$190.28	$9.26	20.5480
+31-May-2019	Reinvested Distribution	DYN 029 424767671	FE	$62.50	$62.50	$21.13	2.9579
+31-May-2019	Reinvested Distribution	DYN 1560 424767671	FE	$73.83	$73.83	$13.60	5.4287
+31-May-2019	Reinvested Distribution	DYN 729 424767671	DSC	$12.68	$12.68	$21.13	0.6001
+31-May-2019	Reinvested Distribution	DYN 1562 424767671	DSC	$14.69	$14.69	$13.60	1.0801
+
+FUND ACCOUNTS TFSA Plan ID: 300787
+Investments	Account #	Quantity	Price	Gain / Loss
+Since Inception	First Trx Date	Net Invested
+Since Inception	Market Value
+01-Jun-2019
+Franklin Bissett Canadian Equity Fund Series A - TML-202	4963030	99.5165	$97.9568	$555.75	Nov 11, 2015	$9,192.57	$9,748.32
+Franklin Bissett Canadian Equity Fund Series A - TML-518	4963030	11.8570	$97.9568	$670.52	Oct 29, 2014	$490.95	$1,161.47
+Franklin Bissett Dividend Income Fund A - TML-203	4963030	442.0809	$27.5406	$753.99	Nov 11, 2015	$11,421.18	$12,175.17
+Franklin Bissett Dividend Income Fund A - TML-519	4963030	53.9523	$27.5406	$1,016.07	Oct 29, 2014	$469.81	$1,485.88
+Franklin Bissett Small Cap Fund Series A - TML-223	4963030	82.0894	$32.8600	($818.64)	Nov 11, 2015	$3,516.10	$2,697.46
+Franklin Bissett Small Cap Fund Series A - TML-598	4963030	10.5889	$32.8600	($505.95)	Oct 29, 2014	$853.90	$347.95
+Franklin Mutual Global Discovery Fund A - TML-180	4963030	486.2274	$17.9464	($132.46)	Nov 11, 2015	$8,858.49	$8,726.03
+Franklin Mutual Global Discovery Fund A - TML-184	4963030	56.5542	$17.9464	$735.41	Oct 29, 2014	$279.53	$1,014.94
+Templeton Global Bond Fund Series A - TML-674	4963030	84.6368	$8.3337	$306.06	Oct 29, 2014	$399.28	$705.34
+Templeton Global Bond Fund Series A - TML-704	4963030	753.0135	$8.3337	$90.22	Nov 11, 2015	$6,185.17	$6,275.39
+Templeton Global Smaller Companies Fund A - TML-694	4963030	12.3416	$25.2009	$587.41	Oct 29, 2014	($276.39)	$311.02
+Templeton Global Smaller Companies Fund A - TML-707	4963030	114.1125	$25.2009	($49.52)	Nov 11, 2015	$2,925.26	$2,875.74
+  	 	 	$47,524.71
+TRANSACTIONS TFSA Plan ID: 300787
+Date	Type	Account	Load	Gross	Net	Price	Units
+30-May-2019	Reinvested Distribution	TML 203 4963030	FE	$24.27	$24.27	$27.54	0.8812
+30-May-2019	Reinvested Distribution	TML 519 4963030	LL	$2.96	$2.96	$27.54	0.1075
+30-May-2019	Reinvested Distribution	TML 674 4963030	LL	$1.35	$1.35	$8.33	0.1620
+30-May-2019	Reinvested Distribution	TML 704 4963030	FE	$12.03	$12.03	$8.33	1.4435
