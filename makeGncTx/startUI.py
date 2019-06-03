@@ -45,11 +45,11 @@ MAIN_FXNS = {
 
 
 # noinspection PyUnresolvedReferences,PyAttributeOutsideInit
-class CreateGncTxsAndPrices(QDialog):
+class MonarchGnucashServices(QDialog):
     def __init__(self):
-        print_info("startUI:CreateGncTxsAndPrices()\nRuntime = {}\n".format(strnow), MAGENTA)
+        print_info("startUI:MonarchGnucashServices()\nRuntime = {}\n".format(strnow), MAGENTA)
         super().__init__()
-        self.title = 'Gnucash Txs & Prices'
+        self.title = 'Monarch & Gnucash Services'
         self.left = 480
         self.top = 160
         self.width = 800
@@ -238,7 +238,7 @@ class CreateGncTxsAndPrices(QDialog):
 # TODO: print debug output to ui screen
 def ui_main():
     app = QApplication(sys.argv)
-    dialog = CreateGncTxsAndPrices()
+    dialog = MonarchGnucashServices()
     dialog.show()
     sys.exit(app.exec_())
 

@@ -258,7 +258,7 @@ class MonarchQrepToGncPrices:
 
 
 def mon_qtr_rep_main(args):
-    usage = "usage: py36 parseMonarchQtrRep.py <monarch json file> <gnucash file> <mode: prod|test>"
+    usage = "usage: py36 parseMonarchQtrRep.py <monarch pdf-text file> <gnucash file> <mode: prod|test>"
     if len(args) < 3:
         print_error("NOT ENOUGH parameters!")
         print_info(usage, MAGENTA)

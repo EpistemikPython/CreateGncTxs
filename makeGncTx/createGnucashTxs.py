@@ -175,15 +175,15 @@ class GncTxCreator:
 
         init_tx = {FUND_CMPY: mtx[FUND_CMPY]}
 
-        print_info("trade date = {}".format(mtx[TRADE_DATE]))
+        # print_info("trade date = {}".format(mtx[TRADE_DATE]))
         conv_date = dt.strptime(mtx[TRADE_DATE], "%d-%b-%Y")
-        print_info("converted date = {}".format(conv_date))
+        # print_info("converted date = {}".format(conv_date))
         init_tx[TRADE_DAY] = conv_date.day
         init_tx[TRADE_MTH] = conv_date.month
         init_tx[TRADE_YR]  = conv_date.year
         print_info("trade day-month-year = '{}-{}-{}'".format(init_tx[TRADE_DAY],init_tx[TRADE_MTH],init_tx[TRADE_YR]))
 
-        # check if we have a switch/transfer
+        # check if we have a switch-in/out
         switch = True if mtx[DESC] == SW_IN or mtx[DESC] == SW_OUT else False
         init_tx[SWITCH] = switch
         print_info("{}Have a Switch!".format('DO NOT ' if not switch else '>>> '), BLUE)
@@ -236,12 +236,12 @@ class GncTxCreator:
         # assemble the Description string
         descr = "{}: {} {}".format(COMPANY_NAME[init_tx[FUND_CMPY]], mtx[DESC], asset_acct_name)
         init_tx[DESC] = descr
-        print_info("descr = {}".format(init_tx[DESC]))
+        # print_info("descr = {}".format(init_tx[DESC]))
 
         # notes/load field
         load = str(asset_acct_name + " load = " + mtx[LOAD])
         init_tx[NOTES] = load
-        print_info("notes = {}".format(init_tx[NOTES]))
+        # print_info("notes = {}".format(init_tx[NOTES]))
 
         pair_tx = None
         have_pair = False
@@ -264,6 +264,7 @@ class GncTxCreator:
 
         return init_tx, pair_tx
 
+    # TODO: separate file with standard functions to create Gnucash session, prices, transactions
     def create_gnc_prices(self, tx1, tx2):
         """
         create and load Gnucash prices to the Gnucash PriceDB
@@ -312,14 +313,15 @@ class GncTxCreator:
             pr2.commit_edit()
 
         if self.mode == PROD:
-            print_info("Mode = {}: Add Price1 to DB.\n".format(self.mode), GREEN)
+            print_info("Mode = {}: Add Price1 to DB.".format(self.mode), GREEN)
             self.price_db.add_price(pr1)
             if tx1[SWITCH]:
-                print_info("Mode = {}: Add Price2 to DB.\n".format(self.mode), GREEN)
+                print_info("Mode = {}: Add Price2 to DB.".format(self.mode), GREEN)
                 self.price_db.add_price(pr2)
         else:
             print_info("Mode = {}: ABANDON Prices!\n".format(self.mode), RED)
 
+    # TODO: separate file with standard functions to create Gnucash session, prices, transactions
     def create_gnc_txs(self, tx1, tx2):
         """
         create and load Gnucash transactions to the Gnucash file
@@ -336,7 +338,7 @@ class GncTxCreator:
 
         gtx.SetCurrency(self.curr)
         gtx.SetDate(tx1[TRADE_DAY], tx1[TRADE_MTH], tx1[TRADE_YR])
-        print_info("gtx date = {}".format(gtx.GetDate()), BLUE)
+        # print_info("gtx date = {}".format(gtx.GetDate()), BLUE)
         print_info("tx1[DESC] = {}".format(tx1[DESC]), YELLOW)
         gtx.SetDescription(tx1[DESC])
 
@@ -370,7 +372,7 @@ class GncTxCreator:
             # set the Account, Value and Reconciled of the REVENUE split
             spl_rev.SetAccount(tx1[REVENUE])
             rev_gross = tx1[GROSS] * -1
-            print_info("revenue gross = {}".format(rev_gross))
+            # print_info("revenue gross = {}".format(rev_gross))
             spl_rev.SetValue(GncNumeric(rev_gross, 100))
             spl_rev.SetReconcile(CREC)
             # set Notes for the Tx
@@ -477,6 +479,7 @@ class GncTxCreator:
 
         return asset_parent, rev_acct
 
+    # TODO: separate file with standard functions to create Gnucash session, prices, transactions
     def prepare_session(self):
         """
         Take the information from a transaction collection and produce Gnucash transactions to write to a Gnucash file
@@ -515,7 +518,7 @@ class GncTxCreator:
 
 
 def create_gnc_txs_main(args):
-    usage = "usage: py36 createGnucashTxs.py <monarch json file> <gnucash file> <mode: prod|test>"
+    usage = "usage: py36 createGnucashTxs.py <monarch JSON file> <gnucash file> <mode: prod|test>"
     if len(args) < 3:
         print_error("NOT ENOUGH parameters!")
         print_info(usage, MAGENTA)

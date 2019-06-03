@@ -10,7 +10,7 @@
 
 import os.path as osp
 from sys import argv, exit
-from parseMonarchTxRep import parse_mon_tx_from_pdf
+from parseMonarchTxRep import parse_pdf_txs
 from createGnucashTxs import GncTxCreator
 from Configuration import *
 
@@ -36,7 +36,7 @@ def main():
     mode = argv[3]
 
     # parse an external Monarch report file
-    tx_coll = parse_mon_tx_from_pdf(mon_file, mode)
+    tx_coll = parse_pdf_txs(mon_file, mode)
 
     # create gnucash transactions and write to the desired Gnucash file
     gtc = GncTxCreator(tx_coll, gnc_file, mode)

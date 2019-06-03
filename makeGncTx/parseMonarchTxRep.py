@@ -18,7 +18,7 @@ import json
 from Configuration import *
 
 
-def parse_mon_tx_from_pdf(file_name, ts):
+def parse_pdf_txs(file_name, ts):
     """
     :param file_name: string: monarch transaction report text file to parse
     :param        ts: string: timestamp for file name
@@ -38,7 +38,7 @@ def parse_mon_tx_from_pdf(file_name, ts):
                   line  = 'Unit Balance' : float
     :return: Configuration.InvestmentRecord object
     """
-    print_info("\nparse_mon_tx_from_pdf({})\nRuntime = {}\n".format(file_name, ts), MAGENTA)
+    print_info("\nparse_pdf_txs({})\nRuntime = {}\n".format(file_name, ts), MAGENTA)
 
     # re searches
     re_own  = re.compile(".*({}).*".format(OWNER))
@@ -138,7 +138,7 @@ def parse_mon_tx_from_pdf(file_name, ts):
     return tx_coll
 
 
-def parse_tx_copy(file_name, ts):
+def parse_copy_txs(file_name, ts):
     """
     :param file_name: string: monarch transaction report text file to parse
     :param        ts: string: timestamp for file name
@@ -160,7 +160,7 @@ def parse_tx_copy(file_name, ts):
                 company = wd[-8]
     :return: Configuration.InvestmentRecord object
     """
-    print_info("\nparse_tx_copy({})\nRuntime = {}\n".format(file_name, ts), MAGENTA)
+    print_info("\nparse_copy_txs({})\nRuntime = {}\n".format(file_name, ts), MAGENTA)
 
     # re searches
     re_tx  = re.compile(".*({}).*".format(TX))
@@ -226,7 +226,7 @@ def parse_tx_copy(file_name, ts):
 def mon_tx_rep_main(args):
     if len(args) < 2:
         print_error("NOT ENOUGH parameters!")
-        print_info("usage: py36 parseMonarchTxRep.py <monarch file> <mode: prod|test>", MAGENTA)
+        print_info("usage: py36 parseMonarchTxRep.py <monarch text file> <mode: prod|test>", MAGENTA)
         exit()
 
     mon_file = args[0]
@@ -240,10 +240,10 @@ def mon_tx_rep_main(args):
 
     # parse an external Monarch report file
     # from PDF
-    # record = parse_mon_tx_from_pdf(mon_file, now)
+    # record = parse_pdf_txs(mon_file, now)
     # src_dir = 'txtFromPdf'
     # from copy & paste
-    record = parse_tx_copy(mon_file, now)
+    record = parse_copy_txs(mon_file, now)
     src_dir = 'copyTxt'
 
     record.set_filename(mon_file)
