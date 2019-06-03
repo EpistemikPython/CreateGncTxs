@@ -121,6 +121,9 @@ class GncUtilities:
     # END class GncUtilities
 
 
+# TODO: TxRecord in standard format for both Monarch and Gnucash
+
+# TODO: data date and run date
 class InvestmentRecord:
     def __init__(self, own=None, dte=None, fn=None):
         print_info("InvestmentRecord()\nRuntime = {}\n".format(strnow), MAGENTA)
@@ -269,13 +272,16 @@ COMPANY_NAME = {
 
 # Company name codes
 FUND_NAME_CODE = {
-    "CIBC"      : ATL ,
-    "CI"        : CIG ,
-    "Dynamic"   : DYN ,
-    "Mackenzie" : MFC ,
-    "Manulife"  : MMF ,
-    "Franklin"  : TML ,
-    "Templeton" : TML
+    "CIBC"        : ATL ,
+    "Renaissance" : ATL ,
+    "CI"          : CIG ,
+    "Cambridge"   : CIG ,
+    "Signature"   : CIG ,
+    "Dynamic"     : DYN ,
+    "Mackenzie"   : MFC ,
+    "Manulife"    : MMF ,
+    "Franklin"    : TML ,
+    "Templeton"   : TML
 }
 
 # Fund codes/names
