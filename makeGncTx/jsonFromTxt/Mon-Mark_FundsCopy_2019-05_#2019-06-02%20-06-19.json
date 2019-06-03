@@ -1,0 +1,232 @@
+{
+    "__class__": "InvestmentRecord",
+    "__module__": "Configuration",
+    "Owner": "Mark H. Sattolo",
+    "Source File": "copyTxt/Mon-Mark_FundsCopy_2019-05.txt",
+    "Date": "#2019-06-02%20-06-19",
+    "Size": "36 = OPEN:8 + TFSA:12 + RRSP:16",
+    "Plan Data": {
+        "OPEN": [
+            {
+                "Fund Company": "Cambridge",
+                "Fund": "CIG 1521",
+                "Unit Balance": "125.6020",
+                "Price": "$16.6885"
+            },
+            {
+                "Fund Company": "Cambridge",
+                "Fund": "CIG 2321",
+                "Unit Balance": "370.1390",
+                "Price": "$16.6885"
+            },
+            {
+                "Fund Company": "CI",
+                "Fund": "CIG 1154",
+                "Unit Balance": "33.9260",
+                "Price": "$17.6053"
+            },
+            {
+                "Fund Company": "CI",
+                "Fund": "CIG 6104",
+                "Unit Balance": "99.8740",
+                "Price": "$17.6053"
+            },
+            {
+                "Fund Company": "Signature",
+                "Fund": "CIG 11111",
+                "Unit Balance": "613.6960",
+                "Price": "$9.2696"
+            },
+            {
+                "Fund Company": "Signature",
+                "Fund": "CIG 11461",
+                "Unit Balance": "218.4920",
+                "Price": "$9.2696"
+            },
+            {
+                "Fund Company": "Signature",
+                "Fund": "CIG 1304",
+                "Unit Balance": "75.0660",
+                "Price": "$27.3284"
+            },
+            {
+                "Fund Company": "Signature",
+                "Fund": "CIG 2304",
+                "Unit Balance": "211.8350",
+                "Price": "$27.3284"
+            }
+        ],
+        "TFSA": [
+            {
+                "Fund Company": "Franklin",
+                "Fund": "TML 202",
+                "Unit Balance": "99.5165",
+                "Price": "$97.9568"
+            },
+            {
+                "Fund Company": "Franklin",
+                "Fund": "TML 518",
+                "Unit Balance": "11.8570",
+                "Price": "$97.9568"
+            },
+            {
+                "Fund Company": "Franklin",
+                "Fund": "TML 203",
+                "Unit Balance": "442.0809",
+                "Price": "$27.5406"
+            },
+            {
+                "Fund Company": "Franklin",
+                "Fund": "TML 519",
+                "Unit Balance": "53.9523",
+                "Price": "$27.5406"
+            },
+            {
+                "Fund Company": "Franklin",
+                "Fund": "TML 223",
+                "Unit Balance": "82.0894",
+                "Price": "$32.8600"
+            },
+            {
+                "Fund Company": "Franklin",
+                "Fund": "TML 598",
+                "Unit Balance": "10.5889",
+                "Price": "$32.8600"
+            },
+            {
+                "Fund Company": "Franklin",
+                "Fund": "TML 180",
+                "Unit Balance": "486.2274",
+                "Price": "$17.9464"
+            },
+            {
+                "Fund Company": "Franklin",
+                "Fund": "TML 184",
+                "Unit Balance": "56.5542",
+                "Price": "$17.9464"
+            },
+            {
+                "Fund Company": "Templeton",
+                "Fund": "TML 674",
+                "Unit Balance": "84.6368",
+                "Price": "$8.3337"
+            },
+            {
+                "Fund Company": "Templeton",
+                "Fund": "TML 704",
+                "Unit Balance": "753.0135",
+                "Price": "$8.3337"
+            },
+            {
+                "Fund Company": "Templeton",
+                "Fund": "TML 694",
+                "Unit Balance": "12.3416",
+                "Price": "$25.2009"
+            },
+            {
+                "Fund Company": "Templeton",
+                "Fund": "TML 707",
+                "Unit Balance": "114.1125",
+                "Price": "$25.2009"
+            }
+        ],
+        "RRSP": [
+            {
+                "Fund Company": "Dynamic",
+                "Fund": "DYN 029",
+                "Unit Balance": "895.8222",
+                "Price": "$21.1300"
+            },
+            {
+                "Fund Company": "Dynamic",
+                "Fund": "DYN 729",
+                "Unit Balance": "181.7473",
+                "Price": "$21.1300"
+            },
+            {
+                "Fund Company": "Dynamic",
+                "Fund": "DYN 1560",
+                "Unit Balance": "1269.5862",
+                "Price": "$13.6000"
+            },
+            {
+                "Fund Company": "Dynamic",
+                "Fund": "DYN 1562",
+                "Unit Balance": "252.6369",
+                "Price": "$13.6000"
+            },
+            {
+                "Fund Company": "Franklin",
+                "Fund": "TML 1017",
+                "Unit Balance": "554.2857",
+                "Price": "$14.2826"
+            },
+            {
+                "Fund Company": "Franklin",
+                "Fund": "TML 1018",
+                "Unit Balance": "135.4612",
+                "Price": "$14.2826"
+            },
+            {
+                "Fund Company": "Mackenzie",
+                "Fund": "MFC 302",
+                "Unit Balance": "768.3610",
+                "Price": "$14.1236"
+            },
+            {
+                "Fund Company": "Mackenzie",
+                "Fund": "MFC 6129",
+                "Unit Balance": "1515.7410",
+                "Price": "$10.6731"
+            },
+            {
+                "Fund Company": "Mackenzie",
+                "Fund": "MFC 4378",
+                "Unit Balance": "0.0410",
+                "Price": "$10.0000"
+            },
+            {
+                "Fund Company": "Mackenzie",
+                "Fund": "MFC 856",
+                "Unit Balance": "1766.4460",
+                "Price": "$4.2349"
+            },
+            {
+                "Fund Company": "Mackenzie",
+                "Fund": "MFC 6130",
+                "Unit Balance": "1371.5250",
+                "Price": "$9.1737"
+            },
+            {
+                "Fund Company": "Mackenzie",
+                "Fund": "MFC 3232",
+                "Unit Balance": "2089.1030",
+                "Price": "$8.6849"
+            },
+            {
+                "Fund Company": "Mackenzie",
+                "Fund": "MFC 6138",
+                "Unit Balance": "2057.5600",
+                "Price": "$14.0495"
+            },
+            {
+                "Fund Company": "Manulife",
+                "Fund": "MMF 44424",
+                "Unit Balance": "333.2580",
+                "Price": "$9.2603"
+            },
+            {
+                "Fund Company": "Manulife",
+                "Fund": "MMF 4524",
+                "Unit Balance": "3826.1160",
+                "Price": "$9.2603"
+            },
+            {
+                "Fund Company": "Renaissance",
+                "Fund": "ATL 059",
+                "Unit Balance": "1603.7380",
+                "Price": "$10.9629"
+            }
+        ]
+    }
+}
