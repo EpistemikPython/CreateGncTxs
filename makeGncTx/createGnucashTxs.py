@@ -14,7 +14,6 @@ __updated__ = '2019-06-02'
 
 import copy
 import json
-import os.path as osp
 import re
 from gnucash import Session, Transaction, Split, GncNumeric, GncPrice
 from gnucash.gnucash_core_c import CREC
@@ -522,13 +521,13 @@ def create_gnc_txs_main(args):
     if len(args) < 3:
         print_error("NOT ENOUGH parameters!")
         print_info(usage, MAGENTA)
-        exit()
+        exit(524)
 
     mon_file = args[0]
     if not osp.isfile(mon_file):
         print_error("File path '{}' does not exist. Exiting...".format(mon_file))
         print_info(usage, GREEN)
-        exit()
+        exit(530)
     print_info("\nMonarch file = {}".format(mon_file), GREEN)
 
     # get Monarch transactions from the Monarch json file
@@ -538,7 +537,7 @@ def create_gnc_txs_main(args):
     gnc_file = args[1]
     if not osp.isfile(gnc_file):
         print_error("File path '{}' does not exist. Exiting...".format(gnc_file))
-        exit()
+        exit(540)
     print_info("\nGnucash file = {}".format(gnc_file), GREEN)
 
     mode = args[2].upper()

@@ -12,7 +12,6 @@ __python_version__ = 3.6
 __created__ = '2018'
 __updated__ = '2019-06-02'
 
-import os.path as osp
 import re
 import json
 from Configuration import *
@@ -227,12 +226,12 @@ def mon_tx_rep_main(args):
     if len(args) < 2:
         print_error("NOT ENOUGH parameters!")
         print_info("usage: py36 parseMonarchTxRep.py <monarch text file> <mode: prod|test>", MAGENTA)
-        exit()
+        exit(230)
 
     mon_file = args[0]
     if not osp.isfile(mon_file):
         print_error("File path '{}' does not exist! Exiting...".format(mon_file))
-        exit()
+        exit(235)
 
     mode = args[1].upper()
 

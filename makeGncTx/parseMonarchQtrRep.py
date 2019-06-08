@@ -7,12 +7,12 @@
 #
 # Copyright (c) 2019 Mark Sattolo <epistemik@gmail.com>
 #
-# @author Mark Sattolo <epistemik@gmail.com>
-# @version Python 3.6
-# @created 2019-04-28
-# @updated 2019-05-25
+__author__ = 'Mark Sattolo'
+__author_email__ = 'epistemik@gmail.com'
+__python_version__ = 3.6
+__created__ = '2019-04-28'
+__updated__ = '2019-06-05'
 
-import os.path as osp
 import re
 import copy
 import json
@@ -247,7 +247,7 @@ class MonarchQrepToGncPrices:
             self.session.destroy()
 
         except Exception as e:
-            msg = "get_prices_and_save() EXCEPTION!! '{}'".format(str(e))
+            msg = "get_prices_and_save() EXCEPTION!! '{}'".format(repr(e))
             print_error(msg)
             if "session" in locals() and self.session is not None:
                 self.session.end()
@@ -262,20 +262,20 @@ def mon_qtr_rep_main(args):
     if len(args) < 3:
         print_error("NOT ENOUGH parameters!")
         print_info(usage, MAGENTA)
-        exit()
+        exit(264)
 
     mon_file = args[0]
     if not osp.isfile(mon_file):
         print_error("File path '{}' does not exist. Exiting...".format(mon_file))
         print_info(usage, GREEN)
-        exit()
+        exit(270)
     print_info("mon_file = {}".format(mon_file))
 
     gnc_file = args[1]
     if not osp.isfile(gnc_file):
         print_error("File path '{}' does not exist. Exiting...".format(gnc_file))
         print_info(usage, GREEN)
-        exit()
+        exit(277)
     print_info("gnc_file = {}".format(gnc_file))
 
     mode = args[2].upper()
