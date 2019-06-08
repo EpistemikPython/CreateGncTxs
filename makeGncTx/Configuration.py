@@ -10,9 +10,10 @@ __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __python_version__ = 3.6
 __created__ = '2018'
-__updated__ = '2019-06-02'
+__updated__ = '2019-06-05'
 
 import inspect
+import os.path as osp
 from datetime import datetime as dt
 
 DATE_STR_FORMAT = "\u0023%Y-%m-%d\u0025\u0025%H-%M-%S"
@@ -122,21 +123,39 @@ class GncUtilities:
 
 
 # TODO: TxRecord in standard format for both Monarch and Gnucash
+class TxRecord:
+    """
+    All the required information for an individual transaction
+    """
+    def __init__(self, tx_dte, tx_cpy, tx_code, tx_gross, tx_price, tx_units):
+        self.date = tx_dte
+        self.company = tx_cpy
+        self.fd_code = tx_code
+        self.gross = tx_gross
+        self.price = tx_price
+        self.units = tx_units
+
+    # END class TxRecord
+
 
 # TODO: data date and run date
 class InvestmentRecord:
+    """
+    All transactions from an investment report
+    """
     def __init__(self, own=None, dte=None, fn=None):
         print_info("InvestmentRecord()\nRuntime = {}\n".format(strnow), MAGENTA)
         if own is not None:
-            assert isinstance(own, str), 'Must be a valid string!'
-        self.owner = own
+            assert (own == MON_MARK or own == MON_LULU), 'Must be a valid Owner!'
+        self.owner: str = own
         self.date = dte if dte is not None and isinstance(dte, dt) else dtnow
         if fn is not None:
-            assert isinstance(fn, str), 'Must be a valid string!'
-        self.filename = fn
+            assert (isinstance(fn, str) and osp.isfile(fn)), 'Must be a valid filename!'
+        self.filename: str = fn
         self.plans = {
-            PL_OPEN : [],
-            PL_TFSA : [],
+            # lists of TxRecords
+            PL_OPEN : [] ,
+            PL_TFSA : [] ,
             PL_RRSP : []
         }
 
@@ -201,19 +220,19 @@ DOLLARS: str   = '$'
 CENTS: str     = '\u00A2'
 UNKNOWN: str   = "UNKNOWN"
 
-REVENUE  = "Revenue"
-ASSET    = "Asset"
-TRUST    = "TRUST"
-MON_MARK = "Mark H. Sattolo"
-MON_LULU = "Louise Robb"
-GNC_MARK = "Mark"
-GNC_LULU = "Lulu"
+REVENUE: str  = "Revenue"
+ASSET: str    = "Asset"
+TRUST: str    = "TRUST"
+MON_MARK: str = "Mark H. Sattolo"
+MON_LULU: str = "Louise Robb"
+GNC_MARK: str = "Mark"
+GNC_LULU: str = "Lulu"
 
 # Plan types
-PLAN_DATA = "Plan Data"
-PL_OPEN   = "OPEN"
-PL_TFSA   = "TFSA"
-PL_RRSP   = "RRSP"
+PLAN_DATA: str = "Plan Data"
+PL_OPEN: str   = "OPEN"
+PL_TFSA: str   = "TFSA"
+PL_RRSP: str   = "RRSP"
 
 # Tx categories
 FUND       = "Fund"
