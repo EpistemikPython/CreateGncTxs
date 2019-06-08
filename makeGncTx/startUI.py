@@ -20,6 +20,7 @@ from Configuration import *
 from parseMonarchTxRep import mon_tx_rep_main
 from parseMonarchQtrRep import mon_qtr_rep_main
 from createGnucashTxs import create_gnc_txs_main
+from parseMonarchFundsRep import mon_funds_rep_main
 sys.path.append('/home/marksa/dev/git/Python/Gnucash/createGncTxs/parsePdf')
 from parsePdf import parse_pdf_main
 
@@ -29,6 +30,8 @@ QTRS       = MON + ' Quarterly Report'
 PDF        = MON + ' PDF Report'
 TX         = MON + ' Txs Report'
 GNC_TXS    = 'Create Gnc Txs'
+FUNDS      = MON + ' Funds Copy'
+TX_COPY    = MON + ' Tx Copy'
 FILE_LABEL = ' File:'
 GNC_SFX    = 'gnc'
 MON_SFX    = 'txt'
@@ -38,13 +41,14 @@ NO_NEED    = 'NOT NEEDED'
 
 MAIN_FXNS = {
     GNC_TXS : create_gnc_txs_main ,
+    FUNDS   : mon_funds_rep_main  ,
+    TX_COPY : mon_tx_rep_main     ,
     PDF     : parse_pdf_main      ,
     TX      : mon_tx_rep_main     ,
     QTRS    : mon_qtr_rep_main
 }
 
 
-# noinspection PyUnresolvedReferences,PyAttributeOutsideInit
 class MonarchGnucashServices(QDialog):
     def __init__(self):
         print_info("startUI:MonarchGnucashServices()\nRuntime = {}\n".format(strnow), MAGENTA)
@@ -92,6 +96,12 @@ class MonarchGnucashServices(QDialog):
         self.layout.addRow(QLabel("Script:"), self.cb_script)
         self.script = self.cb_script.currentText()
 
+        # self.add_mon_funds_file_btn()
+        # self.layout.addRow(self.mon_funds_label, self.mon_funds_file_btn)
+        # 
+        # self.add_mon_txcopy_file_btn()
+        # self.layout.addRow(self.mon_txcopy_label, self.mon_txcopy_file_btn)
+
         self.add_pdf_file_btn()
         self.layout.addRow(self.pdf_label, self.pdf_file_btn)
 
@@ -111,22 +121,34 @@ class MonarchGnucashServices(QDialog):
 
         self.gb_main.setLayout(self.layout)
 
+    def add_mon_funds_file_btn(self):
+        self.mon_funds_btn_title = 'Get ' + FUNDS + ' file'
+        self.mon_funds_file_btn  = QPushButton(NO_NEED)
+        self.mon_funds_label     = QLabel(FUNDS+FILE_LABEL)
+        self.mon_funds_file_btn.clicked.connect(partial(self.open_file_name_dialog, FUNDS))
+
+    def add_mon_txcopy_file_btn(self):
+        self.mon_txcopy_btn_title = 'Get ' + TX_COPY + ' file'
+        self.mon_txcopy_file_btn  = QPushButton(NO_NEED)
+        self.mon_txcopy_label     = QLabel(TX_COPY+FILE_LABEL)
+        self.mon_txcopy_file_btn.clicked.connect(partial(self.open_file_name_dialog, TX_COPY))
+
     def add_pdf_file_btn(self):
         self.pdf_btn_title = 'Get ' + PDF + ' file'
-        self.pdf_file_btn = QPushButton(NO_NEED)
-        self.pdf_label    = QLabel(PDF+FILE_LABEL)
+        self.pdf_file_btn  = QPushButton(NO_NEED)
+        self.pdf_label     = QLabel(PDF+FILE_LABEL)
         self.pdf_file_btn.clicked.connect(partial(self.open_file_name_dialog, PDF))
 
     def add_mon_file_btn(self):
         self.mon_btn_title = 'Get ' + MON + ' file'
-        self.mon_file_btn = QPushButton(self.mon_btn_title)
-        self.mon_label    = QLabel(MON+FILE_LABEL)
+        self.mon_file_btn  = QPushButton(self.mon_btn_title)
+        self.mon_label     = QLabel(MON+FILE_LABEL)
         self.mon_file_btn.clicked.connect(partial(self.open_file_name_dialog, MON))
 
     def add_gnc_file_btn(self):
         self.gnc_btn_title = 'Get ' + GNC + ' file'
-        self.gnc_file_btn = QPushButton(self.gnc_btn_title)
-        self.gnc_label    = QLabel(GNC+FILE_LABEL)
+        self.gnc_file_btn  = QPushButton(self.gnc_btn_title)
+        self.gnc_label     = QLabel(GNC+FILE_LABEL)
         self.gnc_file_btn.clicked.connect(partial(self.open_file_name_dialog, GNC))
 
     # noinspection PyUnboundLocalVariable
@@ -143,7 +165,7 @@ class MonarchGnucashServices(QDialog):
         elif label == MON:
             print_info(MON)
             caption = base_caption.format(MON)
-            suffix = MON_SFX if self.script == TX else JSON
+            suffix = JSON if self.script == GNC_TXS else MON_SFX
             ffilter = base_filter.format(MON, suffix)
         elif label == GNC:
             print_info(GNC)
@@ -178,15 +200,17 @@ class MonarchGnucashServices(QDialog):
                 self.gnc_file_btn.setText(NO_NEED)
                 self.gnc_file = None
             else:
+                # restore proper text for Monarch file button
                 self.mon_file_btn.setText(self.mon_btn_title)
-                if self.script == PDF or self.script == TX:
+                # if previous script didn't have, restore proper text for Gnucash file button
+                if self.script == TX or self.script == TX_COPY:
                     self.gnc_file_btn.setText(self.gnc_btn_title)
                     if self.script == PDF:
                         self.pdf_file_btn.setText(NO_NEED)
                         self.pdf_file = None
                     else:
                         self.gnc_file_btn.setText(self.gnc_btn_title)
-                if new_script == TX:
+                if new_script == TX or new_script == TX_COPY:
                     self.gnc_file_btn.setText(NO_NEED)
                     self.gnc_file = None
 
@@ -209,9 +233,9 @@ class MonarchGnucashServices(QDialog):
             if self.mon_file is None:
                 self.response_box.setText('>>> MUST select a Monarch File!')
                 return
-            if fxn_key == TX:
+            if fxn_key == TX or fxn_key == TX_COPY:
                 cl_params = [self.mon_file, mode]
-            else: # GNC or QTRS
+            else: # GNC or FUNDS or QTRS
                 if self.gnc_file is None:
                     self.response_box.setText('>>> MUST select a Gnucash File!')
                     return
