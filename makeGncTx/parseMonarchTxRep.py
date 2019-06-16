@@ -10,7 +10,7 @@ __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __python_version__ = 3.6
 __created__ = '2018'
-__updated__ = '2019-06-02'
+__updated__ = '2019-06-16'
 
 import re
 import json
@@ -161,63 +161,55 @@ def parse_copy_txs(file_name, ts):
     """
     print_info("\nparse_copy_txs({})\nRuntime = {}\n".format(file_name, ts), MAGENTA)
 
-    # re searches
-    re_tx  = re.compile(".*({}).*".format(TX))
-    re_date = re.compile(r"^([0-9]{2}-\w{3}-[0-9]{4}).*")
+    re_date = re.compile(r"([0-9]{2}-\w{3}-[0-9]{4})")
 
     tx_coll = InvestmentRecord()
-    mon_state = STATE_SEARCH
+    mon_state = FIND_OWNER
     with open(file_name) as fp:
         ct = 0
         for line in fp:
             ct += 1
             print_info("Line {}".format(ct))
-            if mon_state == STATE_SEARCH:
+            if mon_state == FIND_OWNER:
                 owner = line.strip()
                 tx_coll.set_owner(owner)
                 print_info("\n\t\u0022Current owner: {}\u0022".format(owner), MAGENTA)
-                mon_state = FIND_PLAN
+                mon_state = STATE_SEARCH
                 continue
 
-            if mon_state == FIND_PLAN:
-                words = line.split()
+            words = line.split()
+            if len(words) <= 0:
+                continue
+
+            if words[0] == TXS:
                 plan_type = words[1]
                 print_info("\n\t\u0022Current plan_type: {}\u0022".format(plan_type), MAGENTA)
-                mon_state = FIND_NEXT_TX
                 continue
 
-            if mon_state == FIND_NEXT_TX:
-                words = line.split()
-                re_match = re.match(re_tx, line)
-                if re_match:
-                    plan_type = words[1]
-                    print_info("\n\t\u0022Current plan_type: {}\u0022".format(plan_type), MAGENTA)
-                    continue
+            re_match = re.match(re_date, words[0])
+            if re_match and len(words) > 2:
+                tx_date = re_match.group(1)
+                print_info("FOUND a NEW tx! Date: {}".format(tx_date), YELLOW)
+                curr_tx = {TRADE_DATE: tx_date}
 
-                re_match = re.match(re_date, line)
-                if re_match:
-                    tx_date = re_match.group(1)
-                    print_info("FOUND a NEW tx! Date: {}".format(tx_date), YELLOW)
-                    curr_tx = {TRADE_DATE: tx_date}
+                tx_type = words[1]
+                curr_tx[DESC] = TX_TYPES[words[2]] if tx_type == INTRCL else TX_TYPES[tx_type]
+                print_info("curr_tx[DESC]: {}".format(curr_tx[DESC]))
+                curr_tx[GROSS] = words[-4]
+                print_info("curr_tx[GROSS]: {}".format(curr_tx[GROSS]))
+                curr_tx[UNITS] = words[-1]
+                print_info("curr_tx[UNITS]: {}".format(curr_tx[UNITS]))
+                curr_tx[PRICE] = words[-2]
+                print_info("curr_tx[PRICE]: {}".format(curr_tx[PRICE]))
+                curr_tx[LOAD] = words[-5]
+                print_info("curr_tx[LOAD]: {}".format(curr_tx[LOAD]))
+                curr_tx[FUND_CODE] = words[-7]
+                print_info("curr_tx[FUND_CODE]: {}".format(curr_tx[FUND_CODE]))
+                curr_tx[FUND_CMPY] = words[-8]
+                print_info("curr_tx[FUND_CMPY]: {}".format(curr_tx[FUND_CMPY]))
 
-                    tx_type = words[1]
-                    curr_tx[DESC] = TX_TYPES[tx_type]
-                    print_info("curr_tx[DESC]: {}".format(curr_tx[DESC]))
-                    curr_tx[GROSS] = words[-4]
-                    print_info("curr_tx[GROSS]: {}".format(curr_tx[GROSS]))
-                    curr_tx[UNITS] = words[-1]
-                    print_info("curr_tx[UNITS]: {}".format(curr_tx[UNITS]))
-                    curr_tx[PRICE] = words[-2]
-                    print_info("curr_tx[PRICE]: {}".format(curr_tx[PRICE]))
-                    curr_tx[LOAD] = words[-5]
-                    print_info("curr_tx[LOAD]: {}".format(curr_tx[LOAD]))
-                    curr_tx[FUND_CODE] = words[-7]
-                    print_info("curr_tx[FUND_CODE]: {}".format(curr_tx[FUND_CODE]))
-                    curr_tx[FUND_CMPY] = words[-8]
-                    print_info("curr_tx[FUND_CMPY]: {}".format(curr_tx[FUND_CMPY]))
-
-                    tx_coll.add_tx(plan_type, curr_tx)
-                    print_info('ADD current Tx to Collection!', GREEN)
+                tx_coll.add_tx(plan_type, curr_tx)
+                print_info('ADD current Tx to Collection!', GREEN)
 
     return tx_coll
 

@@ -9,7 +9,7 @@ __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __python_version__ = 3.6
 __created__ = '2018'
-__updated__ = '2019-06-02'
+__updated__ = '2019-06-08'
 
 import sys
 import json
@@ -203,14 +203,14 @@ class MonarchGnucashServices(QDialog):
                 # restore proper text for Monarch file button
                 self.mon_file_btn.setText(self.mon_btn_title)
                 # if previous script didn't have, restore proper text for Gnucash file button
-                if self.script == TX or self.script == TX_COPY:
+                if self.script == TXS or self.script == TX_COPY:
                     self.gnc_file_btn.setText(self.gnc_btn_title)
                     if self.script == PDF:
                         self.pdf_file_btn.setText(NO_NEED)
                         self.pdf_file = None
                     else:
                         self.gnc_file_btn.setText(self.gnc_btn_title)
-                if new_script == TX or new_script == TX_COPY:
+                if new_script == TXS or new_script == TX_COPY:
                     self.gnc_file_btn.setText(NO_NEED)
                     self.gnc_file = None
 
@@ -233,7 +233,7 @@ class MonarchGnucashServices(QDialog):
             if self.mon_file is None:
                 self.response_box.setText('>>> MUST select a Monarch File!')
                 return
-            if fxn_key == TX or fxn_key == TX_COPY:
+            if fxn_key == TXS or fxn_key == TX_COPY:
                 cl_params = [self.mon_file, mode]
             else: # GNC or FUNDS or QTRS
                 if self.gnc_file is None:

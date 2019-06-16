@@ -10,7 +10,7 @@ __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __python_version__ = 3.6
 __created__ = '2019-06-02'
-__updated__ = '2019-06-05'
+__updated__ = '2019-06-16'
 
 import re
 import json
@@ -39,54 +39,54 @@ class ParseMonarchFundsReport:
                 add final balance to notes
         :return: Configuration.InvestmentRecord object
         """
-        print_info("\nparse_copy_txs({})\nRuntime = {}\n".format(file_name, ts), MAGENTA)
+        print_info("\nparse_funds_info({})\nRuntime = {}\n".format(file_name, ts), MAGENTA)
 
-        re_date = re.compile(r"^([0-9]{2}-\w{3}-[0-9]{4}).*")
+        re_date = re.compile(r"([0-9]{2}-\w{3}-[0-9]{4})")
 
         tx_coll = InvestmentRecord()
-        mon_state = STATE_SEARCH
-        plan_type = PL_OPEN
+        mon_state = FIND_OWNER
+        plan_type = UNKNOWN
         with open(file_name) as fp:
             ct = 0
             for line in fp:
                 ct += 1
                 print_info("Line {}".format(ct))
-                if mon_state == STATE_SEARCH:
+                if mon_state == FIND_OWNER:
                     owner = line.strip()
                     tx_coll.set_owner(owner)
                     print_info("\n\t\u0022Current owner: {}\u0022".format(owner), MAGENTA)
                     mon_state = FIND_DATE
                     continue
 
+                words = line.split()
+                if len(words) <= 0:
+                    continue
+
                 if mon_state == FIND_DATE:
-                    re_match = re.match(re_date, line)
+                    re_match = re.match(re_date, words[0])
                     if re_match:
                         tx_date = re_match.group(1)
-                        print_info("FOUND the Date: {}".format(tx_date), YELLOW)
-                        mon_state = FIND_NEXT_TX
-                        continue
+                        print_info("Document date: {}".format(tx_date), YELLOW)
+                        mon_state = STATE_SEARCH
 
-                if mon_state == FIND_NEXT_TX:
-                    words = line.split()
-                    if len(words) >= 3:
-                        if words[0] == 'FUND':
-                            plan_type = words[2]
-                            print_info("\n\t\u0022Current plan_type: {}\u0022".format(plan_type), MAGENTA)
-                            continue
+                if words[0] == FUND.upper():
+                    plan_type = words[2]
+                    print_info("\n\t\u0022Current plan_type: {}\u0022".format(plan_type), MAGENTA)
+                    continue
 
-                        if words[0] in FUND_NAME_CODE:
-                            fd_co = words[0]
-                            print_info("Fund company = {}".format(fd_co))
-                            fund = words[-10].replace('-', ' ')
-                            print_info("Fund = {}".format(fund))
-                            bal = words[-8]
-                            print_info("Final balance = {}".format(bal))
-                            price = words[-7]
-                            print_info("Final price = {}".format(price))
+                if words[0] in FUND_NAME_CODE:
+                    fd_co = words[0]
+                    print_info("Fund company = {}".format(fd_co))
+                    fund = words[-10].replace('-', ' ')
+                    print_info("Fund = {}".format(fund))
+                    bal = words[-8]
+                    print_info("Final balance = {}".format(bal))
+                    price = words[-7]
+                    print_info("Final price = {}".format(price))
 
-                            curr_tx = {FUND_CMPY: fd_co, FUND: fund, UNIT_BAL: bal, PRICE: price}
-                            tx_coll.add_tx(plan_type, curr_tx)
-                            print_info('ADD current Tx to Collection!', GREEN)
+                    curr_tx = {TRADE_DATE: tx_date, FUND_CMPY: fd_co, FUND: fund, UNIT_BAL: bal, PRICE: price}
+                    tx_coll.add_tx(plan_type, curr_tx)
+                    print_info('ADD current Tx to Collection!', GREEN)
 
         return tx_coll
 

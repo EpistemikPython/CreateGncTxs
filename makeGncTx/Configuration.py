@@ -10,7 +10,7 @@ __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __python_version__ = 3.6
 __created__ = '2018'
-__updated__ = '2019-06-05'
+__updated__ = '2019-06-16'
 
 import inspect
 import os.path as osp
@@ -21,8 +21,8 @@ dtnow = dt.now()
 strnow = dtnow.strftime(DATE_STR_FORMAT)
 
 # constant strings
-TEST = 'test'
-PROD = 'PROD'
+TEST: str = 'test'
+PROD: str = 'PROD'
 
 COLOR_FLAG = '\x1b['
 BLACK   = COLOR_FLAG + '30m'
@@ -127,9 +127,10 @@ class TxRecord:
     """
     All the required information for an individual transaction
     """
-    def __init__(self, tx_dte, tx_cpy, tx_code, tx_gross, tx_price, tx_units):
+    def __init__(self, tx_dte, tx_cmpy, tx_code, tx_name, tx_gross, tx_price, tx_units):
         self.date = tx_dte
-        self.company = tx_cpy
+        self.company = tx_cmpy
+        self.fd_name = tx_name
         self.fd_code = tx_code
         self.gross = tx_gross
         self.price = tx_price
@@ -211,8 +212,8 @@ class InvestmentRecord:
 
 GNC: str       = 'Gnucash'
 MON: str       = 'Monarch'
-TX: str        = "TRANSACTIONS"
-CLIENT_TX:str  = "CLIENT " + TX
+TXS: str       = "TRANSACTIONS"
+CLIENT_TX:str  = "CLIENT " + TXS
 PLAN_TYPE: str = "Plan Type:"
 OWNER: str     = "Owner"
 AUTO_SYS: str  = "Automatic/Systematic"
@@ -235,47 +236,47 @@ PL_TFSA: str   = "TFSA"
 PL_RRSP: str   = "RRSP"
 
 # Tx categories
-FUND       = "Fund"
-FUND_CODE  = FUND + " Code"
-FUND_CMPY  = FUND + " Company"
-TRADE_DATE = "Trade Date"
-TRADE_DAY  = "Trade Day"
-TRADE_MTH  = "Trade Month"
-TRADE_YR   = "Trade Year"
-DESC       = "Description"
-SWITCH     = "Switch"
-GROSS      = "Gross"
-NET        = "Net"
-UNITS      = "Units"
-PRICE      = "Price"
-UNIT_BAL   = "Unit Balance"
-ACCT       = "Account"  # in Gnucash
-NOTES      = "Notes"
-LOAD: str  = "Load"
-
-FEE    = 'Fee'
-FEE_RD = FEE + " Redemption"
-DIST   = "Dist"
-SW_IN  = SWITCH + "-in"
-SW_OUT = SWITCH + "-out"
-INTRF  = "Internal Transfer"
-INTRF_IN  = INTRF + "-In"
-INTRF_OUT = INTRF + "-Out"
-REINV: str = 'Reinvested'
+FUND: str       = "Fund"
+FUND_CODE: str  = FUND + " Code"
+FUND_CMPY: str  = FUND + " Company"
+TRADE_DATE: str = "Trade Date"
+TRADE_DAY: str  = "Trade Day"
+TRADE_MTH: str  = "Trade Month"
+TRADE_YR: str   = "Trade Year"
+DESC: str       = "Description"
+SWITCH: str     = "Switch"
+GROSS: str      = "Gross"
+NET: str        = "Net"
+UNITS: str      = "Units"
+PRICE: str      = "Price"
+UNIT_BAL: str   = "Unit Balance"
+ACCT: str       = "Account"  # in Gnucash
+NOTES: str      = "Notes"
+LOAD: str       = "Load"
+FEE: str        = 'Fee'
+FEE_RD: str     = FEE + " Redemption"
+DIST: str       = "Dist"
+SW_IN: str      = SWITCH + "-in"
+SW_OUT: str     = SWITCH + "-out"
+INTRF: str      = "Internal Transfer"
+INTRF_IN: str   = INTRF + "-In"
+INTRF_OUT: str  = INTRF + "-Out"
+REINV: str      = 'Reinvested'
+INTRCL:str      = 'Inter-Class'
 
 # Fund companies
-ATL = "ATL"
-CIG = "CIG"
-DYN = "DYN"
-MFC = "MFC"
-MMF = "MMF"
-TML = "TML"
+ATL: str = "ATL"
+CIG: str = "CIG"
+DYN: str = "DYN"
+MFC: str = "MFC"
+MMF: str = "MMF"
+TML: str = "TML"
 
 TX_TYPES = {
-    FEE    : FEE_RD ,
-    SW_IN  : SW_IN  ,
-    SW_OUT : SW_OUT ,
-    REINV  : REINV + ' Distribution' ,
+    FEE      : FEE_RD ,
+    SW_IN    : SW_IN  ,
+    SW_OUT   : SW_OUT ,
+    REINV    : REINV + ' Distribution' ,
     AUTO_SYS : AUTO_SYS + ' Withdrawal Plan'
 }
 
