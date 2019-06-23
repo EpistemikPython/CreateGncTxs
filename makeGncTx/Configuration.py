@@ -10,7 +10,7 @@ __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __python_version__ = 3.6
 __created__ = '2018'
-__updated__ = '2019-06-16'
+__updated__ = '2019-06-23'
 
 import inspect
 import os.path as osp
@@ -172,6 +172,10 @@ class InvestmentRecord:
         else:
             print_error("dte is type: {}".format(type(dte)))
 
+    def get_next(self):
+        # keep track of TxRecords and return next
+        return self.plans[PL_OPEN][0]
+
     def get_date(self):
         return self.date
 
@@ -224,8 +228,10 @@ UNKNOWN: str   = "UNKNOWN"
 REVENUE: str  = "Revenue"
 ASSET: str    = "Asset"
 TRUST: str    = "TRUST"
-MON_MARK: str = "Mark H. Sattolo"
-MON_LULU: str = "Louise Robb"
+MON_SATT: str = "Sattolo"
+MON_MARK: str = "Mark H. " + MON_SATT
+MON_ROBB: str = "Robb"
+MON_LULU: str = "Louise " + MON_ROBB
 GNC_MARK: str = "Mark"
 GNC_LULU: str = "Lulu"
 
@@ -235,11 +241,15 @@ PL_OPEN: str   = "OPEN"
 PL_TFSA: str   = "TFSA"
 PL_RRSP: str   = "RRSP"
 
+# Plan IDs
+JOINT_PLAN_ID: str = '78512'
+
 # Tx categories
 FUND: str       = "Fund"
 FUND_CODE: str  = FUND + " Code"
 FUND_CMPY: str  = FUND + " Company"
-TRADE_DATE: str = "Trade Date"
+DATE: str       = "Date"
+TRADE_DATE: str = "Trade " + DATE
 TRADE_DAY: str  = "Trade Day"
 TRADE_MTH: str  = "Trade Month"
 TRADE_YR: str   = "Trade Year"
