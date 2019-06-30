@@ -110,7 +110,7 @@ class ParseMonarchCopyReport:
                     print_info("Final price = {}".format(price))
 
                     curr_tx = {DATE: doc_date, DESC: PRICE, FUND_CMPY: fd_co, FUND: fund, UNIT_BAL: bal, PRICE: price}
-                    self.tx_coll.add_tx(plan_type, curr_tx)
+                    self.tx_coll.add_tx(plan_type, PRICE, curr_tx)
                     print_info('ADD current Tx to Collection!', GREEN)
                     continue
 
@@ -136,7 +136,7 @@ class ParseMonarchCopyReport:
                     curr_tx[FUND_CMPY] = words[-8]
                     print_info("curr_tx[FUND_CMPY]: {}".format(curr_tx[FUND_CMPY]))
 
-                    self.tx_coll.add_tx(plan_type, curr_tx)
+                    self.tx_coll.add_tx(plan_type, TRADE, curr_tx)
                     print_info('ADD current Tx to Collection!', GREEN)
 
     def save_to_gnucash_file(self):

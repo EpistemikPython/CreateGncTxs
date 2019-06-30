@@ -155,9 +155,9 @@ class InvestmentRecord:
         self.filename: str = fn
         self.plans = {
             # lists of TxRecords
-            PL_OPEN : [] ,
-            PL_TFSA : [] ,
-            PL_RRSP : []
+            PL_OPEN : { TRADE:[], PRICE:[] } ,
+            PL_TFSA : { TRADE:[], PRICE:[] } ,
+            PL_RRSP : { TRADE:[], PRICE:[] }
         }
 
     def set_owner(self, own):
@@ -174,7 +174,7 @@ class InvestmentRecord:
 
     def get_next(self):
         # keep track of TxRecords and return next
-        return self.plans[PL_OPEN][0]
+        return self.plans[PL_OPEN][PRICE][0]
 
     def get_date(self):
         return self.date
@@ -188,17 +188,26 @@ class InvestmentRecord:
     def get_filename(self):
         return UNKNOWN if self.filename is None or self.filename == '' else self.filename
 
-    def get_size(self):
-        return len(self.plans[PL_OPEN]) + len(self.plans[PL_TFSA]) + len(self.plans[PL_RRSP])
+    def get_size(self, p_spec:str = None, q_spec:str = None):
+        if p_spec is None:
+            return self.get_size(PL_OPEN) + self.get_size(PL_TFSA) + self.get_size(PL_RRSP)
+        if q_spec is None:
+            if p_spec == PL_OPEN or p_spec == PL_TFSA or p_spec == PL_RRSP:
+                return len(self.plans[p_spec][PRICE]) + len(self.plans[p_spec][TRADE])
+            if p_spec == PRICE or p_spec == TRADE:
+                return len(self.plans[PL_OPEN][p_spec]) + len(self.plans[PL_TFSA][p_spec]) + len(self.plans[PL_RRSP][p_spec])
+        return len(self.plans[p_spec][q_spec])
 
-    def get_size_str(self):
-        return "{} = {}:{} + {}:{} + {}:{}".format(str(self.get_size()), PL_OPEN, len(self.plans[PL_OPEN]),
-                                                   PL_TFSA, len(self.plans[PL_TFSA]), PL_RRSP, len(self.plans[PL_RRSP]))
+    def get_size_str(self, str_spec:str = None):
+        if str_spec is not None:
+            return "P{}/T{}".format(self.get_size(str_spec, PRICE), self.get_size(str_spec, TRADE))
+        return "{} = {}:{} + {}:{} + {}:{}".format( self.get_size(), PL_OPEN, self.get_size_str(PL_OPEN),
+                PL_TFSA, self.get_size_str(PL_TFSA), PL_RRSP, self.get_size_str(PL_RRSP) )
 
-    def add_tx(self, plan, obj):
+    def add_tx(self, plan, tx_type, obj):
         if isinstance(plan, str) and plan in self.plans.keys():
             if obj is not None:
-                self.plans[plan].append(obj)
+                self.plans[plan][tx_type].append(obj)
 
     def to_json(self):
         return {
@@ -249,10 +258,11 @@ FUND: str       = "Fund"
 FUND_CODE: str  = FUND + " Code"
 FUND_CMPY: str  = FUND + " Company"
 DATE: str       = "Date"
-TRADE_DATE: str = "Trade " + DATE
-TRADE_DAY: str  = "Trade Day"
-TRADE_MTH: str  = "Trade Month"
-TRADE_YR: str   = "Trade Year"
+TRADE: str      = "Trade"
+TRADE_DATE: str = TRADE + " " + DATE
+TRADE_DAY: str  = TRADE + " Day"
+TRADE_MTH: str  = TRADE + " Month"
+TRADE_YR: str   = TRADE + " Year"
 DESC: str       = "Description"
 SWITCH: str     = "Switch"
 GROSS: str      = "Gross"
