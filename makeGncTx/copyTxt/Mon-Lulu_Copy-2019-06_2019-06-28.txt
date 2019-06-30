@@ -1,0 +1,98 @@
+PLAN DESCRIPTION	Net Invested
+Since Inception	Gain / Loss
+Since Inception	Book Value	Market Value
+28-Jun-2019	%  
+OPEN Plan ID: 78512 Joint with: Sattolo Mark H.	$24,849.37 	$1,792.07 	$26,775.16 	$26,641.44 	8.2 
+OPEN Plan ID: 78514	$88,293.95 	$8,835.79 	$81,048.53 	$97,129.74 	30.1 
+RRSP Plan ID: 278825	$107,391.33 	$34,158.35 	$130,233.06 	$141,549.68 	43.8 
+TFSA Plan ID: 278826	$43,704.33 	$14,060.84 	$52,498.58 	$57,765.17 	17.9 
+ PORTFOLIO TOTAL	$264,238.98	$58,847.05	$290,555.33	$323,086.03	 
+ 
+FUND ACCOUNTS OPEN Plan ID: 78512 Joint with: Sattolo Mark H.
+Investments	Account #	Quantity	Price	Gain / Loss
+Since Inception	First Trx Date	Net Invested
+Since Inception	Market Value
+28-Jun-2019
+Cambridge Canadian Equity Corporate Class A - CIG-1521	106035991	126.9640	$16.9053	$370.99	Mar 1, 2018	$1,775.37	$2,146.36
+Cambridge Canadian Equity Corporate Class A - CIG-2321	106035991	374.1530	$16.9053	$127.98	Mar 1, 2018	$6,197.19	$6,325.17
+CI Can-Am Small Cap Corporate Class A - CIG-1154	106035991	34.3310	$17.6122	($127.76)	Mar 1, 2018	$732.40	$604.64
+CI Can-Am Small Cap Corporate Class A - CIG-6104	106035991	101.0680	$17.6122	($32.05)	Mar 1, 2018	$1,812.08	$1,780.03
+Signature Diversified Yield II Fund Class A - CIG-11111	106035991	616.9310	$9.3668	$217.76	Mar 1, 2018	$5,560.91	$5,778.67
+Signature Diversified Yield II Fund Class A - CIG-11461	106035991	219.6430	$9.3668	$469.91	Mar 1, 2018	$1,587.44	$2,057.35
+Signature High Income Corporate Class A - CIG-1304	106035991	75.8780	$27.4108	$539.71	Mar 1, 2018	$1,540.17	$2,079.88
+Signature High Income Corporate Class A - CIG-2304	106035991	214.1250	$27.4108	$225.53	Mar 1, 2018	$5,643.81	$5,869.34
+  	 	 	$26,641.44
+TRANSACTIONS OPEN Plan ID: 78512 Joint with: Sattolo Mark H.
+Date	Type	Account	Load	Gross	Net	Price	Units
+21-Jun-2019	Reinvested Distribution	CIG 11111 106035991	FE	$30.69	$30.69	$9.49	3.2350
+21-Jun-2019	Reinvested Distribution	CIG 11461 106035991	LL3	$10.92	$10.92	$9.49	1.1510
+21-Jun-2019	Reinvested Distribution	CIG 1154 106035991	LL3	$7.16	$7.16	$17.69	0.4050
+21-Jun-2019	Reinvested Distribution	CIG 1304 106035991	LL3	$22.49	$22.49	$27.70	0.8120
+21-Jun-2019	Reinvested Distribution	CIG 2321 106035991	FE	$68.79	$68.79	$17.14	4.0140
+21-Jun-2019	Reinvested Distribution	CIG 6104 106035991	FE	$21.12	$21.12	$17.69	1.1940
+21-Jun-2019	Reinvested Distribution	CIG 1521 106035991	LL3	$23.34	$23.34	$17.14	1.3620
+21-Jun-2019	Reinvested Distribution	CIG 2304 106035991	FE	$63.42	$63.42	$27.70	2.2900
+ 
+FUND ACCOUNTS OPEN Plan ID: 78514
+Investments	Account #	Quantity	Price	Gain / Loss
+Since Inception	First Trx Date	Net Invested
+Since Inception	Market Value
+28-Jun-2019
+Signature Diversified Yield Corporate Class O - CIG-18140	105017156	6147.9580	$15.7987	$8,835.79	Mar 12, 2018	$88,293.95	$97,129.74
+  	 	 	$97,129.74
+TRANSACTIONS OPEN Plan ID: 78514
+Date	Type	Account	Load	Gross	Net	Price	Units
+12-Jun-2019	Automatic/Systematic Withdrawal Plan (AWD/SWP)	CIG 18140 105017156	NL	-$1,000.00	-$1,000.00	$15.96	-62.6740
+14-Jun-2019	Fee Redemption	CIG 18140 105017156	NL	-$234.97	-$234.97	$16.04	-14.6460
+21-Jun-2019	Reinvested Distribution	CIG 18140 105017156	NL	$986.86	$986.86	$16.00	61.6940
+ 
+FUND ACCOUNTS RRSP Plan ID: 278825
+Investments	Account #	Quantity	Price	Gain / Loss
+Since Inception	First Trx Date	Net Invested
+Since Inception	Market Value
+28-Jun-2019
+Dynamic Equity Income Fund Series A - DYN-029	424854693	718.9841	$21.6200	$6,750.42	Jun 8, 2012	$8,794.02	$15,544.44
+Dynamic Equity Income Fund Series A - DYN-729	424854693	109.0684	$21.6200	$13,507.92	May 28, 2012	($11,149.86)	$2,358.06
+Dynamic Strategic Yield Fund Series A - DYN-1560	424854693	958.1703	$13.6900	$5,086.87	Jun 8, 2012	$8,030.48	$13,117.35
+Dynamic Strategic Yield Fund Series A - DYN-1562	424854693	135.0380	$13.6900	$11,979.72	May 28, 2012	($10,131.05)	$1,848.67
+Franklin Bissett Canadian Dividend Fund A - TML-1017	4722845	428.8425	$14.2793	$300.80	Jan 6, 2017	$5,822.77	$6,123.57
+Franklin Bissett Canadian Dividend Fund A - TML-1018	4722845	70.0040	$14.2793	$724.57	Apr 22, 2016	$275.04	$999.61
+Mackenzie Canadian Bond Fund Series A - MFC-302	64667227	224.8370	$14.2134	$15,505.44	May 28, 2012	($12,309.74)	$3,195.70
+Mackenzie Canadian Bond Fund Series PW - MFC-6129	64667227	1558.2910	$10.7409	$681.67	Jun 8, 2018	$16,055.78	$16,737.45
+Mackenzie Corporate Bond Fund Series A - MFC-856	64667227	364.8240	$4.2940	$11,660.36	May 28, 2012	($10,093.81)	$1,566.55
+Mackenzie Corporate Bond Fund Series PW - MFC-6130	64667227	1357.1810	$9.3014	$370.09	Jun 8, 2018	$12,253.59	$12,623.68
+Mackenzie Strategic Income Fund Series A - MFC-3232	64667227	348.6590	$8.7731	$28,195.22	May 28, 2012	($25,136.40)	$3,058.82
+Mackenzie Strategic Income Fund Series PW - MFC-6138	64667227	2200.9540	$14.1948	$994.81	Jun 8, 2018	$30,247.29	$31,242.10
+Manulife Yield Opportunities Fund Advisor Series - MMF-44424	72566701	109.6500	$9.3803	$5.56	May 25, 2018	$1,022.99	$1,028.55
+Manulife Yield Opportunities Fund Advisor Series - MMF-4524	72566701	2934.6890	$9.3803	$1,238.86	May 25, 2018	$26,289.40	$27,528.26
+Renaissance Global Infrastructure Fund Class A - ATL-059	3089484001	413.2540	$11.0752	$742.50	Jan 14, 2016	$3,834.37	$4,576.87
+  	 	 	$141,549.68
+TRANSACTIONS RRSP Plan ID: 278825
+Date	Type	Account	Load	Gross	Net	Price	Units
+14-Jun-2019	Inter-Class Switch-out	MFC 302 64667227	DSC	-$5,964.47	-$5,964.47	$14.20	-420.0890
+14-Jun-2019	Inter-Class Switch-in	MFC 6129 64667227	FE	$5,964.47	$5,964.47	$10.73	555.7960
+14-Jun-2019	Inter-Class Switch-out	MFC 856 64667227	DSC	-$4,802.78	-$4,802.78	$4.27	-1123.7210
+14-Jun-2019	Inter-Class Switch-in	MFC 6130 64667227	FE	$4,802.78	$4,802.78	$9.26	518.6760
+14-Jun-2019	Inter-Class Switch-out	MFC 3232 64667227	DSC	-$12,229.46	-$12,229.46	$8.78	-1392.7180
+14-Jun-2019	Inter-Class Switch-in	MFC 6138 64667227	FE	$12,229.46	$12,229.46	$14.21	860.8480
+21-Jun-2019	Reinvested Distribution	MFC 302 64667227	DSC	$2.34	$2.34	$14.20	0.1650
+21-Jun-2019	Reinvested Distribution	MFC 856 64667227	DSC	$4.66	$4.66	$4.30	1.0830
+21-Jun-2019	Reinvested Distribution	MFC 6129 64667227	FE	$18.21	$18.21	$10.73	1.6980
+21-Jun-2019	Reinvested Distribution	MFC 3232 64667227	DSC	$11.91	$11.91	$8.82	1.3510
+21-Jun-2019	Reinvested Distribution	MFC 6130 64667227	FE	$41.39	$41.39	$9.31	4.4460
+21-Jun-2019	Reinvested Distribution	MFC 6138 64667227	FE	$121.46	$121.46	$14.27	8.5140
+ 
+FUND ACCOUNTS TFSA Plan ID: 278826
+Investments	Account #	Quantity	Price	Gain / Loss
+Since Inception	First Trx Date	Net Invested
+Since Inception	Market Value
+28-Jun-2019
+Mackenzie Strategic Income Class T5 - MFC-1960	64663089	1866.3390	$12.0137	$7,702.72	Jun 8, 2012	$14,718.92	$22,421.64
+Mackenzie Strategic Income Fund Series A - MFC-3232	64663089	1089.9620	$8.7731	$1,888.79	Jan 29, 2015	$7,673.56	$9,562.35
+Mackenzie Strategic Income Fund Series PW - MFC-6138	64663089	1816.2410	$14.1948	$1,243.08	Jun 8, 2018	$24,538.10	$25,781.18
+  	 	 	$57,765.17
+TRANSACTIONS TFSA Plan ID: 278826
+Date	Type	Account	Load	Gross	Net	Price	Units
+21-Jun-2019	Reinvested Distribution	MFC 3232 64663089	DSC	$37.24	$37.24	$8.82	4.2240
+21-Jun-2019	Reinvested Distribution	MFC 1960 64663089	FE	$92.01	$92.01	$12.07	7.6200
+21-Jun-2019	Reinvested Distribution	MFC 6138 64663089	FE	$100.23	$100.23	$14.27	7.0260
