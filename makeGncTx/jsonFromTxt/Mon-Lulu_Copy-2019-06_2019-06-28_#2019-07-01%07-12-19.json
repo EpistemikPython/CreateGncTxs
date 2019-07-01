@@ -3,40 +3,38 @@
     "__module__": "Configuration",
     "Owner": "Louise Robb",
     "Source File": "copyTxt/Mon-Lulu_Copy-2019-06_2019-06-28.txt",
-    "Date": "#2019-06-30%10-59-11",
+    "Date": "#2019-07-01%07-12-19",
     "Size": "37 = OPEN:P1/T3 + TFSA:P3/T3 + RRSP:P15/T12",
     "Plan Data": {
         "OPEN": {
             "Trade": [
                 {
                     "Trade Date": "12-Jun-2019",
-                    "Description": "Automatic/Systematic Withdrawal Plan",
+                    "Fund": "CIG 18140",
+                    "Description": "CI Investments: Automatic/Systematic Withdrawal Plan",
                     "Gross": "-$1,000.00",
                     "Units": "-62.6740",
                     "Price": "$15.96",
-                    "Load": "NL",
-                    "Fund Code": "18140",
-                    "Fund Company": "CIG"
+                    "Load": "NL"
                 },
                 {
                     "Trade Date": "14-Jun-2019",
-                    "Description": "Fee Redemption",
+                    "Fund": "CIG 18140",
+                    "Description": "CI Investments: Fee Redemption",
                     "Gross": "-$234.97",
                     "Units": "-14.6460",
                     "Price": "$16.04",
-                    "Load": "NL",
-                    "Fund Code": "18140",
-                    "Fund Company": "CIG"
+                    "Load": "NL"
                 },
                 {
                     "Trade Date": "21-Jun-2019",
-                    "Description": "Reinvested Distribution",
+                    "Fund": "CIG 18140",
+                    "Description": "CI Investments: Reinvested Distribution",
                     "Gross": "$986.86",
                     "Units": "61.6940",
                     "Price": "$16.00",
                     "Load": "NL",
-                    "Fund Code": "18140",
-                    "Fund Company": "CIG"
+                    "Notes": "CIG 18140 Balance = 6147.9580"
                 }
             ],
             "Price": [
@@ -54,33 +52,33 @@
             "Trade": [
                 {
                     "Trade Date": "21-Jun-2019",
-                    "Description": "Reinvested Distribution",
+                    "Fund": "MFC 3232",
+                    "Description": "Mackenzie Financial Corp: Reinvested Distribution",
                     "Gross": "$37.24",
                     "Units": "4.2240",
                     "Price": "$8.82",
                     "Load": "DSC",
-                    "Fund Code": "3232",
-                    "Fund Company": "MFC"
+                    "Notes": "MFC 3232 Balance = 1089.9620"
                 },
                 {
                     "Trade Date": "21-Jun-2019",
-                    "Description": "Reinvested Distribution",
+                    "Fund": "MFC 1960",
+                    "Description": "Mackenzie Financial Corp: Reinvested Distribution",
                     "Gross": "$92.01",
                     "Units": "7.6200",
                     "Price": "$12.07",
                     "Load": "FE",
-                    "Fund Code": "1960",
-                    "Fund Company": "MFC"
+                    "Notes": "MFC 1960 Balance = 1866.3390"
                 },
                 {
                     "Trade Date": "21-Jun-2019",
-                    "Description": "Reinvested Distribution",
+                    "Fund": "MFC 6138",
+                    "Description": "Mackenzie Financial Corp: Reinvested Distribution",
                     "Gross": "$100.23",
                     "Units": "7.0260",
                     "Price": "$14.27",
                     "Load": "FE",
-                    "Fund Code": "6138",
-                    "Fund Company": "MFC"
+                    "Notes": "MFC 6138 Balance = 1816.2410"
                 }
             ],
             "Price": [
@@ -114,123 +112,117 @@
             "Trade": [
                 {
                     "Trade Date": "14-Jun-2019",
-                    "Description": "Switch-out",
+                    "Fund": "MFC 302",
+                    "Description": "Mackenzie Financial Corp: Switch-out",
                     "Gross": "-$5,964.47",
                     "Units": "-420.0890",
                     "Price": "$14.20",
-                    "Load": "DSC",
-                    "Fund Code": "302",
-                    "Fund Company": "MFC"
+                    "Load": "DSC"
                 },
                 {
                     "Trade Date": "14-Jun-2019",
-                    "Description": "Switch-in",
+                    "Fund": "MFC 6129",
+                    "Description": "Mackenzie Financial Corp: Switch-in",
                     "Gross": "$5,964.47",
                     "Units": "555.7960",
                     "Price": "$10.73",
-                    "Load": "FE",
-                    "Fund Code": "6129",
-                    "Fund Company": "MFC"
+                    "Load": "FE"
                 },
                 {
                     "Trade Date": "14-Jun-2019",
-                    "Description": "Switch-out",
+                    "Fund": "MFC 856",
+                    "Description": "Mackenzie Financial Corp: Switch-out",
                     "Gross": "-$4,802.78",
                     "Units": "-1123.7210",
                     "Price": "$4.27",
-                    "Load": "DSC",
-                    "Fund Code": "856",
-                    "Fund Company": "MFC"
+                    "Load": "DSC"
                 },
                 {
                     "Trade Date": "14-Jun-2019",
-                    "Description": "Switch-in",
+                    "Fund": "MFC 6130",
+                    "Description": "Mackenzie Financial Corp: Switch-in",
                     "Gross": "$4,802.78",
                     "Units": "518.6760",
                     "Price": "$9.26",
-                    "Load": "FE",
-                    "Fund Code": "6130",
-                    "Fund Company": "MFC"
+                    "Load": "FE"
                 },
                 {
                     "Trade Date": "14-Jun-2019",
-                    "Description": "Switch-out",
+                    "Fund": "MFC 3232",
+                    "Description": "Mackenzie Financial Corp: Switch-out",
                     "Gross": "-$12,229.46",
                     "Units": "-1392.7180",
                     "Price": "$8.78",
-                    "Load": "DSC",
-                    "Fund Code": "3232",
-                    "Fund Company": "MFC"
+                    "Load": "DSC"
                 },
                 {
                     "Trade Date": "14-Jun-2019",
-                    "Description": "Switch-in",
+                    "Fund": "MFC 6138",
+                    "Description": "Mackenzie Financial Corp: Switch-in",
                     "Gross": "$12,229.46",
                     "Units": "860.8480",
                     "Price": "$14.21",
-                    "Load": "FE",
-                    "Fund Code": "6138",
-                    "Fund Company": "MFC"
+                    "Load": "FE"
                 },
                 {
                     "Trade Date": "21-Jun-2019",
-                    "Description": "Reinvested Distribution",
+                    "Fund": "MFC 302",
+                    "Description": "Mackenzie Financial Corp: Reinvested Distribution",
                     "Gross": "$2.34",
                     "Units": "0.1650",
                     "Price": "$14.20",
                     "Load": "DSC",
-                    "Fund Code": "302",
-                    "Fund Company": "MFC"
+                    "Notes": "MFC 302 Balance = 224.8370"
                 },
                 {
                     "Trade Date": "21-Jun-2019",
-                    "Description": "Reinvested Distribution",
+                    "Fund": "MFC 856",
+                    "Description": "Mackenzie Financial Corp: Reinvested Distribution",
                     "Gross": "$4.66",
                     "Units": "1.0830",
                     "Price": "$4.30",
                     "Load": "DSC",
-                    "Fund Code": "856",
-                    "Fund Company": "MFC"
+                    "Notes": "MFC 856 Balance = 364.8240"
                 },
                 {
                     "Trade Date": "21-Jun-2019",
-                    "Description": "Reinvested Distribution",
+                    "Fund": "MFC 6129",
+                    "Description": "Mackenzie Financial Corp: Reinvested Distribution",
                     "Gross": "$18.21",
                     "Units": "1.6980",
                     "Price": "$10.73",
                     "Load": "FE",
-                    "Fund Code": "6129",
-                    "Fund Company": "MFC"
+                    "Notes": "MFC 6129 Balance = 1558.2910"
                 },
                 {
                     "Trade Date": "21-Jun-2019",
-                    "Description": "Reinvested Distribution",
+                    "Fund": "MFC 3232",
+                    "Description": "Mackenzie Financial Corp: Reinvested Distribution",
                     "Gross": "$11.91",
                     "Units": "1.3510",
                     "Price": "$8.82",
                     "Load": "DSC",
-                    "Fund Code": "3232",
-                    "Fund Company": "MFC"
+                    "Notes": "MFC 3232 Balance = 348.6590"
                 },
                 {
                     "Trade Date": "21-Jun-2019",
-                    "Description": "Reinvested Distribution",
+                    "Fund": "MFC 6130",
+                    "Description": "Mackenzie Financial Corp: Reinvested Distribution",
                     "Gross": "$41.39",
                     "Units": "4.4460",
                     "Price": "$9.31",
                     "Load": "FE",
-                    "Fund Code": "6130",
-                    "Fund Company": "MFC"
+                    "Notes": "MFC 6130 Balance = 1357.1810"
                 },
                 {
                     "Trade Date": "21-Jun-2019",
-                    "Description": "Reinvested Distribution",
+                    "Fund": "MFC 6138",
+                    "Description": "Mackenzie Financial Corp: Reinvested Distribution",
                     "Gross": "$121.46",
                     "Units": "8.5140",
                     "Price": "$14.27",
                     "Load": "FE",
-                    "Fund Code": "6138",
-                    "Fund Company": "MFC"
+                    "Notes": "MFC 6138 Balance = 2200.9540"
                 }
             ],
             "Price": [
