@@ -10,28 +10,30 @@ __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __python_version__ = 3.6
 __created__ = '2019-06-22'
-__updated__ = '2019-06-23'
+__updated__ = '2019-07-01'
 
 import re
 import json
 from Configuration import *
+from gnucashSession import GnucashSession
 
 
 class ParseMonarchCopyReport:
-    def __init__(self, p_debug=False):
+    def __init__(self, p_monfile, p_mode, p_debug=False):
+        self.mon_file = p_monfile
+        self.mode = p_mode
         self.debug = p_debug
-        self.tx_coll = InvestmentRecord()
+        self.inv_rec = InvestmentRecord()
 
     def set_filename(self, fn):
-        self.tx_coll.set_filename(fn)
+        self.inv_rec.set_filename(fn)
 
     def get_record(self):
-        return self.tx_coll
+        return self.inv_rec
 
-    def parse_copy_info(self, file_name, ts):
+    def parse_copy_info(self, ts):
         """
-        :param file_name: string: monarch transaction report text file to parse
-        :param        ts: string: timestamp for file name
+        :param ts: string: timestamp for file name
         parsing for NEW format txt files, ~ May 31, 2019, just COPIED from Monarch web page,
         as new Monarch pdf's are no longer practical to use -- extracted text just too inconsistent...
         *loop lines:
@@ -55,14 +57,14 @@ class ParseMonarchCopyReport:
             *add ALL price and tx info to self.Configuration.InvestmentRecord object
         :return nil
         """
-        print_info("\nparse_copy_info({})\nRuntime = {}\n".format(file_name, ts), MAGENTA)
+        print_info("\nparse_copy_info()\nRuntime = {}\n".format(ts), MAGENTA)
 
         re_date = re.compile(r"([0-9]{2}-\w{3}-[0-9]{4})")
 
         mon_state = FIND_DATE
         plan_type = UNKNOWN
         plan_id = UNKNOWN
-        with open(file_name) as fp:
+        with open(self.mon_file) as fp:
             ct = 0
             for line in fp:
                 ct += 1
@@ -83,7 +85,7 @@ class ParseMonarchCopyReport:
                 if mon_state == FIND_OWNER:
                     if words[0] == PL_OPEN:
                         owner = MON_MARK if words[6] == MON_ROBB else MON_LULU
-                        self.tx_coll.set_owner(owner)
+                        self.inv_rec.set_owner(owner)
                         print_info("\n\t\u0022Current owner: {}\u0022".format(owner), MAGENTA)
                         mon_state = STATE_SEARCH
                         continue
@@ -111,7 +113,7 @@ class ParseMonarchCopyReport:
                     print_info("Final price = {}".format(price))
 
                     curr_tx = {DATE: doc_date, DESC: PRICE, FUND_CMPY: fd_co, FUND: fund, UNIT_BAL: bal, PRICE: price}
-                    self.tx_coll.add_tx(plan_type, PRICE, curr_tx)
+                    self.inv_rec.add_tx(plan_type, PRICE, curr_tx)
                     print_info('ADD current Tx to Collection!', GREEN)
                     continue
 
@@ -139,7 +141,7 @@ class ParseMonarchCopyReport:
                     curr_tx[LOAD] = words[-5]
                     print_info("curr_tx[LOAD]: {}".format(curr_tx[LOAD]))
 
-                    self.tx_coll.add_tx(plan_type, TRADE, curr_tx)
+                    self.inv_rec.add_tx(plan_type, TRADE, curr_tx)
                     print_info('ADD current Tx to Collection!', GREEN)
 
     def add_balance_to_trade(self):
@@ -151,9 +153,9 @@ class ParseMonarchCopyReport:
         :return: nil
         """
         print_info('add_balance_to_trade()', BLACK)
-        for pl in self.tx_coll.plans:
+        for pl in self.inv_rec.plans:
             print_info("pl = {}".format(repr(pl)))
-            plan = self.tx_coll.plans[pl]
+            plan = self.inv_rec.plans[pl]
             for prc in plan[PRICE]:
                 indx = 0
                 latest_indx = -1
@@ -171,9 +173,13 @@ class ParseMonarchCopyReport:
                 if latest_indx > -1:
                     plan[TRADE][latest_indx][NOTES] = fnd + " Balance = " + prc[UNIT_BAL]
 
-    def save_to_gnucash_file(self):
-        print_info('save_to_gnucash_file()', BLACK)
-        tx = self.tx_coll.get_next()
+    def save_to_gnucash_file(self, gnc_file):
+        print_info('save_to_gnucash_file()', BLUE)
+        gncs = GnucashSession(self.inv_rec, self.mode, gnc_file)
+        msg = gncs.prepare_session()
+        print_info('msg = {}'.format(msg), MAGENTA)
+
+# END class ParseMonarchCopyReport
 
 
 def mon_copy_rep_main(args):
@@ -182,12 +188,12 @@ def mon_copy_rep_main(args):
     if len(args) < 2:
         print_error("NOT ENOUGH parameters!")
         print_info(usage, MAGENTA)
-        exit(175)
+        exit(191)
 
     mon_file = args[0]
     if not osp.isfile(mon_file):
         print_error("File path '{}' does not exist! Exiting...".format(mon_file))
-        exit(180)
+        exit(196)
     print_info("mon_file = {}".format(mon_file))
 
     mode = args[1].upper()
@@ -196,22 +202,22 @@ def mon_copy_rep_main(args):
         if len(args) < 3:
             print_error("NOT ENOUGH parameters!")
             print_info(usage, MAGENTA)
-            exit(189)
+            exit(205)
         else:
             gnc_file = args[2]
             if not osp.isfile(gnc_file):
                 print_error("File path '{}' does not exist. Exiting...".format(gnc_file))
                 print_info(usage, GREEN)
-                exit(195)
+                exit(211)
             print_info("gnc_file = {}".format(gnc_file))
 
     now = dt.now().strftime(DATE_STR_FORMAT)
 
     try:
         # parse an external Monarch COPIED report file
-        parser = ParseMonarchCopyReport()
+        parser = ParseMonarchCopyReport(mon_file, mode)
 
-        parser.parse_copy_info(mon_file, now)
+        parser.parse_copy_info(now)
         parser.add_balance_to_trade()
 
         parser.set_filename(mon_file)
@@ -219,7 +225,7 @@ def mon_copy_rep_main(args):
         src_dir = 'copyTxt'
         msg = TEST
         if mode == PROD:
-            parser.save_to_gnucash_file()
+            parser.save_to_gnucash_file(gnc_file)
         else:
             # PRINT RECORD AS JSON FILE
             # pluck path and basename from mon_file to use for the saved json file
