@@ -99,6 +99,7 @@ class ParseMonarchCopyReport:
                     if owner == MON_LULU and plan_id == JOINT_PLAN_ID:
                         continue
 
+                # PRICES
                 if words[0] in FUND_NAME_CODE:
                     fd_co = words[0]
                     print_info("Fund company = {}".format(fd_co))
@@ -114,14 +115,20 @@ class ParseMonarchCopyReport:
                     print_info('ADD current Tx to Collection!', GREEN)
                     continue
 
+                # TRADES
                 re_match = re.match(re_date, words[0])
                 if re_match:
                     tx_date = re_match.group(1)
                     print_info("FOUND a NEW tx! Date: {}".format(tx_date), YELLOW)
                     curr_tx = {TRADE_DATE: tx_date}
 
+                    fund_co = words[-8]
+                    fund = fund_co + " " + words[-7]
+                    curr_tx[FUND] = fund
+                    print_info("curr_tx[FUND]: {}".format(curr_tx[FUND]))
                     tx_type = words[1]
-                    curr_tx[DESC] = TX_TYPES[words[2]] if tx_type == INTRCL else TX_TYPES[tx_type]
+                    desc = TX_TYPES[words[2]] if tx_type == INTRCL else TX_TYPES[tx_type]
+                    curr_tx[DESC] = COMPANY_NAME[fund_co] + ": " + desc
                     print_info("curr_tx[DESC]: {}".format(curr_tx[DESC]))
                     curr_tx[GROSS] = words[-4]
                     print_info("curr_tx[GROSS]: {}".format(curr_tx[GROSS]))
@@ -131,16 +138,41 @@ class ParseMonarchCopyReport:
                     print_info("curr_tx[PRICE]: {}".format(curr_tx[PRICE]))
                     curr_tx[LOAD] = words[-5]
                     print_info("curr_tx[LOAD]: {}".format(curr_tx[LOAD]))
-                    curr_tx[FUND_CODE] = words[-7]
-                    print_info("curr_tx[FUND_CODE]: {}".format(curr_tx[FUND_CODE]))
-                    curr_tx[FUND_CMPY] = words[-8]
-                    print_info("curr_tx[FUND_CMPY]: {}".format(curr_tx[FUND_CMPY]))
 
                     self.tx_coll.add_tx(plan_type, TRADE, curr_tx)
                     print_info('ADD current Tx to Collection!', GREEN)
 
+    def add_balance_to_trade(self):
+        """
+        for each plan type:
+            go through Price tx:
+                for each fund, find the latest tx in the Trade txs, if any
+                if found, add the Unit Balance from the Price tx to the Trade tx
+        :return: nil
+        """
+        print_info('add_balance_to_trade()', BLACK)
+        for pl in self.tx_coll.plans:
+            print_info("pl = {}".format(repr(pl)))
+            plan = self.tx_coll.plans[pl]
+            for prc in plan[PRICE]:
+                indx = 0
+                latest_indx = -1
+                latest_dte = None
+                fnd = prc[FUND]
+                print_info("Fund = {}".format(fnd))
+                for trd in plan[TRADE]:
+                    if trd[FUND] == fnd:
+                        dte = dt.strptime(trd[TRADE_DATE], '%d-%b-%Y')
+                        if latest_dte is None or dte > latest_dte:
+                            latest_dte = dte
+                            print_info("Latest date for {} is {}".format(fnd, latest_dte))
+                            latest_indx = indx
+                    indx += 1
+                if latest_indx > -1:
+                    plan[TRADE][latest_indx][NOTES] = fnd + " Balance = " + prc[UNIT_BAL]
+
     def save_to_gnucash_file(self):
-        print_info('save_to_gnucash_file', BLACK)
+        print_info('save_to_gnucash_file()', BLACK)
         tx = self.tx_coll.get_next()
 
 
@@ -178,10 +210,9 @@ def mon_copy_rep_main(args):
     try:
         # parse an external Monarch COPIED report file
         parser = ParseMonarchCopyReport()
-        parser.parse_copy_info(mon_file, now)
 
-        # parser.get_prices(record)
-        # parser.get_final_balances(record)
+        parser.parse_copy_info(mon_file, now)
+        parser.add_balance_to_trade()
 
         parser.set_filename(mon_file)
 
