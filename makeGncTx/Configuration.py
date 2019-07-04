@@ -10,7 +10,7 @@ __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __python_version__ = 3.6
 __created__ = '2018'
-__updated__ = '2019-06-30'
+__updated__ = '2019-07-04'
 
 import inspect
 import os.path as osp
@@ -136,7 +136,7 @@ class TxRecord:
         self.price = tx_price
         self.units = tx_units
 
-    # END class TxRecord
+# END class TxRecord
 
 
 # TODO: data date and run date
@@ -145,7 +145,7 @@ class InvestmentRecord:
     All transactions from an investment report
     """
     def __init__(self, own=None, dte=None, fn=None):
-        print_info("InvestmentRecord()\nRuntime = {}\n".format(strnow), MAGENTA)
+        print_info("InvestmentRecord(): Runtime = {}\n".format(strnow), MAGENTA)
         if own is not None:
             assert (own == MON_MARK or own == MON_LULU), 'Must be a valid Owner!'
         self.owner: str = own
@@ -171,6 +171,9 @@ class InvestmentRecord:
             self.date = dte
         else:
             print_error("dte is type: {}".format(type(dte)))
+
+    def get_plans(self):
+        return self.plans
 
     def get_next(self):
         # keep track of TxRecords and return next
@@ -220,7 +223,7 @@ class InvestmentRecord:
             PLAN_DATA      : self.plans
         }
 
-    # END class InvestmentRecord
+# END class InvestmentRecord
 
 
 GNC: str       = 'Gnucash'
@@ -349,6 +352,8 @@ TML_694   = TML + " 694"   # Templeton Global Smaller Companies Fund A
 TML_707   = TML + " 707"   # Templeton Global Smaller Companies Fund A
 TML_1017  = TML + " 1017"  # Franklin Bissett Canadian Dividend Fund A
 TML_1018  = TML + " 1018"  # Franklin Bissett Canadian Dividend Fund A
+TML_204   = TML + " 204"   # Franklin Bissett Money Market
+TML_703   = TML + " 703"   # Franklin Templeton Treasury Bill
 MFC_756   = MFC + " 756"   # Mackenzie Corporate Bond Fund Series A
 MFC_856   = MFC + " 856"   # Mackenzie Corporate Bond Fund Series A
 MFC_6130  = MFC + " 6130"  # Mackenzie Corporate Bond Fund Series PW
@@ -360,6 +365,8 @@ MFC_3769  = MFC + " 3769"  # Mackenzie Canadian Bond Fund Series SC
 MFC_6129  = MFC + " 6129"  # Mackenzie Canadian Bond Fund Series PW
 MFC_1960  = MFC + " 1960"  # Mackenzie Strategic Income Class Series T6
 MFC_3689  = MFC + " 3689"  # Mackenzie Strategic Income Class Series T6
+MFC_298   = MFC + " 298"   # Mackenzie Cash Management A
+MFC_4378  = MFC + " 4378"  # Mackenzie Canadian Money Market Fund Series C
 DYN_029   = DYN + " 029"   # Dynamic Equity Income Fund Series A
 DYN_729   = DYN + " 729"   # Dynamic Equity Income Fund Series A
 DYN_1560  = DYN + " 1560"  # Dynamic Strategic Yield Fund Series A
@@ -371,11 +378,15 @@ MMF_13417 = MMF + " 13417" # Manulife Conservative Income Fund Advisor Series
 
 FUNDS_LIST = [
     CIG_11461, CIG_11111, CIG_18140, CIG_2304, CIG_2321, CIG_6104, CIG_1154, CIG_1304, CIG_1521,
-    TML_674, TML_704, TML_180, TML_184, TML_202, TML_203, TML_223, TML_518, TML_519, TML_598, TML_694, TML_707, TML_1017, TML_1018,
-    MFC_756, MFC_856, MFC_6129, MFC_6130, MFC_6138, MFC_302, MFC_2238, MFC_3232, MFC_3769, MFC_3689, MFC_1960,
+    TML_674, TML_703, TML_704, TML_180, TML_184, TML_202, TML_203, TML_204, TML_223, 
+    TML_518, TML_519, TML_598, TML_694, TML_707, TML_1017, TML_1018,
+    MFC_756, MFC_856, MFC_6129, MFC_6130, MFC_6138, MFC_302, MFC_2238, 
+    MFC_3232, MFC_3769, MFC_3689, MFC_1960, MFC_298, MFC_4378,
     DYN_029, DYN_729, DYN_1562, DYN_1560,
     MMF_44424, MMF_4524, MMF_3517, MMF_13417
 ]
+
+MONEY_MKT_FUNDS = [MFC_298, MFC_4378, TML_204, TML_703]
 
 TRUST_AST_ACCT = CIG_18140
 TRUST_REV_ACCT = "Trust Base"

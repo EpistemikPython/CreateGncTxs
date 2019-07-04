@@ -10,7 +10,7 @@ __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __python_version__ = 3.6
 __created__ = '2019-07-01'
-__updated__ = '2019-07-01'
+__updated__ = '2019-07-04'
 
 import copy
 import json
@@ -24,54 +24,56 @@ class GnucashSession:
     """
     create and manage a Gnucash session
     """
-    def __init__(self, p_invrec, p_mode, p_gncfile, pdb=None, bk=None, rt=None, cur=None, rpinfo=None):
-        print_info("GnucashSession()\nRuntime = {}\n".format(strnow), MAGENTA)
-        self.inv_rec  = p_invrec
+    def __init__(self, p_mrec, p_mode, p_gncfile, p_db=None, p_bk=None, p_rt=None, p_cur=None, p_grec=None):
+        print_info("GnucashSession(): Runtime = {}\n".format(strnow), MAGENTA)
+        self.mon_rec  = p_mrec
         self.gnc_file = p_gncfile
         self.mode     = p_mode
-        self.price_db = pdb
-        self.book     = bk
-        self.root     = rt
-        self.curr     = cur
-        self.report_info = rpinfo
+        self.price_db = p_db
+        self.book     = p_bk
+        self.root     = p_rt
+        self.curr     = p_cur
+        self.gnc_rec  = p_grec
 
     gncu = GncUtilities()
 
-    def get_mon_copy_info(self, mtx, plan_type, ast_parent, rev_acct):
+    def get_trade_info(self, mtx, plan_type, ast_parent, rev_acct):
         """
-        parse the Monarch transactions from a copy&paste json file
+        parse the Monarch trade transactions from a copy&paste JSON file
         Asset accounts: use the proper path to find the parent then search for the Fund Code in the descendants
         Revenue accounts: pick the proper account based on owner and plan type
         gross_curr: re match to Gross then concatenate the two match groups
         date: convert the date then get day, month and year to form a Gnc date
         Units: re match and concatenate the two groups on either side of decimal point
         Description: use DESC and Fund Company
-        :param        mtx:   dict: Monarch copied transaction information
+        :param        mtx:   dict: Monarch copied trade tx information
         :param  plan_type: String:
         :param ast_parent: String:
         :param   rev_acct: Gnucash account
         :return: dict, dict
         """
-        print_info('get_mon_copy_info()', MAGENTA)
+        print_info('get_trade_info()', MAGENTA)
 
         # set the regex needed to match the required groups in each value
         re_gross  = re.compile(r"^(-?)\$([0-9,]{1,6})\.([0-9]{2}).*")
         re_units  = re.compile(r"^(-?)([0-9]{1,5})\.([0-9]{4}).*")
 
-        asset_acct_name = mtx[FUND]
+        fund_name = mtx[FUND]
 
         # print_info("trade date = {}".format(mtx[TRADE_DATE]))
         conv_date = dt.strptime(mtx[TRADE_DATE], "%d-%b-%Y")
         # print_info("converted date = {}".format(conv_date))
-        init_tx = { TRADE_DAY:conv_date.day, TRADE_MTH:conv_date.month, TRADE_YR:conv_date.year }
+        init_tx = { FUND:fund_name, TRADE_DATE:mtx[TRADE_DATE], 
+                    TRADE_DAY:conv_date.day, TRADE_MTH:conv_date.month, TRADE_YR:conv_date.year }
         print_info("trade day-month-year = '{}-{}-{}'".format(init_tx[TRADE_DAY],init_tx[TRADE_MTH],init_tx[TRADE_YR]))
 
         # check if we have a switch-in/out
-        switch = True if mtx[DESC] == SW_IN or mtx[DESC] == SW_OUT else False
+        sw_ind = mtx[DESC].split()[-1]
+        switch = True if sw_ind == SW_IN or sw_ind == SW_OUT else False
         init_tx[SWITCH] = switch
-        print_info("{}Have a Switch!".format('DO NOT ' if not switch else '>>> '), BLUE)
+        print_info("{} Have a Switch!".format('***' if switch else 'DO NOT'), BLUE)
 
-        asset_acct, rev_acct = self.get_accounts(ast_parent, asset_acct_name, rev_acct)
+        asset_acct, rev_acct = self.get_accounts(ast_parent, fund_name, rev_acct)
         init_tx[ACCT] = asset_acct
         # save the (possibly modified) Revenue account to the Gnc tx
         init_tx[REVENUE] = rev_acct
@@ -88,7 +90,7 @@ class GnucashSession:
             print_info("gross_curr = {}".format(gross_curr))
             init_tx[GROSS] = gross_curr
         else:
-            raise Exception("PROBLEM!! re_gross DID NOT match with value '{}'!".format(mtx[GROSS]))
+            raise Exception("PROBLEM[93]!! re_gross DID NOT match with value '{}'!".format(mtx[GROSS]))
 
         # get the units of the tx
         re_match = re.match(re_units, mtx[UNITS])
@@ -100,40 +102,41 @@ class GnucashSession:
             init_tx[UNITS] = units
             print_info("units = {}".format(units))
         else:
-            raise Exception("PROBLEM!! re_units DID NOT match with value '{}'!".format(mtx[UNITS]))
+            raise Exception("PROBLEM[105]!! re_units DID NOT match with value '{}'!".format(mtx[UNITS]))
 
         # assemble the Description string
-        descr = "{}: {} {}".format(COMPANY_NAME[init_tx[FUND_CMPY]], mtx[DESC], asset_acct_name)
+        descr = "{} {}".format(mtx[DESC], fund_name)
         init_tx[DESC] = descr
-        # print_info("descr = {}".format(init_tx[DESC]))
+        print_info("descr = {}".format(init_tx[DESC]), CYAN)
 
-        # notes/load field
-        load = str(asset_acct_name + " load = " + mtx[LOAD])
-        init_tx[NOTES] = load
-        # print_info("notes = {}".format(init_tx[NOTES]))
+        # notes field
+        notes = mtx[NOTES] if NOTES in mtx else "{} Load = {}".format(fund_name, mtx[LOAD])
+        init_tx[NOTES] = notes
+        print_info("notes = {}".format(init_tx[NOTES]), CYAN)
 
         pair_tx = None
         have_pair = False
         if switch:
             print_info("Tx is a Switch to OTHER Monarch account.", BLUE)
             # look for switches in this plan type with same company, day, month and opposite gross value
-            for itx in self.report_info.plans[plan_type]:
-                if itx[SWITCH] and itx[FUND_CMPY] == init_tx[FUND_CMPY] and itx[GROSS] == (gross_curr * -1) \
-                        and itx[TRADE_DAY] == init_tx[TRADE_DAY] and itx[TRADE_MTH] == init_tx[TRADE_MTH] :
+            for itx in self.gnc_rec.plans[plan_type][TRADE]:
+                if itx[SWITCH] and itx[FUND].split()[0] == init_tx[FUND].split()[0] and itx[GROSS] == (gross_curr * -1) \
+                        and itx[TRADE_DATE] == init_tx[TRADE_DATE] :
                     # ALREADY HAVE THE FIRST ITEM OF THE PAIR
                     have_pair = True
                     pair_tx = itx
-                    print_info('Found the MATCH of a pair...', YELLOW)
+                    print_info('*** Found the MATCH of a pair ***', YELLOW)
                     break
 
             if not have_pair:
                 # store the tx until we find the matching tx
-                self.report_info.plans[plan_type].append(init_tx)
+                self.gnc_rec.plans[plan_type][TRADE].append(init_tx)
                 print_info('Found the FIRST of a pair...\n', YELLOW)
 
         return init_tx, pair_tx
 
     def get_accounts(self, ast_parent, asset_acct_name, rev_acct):
+        print_info('get_accounts()', MAGENTA)
         asset_parent = ast_parent
         # special locations for Trust Revenue and Asset accounts
         if asset_acct_name == TRUST_AST_ACCT:
@@ -144,13 +147,13 @@ class GnucashSession:
         # get the asset account
         asset_acct = asset_parent.lookup_by_name(asset_acct_name)
         if asset_acct is None:
-            raise Exception("Could NOT find acct '{}' under parent '{}'".format(asset_acct_name, asset_parent.GetName()))
+            raise Exception("[149] Could NOT find acct '{}' under parent '{}'".format(asset_acct_name, asset_parent.GetName()))
 
         print_info("asset_acct = {}".format(asset_acct.GetName()), color=CYAN)
         return asset_acct, rev_acct
 
     # TODO: separate file with standard functions to create Gnucash session, prices, transactions
-    def create_gnc_prices(self, mtx, ast_parent, rev_acct):
+    def create_gnc_price_txs(self, mtx, ast_parent, rev_acct):
         """
         create and load Gnucash prices to the Gnucash PriceDB
         :param        mtx: InvestmentRecord transaction
@@ -158,21 +161,24 @@ class GnucashSession:
         :param   rev_acct: Gnucash account
         :return: nil
         """
-        print_info('create_gnc_prices()', MAGENTA)
-        pr_date = dt(mtx[TRADE_YR], mtx[TRADE_MTH], mtx[TRADE_DAY])
+        print_info('create_gnc_price_txs()', MAGENTA)
+        conv_date = dt.strptime(mtx[DATE], "%d-%b-%Y")
+        pr_date = dt(conv_date.year, conv_date.month, conv_date.day)
         datestring = pr_date.strftime("%Y-%m-%d")
 
-        asset_acct_name = mtx[FUND]
+        fund_name = mtx[FUND]
+        if fund_name in MONEY_MKT_FUNDS:
+            return
 
-        int_price = int(mtx[PRICE]) * 10000
+        int_price = int(mtx[PRICE].replace('.', '').replace('$', ''))
         val = GncNumeric(int_price, 10000)
-        print_info("Adding: {}[{}] @ ${}".format(asset_acct_name, datestring, val))
+        print_info("Adding: {}[{}] @ ${}".format(fund_name, datestring, val))
 
         pr1 = GncPrice(self.book)
         pr1.begin_edit()
         pr1.set_time64(pr_date)
 
-        asset_acct, rev_acct = self.get_accounts(ast_parent, asset_acct_name, rev_acct)
+        asset_acct, rev_acct = self.get_accounts(ast_parent, fund_name, rev_acct)
         comm = asset_acct.GetCommodity()
         print_info("Commodity = {}:{}".format(comm.get_namespace(), comm.get_printname()))
         pr1.set_commodity(comm)
@@ -190,14 +196,14 @@ class GnucashSession:
             print_info("Mode = {}: ABANDON Prices!\n".format(self.mode), RED)
 
     # TODO: separate file with standard functions to create Gnucash session, prices, transactions
-    def create_gnc_trades(self, tx1, tx2):
+    def create_gnc_trade_txs(self, tx1, tx2):
         """
         create and load Gnucash transactions to the Gnucash file
         :param tx1: first transaction
         :param tx2: matching transaction if a switch
         :return: nil
         """
-        print_info('create_gnc_trades()', MAGENTA)
+        print_info('create_gnc_trade_txs()', MAGENTA)
         # create a gnucash Tx
         gtx = Transaction(self.book)
         # gets a guid on construction
@@ -263,7 +269,7 @@ class GnucashSession:
             print_info("Mode = {}: Roll back transaction changes!\n".format(self.mode), RED)
             gtx.RollbackEdit()
 
-    def process_monarch_trades(self, mtx, plan_type, ast_parent, rev_acct):
+    def process_monarch_trade(self, mtx, plan_type, ast_parent, rev_acct):
         """
         Asset accounts: use the proper path to find the parent then search for the Fund Code in the descendants
         Revenue accounts: pick the proper account based on owner and plan type
@@ -278,19 +284,19 @@ class GnucashSession:
         :param ast_parent:
         :return: nil
         """
-        print_info('process_monarch_trades()', MAGENTA)
+        print_info('process_monarch_trade()', MAGENTA)
         try:
             # get the additional required information from the Monarch json
-            tx1, tx2 = self.get_mon_copy_info(mtx, plan_type, ast_parent, rev_acct)
+            tx1, tx2 = self.get_trade_info(mtx, plan_type, ast_parent, rev_acct)
 
             # just return if there is a matching tx but we don't have it yet
             if tx1[SWITCH] and tx2 is None:
                 return
 
-            self.create_gnc_trades(tx1, tx2)
+            self.create_gnc_trade_txs(tx1, tx2)
 
         except Exception as ie:
-            print_error("process_monarch_trades() EXCEPTION!! '{}'\n".format(str(ie)))
+            print_error("process_monarch_trade() EXCEPTION!! '{}'\n".format(str(ie)))
 
     def create_gnucash_info(self):
         """
@@ -308,33 +314,34 @@ class GnucashSession:
         commod_tab = self.book.get_table()
         self.curr = commod_tab.lookup("ISO4217", "CAD")
 
-        for plan_type in self.inv_rec[PLAN_DATA]:
+        plans = self.mon_rec.get_plans()
+        for plan_type in plans:
             print_info("\n\t\u0022Plan type = {}\u0022".format(plan_type), YELLOW)
 
-            asset_parent, rev_acct = self.get_plan_info(plan_type)
+            asset_parent, rev_acct = self.get_asset_revenue_info(plan_type)
 
-            for mon_tx in self.inv_rec[PLAN_DATA][plan_type][TRADE]:
-                self.process_monarch_trades(mon_tx, plan_type, asset_parent, rev_acct)
+            for mon_tx in plans[plan_type][TRADE]:
+                self.process_monarch_trade(mon_tx, plan_type, asset_parent, rev_acct)
 
-            for mon_tx in self.inv_rec[PLAN_DATA][plan_type][PRICE]:
-                self.create_gnc_prices(mon_tx, asset_parent, rev_acct)
+            for mon_tx in plans[plan_type][PRICE]:
+                self.create_gnc_price_txs(mon_tx, asset_parent, rev_acct)
 
-    def get_plan_info(self, plan_type):
+    def get_asset_revenue_info(self, plan_type):
         """
         get the required asset and/or revenue information from each plan
         :param plan_type: string: see Configuration
         :return: Gnucash account, Gnucash account: revenue account and asset parent account
         """
-        print_info("get_plan_info()", MAGENTA)
+        print_info("get_asset_revenue_info()", MAGENTA)
         rev_path = copy.copy(ACCT_PATHS[REVENUE])
         rev_path.append(plan_type)
         ast_parent_path = copy.copy(ACCT_PATHS[ASSET])
         ast_parent_path.append(plan_type)
 
-        pl_owner = self.report_info.get_owner()
+        pl_owner = self.gnc_rec.get_owner()
         if plan_type != PL_OPEN:
             if pl_owner == '':
-                raise Exception("PROBLEM!! Trying to process plan type '{}' but NO Owner value found"
+                raise Exception("PROBLEM[341]!! Trying to process plan type '{}' but NO Owner value found"
                                 " in Tx Collection!!".format(plan_type))
             rev_path.append(ACCT_PATHS[pl_owner])
             ast_parent_path.append(ACCT_PATHS[pl_owner])
@@ -360,7 +367,9 @@ class GnucashSession:
             session = Session(self.gnc_file)
             self.book = session.book
 
-            print_info("Owner = {}".format(self.inv_rec[OWNER]), GREEN)
+            owner = self.mon_rec.get_owner()
+            print_info("Owner = {}".format(owner), GREEN)
+            self.gnc_rec = InvestmentRecord(owner)
 
             self.create_gnucash_info()
 
@@ -391,13 +400,13 @@ def gnucash_session_main(args):
     if len(args) < 3:
         print_error("NOT ENOUGH parameters!")
         print_info(usage, MAGENTA)
-        exit(412)
+        exit(400)
 
     mon_file = args[0]
     if not osp.isfile(mon_file):
         print_error("File path '{}' does not exist. Exiting...".format(mon_file))
         print_info(usage, GREEN)
-        exit(418)
+        exit(406)
     print_info("\nMonarch file = {}".format(mon_file), GREEN)
 
     # get Monarch transactions from the Monarch json file
@@ -407,7 +416,7 @@ def gnucash_session_main(args):
     gnc_file = args[1]
     if not osp.isfile(gnc_file):
         print_error("File path '{}' does not exist. Exiting...".format(gnc_file))
-        exit(428)
+        exit(416)
     print_info("\nGnucash file = {}".format(gnc_file), GREEN)
 
     mode = args[2].upper()
