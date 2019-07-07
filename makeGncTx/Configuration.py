@@ -10,7 +10,7 @@ __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __python_version__ = 3.6
 __created__ = '2018'
-__updated__ = '2019-07-04'
+__updated__ = '2019-07-07'
 
 import inspect
 import os.path as osp
@@ -35,49 +35,65 @@ CYAN    = COLOR_FLAG + '36m'
 WHITE   = COLOR_FLAG + '37m'
 COLOR_OFF = COLOR_FLAG + '0m'
 
-log_text: [str] = []
 
+class Gnulog:
+    def __init__(self, p_debug):
+        self.debug = p_debug
+        self.log_text = []
 
-def clear_log():
-    global log_text
-    log_text = []
+    def clear_log(self):
+        self.log_text = []
 
+    def get_log(self):
+        return self.log_text
 
-def print_info(info, color='', inspector=True, newline=True):
-    """
-    Print information with choices of color, inspection info, newline
-    """
-    global log_text
-    inspect_line = ''
-    if info is None:
-        info = '==============================================================================================================='
-        inspector = False
-    text = str(info)
-    if inspector:
-        calling_frame = inspect.currentframe().f_back
-        calling_file  = inspect.getfile(calling_frame).split('/')[-1]
-        calling_line  = str(inspect.getlineno(calling_frame))
-        inspect_line  = '[' + calling_file + '@' + calling_line + ']: '
-    print(inspect_line + color + text + COLOR_OFF, end=('\n' if newline else ''))
-    log_text.append(text)
+    def print_info(self, info, color='', inspector=True, newline=True):
+        """
+        Print information with choices of color, inspection info, newline
+        """
+        if self.debug:
+            inspect_line = ''
+            if info is None:
+                info = '==============================================================================================================='
+                inspector = False
+            text = str(info)
+            if inspector:
+                calling_frame = inspect.currentframe().f_back
+                calling_file  = inspect.getfile(calling_frame).split('/')[-1]
+                calling_line  = str(inspect.getlineno(calling_frame))
+                inspect_line  = '[' + calling_file + '@' + calling_line + ']: '
+            print(inspect_line + color + text + COLOR_OFF, end=('\n' if newline else ''))
+            self.log_text.append(text)
 
+    def print_error(self, text, newline=True):
+        """
+        Print Error information in RED with inspection info
+        """
+        if self.debug:
+            calling_frame = inspect.currentframe().f_back
+            parent_frame = calling_frame.f_back
+            calling_file = inspect.getfile(calling_frame).split('/')[-1]
+            calling_line = str(inspect.getlineno(calling_frame))
+            parent_line = str(inspect.getlineno(parent_frame))
+            inspect_line = '[' + calling_file + '@' + calling_line + '/' + parent_line + ']: '
+            print(inspect_line + RED + str(text) + COLOR_OFF, end=('\n' if newline else ''))
 
-def get_log():
-    global log_text
-    return log_text
-
-
-def print_error(text, newline=True):
-    """
-    Print Error information in RED with inspection info
-    """
-    calling_frame = inspect.currentframe().f_back
-    parent_frame = calling_frame.f_back
-    calling_file = inspect.getfile(calling_frame).split('/')[-1]
-    calling_line = str(inspect.getlineno(calling_frame))
-    parent_line = str(inspect.getlineno(parent_frame))
-    inspect_line = '[' + calling_file + '@' + calling_line + '/' + parent_line + ']: '
-    print(inspect_line + RED + str(text) + COLOR_OFF, end=('\n' if newline else ''))
+    @staticmethod
+    def print_text(info, color='', inspector=True, newline=True):
+        """
+        Print information with choices of color, inspection info, newline
+        """
+        inspect_line = ''
+        if info is None:
+            info = '==============================================================================================================='
+            inspector = False
+        text = str(info)
+        if inspector:
+            calling_frame = inspect.currentframe().f_back
+            calling_file  = inspect.getfile(calling_frame).split('/')[-1]
+            calling_line  = str(inspect.getlineno(calling_frame))
+            inspect_line  = '[' + calling_file + '@' + calling_line + ']: '
+        print(inspect_line + color + text + COLOR_OFF, end=('\n' if newline else ''))
 
 
 class GncUtilities:
@@ -110,12 +126,12 @@ class GncUtilities:
         """
         acct = self.account_from_path(root, path)
         acct_name = acct.GetName()
-        print_info("account = " + acct_name)
+        Gnulog.print_text("account = " + acct_name)
         descendants = acct.get_descendants()
         if len(descendants) == 0:
-            print_info("{} has NO Descendants!".format(acct_name))
+            Gnulog.print_text("{} has NO Descendants!".format(acct_name))
         else:
-            print_info("Descendants of {}:".format(acct_name))
+            Gnulog.print_text("Descendants of {}:".format(acct_name))
             # for subAcct in descendants:
             # print_info("{}".format(subAcct.GetName()))
 
@@ -145,7 +161,7 @@ class InvestmentRecord:
     All transactions from an investment report
     """
     def __init__(self, own=None, dte=None, fn=None):
-        print_info("InvestmentRecord(): Runtime = {}\n".format(strnow), MAGENTA)
+        Gnulog.print_text("InvestmentRecord(): Runtime = {}\n".format(strnow), MAGENTA)
         if own is not None:
             assert (own == MON_MARK or own == MON_LULU), 'Must be a valid Owner!'
         self.owner: str = own
@@ -170,7 +186,7 @@ class InvestmentRecord:
         if isinstance(dte, dt):
             self.date = dte
         else:
-            print_error("dte is type: {}".format(type(dte)))
+            Gnulog.print_text("dte is type: {}".format(type(dte)), RED)
 
     def get_plans(self):
         return self.plans
