@@ -57,7 +57,7 @@ MAIN_FXNS = {
 
 NEED_MONARCH_TEXT = [MON_COPY, FD_COPY, TX_COPY, TX, QTRS]
 NEED_MONARCH_JSON = [GNC_TXS]
-NEED_GNUCASH_FILE = [GNC_TXS, FD_COPY, QTRS] # and also MON_COPY depending on mode
+NEED_GNUCASH_FILE = [GNC_TXS, FD_COPY, QTRS] # and maybe MON_COPY depending on mode
 
 
 # noinspection PyAttributeOutsideInit
@@ -81,8 +81,6 @@ class MonarchGnucashServices(QDialog):
         self.setGeometry(self.left, self.top, self.width, self.height)
 
         self.create_group_box()
-        # need a horizontal group box to hold two checkboxes: for save_json and debug
-        # place horiz group box in main group box between mode & execute 
 
         self.response_box = QTextEdit()
         self.response_box.setReadOnly(True)
@@ -128,7 +126,7 @@ class MonarchGnucashServices(QDialog):
 
         self.horiz_box = QGroupBox("Check:")
         self.horiz_layout = QHBoxLayout()
-        self.ch_json = QCheckBox("Save Monarch info to JSON?")
+        self.ch_json = QCheckBox("Save Monarch info to JSON file?")
         self.ch_debug = QCheckBox("Print DEBUG info?")
         self.horiz_layout.addWidget(self.ch_json)
         self.horiz_layout.addWidget(self.ch_debug)
@@ -196,7 +194,7 @@ class MonarchGnucashServices(QDialog):
                 self.gnc_file_btn.setText(self.gnc_file_display)
 
     def mode_change(self):
-        """for Monarch_Copy: need for Gnucash file depends on mode"""
+        """Monarch_Copy: need Gnucash file only if in PROD mode"""
         if self.cb_script.currentText() == MON_COPY:
             if self.cb_mode.currentText() == PROD:
                 self.gnc_file_btn.setText(self.gnc_btn_title)
@@ -286,12 +284,11 @@ class MonarchGnucashServices(QDialog):
             else:
                 msg = "Problem with main??!! '{}'".format(main_fxn)
                 self.dbg.print_error(msg)
-                reply = {'msg': msg, 'log': self.dbg.get_log()}
+                reply = {'log': self.dbg.get_log(), 'msg': msg}
 
         self.response_box.setText(json.dumps(reply, indent=4))
 
 
-# TODO: print debug output to ui screen
 def ui_main():
     app = QApplication(sys.argv)
     dialog = MonarchGnucashServices()
