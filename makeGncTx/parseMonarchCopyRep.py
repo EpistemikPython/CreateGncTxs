@@ -192,6 +192,8 @@ def test_args():
                                 prog='parseMonarchCopyRep.py')
     # required arguments
     found_args.add_argument('-m', '--monarch', required=True, help='REQUIRED: path & filename of the copied Monarch Report file')
+    found_args.add_argument('-t', '--type', required=True, choices=['trades', 'prices', 'both'], 
+                            help='REQUIRED: type of transaction to process: Trades or Prices or Both')
     # optional arguments
     found_args.add_argument('-g', '--gnucash', help='Required if PROD: path & filename of the Gnucash file')
     found_args.add_argument('--json', action='store_true', help='Write the parsed Monarch data to a JSON file')
@@ -201,6 +203,7 @@ def test_args():
     return found_args
 
 
+# TODO: specify processing trades or prices or both
 def process_input_parameters(argv):
     args = test_args().parse_args(argv)
 
