@@ -208,23 +208,21 @@ class MonarchGnucashServices(QDialog):
 
         if new_script != self.script:
             self.mon_file = None
+            self.gnc_file = None
             if new_script == PDF:
                 # PDF button ONLY
                 self.pdf_file_btn.setText(self.pdf_btn_title)
                 self.mon_file_btn.setText(NO_NEED)
                 self.gnc_file_btn.setText(NO_NEED)
-                self.gnc_file = None
             else:
                 # restore proper text for Monarch file button
                 self.mon_file_btn.setText(self.mon_btn_title)
 
-                # if need and previous script didn't have, restore proper text for Gnucash file button
-                mode = self.cb_mode.currentText()
-                if new_script in NEED_GNUCASH_FILE or (mode == PROD and new_script == MON_COPY):
+                # if needed, restore proper text for Gnucash file button
+                if new_script in NEED_GNUCASH_FILE or (self.cb_mode.currentText() == PROD and new_script == MON_COPY):
                     self.gnc_file_btn.setText(self.gnc_btn_title)
                 else:
                     self.gnc_file_btn.setText(NO_NEED)
-                    self.gnc_file = None
                 if self.script == PDF:
                     self.pdf_file_btn.setText(NO_NEED)
                     self.pdf_file = None
@@ -237,8 +235,6 @@ class MonarchGnucashServices(QDialog):
 
         mode = self.cb_mode.currentText()
         selected_fxn = self.cb_script.currentText()
-        save_json = self.ch_json.isChecked()
-        do_debug = self.ch_debug.isChecked()
 
         main_fxn = MAIN_FXNS[selected_fxn]
         self.dbg.print_info("Function to run: {}".format(str(main_fxn)), YELLOW)
@@ -261,15 +257,15 @@ class MonarchGnucashServices(QDialog):
                     return
                 cl_params = [self.mon_file, self.gnc_file, mode]
             else: # MON_COPY
-                if mode == PROD and self.gnc_file is None:
-                    self.response_box.setText('>>> MUST select a Gnucash File!')
-                    return
                 cl_params = ['-m' + self.mon_file]
-                if mode == PROD: 
+                if mode == PROD:
+                    if self.gnc_file is None:
+                        self.response_box.setText('>>> MUST select a Gnucash File!')
+                        return
                     cl_params.append('--prod')
                     cl_params.append('-g' + self.gnc_file)
-                if save_json: cl_params.append('--json')
-                if do_debug: cl_params.append('--debug')
+                if self.ch_json.isChecked(): cl_params.append('--json')
+                if self.ch_debug.isChecked(): cl_params.append('--debug')
 
         self.dbg.print_info("Parameters = \n{}".format(json.dumps(cl_params, indent=4)), GREEN)
 
