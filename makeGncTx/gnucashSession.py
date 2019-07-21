@@ -10,7 +10,7 @@ __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __python_version__ = 3.6
 __created__ = '2019-07-01'
-__updated__ = '2019-07-07'
+__updated__ = '2019-07-21'
 
 import copy
 import json
@@ -26,17 +26,18 @@ class GnucashSession:
     """
     create and manage a Gnucash session
     """
-    def __init__(self, p_mrec, p_mode, p_gncfile, p_debug, p_db=None, p_bk=None, p_rt=None, p_cur=None, p_grec=None):
+    def __init__(self, p_mrec, p_mode, p_gncfile, p_debug, p_domain, p_db=None, p_bk=None, p_rt=None, p_cur=None, p_grec=None):
         self.dbg = Gnulog(p_debug)
         self.mon_rec  = p_mrec
         self.gnc_file = p_gncfile
         self.mode     = p_mode
+        self.domain   = p_domain
         self.price_db = p_db
         self.book     = p_bk
         self.root     = p_rt
         self.curr     = p_cur
         self.gnc_rec  = p_grec
-        self.dbg.print_info("GnucashSession(): Runtime = {}\n".format(strnow), MAGENTA)
+        self.dbg.print_info("class GnucashSession: Runtime = {}\n".format(strnow), MAGENTA)
 
     gncu = GncUtilities()
 
@@ -55,7 +56,7 @@ class GnucashSession:
         :param   rev_acct: Gnucash account
         :return: dict, dict
         """
-        self.dbg.print_info('get_trade_info()', MAGENTA)
+        self.dbg.print_info('get_trade_info()', BLUE)
 
         # set the regex needed to match the required groups in each value
         re_gross  = re.compile(r"^(-?)\$([0-9,]{1,6})\.([0-9]{2}).*")
@@ -139,7 +140,7 @@ class GnucashSession:
         return init_tx, pair_tx
 
     def get_accounts(self, ast_parent, asset_acct_name, rev_acct):
-        self.dbg.print_info('get_accounts()', MAGENTA)
+        self.dbg.print_info('get_accounts()', BLUE)
         asset_parent = ast_parent
         # special locations for Trust Revenue and Asset accounts
         if asset_acct_name == TRUST_AST_ACCT:
@@ -163,7 +164,7 @@ class GnucashSession:
         :param   rev_acct: Gnucash account
         :return: nil
         """
-        self.dbg.print_info('create_gnc_price_txs()', MAGENTA)
+        self.dbg.print_info('create_gnc_price_txs()', BLUE)
         conv_date = dt.strptime(mtx[DATE], "%d-%b-%Y")
         pr_date = dt(conv_date.year, conv_date.month, conv_date.day)
         datestring = pr_date.strftime("%Y-%m-%d")
@@ -204,7 +205,7 @@ class GnucashSession:
         :param tx2: matching transaction if a switch
         :return: nil
         """
-        self.dbg.print_info('create_gnc_trade_txs()', MAGENTA)
+        self.dbg.print_info('create_gnc_trade_txs()', BLUE)
         # create a gnucash Tx
         gtx = Transaction(self.book)
         # gets a guid on construction
@@ -285,7 +286,7 @@ class GnucashSession:
         :param ast_parent:
         :return: nil
         """
-        self.dbg.print_info('process_monarch_trade()', MAGENTA)
+        self.dbg.print_info('process_monarch_trade()', BLUE)
         try:
             # get the additional required information from the Monarch json
             tx1, tx2 = self.get_trade_info(mtx, plan_type, ast_parent, rev_acct)
@@ -304,13 +305,14 @@ class GnucashSession:
         process each transaction in the Monarch input file to get the required Gnucash information
         :return: nil
         """
-        self.dbg.print_info("create_gnucash_info()", MAGENTA)
+        self.dbg.print_info("create_gnucash_info()", BLUE)
         self.root = self.book.get_root_account()
         self.root.get_instance()
 
-        self.price_db = self.book.get_price_db()
-        self.price_db.begin_edit()
-        self.dbg.print_info("self.price_db.begin_edit()", CYAN)
+        if self.domain != TRADE:
+            self.price_db = self.book.get_price_db()
+            self.price_db.begin_edit()
+            self.dbg.print_info("self.price_db.begin_edit()", CYAN)
 
         commod_tab = self.book.get_table()
         self.curr = commod_tab.lookup("ISO4217", "CAD")
@@ -321,11 +323,13 @@ class GnucashSession:
 
             asset_parent, rev_acct = self.get_asset_revenue_info(plan_type)
 
-            for mon_tx in plans[plan_type][TRADE]:
-                self.process_monarch_trade(mon_tx, plan_type, asset_parent, rev_acct)
+            if self.domain != PRICE:
+                for mon_tx in plans[plan_type][TRADE]:
+                    self.process_monarch_trade(mon_tx, plan_type, asset_parent, rev_acct)
 
-            for mon_tx in plans[plan_type][PRICE]:
-                self.create_gnc_price_txs(mon_tx, asset_parent, rev_acct)
+            if self.domain != TRADE:
+                for mon_tx in plans[plan_type][PRICE]:
+                    self.create_gnc_price_txs(mon_tx, asset_parent, rev_acct)
 
     def get_asset_revenue_info(self, plan_type):
         """
@@ -333,7 +337,7 @@ class GnucashSession:
         :param plan_type: string: see Configuration
         :return: Gnucash account, Gnucash account: revenue account and asset parent account
         """
-        self.dbg.print_info("get_asset_revenue_info()", MAGENTA)
+        self.dbg.print_info("get_asset_revenue_info()", BLUE)
         rev_path = copy.copy(ACCT_PATHS[REVENUE])
         rev_path.append(plan_type)
         ast_parent_path = copy.copy(ACCT_PATHS[ASSET])
@@ -361,7 +365,7 @@ class GnucashSession:
         Take the information from an InvestmentRecord and produce Gnucash transactions to write to a Gnucash file
         :return: message
         """
-        self.dbg.print_info("prepare_session()", MAGENTA)
+        self.dbg.print_info("prepare_session()", BLUE)
         msg = TEST
         try:
             session = Session(self.gnc_file)
@@ -376,20 +380,23 @@ class GnucashSession:
             if self.mode == PROD:
                 msg = "Mode = {}: COMMIT Price DB edits and Save session.".format(self.mode)
                 self.dbg.print_info(msg, GREEN)
-                self.price_db.commit_edit()
+
+                if domain != TRADE:
+                    self.price_db.commit_edit()
+
                 # only ONE session save for the entire run
                 session.save()
 
             session.end()
             session.destroy()
 
-        except Exception as e:
-            msg = "prepare_session() EXCEPTION!! '{}'".format(repr(e))
+        except Exception as se:
+            msg = "prepare_session() EXCEPTION!! '{}'".format(repr(se))
             self.dbg.print_error(msg)
             if "session" in locals() and session is not None:
                 session.end()
                 session.destroy()
-            raise
+            raise se
 
         return msg
 
@@ -400,13 +407,13 @@ def gnucash_session_main(args):
     if len(args) < 3:
         Gnulog.print_text("NOT ENOUGH parameters!", RED)
         Gnulog.print_text(usage, MAGENTA)
-        exit(400)
+        exit(409)
 
     mon_file = args[0]
     if not osp.isfile(mon_file):
         Gnulog.print_text("File path '{}' does not exist. Exiting...".format(mon_file), RED)
         Gnulog.print_text(usage, GREEN)
-        exit(406)
+        exit(415)
     Gnulog.print_text("\nMonarch file = {}".format(mon_file), GREEN)
 
     # get Monarch transactions from the Monarch JSON file
@@ -416,7 +423,7 @@ def gnucash_session_main(args):
     gnc_file = args[1]
     if not osp.isfile(gnc_file):
         Gnulog.print_text("File path '{}' does not exist. Exiting...".format(gnc_file), RED)
-        exit(416)
+        exit(425)
     Gnulog.print_text("\nGnucash file = {}".format(gnc_file), GREEN)
 
     mode = args[2].upper()
@@ -424,7 +431,7 @@ def gnucash_session_main(args):
     global strnow
     strnow = dt.now().strftime(DATE_STR_FORMAT)
 
-    gncs = GnucashSession(tx_coll, mode, gnc_file)
+    gncs = GnucashSession(tx_coll, mode, gnc_file, True, BOTH)
     msg = gncs.prepare_session()
 
     Gnulog.print_text("\n >>> PROGRAM ENDED.", MAGENTA)
