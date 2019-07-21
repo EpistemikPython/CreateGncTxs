@@ -10,7 +10,7 @@ __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __python_version__ = 3.6
 __created__ = '2018'
-__updated__ = '2019-07-07'
+__updated__ = '2019-07-21'
 
 import inspect
 import os.path as osp
@@ -23,6 +23,65 @@ strnow = dtnow.strftime(DATE_STR_FORMAT)
 # constant strings
 TEST: str = 'test'
 PROD: str = 'PROD'
+
+GNC: str       = 'Gnucash'
+MON: str       = 'Monarch'
+TXS: str       = "TRANSACTIONS"
+CLIENT_TX:str  = "CLIENT " + TXS
+PLAN_TYPE: str = "Plan Type:"
+OWNER: str     = "Owner"
+AUTO_SYS: str  = "Automatic/Systematic"
+DOLLARS: str   = '$'
+CENTS: str     = '\u00A2'
+UNKNOWN: str   = "UNKNOWN"
+
+REVENUE: str  = "Revenue"
+ASSET: str    = "Asset"
+TRUST: str    = "TRUST"
+MON_SATT: str = "Sattolo"
+MON_MARK: str = "Mark H. " + MON_SATT
+MON_ROBB: str = "Robb"
+MON_LULU: str = "Louise " + MON_ROBB
+GNC_MARK: str = "Mark"
+GNC_LULU: str = "Lulu"
+
+# Plan types
+PLAN_DATA: str = "Plan Data"
+PL_OPEN: str   = "OPEN"
+PL_TFSA: str   = "TFSA"
+PL_RRSP: str   = "RRSP"
+
+# Tx categories
+FUND: str       = "Fund"
+FUND_CODE: str  = FUND + " Code"
+FUND_CMPY: str  = FUND + " Company"
+DATE: str       = "Date"
+TRADE: str      = "Trade"
+TRADE_DATE: str = TRADE + " " + DATE
+TRADE_DAY: str  = TRADE + " Day"
+TRADE_MTH: str  = TRADE + " Month"
+TRADE_YR: str   = TRADE + " Year"
+DESC: str       = "Description"
+SWITCH: str     = "Switch"
+GROSS: str      = "Gross"
+NET: str        = "Net"
+UNITS: str      = "Units"
+PRICE: str      = "Price"
+BOTH: str       = 'Both'
+UNIT_BAL: str   = "Unit Balance"
+ACCT: str       = "Account"  # in Gnucash
+NOTES: str      = "Notes"
+LOAD: str       = "Load"
+FEE: str        = 'Fee'
+FEE_RD: str     = FEE + " Redemption"
+DIST: str       = "Dist"
+SW_IN: str      = SWITCH + "-in"
+SW_OUT: str     = SWITCH + "-out"
+INTRF: str      = "Internal Transfer"
+INTRF_IN: str   = INTRF + "-In"
+INTRF_OUT: str  = INTRF + "-Out"
+REINV: str      = 'Reinvested'
+INTRCL:str      = 'Inter-Class'
 
 COLOR_FLAG = '\x1b['
 BLACK   = COLOR_FLAG + '30m'
@@ -242,67 +301,6 @@ class InvestmentRecord:
 # END class InvestmentRecord
 
 
-GNC: str       = 'Gnucash'
-MON: str       = 'Monarch'
-TXS: str       = "TRANSACTIONS"
-CLIENT_TX:str  = "CLIENT " + TXS
-PLAN_TYPE: str = "Plan Type:"
-OWNER: str     = "Owner"
-AUTO_SYS: str  = "Automatic/Systematic"
-DOLLARS: str   = '$'
-CENTS: str     = '\u00A2'
-UNKNOWN: str   = "UNKNOWN"
-
-REVENUE: str  = "Revenue"
-ASSET: str    = "Asset"
-TRUST: str    = "TRUST"
-MON_SATT: str = "Sattolo"
-MON_MARK: str = "Mark H. " + MON_SATT
-MON_ROBB: str = "Robb"
-MON_LULU: str = "Louise " + MON_ROBB
-GNC_MARK: str = "Mark"
-GNC_LULU: str = "Lulu"
-
-# Plan types
-PLAN_DATA: str = "Plan Data"
-PL_OPEN: str   = "OPEN"
-PL_TFSA: str   = "TFSA"
-PL_RRSP: str   = "RRSP"
-
-# Plan IDs
-JOINT_PLAN_ID: str = '78512'
-
-# Tx categories
-FUND: str       = "Fund"
-FUND_CODE: str  = FUND + " Code"
-FUND_CMPY: str  = FUND + " Company"
-DATE: str       = "Date"
-TRADE: str      = "Trade"
-TRADE_DATE: str = TRADE + " " + DATE
-TRADE_DAY: str  = TRADE + " Day"
-TRADE_MTH: str  = TRADE + " Month"
-TRADE_YR: str   = TRADE + " Year"
-DESC: str       = "Description"
-SWITCH: str     = "Switch"
-GROSS: str      = "Gross"
-NET: str        = "Net"
-UNITS: str      = "Units"
-PRICE: str      = "Price"
-UNIT_BAL: str   = "Unit Balance"
-ACCT: str       = "Account"  # in Gnucash
-NOTES: str      = "Notes"
-LOAD: str       = "Load"
-FEE: str        = 'Fee'
-FEE_RD: str     = FEE + " Redemption"
-DIST: str       = "Dist"
-SW_IN: str      = SWITCH + "-in"
-SW_OUT: str     = SWITCH + "-out"
-INTRF: str      = "Internal Transfer"
-INTRF_IN: str   = INTRF + "-In"
-INTRF_OUT: str  = INTRF + "-Out"
-REINV: str      = 'Reinvested'
-INTRCL:str      = 'Inter-Class'
-
 # Fund companies
 ATL: str = "ATL"
 CIG: str = "CIG"
@@ -402,6 +400,9 @@ FUNDS_LIST = [
     MMF_44424, MMF_4524, MMF_3517, MMF_13417
 ]
 
+# Plan IDs
+JOINT_PLAN_ID: str = '78512'
+
 MONEY_MKT_FUNDS = [MFC_298, MFC_4378, TML_204, TML_703]
 
 TRUST_AST_ACCT = CIG_18140
@@ -427,12 +428,3 @@ FIND_DATE    = 0x0060
 FIND_COMPANY = 0x0070
 FIND_NEXT_TX = 0x0080
 FILL_CURR_TX = 0x0090
-
-# file paths
-GNC_FOLDER = "/home/marksa/dev/git/Python/Gnucash/gncFiles/"
-READER_GNC = GNC_FOLDER + 'reader.gnc'
-RUNNER_GNC = GNC_FOLDER + 'runner.gnc'
-TEST1_GNC  = GNC_FOLDER + 'test1.gnc'
-TEST2_GNC  = GNC_FOLDER + 'test2.gnc'
-TEST3_GNC  = GNC_FOLDER + 'test3.gnc'
-TEST4_GNC  = GNC_FOLDER + 'test4.gnc'
