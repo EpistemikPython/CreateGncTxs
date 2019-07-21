@@ -10,7 +10,7 @@ __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __python_version__ = 3.6
 __created__ = '2019-06-22'
-__updated__ = '2019-07-07'
+__updated__ = '2019-07-21'
 
 import re
 import json
@@ -24,8 +24,9 @@ class ParseMonarchCopyReport:
         self.mon_file = p_monfile
         self.mode     = p_mode
         self.debug    = p_debug
-        self.dbg      = Gnulog(p_debug)
+        self.logger   = Gnulog(p_debug)
         self.inv_rec  = InvestmentRecord()
+        self.logger.print_info('class ParseMonarchCopyReport', MAGENTA)
 
     def set_filename(self, fn):
         self.inv_rec.set_filename(fn)
@@ -34,7 +35,7 @@ class ParseMonarchCopyReport:
         return self.inv_rec
 
     def get_log(self):
-        return self.dbg.get_log()
+        return self.logger.get_log()
 
     def parse_copy_info(self, ts):
         """
@@ -62,7 +63,7 @@ class ParseMonarchCopyReport:
             *add ALL price and tx info to self.Configuration.InvestmentRecord object
         :return nil
         """
-        self.dbg.print_info("\nparse_copy_info()\nRuntime = {}\n".format(ts), MAGENTA)
+        self.logger.print_info("\n\tparse_copy_info(): Runtime = {}\n".format(ts), BLUE)
 
         re_date = re.compile(r"([0-9]{2}-\w{3}-[0-9]{4})")
 
@@ -83,7 +84,7 @@ class ParseMonarchCopyReport:
                     re_match = re.match(re_date, words[0])
                     if re_match:
                         doc_date = re_match.group(1)
-                        self.dbg.print_info("Document date: {}".format(doc_date), YELLOW)
+                        self.logger.print_info("Document date: {}".format(doc_date), YELLOW)
                         mon_state = FIND_OWNER
                         continue
 
@@ -91,14 +92,14 @@ class ParseMonarchCopyReport:
                     if words[0] == PL_OPEN:
                         owner = MON_MARK if words[6] == MON_ROBB else MON_LULU
                         self.inv_rec.set_owner(owner)
-                        self.dbg.print_info("\n\t\u0022Current owner: {}\u0022".format(owner), MAGENTA)
+                        self.logger.print_info("\n\t\u0022Current owner: {}\u0022".format(owner), MAGENTA)
                         mon_state = STATE_SEARCH
                         continue
 
                 if words[0] == FUND.upper():
                     plan_type = words[2]
                     plan_id = words[5]
-                    self.dbg.print_info("\n\t\u0022Current plan: type = {} ; id = {}\u0022".format(plan_type, plan_id), MAGENTA)
+                    self.logger.print_info("\n\t\u0022Current plan: type = {} ; id = {}\u0022".format(plan_type, plan_id), MAGENTA)
                     continue
 
                 if mon_state == STATE_SEARCH:
@@ -109,45 +110,45 @@ class ParseMonarchCopyReport:
                 # PRICES
                 if words[0] in FUND_NAME_CODE:
                     fd_co = words[0]
-                    self.dbg.print_info("Fund company = {}".format(fd_co))
+                    self.logger.print_info("Fund company = {}".format(fd_co))
                     fund = words[-10].replace('-', ' ')
-                    self.dbg.print_info("Fund = {}".format(fund))
+                    self.logger.print_info("Fund = {}".format(fund))
                     bal = words[-8]
-                    self.dbg.print_info("Final balance = {}".format(bal))
+                    self.logger.print_info("Final balance = {}".format(bal))
                     price = words[-7]
-                    self.dbg.print_info("Final price = {}".format(price))
+                    self.logger.print_info("Final price = {}".format(price))
 
                     curr_tx = {DATE: doc_date, DESC: PRICE, FUND_CMPY: fd_co, FUND: fund, UNIT_BAL: bal, PRICE: price}
                     self.inv_rec.add_tx(plan_type, PRICE, curr_tx)
-                    self.dbg.print_info('ADD current Tx to Collection!', GREEN)
+                    self.logger.print_info('ADD current Price Tx to Collection!', CYAN)
                     continue
 
                 # TRADES
                 re_match = re.match(re_date, words[0])
                 if re_match:
                     tx_date = re_match.group(1)
-                    self.dbg.print_info("FOUND a NEW tx! Date: {}".format(tx_date), YELLOW)
+                    self.logger.print_info("FOUND a NEW tx! Date: {}".format(tx_date), YELLOW)
                     curr_tx = {TRADE_DATE: tx_date}
 
                     fund_co = words[-8]
                     fund = fund_co + " " + words[-7]
                     curr_tx[FUND] = fund
-                    self.dbg.print_info("curr_tx[FUND]: {}".format(curr_tx[FUND]))
+                    self.logger.print_info("curr_tx[FUND]: {}".format(curr_tx[FUND]))
                     tx_type = words[1]
                     desc = TX_TYPES[words[2]] if tx_type == INTRCL else TX_TYPES[tx_type]
                     curr_tx[DESC] = COMPANY_NAME[fund_co] + ": " + desc
-                    self.dbg.print_info("curr_tx[DESC]: {}".format(curr_tx[DESC]))
+                    self.logger.print_info("curr_tx[DESC]: {}".format(curr_tx[DESC]))
                     curr_tx[GROSS] = words[-4]
-                    self.dbg.print_info("curr_tx[GROSS]: {}".format(curr_tx[GROSS]))
+                    self.logger.print_info("curr_tx[GROSS]: {}".format(curr_tx[GROSS]))
                     curr_tx[UNITS] = words[-1]
-                    self.dbg.print_info("curr_tx[UNITS]: {}".format(curr_tx[UNITS]))
+                    self.logger.print_info("curr_tx[UNITS]: {}".format(curr_tx[UNITS]))
                     curr_tx[PRICE] = words[-2]
-                    self.dbg.print_info("curr_tx[PRICE]: {}".format(curr_tx[PRICE]))
+                    self.logger.print_info("curr_tx[PRICE]: {}".format(curr_tx[PRICE]))
                     curr_tx[LOAD] = words[-5]
-                    self.dbg.print_info("curr_tx[LOAD]: {}".format(curr_tx[LOAD]))
+                    self.logger.print_info("curr_tx[LOAD]: {}".format(curr_tx[LOAD]))
 
                     self.inv_rec.add_tx(plan_type, TRADE, curr_tx)
-                    self.dbg.print_info('ADD current Tx to Collection!', GREEN)
+                    self.logger.print_info('ADD current Trade Tx to Collection!', GREEN)
 
     def add_balance_to_trade(self):
         """
@@ -157,9 +158,9 @@ class ParseMonarchCopyReport:
                 if found, add the Unit Balance from the Price tx to the Trade tx
         :return: nil
         """
-        self.dbg.print_info('add_balance_to_trade()', BLACK)
+        self.logger.print_info('add_balance_to_trade()', BLUE)
         for pl in self.inv_rec.plans:
-            self.dbg.print_info("plan type = {}".format(repr(pl)))
+            self.logger.print_info("plan type = {}".format(repr(pl)))
             plan = self.inv_rec.plans[pl]
             for prc in plan[PRICE]:
                 indx = 0
@@ -172,61 +173,74 @@ class ParseMonarchCopyReport:
                         dte = dt.strptime(trd[TRADE_DATE], '%d-%b-%Y')
                         if latest_dte is None or dte > latest_dte:
                             latest_dte = dte
-                            self.dbg.print_info("Latest date for {} is {}".format(fnd, latest_dte))
+                            self.logger.print_info("Latest date for {} is {}".format(fnd, latest_dte))
                             latest_indx = indx
                     indx += 1
                 if latest_indx > -1:
                     plan[TRADE][latest_indx][NOTES] = fnd + " Balance = " + prc[UNIT_BAL]
 
-    def save_to_gnucash_file(self, gnc_file):
-        self.dbg.print_info('save_to_gnucash_file()', BLUE)
-        gncs = GnucashSession(self.inv_rec, self.mode, gnc_file, self.debug)
+    def save_to_gnucash_file(self, gnc_file, domain):
+        self.logger.print_info('save_to_gnucash_file()', BLUE)
+        gncs = GnucashSession(self.inv_rec, self.mode, gnc_file, self.debug, domain)
         msg = gncs.prepare_session()
-        self.dbg.print_info('msg = {}'.format(msg), MAGENTA)
+        self.logger.print_info('msg = {}'.format(msg), MAGENTA)
 
 # END class ParseMonarchCopyReport
 
 
-def test_args():
-    found_args = ArgumentParser(description='Process a copied Monarch Report to obtain Gnucash transactions',
+def process_args():
+    arg_parser = ArgumentParser(description='Process a copied Monarch Report to obtain Gnucash transactions',
                                 prog='parseMonarchCopyRep.py')
+    required = arg_parser.add_argument_group('REQUIRED')
     # required arguments
-    found_args.add_argument('-m', '--monarch', required=True, help='REQUIRED: path & filename of the copied Monarch Report file')
-    found_args.add_argument('-t', '--type', required=True, choices=['trades', 'prices', 'both'], 
-                            help='REQUIRED: type of transaction to process: Trades or Prices or Both')
+    required.add_argument('-m', '--monarch', required=True, help='path & filename of the copied Monarch Report file')
+    # required if PROD
+    required_if_prod = arg_parser.add_argument_group('Required IF Prod')
+    required_if_prod.add_argument('-g', '--gnucash', help='path & filename of the Gnucash file')
+    required_if_prod.add_argument('-t', '--type', choices=[TRADE, PRICE, BOTH], 
+                                  help="type of transaction to save: {} or {} or {}".format(TRADE, PRICE, BOTH))
     # optional arguments
-    found_args.add_argument('-g', '--gnucash', help='Required if PROD: path & filename of the Gnucash file')
-    found_args.add_argument('--json', action='store_true', help='Write the parsed Monarch data to a JSON file')
-    found_args.add_argument('--prod', action='store_true', help='Save the parsed trade and/or price transactions to a Gnucash file')
-    found_args.add_argument('--debug', action='store_true', help='GENERATE DEBUG OUTPUT: MANY LINES!')
+    arg_parser.add_argument('--prod',  action='store_true', help='Save the parsed trade and price transactions to a Gnucash file')
+    arg_parser.add_argument('--json',  action='store_true', help='Write the parsed Monarch data to a JSON file')
+    arg_parser.add_argument('--debug', action='store_true', help='GENERATE DEBUG OUTPUT: MANY LINES!')
 
-    return found_args
+    return arg_parser
 
 
-# TODO: specify processing trades or prices or both
 def process_input_parameters(argv):
-    args = test_args().parse_args(argv)
+    args = process_args().parse_args(argv)
 
     if args.debug:
         Gnulog.print_text('Printing ALL Debug output!!', RED)
 
     if not osp.isfile(args.monarch):
         Gnulog.print_text("File path '{}' does not exist! Exiting...".format(args.monarch), RED)
-        exit(208)
+        exit(218)
     Gnulog.print_text("monarch file = {}".format(args.monarch))
 
+    domain = BOTH
     mode = PROD if args.prod else TEST
     if mode == PROD:
-        if args.gnucash is None or not osp.isfile(args.gnucash):
+        if args.gnucash is None:
+            Gnulog.print_text("MUST specify the path and Gnucash filename in PROD mode!", RED)
+            exit(226)
+        if not osp.isfile(args.gnucash):
             Gnulog.print_text("File path '{}' does not exist. Exiting...".format(args.gnucash), RED)
-            exit(215)
+            exit(229)
         Gnulog.print_text("gnucash file = {}".format(args.gnucash))
+        if args.type is not None:
+            domain = args.type
+            Gnulog.print_text("Saving {} transaction types.".format(domain))
+        else:
+            Gnulog.print_text("MUST specify the type of transaction to save ({}) in {} mode!"
+                              .format(str([PRICE, TRADE, BOTH]), PROD), RED)
+            exit(237)
 
-    return args.monarch, args.json, args.debug, mode, args.gnucash
+    return args.monarch, args.json, args.debug, mode, args.gnucash, domain
 
 
 def mon_copy_rep_main(args):
-    mon_file, save_json, debug, mode, gnc_file = process_input_parameters(args)
+    mon_file, save_json, debug, mode, gnc_file, domain = process_input_parameters(args)
 
     now = dt.now().strftime(DATE_STR_FORMAT)
 
@@ -240,7 +254,7 @@ def mon_copy_rep_main(args):
         parser.set_filename(mon_file)
 
         if mode == PROD:
-            parser.save_to_gnucash_file(gnc_file)
+            parser.save_to_gnucash_file(gnc_file, domain)
 
         msg = parser.get_log()
 
@@ -254,7 +268,7 @@ def mon_copy_rep_main(args):
             basename, ext = osp.splitext(fname)
             # add a timestamp to get a unique file name
             out_file = path + '/' + basename + '_' + now + ".json"
-            Gnulog.print_text("\nOUTPUT FILE: \u0022{}\u0022".format(out_file))
+            Gnulog.print_text("\nOUTPUT FILE: \u0022{}\u0022".format(out_file), MAGENTA)
             fp = open(out_file, 'w', encoding='utf-8')
             json.dump(parser.get_record().to_json(), fp, indent=4)
             msg.append("\nparseMonarchTxRep created file:\n{}".format(out_file))
