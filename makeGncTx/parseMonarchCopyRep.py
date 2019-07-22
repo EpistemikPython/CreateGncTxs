@@ -191,16 +191,16 @@ class ParseMonarchCopyReport:
 def process_args():
     arg_parser = ArgumentParser(description='Process a copied Monarch Report to obtain Gnucash transactions',
                                 prog='parseMonarchCopyRep.py')
-    required = arg_parser.add_argument_group('REQUIRED')
     # required arguments
+    required = arg_parser.add_argument_group('REQUIRED')
     required.add_argument('-m', '--monarch', required=True, help='path & filename of the copied Monarch Report file')
     # required if PROD
-    required_if_prod = arg_parser.add_argument_group('Required IF Prod')
-    required_if_prod.add_argument('-g', '--gnucash', help='path & filename of the Gnucash file')
-    required_if_prod.add_argument('-t', '--type', choices=[TRADE, PRICE, BOTH], 
-                                  help="type of transaction to save: {} or {} or {}".format(TRADE, PRICE, BOTH))
+    subparsers = arg_parser.add_subparsers(help='MUST specify -f FILENAME and -t TX_TYPE')
+    gnc_parser = subparsers.add_parser('gnc', help='Save the parsed trade and/or price transactions to a Gnucash file')
+    gnc_parser.add_argument('-f', '--filename', required=True, help='path & filename of the Gnucash file')
+    gnc_parser.add_argument('-t', '--type', required=True, choices=[TRADE, PRICE, BOTH], 
+                            help="type of transaction to save: {} or {} or {}".format(TRADE, PRICE, BOTH))
     # optional arguments
-    arg_parser.add_argument('--prod',  action='store_true', help='Save the parsed trade and price transactions to a Gnucash file')
     arg_parser.add_argument('--json',  action='store_true', help='Write the parsed Monarch data to a JSON file')
     arg_parser.add_argument('--debug', action='store_true', help='GENERATE DEBUG OUTPUT: MANY LINES!')
 
@@ -209,34 +209,35 @@ def process_args():
 
 def process_input_parameters(argv):
     args = process_args().parse_args(argv)
+    print("args = {}".format(args))
 
     if args.debug:
         Gnulog.print_text('Printing ALL Debug output!!', RED)
 
     if not osp.isfile(args.monarch):
         Gnulog.print_text("File path '{}' does not exist! Exiting...".format(args.monarch), RED)
-        exit(218)
-    Gnulog.print_text("monarch file = {}".format(args.monarch))
+        exit(219)
+    Gnulog.print_text("Monarch file = {}".format(args.monarch), CYAN)
 
     domain = BOTH
-    mode = PROD if args.prod else TEST
-    if mode == PROD:
-        if args.gnucash is None:
-            Gnulog.print_text("MUST specify the path and Gnucash filename in PROD mode!", RED)
-            exit(226)
-        if not osp.isfile(args.gnucash):
-            Gnulog.print_text("File path '{}' does not exist. Exiting...".format(args.gnucash), RED)
+    mode = TEST
+    gnc_file = None
+    if 'filename' in args:
+        mode = PROD
+        if not osp.isfile(args.filename):
+            Gnulog.print_text("File path '{}' does not exist. Exiting...".format(args.filename), RED)
             exit(229)
-        Gnulog.print_text("gnucash file = {}".format(args.gnucash))
+        gnc_file = args.filename
+        Gnulog.print_text("Gnucash file = {}".format(gnc_file), CYAN)
         if args.type is not None:
             domain = args.type
-            Gnulog.print_text("Saving {} transaction types.".format(domain))
+            Gnulog.print_text("Saving {} transaction types.".format(domain), YELLOW)
         else:
             Gnulog.print_text("MUST specify the type of transaction to save ({}) in {} mode!"
                               .format(str([PRICE, TRADE, BOTH]), PROD), RED)
-            exit(237)
+            exit(238)
 
-    return args.monarch, args.json, args.debug, mode, args.gnucash, domain
+    return args.monarch, args.json, args.debug, mode, gnc_file, domain
 
 
 def mon_copy_rep_main(args):
