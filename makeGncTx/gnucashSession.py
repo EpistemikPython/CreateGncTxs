@@ -381,7 +381,7 @@ class GnucashSession:
                 msg = "Mode = {}: COMMIT Price DB edits and Save session.".format(self.mode)
                 self.dbg.print_info(msg, GREEN)
 
-                if domain != TRADE:
+                if self.domain != TRADE:
                     self.price_db.commit_edit()
 
                 # only ONE session save for the entire run

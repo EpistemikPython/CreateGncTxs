@@ -223,24 +223,20 @@ def process_input_parameters(argv):
     mode = TEST
     gnc_file = None
     if 'filename' in args:
-        mode = PROD
         if not osp.isfile(args.filename):
             Gnulog.print_text("File path '{}' does not exist. Exiting...".format(args.filename), RED)
-            exit(229)
+            exit(228)
         gnc_file = args.filename
         Gnulog.print_text("Gnucash file = {}".format(gnc_file), CYAN)
-        if args.type is not None:
-            domain = args.type
-            Gnulog.print_text("Saving {} transaction types.".format(domain), YELLOW)
-        else:
-            Gnulog.print_text("MUST specify the type of transaction to save ({}) in {} mode!"
-                              .format(str([PRICE, TRADE, BOTH]), PROD), RED)
-            exit(238)
+        mode = PROD
+        domain = args.type
+        Gnulog.print_text("Saving {} transaction types.".format(domain), YELLOW)
 
     return args.monarch, args.json, args.debug, mode, gnc_file, domain
 
 
 def mon_copy_rep_main(args):
+    Gnulog.print_text("Parameters = \n{}".format(json.dumps(args, indent=4)), GREEN)
     mon_file, save_json, debug, mode, gnc_file, domain = process_input_parameters(args)
 
     now = dt.now().strftime(DATE_STR_FORMAT)
@@ -272,10 +268,10 @@ def mon_copy_rep_main(args):
             Gnulog.print_text("\nOUTPUT FILE: \u0022{}\u0022".format(out_file), MAGENTA)
             fp = open(out_file, 'w', encoding='utf-8')
             json.dump(parser.get_record().to_json(), fp, indent=4)
-            msg.append("\nparseMonarchTxRep created file:\n{}".format(out_file))
+            msg.append("\nmon_copy_rep_main() created JSON file:\n{}".format(out_file))
 
     except Exception as e:
-        msg = "mon_funds_rep_main() EXCEPTION!! '{}'".format(repr(e))
+        msg = "mon_copy_rep_main() EXCEPTION!! '{}'".format(repr(e))
         Gnulog.print_text(msg, RED)
 
     Gnulog.print_text("\n >>> PROGRAM ENDED.", GREEN)
