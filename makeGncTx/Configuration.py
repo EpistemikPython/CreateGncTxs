@@ -12,6 +12,7 @@ __python_version__ = 3.6
 __created__ = '2018'
 __updated__ = '2019-07-27'
 
+import json
 import inspect
 import os.path as osp
 from datetime import datetime as dt
@@ -156,7 +157,29 @@ class Gnulog:
 
 
 class GncUtilities:
-    def account_from_path(self, top_account, account_path, original_path=None):
+    @staticmethod
+    def save_to_json(fname, json_data, t_str=None, p_color=BLACK, p_indent=4):
+        """
+        print json data to a file -- add a time string to get a unique file name each run
+        :param     fname: string with file path and name
+        :param json_data: json compatible struct
+        :param     t_str: string with timestamp to use
+        :param  p_indent: int: indentation level for json dump
+        :return: string with file name
+        """
+        out_file = fname + '_' + t_str + ".json"
+        Gnulog.print_text("\nJSON file: \u0022{}\u0022".format(out_file), p_color)
+        try:
+            fp = open(out_file, 'w', encoding='utf-8')
+            json.dump(json_data, fp, indent=p_indent)
+            fp.close()
+        except Exception as sje:
+            Gnulog.print_text("save_to_json EXCEPTION: {}".format(repr(sje)))
+            raise sje
+        return out_file
+
+    @staticmethod
+    def account_from_path(top_account, account_path, original_path=None):
         """
         get a Gnucash account from the given path
         :param   top_account: String: start
@@ -172,18 +195,19 @@ class GncUtilities:
         if account is None:
             raise Exception("path " + str(original_path) + " could NOT be found")
         if len(account_path) > 0:
-            return self.account_from_path(account, account_path, original_path)
+            return GncUtilities.account_from_path(account, account_path, original_path)
         else:
             return account
 
-    def show_account(self, root, path):
+    @staticmethod
+    def show_account(root, path):
         """
         display an account and its descendants
         :param root: Gnucash root
         :param path: to the account
         :return: nil
         """
-        acct = self.account_from_path(root, path)
+        acct = GncUtilities.account_from_path(root, path)
         acct_name = acct.GetName()
         Gnulog.print_text("account = " + acct_name)
         descendants = acct.get_descendants()
@@ -194,7 +218,7 @@ class GncUtilities:
             # for subAcct in descendants:
             # print_info("{}".format(subAcct.GetName()))
 
-    # END class GncUtilities
+# END class GncUtilities
 
 
 # TODO: TxRecord in standard format for both Monarch and Gnucash

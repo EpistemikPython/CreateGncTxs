@@ -12,7 +12,6 @@ __created__ = '2018'
 __updated__ = '2019-07-27'
 
 import sys
-import json
 from PyQt5.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QHBoxLayout, QGroupBox, QDialog, QFileDialog,
                              QPushButton, QFormLayout, QDialogButtonBox, QLabel, QTextEdit, QCheckBox)
 from functools import partial

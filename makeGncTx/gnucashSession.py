@@ -13,7 +13,6 @@ __created__ = '2019-07-01'
 __updated__ = '2019-07-27'
 
 import copy
-import json
 import re
 from gnucash import Session, Transaction, Split, GncNumeric, GncPrice
 from gnucash.gnucash_core_c import CREC
@@ -37,9 +36,11 @@ class GnucashSession:
         self.root     = p_rt
         self.curr     = p_cur
         self.gnc_rec  = p_grec
-        self.dbg.print_info("class GnucashSession: Runtime = {}\n".format(strnow), MAGENTA)
+        self.gncu     = GncUtilities()
+        self.dbg.print_info("class GnucashSession: Runtime = {}\n".format(dt.now().strftime(DATE_STR_FORMAT)), MAGENTA)
 
-    gncu = GncUtilities()
+    def set_gnc_rec(self, p_gncrec):
+        self.gnc_rec = p_gncrec
 
     def get_trade_info(self, mtx, plan_type, ast_parent, rev_acct):
         """
@@ -373,7 +374,7 @@ class GnucashSession:
 
             owner = self.mon_rec.get_owner()
             self.dbg.print_info("Owner = {}".format(owner), GREEN)
-            self.gnc_rec = InvestmentRecord(owner)
+            self.set_gnc_rec(InvestmentRecord(owner))
 
             self.create_gnucash_info()
 
@@ -428,9 +429,6 @@ def gnucash_session_main(args):
     Gnulog.print_text("\nGnucash file = {}".format(gnc_file), GREEN)
 
     mode = args[2].upper()
-
-    global strnow
-    strnow = dt.now().strftime(DATE_STR_FORMAT)
 
     gncs = GnucashSession(tx_coll, mode, gnc_file, True, BOTH)
     msg = gncs.prepare_session()

@@ -13,7 +13,6 @@ __created__ = '2019-06-22'
 __updated__ = '2019-07-27'
 
 import re
-import json
 from argparse import ArgumentParser
 from Configuration import *
 from gnucashSession import GnucashSession
@@ -256,18 +255,14 @@ def mon_copy_rep_main(args):
         msg = parser.get_log()
 
         if save_json:
-            # PRINT RECORD AS JSON FILE
             src_dir = 'copyTxt'
             # pluck path and basename from mon_file to use for the saved json file
             ospath, fname = osp.split(mon_file)
             # save to the output folder
             path = ospath.replace(src_dir, 'jsonFromTxt')
             basename, ext = osp.splitext(fname)
-            # add a timestamp to get a unique file name
-            out_file = path + '/' + basename + '_' + now + ".json"
-            Gnulog.print_text("\nOUTPUT FILE: \u0022{}\u0022".format(out_file), MAGENTA)
-            fp = open(out_file, 'w', encoding='utf-8')
-            json.dump(parser.get_record().to_json(), fp, indent=4)
+            out_file = GncUtilities.save_to_json(path + '/' + basename, parser.get_record().to_json(), 
+                                                 t_str=now, p_color=MAGENTA)
             msg.append("\nmon_copy_rep_main() created JSON file:\n{}".format(out_file))
 
     except Exception as e:
