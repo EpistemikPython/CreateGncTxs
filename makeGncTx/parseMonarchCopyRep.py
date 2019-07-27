@@ -176,6 +176,7 @@ class ParseMonarchCopyReport:
                             latest_indx = indx
                     indx += 1
                 if latest_indx > -1:
+                    plan[TRADE][latest_indx][UNIT_BAL] = prc[UNIT_BAL]
                     plan[TRADE][latest_indx][NOTES] = fnd + " Balance = " + prc[UNIT_BAL]
 
     def save_to_gnucash_file(self, gnc_file, domain):
@@ -258,9 +259,9 @@ def mon_copy_rep_main(args):
             src_dir = 'copyTxt'
             # pluck path and basename from mon_file to use for the saved json file
             ospath, fname = osp.split(mon_file)
-            # save to the output folder
             path = ospath.replace(src_dir, 'jsonFromTxt')
             basename, ext = osp.splitext(fname)
+
             out_file = GncUtilities.save_to_json(path + '/' + basename, parser.get_record().to_json(), 
                                                  t_str=now, p_color=MAGENTA)
             msg.append("\nmon_copy_rep_main() created JSON file:\n{}".format(out_file))
