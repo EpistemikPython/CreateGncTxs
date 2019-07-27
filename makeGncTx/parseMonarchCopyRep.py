@@ -10,7 +10,7 @@ __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __python_version__ = 3.6
 __created__ = '2019-06-22'
-__updated__ = '2019-07-21'
+__updated__ = '2019-07-27'
 
 import re
 import json
@@ -183,7 +183,7 @@ class ParseMonarchCopyReport:
         self.logger.print_info('save_to_gnucash_file()', BLUE)
         gncs = GnucashSession(self.inv_rec, self.mode, gnc_file, self.debug, domain)
         msg = gncs.prepare_session()
-        self.logger.print_info('msg = {}'.format(msg), MAGENTA)
+        self.logger.get_log().append(msg)
 
 # END class ParseMonarchCopyReport
 

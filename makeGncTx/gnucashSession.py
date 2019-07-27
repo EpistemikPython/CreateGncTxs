@@ -10,7 +10,7 @@ __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __python_version__ = 3.6
 __created__ = '2019-07-01'
-__updated__ = '2019-07-21'
+__updated__ = '2019-07-27'
 
 import copy
 import json
@@ -378,8 +378,7 @@ class GnucashSession:
             self.create_gnucash_info()
 
             if self.mode == PROD:
-                msg = "Mode = {}: COMMIT Price DB edits and Save session.".format(self.mode)
-                self.dbg.print_info(msg, GREEN)
+                self.dbg.print_info("Mode = {}: COMMIT Price DB edits and Save session.".format(self.mode), GREEN)
 
                 if self.domain != TRADE:
                     self.price_db.commit_edit()
@@ -389,6 +388,8 @@ class GnucashSession:
 
             session.end()
             session.destroy()
+
+            msg = self.dbg.get_log()
 
         except Exception as se:
             msg = "prepare_session() EXCEPTION!! '{}'".format(repr(se))
