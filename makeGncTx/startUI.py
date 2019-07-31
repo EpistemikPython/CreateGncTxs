@@ -63,7 +63,7 @@ NEED_GNUCASH_FILE = [GNC_TXS, FD_COPY, QTRS] # and maybe MON_COPY depending on m
 class MonarchGnucashServices(QDialog):
     def __init__(self):
         super().__init__()
-        self.dbg = Gnulog(True)
+        self.logger = Gnulog(True)
         self.title = 'Monarch & Gnucash Services'
         self.left = 480
         self.top = 160
@@ -72,7 +72,7 @@ class MonarchGnucashServices(QDialog):
         self.pdf_file = None
         self.mon_file = None
         self.gnc_file = None
-        self.dbg.print_info("startUI:MonarchGnucashServices()\nRuntime = {}\n".format(strnow), MAGENTA)
+        self.logger.print_info("startUI:MonarchGnucashServices()\nRuntime = {}\n".format(strnow), MAGENTA)
         self.init_ui()
 
     def init_ui(self):
@@ -168,22 +168,22 @@ class MonarchGnucashServices(QDialog):
         base_filter  = "{} (*.{});;All Files (*)"
 
         if label == PDF:
-            self.dbg.print_info(PDF)
+            self.logger.print_info(PDF)
             caption = base_caption.format(PDF)
             ffilter = base_filter.format(PDF, PDF_SFX)
         elif label == MON:
-            self.dbg.print_info(MON)
+            self.logger.print_info(MON)
             caption = base_caption.format(MON)
             suffix = JSON if self.script in NEED_MONARCH_JSON else MON_SFX
             ffilter = base_filter.format(MON, suffix)
         else: # GNC
-            self.dbg.print_info(GNC)
+            self.logger.print_info(GNC)
             caption = base_caption.format(GNC)
             ffilter = base_filter.format(GNC, GNC_SFX)
 
         file_name, _ = QFileDialog.getOpenFileName(self, caption, "", ffilter, options=options)
         if file_name:
-            self.dbg.print_info("\nFile selected: {}".format(file_name), BLUE)
+            self.logger.print_info("\nFile selected: {}".format(file_name), BLUE)
             if label == PDF:
                 self.pdf_file = file_name
                 self.pdf_file_display = file_name.split('/')[-1]
@@ -210,7 +210,7 @@ class MonarchGnucashServices(QDialog):
     def script_change(self):
         """need for various input files depends on which script is selected"""
         new_script = self.cb_script.currentText()
-        self.dbg.print_info("Script changed to: {}.".format(new_script), MAGENTA)
+        self.logger.print_info("Script changed to: {}.".format(new_script), MAGENTA)
 
         if new_script != self.script:
             self.mon_file = None
@@ -244,13 +244,13 @@ class MonarchGnucashServices(QDialog):
 
     def button_click(self):
         """prepare the executable and parameters string"""
-        self.dbg.print_info("Clicked '{}'.".format(self.exe_btn.text()), CYAN)
+        self.logger.print_info("Clicked '{}'.".format(self.exe_btn.text()), CYAN)
 
         mode = self.cb_mode.currentText()
         selected_fxn = self.cb_script.currentText()
 
         main_fxn = MAIN_FXNS[selected_fxn]
-        self.dbg.print_info("Function to run: {}".format(str(main_fxn)), YELLOW)
+        self.logger.print_info("Function to run: {}".format(str(main_fxn)), YELLOW)
 
         # check that necessary files have been selected
         if selected_fxn == PDF:
@@ -284,20 +284,20 @@ class MonarchGnucashServices(QDialog):
                     cl_params.append('-f' + self.gnc_file)
                     cl_params.append('-t' + self.cb_domain.currentText())
 
-        self.dbg.print_info("Parameters = \n{}".format(json.dumps(cl_params, indent=4)), GREEN)
+        self.logger.print_info("Parameters = \n{}".format(json.dumps(cl_params, indent=4)), GREEN)
 
         if selected_fxn != MON_COPY and mode == TEST:
-            self.dbg.print_info('TEST mode', GREEN)
-            reply = {'mode': 'TEST', 'log': self.dbg.get_log()}
+            self.logger.print_info('TEST mode', GREEN)
+            reply = {'mode': 'TEST', 'log': self.logger.get_log()}
         else:
             if callable(main_fxn):
-                self.dbg.print_info('Sending...', MAGENTA)
+                self.logger.print_info('Sending...', MAGENTA)
                 response = main_fxn(cl_params)
-                reply = {'response': response, 'log': self.dbg.get_log()}
+                reply = {'response': response, 'log': self.logger.get_log()}
             else:
                 msg = "Problem with main??!! '{}'".format(main_fxn)
-                self.dbg.print_error(msg)
-                reply = {'log': self.dbg.get_log(), 'msg': msg}
+                self.logger.print_error(msg)
+                reply = {'log': self.logger.get_log(), 'msg': msg}
 
         self.response_box.setText(json.dumps(reply, indent=4))
 
