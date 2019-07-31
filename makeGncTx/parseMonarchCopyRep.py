@@ -183,7 +183,7 @@ class ParseMonarchCopyReport:
         self.logger.print_info('save_to_gnucash_file()', BLUE)
         gncs = GnucashSession(self.inv_rec, self.mode, gnc_file, self.debug, domain)
         msg = gncs.prepare_session()
-        self.logger.get_log().append(msg)
+        self.logger.append(msg)
 
 # END class ParseMonarchCopyReport
 
@@ -209,7 +209,7 @@ def process_args():
 
 def process_input_parameters(argv):
     args = process_args().parse_args(argv)
-    print("args = {}".format(args))
+    Gnulog.print_text("\nargs = {}".format(args), YELLOW)
 
     if args.debug:
         Gnulog.print_text('Printing ALL Debug output!!', RED)
@@ -217,7 +217,7 @@ def process_input_parameters(argv):
     if not osp.isfile(args.monarch):
         Gnulog.print_text("File path '{}' does not exist! Exiting...".format(args.monarch), RED)
         exit(219)
-    Gnulog.print_text("Monarch file = {}".format(args.monarch), CYAN)
+    Gnulog.print_text("\nMonarch file = {}".format(args.monarch), CYAN)
 
     domain = BOTH
     mode = TEST
@@ -227,10 +227,10 @@ def process_input_parameters(argv):
             Gnulog.print_text("File path '{}' does not exist. Exiting...".format(args.filename), RED)
             exit(228)
         gnc_file = args.filename
-        Gnulog.print_text("Gnucash file = {}".format(gnc_file), CYAN)
+        Gnulog.print_text("\nGnucash file = {}".format(gnc_file), CYAN)
         mode = PROD
         domain = args.type
-        Gnulog.print_text("Saving {} transaction types.".format(domain), YELLOW)
+        Gnulog.print_text("Saving '{}' transaction types to Gnucash.".format(domain), YELLOW)
 
     return args.monarch, args.json, args.debug, mode, gnc_file, domain
 
