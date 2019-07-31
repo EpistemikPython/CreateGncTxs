@@ -82,24 +82,27 @@ INTRF: str      = "Internal Transfer"
 INTRF_IN: str   = INTRF + "-In"
 INTRF_OUT: str  = INTRF + "-Out"
 REINV: str      = 'Reinvested'
-INTRCL:str      = 'Inter-Class'
+INTRCL: str     = 'Inter-Class'
 
-COLOR_FLAG = '\x1b['
-BLACK   = COLOR_FLAG + '30m'
-RED     = COLOR_FLAG + '31m'
-GREEN   = COLOR_FLAG + '32m'
-YELLOW  = COLOR_FLAG + '33m'
-BLUE    = COLOR_FLAG + '34m'
-MAGENTA = COLOR_FLAG + '35m'
-CYAN    = COLOR_FLAG + '36m'
-WHITE   = COLOR_FLAG + '37m'
-COLOR_OFF = COLOR_FLAG + '0m'
+COLOR_FLAG:str = '\x1b['
+COLOR_OFF:str = COLOR_FLAG + '0m'
+BLACK:str   = COLOR_FLAG + '30m'
+RED:str     = COLOR_FLAG + '31m'
+GREEN:str   = COLOR_FLAG + '32m'
+YELLOW:str  = COLOR_FLAG + '33m'
+BLUE:str    = COLOR_FLAG + '34m'
+MAGENTA:str = COLOR_FLAG + '35m'
+CYAN:str    = COLOR_FLAG + '36m'
+WHITE:str   = COLOR_FLAG + '37m'
 
 
 class Gnulog:
     def __init__(self, p_debug):
         self.debug = p_debug
         self.log_text = []
+
+    def append(self, obj):
+        self.log_text.append(obj)
 
     def clear_log(self):
         self.log_text = []
@@ -112,31 +115,15 @@ class Gnulog:
         Print information with choices of color, inspection info, newline
         """
         if self.debug:
-            inspect_line = ''
-            if info is None:
-                info = '==============================================================================================================='
-                inspector = False
-            text = str(info)
-            if inspector:
-                calling_frame = inspect.currentframe().f_back
-                calling_file  = inspect.getfile(calling_frame).split('/')[-1]
-                calling_line  = str(inspect.getlineno(calling_frame))
-                inspect_line  = '[' + calling_file + '@' + calling_line + ']: '
-            print(inspect_line + color + text + COLOR_OFF, end=('\n' if newline else ''))
-            self.log_text.append(text)
+            text = self.print_text(info, color, inspector, newline)
+            self.append(text)
 
     def print_error(self, text, newline=True):
         """
         Print Error information in RED with inspection info
         """
         if self.debug:
-            calling_frame = inspect.currentframe().f_back
-            parent_frame = calling_frame.f_back
-            calling_file = inspect.getfile(calling_frame).split('/')[-1]
-            calling_line = str(inspect.getlineno(calling_frame))
-            parent_line = str(inspect.getlineno(parent_frame))
-            inspect_line = '[' + calling_file + '@' + calling_line + '/' + parent_line + ']: '
-            print(inspect_line + RED + str(text) + COLOR_OFF, end=('\n' if newline else ''))
+            self.print_text(text, RED, True, newline)
 
     @staticmethod
     def print_text(info, color='', inspector=True, newline=True):
@@ -154,6 +141,7 @@ class Gnulog:
             calling_line  = str(inspect.getlineno(calling_frame))
             inspect_line  = '[' + calling_file + '@' + calling_line + ']: '
         print(inspect_line + color + text + COLOR_OFF, end=('\n' if newline else ''))
+        return text
 
 
 class GncUtilities:
@@ -161,9 +149,10 @@ class GncUtilities:
     def save_to_json(fname, json_data, t_str=None, p_color=BLACK, p_indent=4):
         """
         print json data to a file -- add a time string to get a unique file name each run
-        :param     fname: string with file path and name
+        :param     fname: str: file path and name
         :param json_data: json compatible struct
-        :param     t_str: string with timestamp to use
+        :param     t_str: str: timestamp to use
+        :param   p_color: str: color constant for Gnulog printing
         :param  p_indent: int: indentation level for json dump
         :return: string with file name
         """
@@ -243,15 +232,15 @@ class InvestmentRecord:
     """
     All transactions from an investment report
     """
-    def __init__(self, own=None, dte=None, fn=None):
+    def __init__(self, p_owner=None, p_date=None, p_fname=None):
         Gnulog.print_text("InvestmentRecord(): Runtime = {}\n".format(strnow), MAGENTA)
-        if own is not None:
-            assert (own == MON_MARK or own == MON_LULU), 'Must be a valid Owner!'
-        self.owner: str = own
-        self.date = dte if dte is not None and isinstance(dte, dt) else dtnow
-        if fn is not None:
-            assert (isinstance(fn, str) and osp.isfile(fn)), 'Must be a valid filename!'
-        self.filename: str = fn
+        if p_owner is not None:
+            assert (p_owner == MON_MARK or p_owner == MON_LULU), 'MUST be a valid Owner!'
+        self.owner: str = p_owner
+        self.date = p_date if p_date is not None and isinstance(p_date, dt) else dtnow
+        if p_fname is not None:
+            assert (isinstance(p_fname, str) and osp.isfile(p_fname)), 'MUST be a valid filename!'
+        self.filename: str = p_fname
         self.plans = {
             # lists of TxRecords
             PL_OPEN : { TRADE:[], PRICE:[] } ,
