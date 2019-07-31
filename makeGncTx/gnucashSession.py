@@ -10,7 +10,7 @@ __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __python_version__ = 3.6
 __created__ = '2019-07-01'
-__updated__ = '2019-07-27'
+__updated__ = '2019-07-30'
 
 import copy
 import re
@@ -23,7 +23,7 @@ from Configuration import *
 # noinspection PyUnresolvedReferences,PyUnboundLocalVariable
 class GnucashSession:
     """
-    create and manage a Gnucash session
+    Create and manage a Gnucash session
     """
     def __init__(self, p_mrec, p_mode, p_gncfile, p_debug, p_domain, 
                  p_pdb=None, p_book=None, p_root=None, p_curr=None, p_grec=None):
@@ -45,17 +45,17 @@ class GnucashSession:
 
     def get_trade_info(self, mtx, plan_type, ast_parent, rev_acct):
         """
-        parse the Monarch trade transactions from a copy&paste JSON file
+        Parse the Monarch trade transactions from a copy&paste JSON file
         Asset accounts: use the proper path to find the parent then search for the Fund Code in the descendants
         Revenue accounts: pick the proper account based on owner and plan type
         gross_curr: re match to Gross then concatenate the two match groups
         date: convert the date then get day, month and year to form a Gnc date
         Units: re match and concatenate the two groups on either side of decimal point
         Description: use DESC and Fund Company
-        :param        mtx:   dict: Monarch copied trade tx information
-        :param  plan_type: String:
-        :param ast_parent: String:
-        :param   rev_acct: Gnucash account
+        :param        mtx: dict: Monarch copied trade tx information
+        :param  plan_type:  str: Plans from a Configuration.InvestmentRecord
+        :param ast_parent: Gnucash account: Asset parent
+        :param   rev_acct: Gnucash account: Revenue
         :return: dict, dict
         """
         self.logger.print_info('get_trade_info()', BLUE)
@@ -97,7 +97,7 @@ class GnucashSession:
             self.logger.print_info("gross_curr = {}".format(gross_curr))
             init_tx[GROSS] = gross_curr
         else:
-            raise Exception("PROBLEM[93]!! re_gross DID NOT match with value '{}'!".format(mtx[GROSS]))
+            raise Exception("PROBLEM[100]!! re_gross DID NOT match with value '{}'!".format(mtx[GROSS]))
 
         # get the units of the tx
         re_match = re.match(re_units, mtx[UNITS])
@@ -143,6 +143,13 @@ class GnucashSession:
         return init_tx, pair_tx
 
     def get_accounts(self, ast_parent, asset_acct_name, rev_acct):
+        """
+        Find the proper Asset and Revenue accounts
+        :param      ast_parent: Gnucash account: Asset account parent
+        :param asset_acct_name:             str: Asset account name
+        :param        rev_acct: Gnucash account: Revenue account
+        :return: Gnucash account, Gnucash account
+        """
         self.logger.print_info('get_accounts()', BLUE)
         asset_parent = ast_parent
         # special locations for Trust Revenue and Asset accounts
@@ -154,7 +161,7 @@ class GnucashSession:
         # get the asset account
         asset_acct = asset_parent.lookup_by_name(asset_acct_name)
         if asset_acct is None:
-            raise Exception("[149] Could NOT find acct '{}' under parent '{}'"
+            raise Exception("[164] Could NOT find acct '{}' under parent '{}'"
                             .format(asset_acct_name, asset_parent.GetName()))
 
         self.logger.print_info("asset_acct = {}".format(asset_acct.GetName()), color=CYAN)
@@ -162,7 +169,7 @@ class GnucashSession:
 
     def create_gnc_price_txs(self, mtx, ast_parent, rev_acct):
         """
-        create and load Gnucash prices to the Gnucash PriceDB
+        Create and load Gnucash prices to the Gnucash PriceDB
         :param        mtx: InvestmentRecord transaction
         :param ast_parent: Gnucash account
         :param   rev_acct: Gnucash account
@@ -204,7 +211,7 @@ class GnucashSession:
 
     def create_gnc_trade_txs(self, tx1, tx2):
         """
-        create and load Gnucash transactions to the Gnucash file
+        Create and load Gnucash transactions to the Gnucash file
         :param tx1: first transaction
         :param tx2: matching transaction if a switch
         :return: nil
@@ -278,17 +285,11 @@ class GnucashSession:
 
     def process_monarch_trade(self, mtx, plan_type, ast_parent, rev_acct):
         """
-        Asset accounts: use the proper path to find the parent then search for the Fund Code in the descendants
-        Revenue accounts: pick the proper account based on owner and plan type
-        gross_curr: re match to Gross then concatenate the two match groups
-        date: re match to get day, month and year then re-assemble to form Gnc date
-        Units: re match and concatenate the two groups on either side of decimal point
-        Description: use DESC and Fund Code
-        Notes: use 'Unit Balance' and UNIT_BAL
-        :param mtx:
-        :param plan_type:
-        :param rev_acct:
-        :param ast_parent:
+        Obtain each Monarch trade as a transaction item, or pair of transactions where required, and forward to Gnucash processing
+        :param        mtx: dict: Monarch transaction information
+        :param  plan_type: str: types of plans in a Configuration.InvestmentRecord
+        :param ast_parent: Gnucash account
+        :param   rev_acct: Gnucash account
         :return: nil
         """
         self.logger.print_info('process_monarch_trade()', BLUE)
@@ -307,7 +308,7 @@ class GnucashSession:
 
     def create_gnucash_info(self):
         """
-        process each transaction in the Monarch input file to get the required Gnucash information
+        Process each transaction from the Monarch input file to get the required Gnucash information
         :return: nil
         """
         self.logger.print_info("create_gnucash_info()", BLUE)
@@ -338,7 +339,7 @@ class GnucashSession:
 
     def get_asset_revenue_info(self, plan_type):
         """
-        get the required asset and/or revenue information from each plan
+        Get the required asset and/or revenue information from each plan
         :param plan_type: string: see Configuration
         :return: Gnucash account, Gnucash account: revenue account and asset parent account
         """
@@ -351,7 +352,7 @@ class GnucashSession:
         pl_owner = self.gnucash_record.get_owner()
         if plan_type != PL_OPEN:
             if pl_owner == '':
-                raise Exception("PROBLEM[341]!! Trying to process plan type '{}' but NO Owner value found"
+                raise Exception("PROBLEM[355]!! Trying to process plan type '{}' but NO Owner value found"
                                 " in Tx Collection!!".format(plan_type))
             rev_path.append(ACCT_PATHS[pl_owner])
             ast_parent_path.append(ACCT_PATHS[pl_owner])
@@ -367,7 +368,7 @@ class GnucashSession:
 
     def prepare_session(self):
         """
-        Take the information from an InvestmentRecord and produce Gnucash transactions to write to a Gnucash file
+        initialization needed for a Gnucash session
         :return: message
         """
         self.logger.print_info("prepare_session()", BLUE)
@@ -408,18 +409,22 @@ class GnucashSession:
 
 
 def gnucash_session_main(args):
+    """
+    Take the information from an InvestmentRecord JSON file and produce Gnucash transactions to write to a Gnucash file
+    :return: message
+    """
     py_name = __file__.split('/')[-1]
     usage = "usage: py36 {} <Monarch copy-text JSON file> <mode: prod|test> [Gnucash file]".format(py_name)
     if len(args) < 3:
         Gnulog.print_text("NOT ENOUGH parameters!", RED)
         Gnulog.print_text(usage, MAGENTA)
-        exit(409)
+        exit(421)
 
     mon_file = args[0]
     if not osp.isfile(mon_file):
         Gnulog.print_text("File path '{}' does not exist. Exiting...".format(mon_file), RED)
         Gnulog.print_text(usage, GREEN)
-        exit(415)
+        exit(427)
     Gnulog.print_text("\nMonarch file = {}".format(mon_file), GREEN)
 
     # get Monarch transactions from the Monarch JSON file
@@ -429,7 +434,7 @@ def gnucash_session_main(args):
     gnc_file = args[1]
     if not osp.isfile(gnc_file):
         Gnulog.print_text("File path '{}' does not exist. Exiting...".format(gnc_file), RED)
-        exit(425)
+        exit(437)
     Gnulog.print_text("\nGnucash file = {}".format(gnc_file), GREEN)
 
     mode = args[2].upper()
