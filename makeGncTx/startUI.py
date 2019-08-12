@@ -9,7 +9,7 @@ __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __python_version__ = 3.6
 __created__ = '2018'
-__updated__ = '2019-07-27'
+__updated__ = '2019-08-05'
 
 import sys
 from PyQt5.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QHBoxLayout, QGroupBox, QDialog, QFileDialog,
@@ -161,41 +161,34 @@ class MonarchGnucashServices(QDialog):
         self.gnc_label     = QLabel(GNC+FILE_LABEL)
         self.gnc_file_btn.clicked.connect(partial(self.open_file_name_dialog, GNC))
 
-    def open_file_name_dialog(self, label):
+    def open_file_name_dialog(self, label:str):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        base_caption = "Get {} Files"
+        caption = "Get {} Files".format(label)
         base_filter  = "{} (*.{});;All Files (*)"
 
+        self.logger.print_info(label)
         if label == PDF:
-            self.logger.print_info(PDF)
-            caption = base_caption.format(PDF)
             ffilter = base_filter.format(PDF, PDF_SFX)
         elif label == MON:
-            self.logger.print_info(MON)
-            caption = base_caption.format(MON)
-            suffix = JSON if self.script in NEED_MONARCH_JSON else MON_SFX
-            ffilter = base_filter.format(MON, suffix)
+            fsuffix = JSON if self.script in NEED_MONARCH_JSON else MON_SFX
+            ffilter = base_filter.format(MON, fsuffix)
         else: # GNC
-            self.logger.print_info(GNC)
-            caption = base_caption.format(GNC)
             ffilter = base_filter.format(GNC, GNC_SFX)
 
         file_name, _ = QFileDialog.getOpenFileName(self, caption, "", ffilter, options=options)
         if file_name:
             self.logger.print_info("\nFile selected: {}".format(file_name), BLUE)
+            display_name = file_name.split('/')[-1]
             if label == PDF:
                 self.pdf_file = file_name
-                self.pdf_file_display = file_name.split('/')[-1]
-                self.pdf_file_btn.setText(self.pdf_file_display)
+                self.pdf_file_btn.setText(display_name)
             elif label == MON:
                 self.mon_file = file_name
-                self.mon_file_display = file_name.split('/')[-1]
-                self.mon_file_btn.setText(self.mon_file_display)
+                self.mon_file_btn.setText(display_name)
             else: # GNC
                 self.gnc_file = file_name
-                self.gnc_file_display = file_name.split('/')[-1]
-                self.gnc_file_btn.setText(self.gnc_file_display)
+                self.gnc_file_btn.setText(display_name)
 
     def mode_change(self):
         """Monarch_Copy: need Gnucash file and domain only if in PROD mode"""
