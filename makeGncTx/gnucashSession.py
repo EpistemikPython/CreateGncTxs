@@ -10,7 +10,7 @@ __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __python_version__ = 3.6
 __created__ = '2019-07-01'
-__updated__ = '2019-07-30'
+__updated__ = '2019-08-12'
 
 import copy
 import re
@@ -25,8 +25,9 @@ class GnucashSession:
     """
     Create and manage a Gnucash session
     """
-    def __init__(self, p_mrec, p_mode, p_gncfile, p_debug, p_domain, 
-                 p_pdb=None, p_book=None, p_root=None, p_curr=None, p_grec=None):
+    def __init__(self, p_mrec:InvestmentRecord, p_mode:str, p_gncfile:str, p_debug:bool, p_domain:str, 
+                 p_pdb:gnucash_core.GncPriceDB=None, p_book:gnucash_core.Book=None, p_root:gnucash_core.Account=None,
+                 p_curr:gnucash_core.GncCommodity=None, p_grec:InvestmentRecord=None):
         self.logger = Gnulog(p_debug)
         self.monarch_record = p_mrec
         self.gnucash_record = p_grec
@@ -40,10 +41,10 @@ class GnucashSession:
         self.gnc_util  = GncUtilities()
         self.logger.print_info("class GnucashSession: Runtime = {}\n".format(dt.now().strftime(DATE_STR_FORMAT)), MAGENTA)
 
-    def set_gnc_rec(self, p_gncrec):
+    def set_gnc_rec(self, p_gncrec:InvestmentRecord):
         self.gnucash_record = p_gncrec
 
-    def get_trade_info(self, mtx, plan_type, ast_parent, rev_acct):
+    def get_trade_info(self, mtx:dict, plan_type:str, ast_parent:gnucash_core.Account, rev_acct:gnucash_core.Account):
         """
         Parse the Monarch trade transactions from a copy&paste JSON file
         Asset accounts: use the proper path to find the parent then search for the Fund Code in the descendants
@@ -52,10 +53,10 @@ class GnucashSession:
         date: convert the date then get day, month and year to form a Gnc date
         Units: re match and concatenate the two groups on either side of decimal point
         Description: use DESC and Fund Company
-        :param        mtx: dict: Monarch copied trade tx information
-        :param  plan_type:  str: Plans from a Configuration.InvestmentRecord
-        :param ast_parent: Gnucash account: Asset parent
-        :param   rev_acct: Gnucash account: Revenue
+        :param        mtx: Monarch copied trade tx information
+        :param  plan_type: plan names from Configuration.InvestmentRecord
+        :param ast_parent: Asset parent account
+        :param   rev_acct: Revenue account 
         :return: dict, dict
         """
         self.logger.print_info('get_trade_info()', BLUE)
@@ -142,12 +143,12 @@ class GnucashSession:
 
         return init_tx, pair_tx
 
-    def get_accounts(self, ast_parent, asset_acct_name, rev_acct):
+    def get_accounts(self, ast_parent:gnucash_core.Account, asset_acct_name:str, rev_acct:gnucash_core.Account):
         """
         Find the proper Asset and Revenue accounts
-        :param      ast_parent: Gnucash account: Asset account parent
-        :param asset_acct_name:             str: Asset account name
-        :param        rev_acct: Gnucash account: Revenue account
+        :param      ast_parent: Asset account parent
+        :param asset_acct_name: Asset account name
+        :param        rev_acct: Revenue account
         :return: Gnucash account, Gnucash account
         """
         self.logger.print_info('get_accounts()', BLUE)
@@ -167,12 +168,12 @@ class GnucashSession:
         self.logger.print_info("asset_acct = {}".format(asset_acct.GetName()), color=CYAN)
         return asset_acct, rev_acct
 
-    def create_gnc_price_txs(self, mtx, ast_parent, rev_acct):
+    def create_gnc_price_txs(self, mtx:dict, ast_parent:gnucash_core.Account, rev_acct:gnucash_core.Account):
         """
         Create and load Gnucash prices to the Gnucash PriceDB
         :param        mtx: InvestmentRecord transaction
-        :param ast_parent: Gnucash account
-        :param   rev_acct: Gnucash account
+        :param ast_parent: Asset parent account
+        :param   rev_acct: Revenue account
         :return: nil
         """
         self.logger.print_info('create_gnc_price_txs()', BLUE)
@@ -209,7 +210,7 @@ class GnucashSession:
         else:
             self.logger.print_info("Mode = {}: ABANDON Prices!\n".format(self.mode), RED)
 
-    def create_gnc_trade_txs(self, tx1, tx2):
+    def create_gnc_trade_txs(self, tx1:dict, tx2:dict):
         """
         Create and load Gnucash transactions to the Gnucash file
         :param tx1: first transaction
@@ -283,13 +284,13 @@ class GnucashSession:
             self.logger.print_info("Mode = {}: Roll back transaction changes!\n".format(self.mode), RED)
             gtx.RollbackEdit()
 
-    def process_monarch_trade(self, mtx, plan_type, ast_parent, rev_acct):
+    def process_monarch_trade(self, mtx:dict, plan_type:str, ast_parent:gnucash_core.Account, rev_acct:gnucash_core.Account):
         """
         Obtain each Monarch trade as a transaction item, or pair of transactions where required, and forward to Gnucash processing
-        :param        mtx: dict: Monarch transaction information
-        :param  plan_type: str: types of plans in a Configuration.InvestmentRecord
-        :param ast_parent: Gnucash account
-        :param   rev_acct: Gnucash account
+        :param        mtx: Monarch transaction information
+        :param  plan_type: plan names from Configuration.InvestmentRecord
+        :param ast_parent: Asset parent account
+        :param   rev_acct: Revenue account
         :return: nil
         """
         self.logger.print_info('process_monarch_trade()', BLUE)
@@ -337,10 +338,10 @@ class GnucashSession:
                 for mon_tx in plans[plan_type][PRICE]:
                     self.create_gnc_price_txs(mon_tx, asset_parent, rev_acct)
 
-    def get_asset_revenue_info(self, plan_type):
+    def get_asset_revenue_info(self, plan_type:str):
         """
         Get the required asset and/or revenue information from each plan
-        :param plan_type: string: see Configuration
+        :param plan_type: plan names from Configuration.InvestmentRecord
         :return: Gnucash account, Gnucash account: revenue account and asset parent account
         """
         self.logger.print_info("get_asset_revenue_info()", BLUE)
@@ -408,7 +409,7 @@ class GnucashSession:
         return msg
 
 
-def gnucash_session_main(args):
+def gnucash_session_main(args:list):
     """
     Take the information from an InvestmentRecord JSON file and produce Gnucash transactions to write to a Gnucash file
     :return: message
