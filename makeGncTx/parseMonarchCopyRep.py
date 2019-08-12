@@ -10,7 +10,7 @@ __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __python_version__ = 3.6
 __created__ = '2019-06-22'
-__updated__ = '2019-07-27'
+__updated__ = '2019-08-05'
 
 import re
 from argparse import ArgumentParser
@@ -19,7 +19,7 @@ from gnucashSession import GnucashSession
 
 
 class ParseMonarchCopyReport:
-    def __init__(self, p_monfile, p_mode, p_debug=False):
+    def __init__(self, p_monfile:str, p_mode:str, p_debug:bool=False):
         self.mon_file = p_monfile
         self.mode     = p_mode
         self.debug    = p_debug
@@ -27,7 +27,7 @@ class ParseMonarchCopyReport:
         self.inv_rec  = InvestmentRecord()
         self.logger.print_info('class ParseMonarchCopyReport', MAGENTA)
 
-    def set_filename(self, fn):
+    def set_filename(self, fn:str):
         self.inv_rec.set_filename(fn)
 
     def get_record(self):
@@ -36,33 +36,27 @@ class ParseMonarchCopyReport:
     def get_log(self):
         return self.logger.get_log()
 
-    def parse_copy_info(self, ts):
+    def parse_copy_info(self):
         """
-        :param ts: string: timestamp for file name
         parsing for NEW format txt files, ~ May 31, 2019, just COPIED from Monarch web page,
         as new Monarch pdf's are no longer practical to use -- extracted text just too inconsistent...
+        *add ALL price and trade info to self.Configuration.InvestmentRecord object
         *loop lines:
             1: skip if line too short
-            2: owner
-            3: date
+            2: date
+            3: owner
             4: FUND ->
-                 if FUND: plan type = wd[1] ; plan ID = wd[5]
-                 if Fund company: fund and balance and price
-            5: Pass if Joint Plan and owner is Lulu
-            6: TXS ->
+                 plan type = words[2] ; plan ID = words[5]
+            5: Pass if plan ID is Joint and owner is Lulu
+            6: Prices ->
+                 match fund name:
+                    record fund company, fund, balance, price, doc date
+            7: Trades ->
                  match date:
-                    date  = re_date.groups
-                    type  = wd[1] -> TYPES[type]
-                    units = wd[-1]
-                    price = wd[-2]
-                    gross = wd[-4]
-                    load  = wd[-5]
-                    code  = wd[-7]
-                    company = wd[-8]
-            *add ALL price and tx info to self.Configuration.InvestmentRecord object
+                    record fund, desc, gross, units, price, load, trade date
         :return nil
         """
-        self.logger.print_info("\n\tparse_copy_info(): Runtime = {}\n".format(ts), BLUE)
+        self.logger.print_info("\n\tParseMonarchCopyReport.parse_copy_info()\n", BLUE)
 
         re_date = re.compile(r"([0-9]{2}-\w{3}-[0-9]{4})")
 
@@ -179,7 +173,7 @@ class ParseMonarchCopyReport:
                     plan[TRADE][latest_indx][UNIT_BAL] = prc[UNIT_BAL]
                     plan[TRADE][latest_indx][NOTES] = fnd + " Balance = " + prc[UNIT_BAL]
 
-    def save_to_gnucash_file(self, gnc_file, domain):
+    def save_to_gnucash_file(self, gnc_file:str, domain:str):
         self.logger.print_info('save_to_gnucash_file()', BLUE)
         gncs = GnucashSession(self.inv_rec, self.mode, gnc_file, self.debug, domain)
         msg = gncs.prepare_session()
@@ -195,7 +189,7 @@ def process_args():
     required = arg_parser.add_argument_group('REQUIRED')
     required.add_argument('-m', '--monarch', required=True, help='path & filename of the copied Monarch Report file')
     # required if PROD
-    subparsers = arg_parser.add_subparsers(help='MUST specify -f FILENAME and -t TX_TYPE')
+    subparsers = arg_parser.add_subparsers(help='with gnc option: MUST specify -f FILENAME and -t TX_TYPE')
     gnc_parser = subparsers.add_parser('gnc', help='Save the parsed trade and/or price transactions to a Gnucash file')
     gnc_parser.add_argument('-f', '--filename', required=True, help='path & filename of the Gnucash file')
     gnc_parser.add_argument('-t', '--type', required=True, choices=[TRADE, PRICE, BOTH], 
@@ -207,7 +201,7 @@ def process_args():
     return arg_parser
 
 
-def process_input_parameters(argv):
+def process_input_parameters(argv:list):
     args = process_args().parse_args(argv)
     Gnulog.print_text("\nargs = {}".format(args), YELLOW)
 
@@ -216,7 +210,7 @@ def process_input_parameters(argv):
 
     if not osp.isfile(args.monarch):
         Gnulog.print_text("File path '{}' does not exist! Exiting...".format(args.monarch), RED)
-        exit(219)
+        exit(213)
     Gnulog.print_text("\nMonarch file = {}".format(args.monarch), CYAN)
 
     domain = BOTH
@@ -225,7 +219,7 @@ def process_input_parameters(argv):
     if 'filename' in args:
         if not osp.isfile(args.filename):
             Gnulog.print_text("File path '{}' does not exist. Exiting...".format(args.filename), RED)
-            exit(228)
+            exit(222)
         gnc_file = args.filename
         Gnulog.print_text("\nGnucash file = {}".format(gnc_file), CYAN)
         mode = PROD
@@ -235,17 +229,18 @@ def process_input_parameters(argv):
     return args.monarch, args.json, args.debug, mode, gnc_file, domain
 
 
-def mon_copy_rep_main(args):
+def mon_copy_rep_main(args:list):
     Gnulog.print_text("Parameters = \n{}".format(json.dumps(args, indent=4)), GREEN)
     mon_file, save_json, debug, mode, gnc_file, domain = process_input_parameters(args)
 
     now = dt.now().strftime(DATE_STR_FORMAT)
+    Gnulog.print_text("mon_copy_rep_main(): Runtime = {}".format(now), BLUE)
 
     try:
         # parse an external Monarch COPIED report file
         parser = ParseMonarchCopyReport(mon_file, mode, debug)
 
-        parser.parse_copy_info(now)
+        parser.parse_copy_info()
         parser.add_balance_to_trade()
 
         parser.set_filename(mon_file)
