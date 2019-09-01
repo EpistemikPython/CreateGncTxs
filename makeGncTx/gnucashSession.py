@@ -14,20 +14,18 @@ __updated__ = '2019-08-12'
 
 import copy
 import re
-from gnucash import Session, Transaction, Split, GncNumeric, GncPrice
+from gnucash import Session, Book, Account, Transaction, Split, GncNumeric, GncPrice, GncPriceDB, GncCommodity
 from gnucash.gnucash_core_c import CREC
 from Configuration import *
 
 
-# TODO: standard functions to create Gnucash session, prices, transactions
-# noinspection PyUnresolvedReferences,PyUnboundLocalVariable
 class GnucashSession:
     """
     Create and manage a Gnucash session
     """
-    def __init__(self, p_mrec:InvestmentRecord, p_mode:str, p_gncfile:str, p_debug:bool, p_domain:str, 
-                 p_pdb:gnucash_core.GncPriceDB=None, p_book:gnucash_core.Book=None, p_root:gnucash_core.Account=None,
-                 p_curr:gnucash_core.GncCommodity=None, p_grec:InvestmentRecord=None):
+    def __init__(self, p_mrec:InvestmentRecord, p_mode:str, p_gncfile:str, p_debug:bool, p_domain:str,
+                 p_pdb:GncPriceDB=None, p_book:Book=None, p_root:Account=None,
+                 p_curr:GncCommodity=None, p_grec:InvestmentRecord=None):
         self.logger = Gnulog(p_debug)
         self.monarch_record = p_mrec
         self.gnucash_record = p_grec
@@ -44,7 +42,7 @@ class GnucashSession:
     def set_gnc_rec(self, p_gncrec:InvestmentRecord):
         self.gnucash_record = p_gncrec
 
-    def get_trade_info(self, mtx:dict, plan_type:str, ast_parent:gnucash_core.Account, rev_acct:gnucash_core.Account):
+    def get_trade_info(self, mtx:dict, plan_type:str, ast_parent:Account, rev_acct:Account):
         """
         Parse the Monarch trade transactions from a copy&paste JSON file
         Asset accounts: use the proper path to find the parent then search for the Fund Code in the descendants
@@ -56,7 +54,7 @@ class GnucashSession:
         :param        mtx: Monarch copied trade tx information
         :param  plan_type: plan names from Configuration.InvestmentRecord
         :param ast_parent: Asset parent account
-        :param   rev_acct: Revenue account 
+        :param   rev_acct: Revenue account
         :return: dict, dict
         """
         self.logger.print_info('get_trade_info()', BLUE)
@@ -70,7 +68,7 @@ class GnucashSession:
         # self.dbg.print_info("trade date = {}".format(mtx[TRADE_DATE]))
         conv_date = dt.strptime(mtx[TRADE_DATE], "%d-%b-%Y")
         # self.dbg.print_info("converted date = {}".format(conv_date))
-        init_tx = { FUND:fund_name, TRADE_DATE:mtx[TRADE_DATE], 
+        init_tx = { FUND:fund_name, TRADE_DATE:mtx[TRADE_DATE],
                     TRADE_DAY:conv_date.day, TRADE_MTH:conv_date.month, TRADE_YR:conv_date.year }
         self.logger.print_info("trade day-month-year = '{}-{}-{}'"
                                .format(init_tx[TRADE_DAY], init_tx[TRADE_MTH], init_tx[TRADE_YR]))
@@ -143,7 +141,7 @@ class GnucashSession:
 
         return init_tx, pair_tx
 
-    def get_accounts(self, ast_parent:gnucash_core.Account, asset_acct_name:str, rev_acct:gnucash_core.Account):
+    def get_accounts(self, ast_parent:Account, asset_acct_name:str, rev_acct:Account):
         """
         Find the proper Asset and Revenue accounts
         :param      ast_parent: Asset account parent
@@ -168,7 +166,7 @@ class GnucashSession:
         self.logger.print_info("asset_acct = {}".format(asset_acct.GetName()), color=CYAN)
         return asset_acct, rev_acct
 
-    def create_gnc_price_txs(self, mtx:dict, ast_parent:gnucash_core.Account, rev_acct:gnucash_core.Account):
+    def create_gnc_price_txs(self, mtx:dict, ast_parent:Account, rev_acct:Account):
         """
         Create and load Gnucash prices to the Gnucash PriceDB
         :param        mtx: InvestmentRecord transaction
@@ -284,7 +282,7 @@ class GnucashSession:
             self.logger.print_info("Mode = {}: Roll back transaction changes!\n".format(self.mode), RED)
             gtx.RollbackEdit()
 
-    def process_monarch_trade(self, mtx:dict, plan_type:str, ast_parent:gnucash_core.Account, rev_acct:gnucash_core.Account):
+    def process_monarch_trade(self, mtx:dict, plan_type:str, ast_parent:Account, rev_acct:Account):
         """
         Obtain each Monarch trade as a transaction item, or pair of transactions where required, and forward to Gnucash processing
         :param        mtx: Monarch transaction information
@@ -367,6 +365,7 @@ class GnucashSession:
 
         return asset_parent, rev_acct
 
+    # noinspection PyUnboundLocalVariable
     def prepare_session(self):
         """
         initialization needed for a Gnucash session
