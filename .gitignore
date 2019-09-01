@@ -8,6 +8,8 @@
 **/venv/
 **/Downloads
 **/test*/
+**/json*/
+**/copy*/
 **/bin/
 *.py[cdo]
 *.out
