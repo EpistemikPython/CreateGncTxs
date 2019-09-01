@@ -14,8 +14,9 @@ __updated__ = '2019-08-05'
 
 import re
 from argparse import ArgumentParser
-from Configuration import *
+from investment import *
 from gnucashSession import GnucashSession
+from Configuration import Gnulog, GncUtilities
 
 
 class ParseMonarchCopyReport:
@@ -46,8 +47,8 @@ class ParseMonarchCopyReport:
             2: date
             3: owner
             4: FUND ->
-                 plan type = words[2] ; plan ID = words[5]
-            5: Pass if plan ID is Joint and owner is Lulu
+                 find planID in words; type is PLAN_IDS[word][PLAN_TYPE]
+            5: Pass if planID is Joint and owner is Lulu
             6: Prices ->
                  match fund name:
                     record fund company, fund, balance, price, doc date
@@ -56,7 +57,7 @@ class ParseMonarchCopyReport:
                     record fund, desc, gross, units, price, load, trade date
         :return nil
         """
-        self.logger.print_info("\n\tParseMonarchCopyReport.parse_copy_info()\n", BLUE)
+        self.logger.print_info("ParseMonarchCopyReport.parse_copy_info()", BLUE)
 
         re_date = re.compile(r"([0-9]{2}-\w{3}-[0-9]{4})")
 
@@ -67,7 +68,7 @@ class ParseMonarchCopyReport:
             ct = 0
             for line in fp:
                 ct += 1
-                # self.dbg.print_info("Line {}".format(ct))
+                # self.logger.print_info("Line {}".format(ct))
 
                 words = line.split()
                 if len(words) <= 1:
@@ -77,23 +78,25 @@ class ParseMonarchCopyReport:
                     re_match = re.match(re_date, words[0])
                     if re_match:
                         doc_date = re_match.group(1)
-                        self.logger.print_info("Document date: {}".format(doc_date), YELLOW)
+                        self.logger.print_info("Document date: {}".format(doc_date), BROWN)
                         mon_state = FIND_OWNER
                         continue
 
                 if mon_state == FIND_OWNER:
-                    if words[0] == PL_OPEN:
-                        owner = MON_MARK if words[6] == MON_ROBB else MON_LULU
+                    if words[0] == OPEN:
+                        owner = MON_MARK if MON_ROBB in words else MON_LULU
                         self.inv_rec.set_owner(owner)
                         self.logger.print_info("\n\t\u0022Current owner: {}\u0022".format(owner), MAGENTA)
                         mon_state = STATE_SEARCH
                         continue
 
                 if words[0] == FUND.upper():
-                    plan_type = words[2]
-                    plan_id = words[5]
-                    self.logger.print_info("\n\t\u0022Current plan: type = {} ; id = {}\u0022".format(plan_type, plan_id), MAGENTA)
-                    continue
+                    for word in words:
+                        if word in PLAN_IDS:
+                            plan_type = PLAN_IDS[word][PLAN_TYPE]
+                            plan_id = word
+                            self.logger.print_info("\n\t\u0022Current plan: type = {} ; id = {}\u0022".format(plan_type, plan_id), MAGENTA)
+                            continue
 
                 if mon_state == STATE_SEARCH:
                     # have to ensure that the joint transactions are only recorded ONCE
@@ -120,7 +123,7 @@ class ParseMonarchCopyReport:
                 re_match = re.match(re_date, words[0])
                 if re_match:
                     tx_date = re_match.group(1)
-                    self.logger.print_info("FOUND a NEW tx! Date: {}".format(tx_date), YELLOW)
+                    self.logger.print_info("FOUND a NEW tx! Date: {}".format(tx_date), BROWN)
                     curr_tx = {TRADE_DATE: tx_date}
 
                     fund_co = words[-8]
@@ -192,7 +195,7 @@ def process_args():
     subparsers = arg_parser.add_subparsers(help='with gnc option: MUST specify -f FILENAME and -t TX_TYPE')
     gnc_parser = subparsers.add_parser('gnc', help='Save the parsed trade and/or price transactions to a Gnucash file')
     gnc_parser.add_argument('-f', '--filename', required=True, help='path & filename of the Gnucash file')
-    gnc_parser.add_argument('-t', '--type', required=True, choices=[TRADE, PRICE, BOTH], 
+    gnc_parser.add_argument('-t', '--type', required=True, choices=[TRADE, PRICE, BOTH],
                             help="type of transaction to save: {} or {} or {}".format(TRADE, PRICE, BOTH))
     # optional arguments
     arg_parser.add_argument('--json',  action='store_true', help='Write the parsed Monarch data to a JSON file')
@@ -203,14 +206,14 @@ def process_args():
 
 def process_input_parameters(argv:list):
     args = process_args().parse_args(argv)
-    Gnulog.print_text("\nargs = {}".format(args), YELLOW)
+    Gnulog.print_text("\nargs = {}".format(args), BROWN)
 
     if args.debug:
         Gnulog.print_text('Printing ALL Debug output!!', RED)
 
     if not osp.isfile(args.monarch):
         Gnulog.print_text("File path '{}' does not exist! Exiting...".format(args.monarch), RED)
-        exit(213)
+        exit(216)
     Gnulog.print_text("\nMonarch file = {}".format(args.monarch), CYAN)
 
     domain = BOTH
@@ -219,7 +222,7 @@ def process_input_parameters(argv:list):
     if 'filename' in args:
         if not osp.isfile(args.filename):
             Gnulog.print_text("File path '{}' does not exist. Exiting...".format(args.filename), RED)
-            exit(222)
+            exit(225)
         gnc_file = args.filename
         Gnulog.print_text("\nGnucash file = {}".format(gnc_file), CYAN)
         mode = PROD
@@ -233,8 +236,8 @@ def mon_copy_rep_main(args:list):
     Gnulog.print_text("Parameters = \n{}".format(json.dumps(args, indent=4)), GREEN)
     mon_file, save_json, debug, mode, gnc_file, domain = process_input_parameters(args)
 
-    now = dt.now().strftime(DATE_STR_FORMAT)
-    Gnulog.print_text("mon_copy_rep_main(): Runtime = {}".format(now), BLUE)
+    mcr_now = dt.now().strftime(DATE_STR_FORMAT)
+    Gnulog.print_text("mon_copy_rep_main(): Runtime = {}".format(mcr_now), BLUE)
 
     try:
         # parse an external Monarch COPIED report file
@@ -254,11 +257,11 @@ def mon_copy_rep_main(args:list):
             src_dir = 'copyTxt'
             # pluck path and basename from mon_file to use for the saved json file
             ospath, fname = osp.split(mon_file)
-            path = ospath.replace(src_dir, 'jsonFromTxt')
+            json_path = ospath.replace(src_dir, 'jsonFromTxt')
             basename, ext = osp.splitext(fname)
 
-            out_file = GncUtilities.save_to_json(path + '/' + basename, parser.get_record().to_json(), 
-                                                 t_str=now, p_color=MAGENTA)
+            out_file = GncUtilities.save_to_json(json_path + '/' + basename, parser.get_record().to_json(),
+                                                 t_str=mcr_now, p_color=MAGENTA)
             msg.append("\nmon_copy_rep_main() created JSON file:\n{}".format(out_file))
 
     except Exception as e:
