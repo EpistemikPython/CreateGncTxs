@@ -15,8 +15,6 @@ __updated__ = '2019-08-05'
 import re
 from argparse import ArgumentParser
 from investment import *
-from gnucashSession import GnucashSession
-from Configuration import Gnulog, GncUtilities
 
 
 class ParseMonarchCopyReport:
@@ -24,7 +22,7 @@ class ParseMonarchCopyReport:
         self.mon_file = p_monfile
         self.mode     = p_mode
         self.debug    = p_debug
-        self.logger   = Gnulog(p_debug)
+        self.logger   = SattoLog(p_debug)
         self.inv_rec  = InvestmentRecord()
         self.logger.print_info('class ParseMonarchCopyReport', MAGENTA)
 
@@ -206,38 +204,38 @@ def process_args():
 
 def process_input_parameters(argv:list):
     args = process_args().parse_args(argv)
-    Gnulog.print_text("\nargs = {}".format(args), BROWN)
+    SattoLog.print_text("\nargs = {}".format(args), BROWN)
 
     if args.debug:
-        Gnulog.print_text('Printing ALL Debug output!!', RED)
+        SattoLog.print_text('Printing ALL Debug output!!', RED)
 
     if not osp.isfile(args.monarch):
-        Gnulog.print_text("File path '{}' does not exist! Exiting...".format(args.monarch), RED)
+        SattoLog.print_text("File path '{}' does not exist! Exiting...".format(args.monarch), RED)
         exit(216)
-    Gnulog.print_text("\nMonarch file = {}".format(args.monarch), CYAN)
+    SattoLog.print_text("\nMonarch file = {}".format(args.monarch), CYAN)
 
     domain = BOTH
     mode = TEST
     gnc_file = None
     if 'filename' in args:
         if not osp.isfile(args.filename):
-            Gnulog.print_text("File path '{}' does not exist. Exiting...".format(args.filename), RED)
+            SattoLog.print_text("File path '{}' does not exist. Exiting...".format(args.filename), RED)
             exit(225)
         gnc_file = args.filename
-        Gnulog.print_text("\nGnucash file = {}".format(gnc_file), CYAN)
+        SattoLog.print_text("\nGnucash file = {}".format(gnc_file), CYAN)
         mode = PROD
         domain = args.type
-        Gnulog.print_text("Saving '{}' transaction types to Gnucash.".format(domain), YELLOW)
+        SattoLog.print_text("Saving '{}' transaction types to Gnucash.".format(domain), YELLOW)
 
     return args.monarch, args.json, args.debug, mode, gnc_file, domain
 
 
 def mon_copy_rep_main(args:list):
-    Gnulog.print_text("Parameters = \n{}".format(json.dumps(args, indent=4)), GREEN)
+    SattoLog.print_text("Parameters = \n{}".format(json.dumps(args, indent=4)), GREEN)
     mon_file, save_json, debug, mode, gnc_file, domain = process_input_parameters(args)
 
     mcr_now = dt.now().strftime(DATE_STR_FORMAT)
-    Gnulog.print_text("mon_copy_rep_main(): Runtime = {}".format(mcr_now), BLUE)
+    SattoLog.print_text("mon_copy_rep_main(): Runtime = {}".format(mcr_now), BLUE)
 
     try:
         # parse an external Monarch COPIED report file
@@ -260,15 +258,15 @@ def mon_copy_rep_main(args:list):
             json_path = ospath.replace(src_dir, 'jsonFromTxt')
             basename, ext = osp.splitext(fname)
 
-            out_file = GncUtilities.save_to_json(json_path + '/' + basename, parser.get_record().to_json(),
-                                                 t_str=mcr_now, p_color=MAGENTA)
+            out_file = CommonUtilities.save_to_json(json_path + '/' + basename, mcr_now,
+                                                    parser.get_record().to_json(), p_color=MAGENTA)
             msg.append("\nmon_copy_rep_main() created JSON file:\n{}".format(out_file))
 
     except Exception as e:
         msg = "mon_copy_rep_main() EXCEPTION!! '{}'".format(repr(e))
-        Gnulog.print_text(msg, RED)
+        SattoLog.print_text(msg, RED)
 
-    Gnulog.print_text("\n >>> PROGRAM ENDED.", GREEN)
+    SattoLog.print_text("\n >>> PROGRAM ENDED.", GREEN)
     return msg
 
 
