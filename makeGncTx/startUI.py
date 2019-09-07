@@ -9,7 +9,7 @@ __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __python_version__ = 3.6
 __created__ = '2018'
-__updated__ = '2019-08-05'
+__updated__ = '2019-09-07'
 
 import sys
 from PyQt5.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QHBoxLayout, QGroupBox, QDialog, QFileDialog,
@@ -26,8 +26,8 @@ from parsePdf import parse_pdf_main
 
 
 # constant strings
-QTRS:str       = MON + ' Quarterly Report'
-PDF:str        = MON + ' PDF Report'
+QTRS:str       = MON + ' Qtrly Report'
+PDF:str        = MON + ' PDF'
 TX:str         = MON + ' Txs Report'
 GNC_TXS        = 'Create Gnc Txs'
 COPY:str       = 'Copy'
@@ -65,9 +65,9 @@ class MonarchGnucashServices(QDialog):
         super().__init__()
         self.logger = Gnulog(True)
         self.title = 'Monarch & Gnucash Services'
-        self.left = 480
+        self.left = 640
         self.top = 160
-        self.width = 800
+        self.width = 600
         self.height = 800
         self.pdf_file = None
         self.mon_file = None
@@ -86,14 +86,14 @@ class MonarchGnucashServices(QDialog):
         self.response_box.acceptRichText()
         self.response_box.setText('Hello there!')
 
-        self.button_box = QDialogButtonBox(QDialogButtonBox.Close)
-        self.button_box.accepted.connect(self.accept)
-        self.button_box.rejected.connect(self.reject)
+        button_box = QDialogButtonBox(QDialogButtonBox.Close)
+        button_box.accepted.connect(self.accept)
+        button_box.rejected.connect(self.reject)
 
         qvb_layout = QVBoxLayout()
         qvb_layout.addWidget(self.gb_main)
         qvb_layout.addWidget(self.response_box)
-        qvb_layout.addWidget(self.button_box)
+        qvb_layout.addWidget(button_box)
 
         self.setLayout(qvb_layout)
         self.show()
@@ -101,47 +101,47 @@ class MonarchGnucashServices(QDialog):
     # noinspection PyUnresolvedReferences
     def create_group_box(self):
         self.gb_main = QGroupBox("Parameters:")
-        self.layout = QFormLayout()
+        layout = QFormLayout()
 
         self.cb_script = QComboBox()
         self.cb_script.addItems(x for x in MAIN_FXNS)
         self.cb_script.currentIndexChanged.connect(partial(self.script_change))
-        self.layout.addRow(QLabel("Script:"), self.cb_script)
+        layout.addRow(QLabel("Script:"), self.cb_script)
         self.script = self.cb_script.currentText()
 
         self.add_pdf_file_btn()
-        self.layout.addRow(self.pdf_label, self.pdf_file_btn)
+        layout.addRow(self.pdf_label, self.pdf_file_btn)
 
         self.add_mon_file_btn()
-        self.layout.addRow(self.mon_label, self.mon_file_btn)
+        layout.addRow(self.mon_label, self.mon_file_btn)
 
         self.add_gnc_file_btn()
-        self.layout.addRow(self.gnc_label, self.gnc_file_btn)
+        layout.addRow(self.gnc_label, self.gnc_file_btn)
 
         self.cb_mode = QComboBox()
         self.cb_mode.addItems([TEST, PROD])
         self.cb_mode.currentIndexChanged.connect(partial(self.mode_change))
-        self.layout.addRow(QLabel("Mode:"), self.cb_mode)
+        layout.addRow(QLabel("Mode:"), self.cb_mode)
 
         self.cb_domain = QComboBox()
         self.cb_domain.addItems([NO_NEED, BOTH, TRADE, PRICE])
         # self.cb_domain.currentIndexChanged.connect(partial(self.domain_change))
-        self.layout.addRow(QLabel("Domain:"), self.cb_domain)
+        layout.addRow(QLabel("Domain:"), self.cb_domain)
 
-        self.horiz_box = QGroupBox("Check:")
-        self.horiz_layout = QHBoxLayout()
+        horiz_box = QGroupBox("Check:")
+        horiz_layout = QHBoxLayout()
         self.ch_json = QCheckBox("Save Monarch info to JSON file?")
         self.ch_debug = QCheckBox("Print DEBUG info?")
-        self.horiz_layout.addWidget(self.ch_json)
-        self.horiz_layout.addWidget(self.ch_debug)
-        self.horiz_box.setLayout(self.horiz_layout)
-        self.layout.addRow(QLabel("Parameters:"), self.horiz_box)
+        horiz_layout.addWidget(self.ch_json)
+        horiz_layout.addWidget(self.ch_debug)
+        horiz_box.setLayout(horiz_layout)
+        layout.addRow(QLabel("Options"), horiz_box)
 
         self.exe_btn = QPushButton('Go!')
         self.exe_btn.clicked.connect(partial(self.button_click))
-        self.layout.addRow(QLabel("Execute:"), self.exe_btn)
+        layout.addRow(QLabel("Execute:"), self.exe_btn)
 
-        self.gb_main.setLayout(self.layout)
+        self.gb_main.setLayout(layout)
 
     def add_pdf_file_btn(self):
         self.pdf_btn_title = 'Get ' + PDF + ' file'
