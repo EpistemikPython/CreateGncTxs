@@ -9,7 +9,7 @@ __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __python_version__ = 3.6
 __created__ = '2018'
-__updated__ = '2019-08-31'
+__updated__ = '2019-09-08'
 
 from sys import path
 path.append("/home/marksa/dev/git/Python/Utilities/")
@@ -41,73 +41,73 @@ CONT  = 'Contingent'
 NEC   = 'Necessary'
 DEDNS = 'Emp_Dedns'
 TEST  = 'test'
-PROD  = 'prod'
+SEND  = 'send'
 
-GNC: str       = 'Gnucash'
-MON: str       = 'Monarch'
-TXS: str       = "TRANSACTIONS"
-CLIENT_TX:str  = "CLIENT " + TXS
-PLAN_TYPE: str = "Plan Type:"
-PLAN_DATA: str = "Plan Data"
-OPEN: str      = "OPEN"
-TFSA: str      = "TFSA"
-RRSP: str      = "RRSP"
-OWNER: str     = "Owner"
-JOINT:str      = "Joint"
-TRUST: str     = "TRUST"
-AUTO_SYS: str  = "Automatic/Systematic"
-DOLLARS: str   = '$'
-CENTS: str     = '\u00A2'
-UNKNOWN: str   = "UNKNOWN"
+GNC:str       = 'Gnucash'
+MON:str       = 'Monarch'
+TXS:str       = "TRANSACTIONS"
+CLIENT_TX:str = "CLIENT " + TXS
+PLAN_TYPE:str = "Plan Type:"
+PLAN_DATA:str = "Plan Data"
+OPEN:str      = "OPEN"
+TFSA:str      = "TFSA"
+RRSP:str      = "RRSP"
+OWNER:str     = "Owner"
+JOINT:str     = "Joint"
+TRUST:str     = "TRUST"
+AUTO_SYS:str  = "Automatic/Systematic"
+DOLLARS:str   = '$'
+CENTS:str     = '\u00A2'
+UNKNOWN:str   = "UNKNOWN"
 
-REVENUE: str  = "Revenue"
-ASSET: str    = "Asset"
-MON_SATT: str = "Sattolo"
-MON_MARK: str = "Mark H. " + MON_SATT
-MON_ROBB: str = "Robb"
-MON_LULU: str = "Louise " + MON_ROBB
-GNC_MARK: str = "Mark"
-GNC_LULU: str = "Lulu"
+REVENUE:str  = "Revenue"
+ASSET:str    = "Asset"
+MON_SATT:str = "Sattolo"
+MON_MARK:str = "Mark H. " + MON_SATT
+MON_ROBB:str = "Robb"
+MON_LULU:str = "Louise " + MON_ROBB
+GNC_MARK:str = "Mark"
+GNC_LULU:str = "Lulu"
 
 # Tx categories
-FUND: str       = "Fund"
-FUND_CODE: str  = FUND + " Code"
-FUND_CMPY: str  = FUND + " Company"
-DATE: str       = "Date"
-TRADE: str      = "Trade"
-TRADE_DATE: str = TRADE + " " + DATE
-TRADE_DAY: str  = TRADE + " Day"
-TRADE_MTH: str  = TRADE + " Month"
-TRADE_YR: str   = TRADE + " Year"
-DESC: str       = "Description"
-SWITCH: str     = "Switch"
-GROSS: str      = "Gross"
-NET: str        = "Net"
-UNITS: str      = "Units"
-PRICE: str      = "Price"
-BOTH: str       = "Both"
-UNIT_BAL: str   = "Unit Balance"
-ACCT: str       = "Account"  # in Gnucash
-NOTES: str      = "Notes"
-LOAD: str       = "Load"
-FEE: str        = "Fee"
-FEE_RD: str     = FEE + " Redemption"
-DIST: str       = "Dist"
-SW_IN: str      = SWITCH + "-in"
-SW_OUT: str     = SWITCH + "-out"
-INTRF: str      = "Internal Transfer"
-INTRF_IN: str   = INTRF + "-In"
-INTRF_OUT: str  = INTRF + "-Out"
-REINV: str      = "Reinvested"
-INTRCL: str     = "Inter-Class"
+FUND:str       = "Fund"
+FUND_CODE:str  = FUND + " Code"
+FUND_CMPY:str  = FUND + " Company"
+DATE:str       = "Date"
+TRADE:str      = "Trade"
+TRADE_DATE:str = TRADE + " " + DATE
+TRADE_DAY:str  = TRADE + " Day"
+TRADE_MTH:str  = TRADE + " Month"
+TRADE_YR:str   = TRADE + " Year"
+DESC:str       = "Description"
+SWITCH:str     = "Switch"
+GROSS:str      = "Gross"
+NET:str        = "Net"
+UNITS:str      = "Units"
+PRICE:str      = "Price"
+BOTH:str       = "Both"
+UNIT_BAL:str   = "Unit Balance"
+ACCT:str       = "Account"  # in Gnucash
+NOTES:str      = "Notes"
+LOAD:str       = "Load"
+FEE:str        = "Fee"
+FEE_RD:str     = FEE + " Redemption"
+DIST:str       = "Dist"
+SW_IN:str      = SWITCH + "-in"
+SW_OUT:str     = SWITCH + "-out"
+INTRF:str      = "Internal Transfer"
+INTRF_IN:str   = INTRF + "-In"
+INTRF_OUT:str  = INTRF + "-Out"
+REINV:str      = "Reinvested"
+INTRCL:str     = "Inter-Class"
 
 # Fund companies
-ATL: str = "ATL"
-CIG: str = "CIG"
-DYN: str = "DYN"
-MFC: str = "MFC"
-MMF: str = "MMF"
-TML: str = "TML"
+ATL:str = "ATL"
+CIG:str = "CIG"
+DYN:str = "DYN"
+MFC:str = "MFC"
+MMF:str = "MMF"
+TML:str = "TML"
 
 TX_TYPES = {
     FEE      : FEE_RD ,
@@ -260,20 +260,20 @@ class TxRecord:
 # END class TxRecord
 
 
-# TODO: data date and run date
+# TODO: data date and run date?
 class InvestmentRecord:
     """
     All transactions from an investment report
     """
-    def __init__(self, p_owner=None, p_date=None, p_fname=None):
-        SattoLog.print_text("\n\tInvestmentRecord(): Runtime = {}".format(strnow), MAGENTA)
+    def __init__(self, p_owner=None, p_date=None, p_fname=None, logger:SattoLog=None):
+        if logger: logger.print_info("\n\tInvestmentRecord(): Runtime = {}".format(strnow))
         if p_owner is not None:
             assert (p_owner == MON_MARK or p_owner == MON_LULU), 'MUST be a valid Owner!'
-        self.owner: str = p_owner
+        self.owner:str = p_owner
         self.date = p_date if p_date is not None and isinstance(p_date, dt) else dtnow
         if p_fname is not None:
             assert (isinstance(p_fname, str) and osp.isfile(p_fname)), 'MUST be a valid filename!'
-        self.filename: str = p_fname
+        self.filename:str = p_fname
         self.plans = {
             # lists of TxRecords
             OPEN : {TRADE:[], PRICE:[]} ,
@@ -291,7 +291,7 @@ class InvestmentRecord:
         if isinstance(dte, dt):
             self.date = dte
         else:
-            SattoLog.print_text("dte is type: {}".format(type(dte)), RED)
+            SattoLog.print_warning("dte is type: {}".format(type(dte)))
 
     def get_plans(self):
         return self.plans
