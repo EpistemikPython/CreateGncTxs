@@ -10,7 +10,7 @@ __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __python_version__ = 3.6
 __created__ = '2019-06-22'
-__updated__ = '2019-08-05'
+__updated__ = '2019-09-08'
 
 import re
 from argparse import ArgumentParser
@@ -22,9 +22,10 @@ class ParseMonarchCopyReport:
         self.mon_file = p_monfile
         self.mode     = p_mode
         self.debug    = p_debug
-        self.logger   = SattoLog(p_debug)
+        self.logger   = SattoLog(my_color=MAGENTA, do_logging=p_debug)
         self.inv_rec  = InvestmentRecord()
-        self.logger.print_info('class ParseMonarchCopyReport', MAGENTA)
+
+        self.logger.print_info('class ParseMonarchCopyReport')
 
     def set_filename(self, fn:str):
         self.inv_rec.set_filename(fn)
@@ -223,7 +224,7 @@ def process_input_parameters(argv:list):
             exit(225)
         gnc_file = args.filename
         SattoLog.print_text("\nGnucash file = {}".format(gnc_file), CYAN)
-        mode = PROD
+        mode = SEND
         domain = args.type
         SattoLog.print_text("Saving '{}' transaction types to Gnucash.".format(domain), YELLOW)
 
@@ -246,7 +247,7 @@ def mon_copy_rep_main(args:list):
 
         parser.set_filename(mon_file)
 
-        if mode == PROD:
+        if mode == SEND:
             parser.save_to_gnucash_file(gnc_file, domain)
 
         msg = parser.get_log()
@@ -258,8 +259,7 @@ def mon_copy_rep_main(args:list):
             json_path = ospath.replace(src_dir, 'jsonFromTxt')
             basename, ext = osp.splitext(fname)
 
-            out_file = CommonUtilities.save_to_json(json_path + '/' + basename, mcr_now,
-                                                    parser.get_record().to_json(), p_color=MAGENTA)
+            out_file = save_to_json(json_path + '/' + basename, mcr_now, parser.get_record().to_json(), p_color=MAGENTA)
             msg.append("\nmon_copy_rep_main() created JSON file:\n{}".format(out_file))
 
     except Exception as e:
