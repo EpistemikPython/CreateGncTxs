@@ -1,8 +1,9 @@
 ###############################################################################################################################
 # coding=utf-8
 #
-# parseMonarchCopyRep.py -- parse a file with COPIED Monarch Report text, assembling and saving the information
-#                           as transaction and price parameters in json format, then saving to a specified Gnucash file
+# parseMonarchCopyRep.py -- parse a file with COPIED Monarch Report text, assembling and saving
+#                           the information as transaction and price parameters in an InvestmentRecord,
+#                           then saving to a specified Gnucash file
 #
 # Copyright (c) 2019 Mark Sattolo <epistemik@gmail.com>
 #
@@ -10,7 +11,7 @@ __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __python_version__ = 3.6
 __created__ = '2019-06-22'
-__updated__ = '2019-09-08'
+__updated__ = '2019-09-28'
 
 from sys import path
 path.append("/home/marksa/dev/git/Python/Gnucash/updateBudgetQtrly")
@@ -25,16 +26,21 @@ class ParseMonarchCopyReport:
         self.mon_file = p_monfile
         self.mode     = p_mode
         self.debug    = p_debug
-        self.logger   = SattoLog(my_color=MAGENTA, do_logging=p_debug)
-        self.inv_rec  = InvestmentRecord()
+        self.monarch_record  = InvestmentRecord()
+        self.gnc_session = None
 
-        self.logger.print_info('class ParseMonarchCopyReport')
+        self.logger   = SattoLog(my_color=MAGENTA, do_logging=p_debug)
+        self.__log('class ParseMonarchCopyReport')
+
+    def __log(self, p_msg:str, p_color:str=''):
+        if self.logger:
+            self.logger.print_info(p_msg, p_color)
 
     def set_filename(self, fn:str):
-        self.inv_rec.set_filename(fn)
+        self.monarch_record.set_filename(fn)
 
     def get_record(self):
-        return self.inv_rec
+        return self.monarch_record
 
     def get_log(self):
         return self.logger.get_log()
@@ -43,7 +49,7 @@ class ParseMonarchCopyReport:
         """
         parsing for NEW format txt files, ~ May 31, 2019, just COPIED from Monarch web page,
         as new Monarch pdf's are no longer practical to use -- extracted text just too inconsistent...
-        *add ALL price and trade info to self.Configuration.InvestmentRecord object
+        >> add ALL price and trade info to an InvestmentRecord instance
         *loop lines:
             1: skip if line too short
             2: date
@@ -87,7 +93,7 @@ class ParseMonarchCopyReport:
                 if mon_state == FIND_OWNER:
                     if words[0] == OPEN:
                         owner = MON_MARK if MON_ROBB in words else MON_LULU
-                        self.inv_rec.set_owner(owner)
+                        self.monarch_record.set_owner(owner)
                         self.logger.print_info("\n\t\u0022Current owner: {}\u0022".format(owner))
                         mon_state = STATE_SEARCH
                         continue
@@ -118,7 +124,7 @@ class ParseMonarchCopyReport:
                     self.logger.print_info("Final price = {}".format(price))
 
                     curr_tx = {DATE: doc_date, DESC: PRICE, FUND_CMPY: fd_co, FUND: fund, UNIT_BAL: bal, PRICE: price}
-                    self.inv_rec.add_tx(plan_type, PRICE, curr_tx)
+                    self.monarch_record.add_tx(plan_type, PRICE, curr_tx)
                     self.logger.print_info('ADD current Price Tx to Collection!')
                     continue
 
@@ -146,20 +152,20 @@ class ParseMonarchCopyReport:
                     curr_tx[LOAD] = words[-5]
                     self.logger.print_info("curr_tx[LOAD]: {}".format(curr_tx[LOAD]))
 
-                    self.inv_rec.add_tx(plan_type, TRADE, curr_tx)
+                    self.monarch_record.add_tx(plan_type, TRADE, curr_tx)
                     self.logger.print_info('ADD current Trade Tx to Collection!')
 
-    def get_trade_info(self, mtx:dict, plan_type:str, ast_parent:Account, rev_acct:Account):
+    def get_trade_info(self, mon_tx:TxRecord, plan_type:str, ast_parent:Account, rev_acct:Account):
         """
-        Parse the Monarch trade transactions from a copy&paste JSON file
+        Parse the Monarch trade transactions from the member InvestmentRecord instance
         Asset accounts: use the proper path to find the parent then search for the Fund Code in the descendants
         Revenue accounts: pick the proper account based on owner and plan type
         gross_curr: re match to Gross then concatenate the two match groups
         date: convert the date then get day, month and year to form a Gnc date
         Units: re match and concatenate the two groups on either side of decimal point
         Description: use DESC and Fund Company
-        :param        mtx: Monarch copied trade tx information
-        :param  plan_type: plan names from Configuration.InvestmentRecord
+        :param     mon_tx: Monarch transaction
+        :param  plan_type: plan name from InvestmentRecord
         :param ast_parent: Asset parent account
         :param   rev_acct: Revenue account
         :return: dict, dict
@@ -170,29 +176,29 @@ class ParseMonarchCopyReport:
         re_gross  = re.compile(r"^(-?)\$([0-9,]{1,6})\.([0-9]{2}).*")
         re_units  = re.compile(r"^(-?)([0-9]{1,5})\.([0-9]{4}).*")
 
-        fund_name = mtx[FUND]
+        fund_name = mon_tx[FUND]
 
         # self.dbg.print_info("trade date = {}".format(mtx[TRADE_DATE]))
-        conv_date = dt.strptime(mtx[TRADE_DATE], "%d-%b-%Y")
+        conv_date = dt.strptime(mon_tx[TRADE_DATE], "%d-%b-%Y")
         # self.dbg.print_info("converted date = {}".format(conv_date))
-        init_tx = { FUND:fund_name, TRADE_DATE:mtx[TRADE_DATE],
+        init_tx = { FUND:fund_name, TRADE_DATE:mon_tx[TRADE_DATE],
                     TRADE_DAY:conv_date.day, TRADE_MTH:conv_date.month, TRADE_YR:conv_date.year }
         self.logger.print_info("trade day-month-year = '{}-{}-{}'"
                                .format(init_tx[TRADE_DAY], init_tx[TRADE_MTH], init_tx[TRADE_YR]))
 
         # check if we have a switch-in/out
-        sw_ind = mtx[DESC].split()[-1]
+        sw_ind = mon_tx[DESC].split()[-1]
         switch = True if sw_ind == SW_IN or sw_ind == SW_OUT else False
         init_tx[SWITCH] = switch
         self.logger.print_info("{} Have a Switch!".format('***' if switch else 'DO NOT'), BLUE)
 
-        asset_acct, rev_acct = self.get_accounts(ast_parent, fund_name, rev_acct)
+        asset_acct, rev_acct = self.gnc_session.get_accounts(ast_parent, fund_name, rev_acct)
         init_tx[ACCT] = asset_acct
         # save the (possibly modified) Revenue account to the Gnc tx
         init_tx[REVENUE] = rev_acct
 
         # get the dollar value of the tx
-        re_match = re.match(re_gross, mtx[GROSS])
+        re_match = re.match(re_gross, mon_tx[GROSS])
         if re_match:
             str_gross_curr = re_match.group(2) + re_match.group(3)
             # remove possible comma
@@ -203,10 +209,10 @@ class ParseMonarchCopyReport:
             self.logger.print_info("gross_curr = {}".format(gross_curr))
             init_tx[GROSS] = gross_curr
         else:
-            raise Exception("PROBLEM[100]!! re_gross DID NOT match with value '{}'!".format(mtx[GROSS]))
+            raise Exception("PROBLEM[100]!! re_gross DID NOT match with value '{}'!".format(mon_tx[GROSS]))
 
         # get the units of the tx
-        re_match = re.match(re_units, mtx[UNITS])
+        re_match = re.match(re_units, mon_tx[UNITS])
         if re_match:
             units = int(re_match.group(2) + re_match.group(3))
             # if match group 1 is not empty, units is negative
@@ -215,15 +221,15 @@ class ParseMonarchCopyReport:
             init_tx[UNITS] = units
             self.logger.print_info("units = {}".format(units))
         else:
-            raise Exception("PROBLEM[105]!! re_units DID NOT match with value '{}'!".format(mtx[UNITS]))
+            raise Exception("PROBLEM[105]!! re_units DID NOT match with value '{}'!".format(mon_tx[UNITS]))
 
         # assemble the Description string
-        descr = "{} {}".format(mtx[DESC], fund_name)
+        descr = "{} {}".format(mon_tx[DESC], fund_name)
         init_tx[DESC] = descr
         self.logger.print_info("descr = {}".format(init_tx[DESC]), CYAN)
 
         # notes field
-        notes = mtx[NOTES] if NOTES in mtx else "{} Load = {}".format(fund_name, mtx[LOAD])
+        notes = mon_tx[NOTES] if NOTES in mon_tx else "{} Load = {}".format(fund_name, mon_tx[LOAD])
         init_tx[NOTES] = notes
         self.logger.print_info("notes = {}".format(init_tx[NOTES]), CYAN)
 
@@ -232,7 +238,7 @@ class ParseMonarchCopyReport:
         if switch:
             self.logger.print_info("Tx is a Switch to OTHER Monarch account.", BLUE)
             # look for switches in this plan type with same company, day, month and opposite gross value
-            for itx in self.gnucash_record.plans[plan_type][TRADE]:
+            for itx in self.monarch_record.plans[plan_type][TRADE]:
                 if itx[SWITCH] and itx[FUND].split()[0] == init_tx[FUND].split()[0] and itx[GROSS] == (gross_curr * -1) \
                         and itx[TRADE_DATE] == init_tx[TRADE_DATE] :
                     # ALREADY HAVE THE FIRST ITEM OF THE PAIR
@@ -243,12 +249,12 @@ class ParseMonarchCopyReport:
 
             if not have_pair:
                 # store the tx until we find the matching tx
-                self.gnucash_record.plans[plan_type][TRADE].append(init_tx)
+                self.monarch_record.plans[plan_type][TRADE].append(init_tx)
                 self.logger.print_info('Found the FIRST of a pair...\n', YELLOW)
 
         return init_tx, pair_tx
 
-    def process_monarch_trade(self, mtx:dict, plan_type:str, ast_parent:Account, rev_acct:Account):
+    def process_monarch_trade(self, mtx:TxRecord, plan_type:str, ast_parent:Account, rev_acct:Account):
         """
         Obtain each Monarch trade as a transaction item, or pair of transactions where required, and forward to Gnucash processing
         :param        mtx: Monarch transaction information
@@ -266,41 +272,10 @@ class ParseMonarchCopyReport:
             if tx1[SWITCH] and tx2 is None:
                 return
 
-            self.create_gnc_trade_txs(tx1, tx2)
+            self.gnc_session.create_trade_tx(tx1, tx2)
 
         except Exception as ie:
             self.logger.print_error("process_monarch_trade() EXCEPTION!! '{}'\n".format(str(ie)))
-
-    def create_gnucash_info(self):
-        """
-        Process each transaction from the Monarch input file to get the required Gnucash information
-        :return: nil
-        """
-        self.logger.print_info("create_gnucash_info()", BLUE)
-        self.root_acct = self.book.get_root_account()
-        self.root_acct.get_instance()
-
-        if self.domain != TRADE:
-            self.price_db = self.book.get_price_db()
-            self.price_db.begin_edit()
-            self.logger.print_info("self.price_db.begin_edit()", CYAN)
-
-        commod_tab = self.book.get_table()
-        self.currency = commod_tab.lookup("ISO4217", "CAD")
-
-        plans = self.monarch_record.get_plans()
-        for plan_type in plans:
-            self.logger.print_info("\n\t\u0022Plan type = {}\u0022".format(plan_type), YELLOW)
-
-            asset_parent, rev_acct = self.get_asset_revenue_info(plan_type)
-
-            if self.domain != PRICE:
-                for mon_tx in plans[plan_type][TRADE]:
-                    self.process_monarch_trade(mon_tx, plan_type, asset_parent, rev_acct)
-
-            if self.domain != TRADE:
-                for mon_tx in plans[plan_type][PRICE]:
-                    self.create_gnc_price_txs(mon_tx, asset_parent, rev_acct)
 
     def add_balance_to_trade(self):
         """
@@ -311,9 +286,9 @@ class ParseMonarchCopyReport:
         :return: nil
         """
         self.logger.print_info('add_balance_to_trade()')
-        for pl in self.inv_rec.plans:
+        for pl in self.monarch_record.plans:
             self.logger.print_info("plan type = {}".format(repr(pl)))
-            plan = self.inv_rec.plans[pl]
+            plan = self.monarch_record.plans[pl]
             for prc in plan[PRICE]:
                 indx = 0
                 latest_indx = -1
@@ -332,11 +307,53 @@ class ParseMonarchCopyReport:
                     plan[TRADE][latest_indx][UNIT_BAL] = prc[UNIT_BAL]
                     plan[TRADE][latest_indx][NOTES] = fnd + " Balance = " + prc[UNIT_BAL]
 
-    def save_to_gnucash_file(self, gnc_file:str, domain:str):
-        self.logger.print_info('save_to_gnucash_file()')
-        gncs = GnucashSession(self.inv_rec, self.mode, gnc_file, self.debug, domain)
-        msg = gncs.prepare_session()
+    def save_to_gnucash_file(self, p_gncs:GnucashSession) -> list:
+        """
+        transfer the Monarch information to a Gnucash file
+        :return: message
+        """
+        self.__log("save_to_gnucash_file()")
+        self.gnc_session = p_gncs
+        msg = [TEST]
+        try:
+            owner = self.monarch_record.get_owner()
+            self.__log("Owner = {}".format(owner))
+
+            self.create_gnucash_info()
+
+            self.gnc_session.end_session(self.mode == SEND)
+
+            msg = self.logger.get_log()
+
+        except Exception as se:
+            msg = ["prepare_session() EXCEPTION!! '{}'".format(repr(se))]
+            self.logger.print_error(msg)
+            self.gnc_session.check_end_session(locals())
+            raise se
+
         self.logger.append(msg)
+        return msg
+
+    def create_gnucash_info(self):
+        """
+        Process each transaction from the Monarch input file to get the required Gnucash information
+        :return: nil
+        """
+        self.__log("create_gnucash_info()")
+        domain = self.gnc_session.get_domain()
+        plans = self.monarch_record.get_plans()
+        for plan_type in plans:
+            self.logger.print_info("\n\t\u0022Plan type = {}\u0022".format(plan_type), YELLOW)
+
+            asset_parent, rev_acct = self.gnc_session.get_asset_revenue_info(plan_type, self.monarch_record.get_owner())
+
+            if domain != PRICE:
+                for mon_tx in plans[plan_type][TRADE]:
+                    self.process_monarch_trade(mon_tx, plan_type, asset_parent, rev_acct)
+
+            if domain != TRADE:
+                for mon_tx in plans[plan_type][PRICE]:
+                    self.gnc_session.create_price_tx(mon_tx, asset_parent, rev_acct)
 
 # END class ParseMonarchCopyReport
 
@@ -369,7 +386,7 @@ def process_input_parameters(argv:list):
 
     if not osp.isfile(args.monarch):
         SattoLog.print_text("File path '{}' does not exist! Exiting...".format(args.monarch), RED)
-        exit(216)
+        exit(389)
     SattoLog.print_text("\nMonarch file = {}".format(args.monarch), CYAN)
 
     domain = BOTH
@@ -378,7 +395,7 @@ def process_input_parameters(argv:list):
     if 'filename' in args:
         if not osp.isfile(args.filename):
             SattoLog.print_text("File path '{}' does not exist. Exiting...".format(args.filename), RED)
-            exit(225)
+            exit(398)
         gnc_file = args.filename
         SattoLog.print_text("\nGnucash file = {}".format(gnc_file), CYAN)
         mode = SEND
@@ -405,7 +422,8 @@ def mon_copy_rep_main(args:list):
         parser.set_filename(mon_file)
 
         if mode == SEND:
-            parser.save_to_gnucash_file(gnc_file, domain)
+            gnc_session = GnucashSession(mode, gnc_file, debug, domain)
+            parser.save_to_gnucash_file(gnc_session)
 
         msg = parser.get_log()
 
