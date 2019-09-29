@@ -9,7 +9,7 @@ __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __python_version__ = 3.6
 __created__ = '2018'
-__updated__ = '2019-09-08'
+__updated__ = '2019-09-28'
 
 from sys import path
 path.append("/home/marksa/dev/git/Python/Utilities/")
@@ -248,14 +248,41 @@ class TxRecord:
     """
     All the required information for an individual transaction
     """
-    def __init__(self, tx_dte, tx_cmpy, tx_code, tx_name, tx_gross, tx_price, tx_units):
-        self.date = tx_dte
-        self.company = tx_cmpy
-        self.fd_name = tx_name
-        self.fd_code = tx_code
-        self.gross = tx_gross
-        self.price = tx_price
-        self.units = tx_units
+    def __init__(self, p_dt:dt, p_cmpy:str, p_code:str, p_name:str, p_gross:float, p_price:float, p_units:float):
+        self.date = p_dt
+        self.company = p_cmpy
+        self.fd_name = p_name
+        self.fd_code = p_code
+        self.gross = p_gross
+        self.price = p_price
+        self.units = p_units
+
+    def __getitem__(self, item):
+        if item == FUND:
+            return self.fd_name
+        if item == GROSS:
+            return self.gross
+        if item == DATE:
+            return self.date
+        if item in (FUND_CMPY, COMPANY_NAME):
+            return self.company
+        if item == FUND_CODE:
+            return self.fd_code
+        if item == PRICE:
+            return self.price
+        if item == UNITS:
+            return self.units
+        else:
+            SattoLog.print_warning("UNKNOWN item: {}".format(item))
+            return None
+
+    def set_date(self, p_date:dt) -> dt:
+        old_date = self.date
+        if p_date is not None and isinstance(p_date, dt):
+            self.date = p_date
+        else:
+            SattoLog.print_warning("BAD date: {}".format(str(p_date)))
+        return old_date
 
 # END class TxRecord
 
@@ -265,7 +292,7 @@ class InvestmentRecord:
     """
     All transactions from an investment report
     """
-    def __init__(self, p_owner=None, p_date=None, p_fname=None, logger:SattoLog=None):
+    def __init__(self, p_owner:str=None, p_date:dt=None, p_fname:str=None, logger:SattoLog=None):
         if logger: logger.print_info("\n\tInvestmentRecord(): Runtime = {}".format(strnow))
         if p_owner is not None:
             assert (p_owner == MON_MARK or p_owner == MON_LULU), 'MUST be a valid Owner!'
@@ -281,6 +308,10 @@ class InvestmentRecord:
             RRSP : {TRADE:[], PRICE:[]}
         }
 
+    def __getitem__(self, item:str):
+        if item == OPEN:
+            return self.plans[OPEN]
+
     def set_owner(self, own):
         self.owner = str(own)
 
@@ -295,6 +326,12 @@ class InvestmentRecord:
 
     def get_plans(self):
         return self.plans
+
+    def get_plan(self, plan:str) -> dict:
+        if plan in (OPEN, TFSA, RRSP):
+            return self.plans[plan]
+        SattoLog.print_warning("UNKNOWN plan: {}".format(plan))
+        return {}
 
     def get_next(self):
         # keep track of TxRecords and return next
