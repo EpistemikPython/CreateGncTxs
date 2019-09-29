@@ -15,12 +15,11 @@ import sys
 from PyQt5.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QHBoxLayout, QGroupBox, QDialog, QFileDialog,
                              QPushButton, QFormLayout, QDialogButtonBox, QLabel, QTextEdit, QCheckBox)
 from functools import partial
-from Configuration import *
 from parseMonarchTxRep import mon_tx_rep_main
 from parseMonarchQtrRep import mon_qtr_rep_main
 from createGnucashTxs import create_gnc_txs_main
 from parseMonarchFundsRep import mon_funds_rep_main
-from parseMonarchCopyRep import mon_copy_rep_main
+from parseMonarchCopyRep import *
 sys.path.append('/home/marksa/dev/git/Python/Gnucash/createGncTxs/parsePdf')
 from parsePdf import parse_pdf_main
 
@@ -63,7 +62,7 @@ NEED_GNUCASH_FILE = [GNC_TXS, FD_COPY, QTRS] # and maybe MON_COPY depending on m
 class MonarchGnucashServices(QDialog):
     def __init__(self):
         super().__init__()
-        self.logger = Gnulog(True)
+        self.logger = SattoLog(True)
         self.title = 'Monarch & Gnucash Services'
         self.left = 640
         self.top = 160
@@ -119,7 +118,7 @@ class MonarchGnucashServices(QDialog):
         layout.addRow(self.gnc_label, self.gnc_file_btn)
 
         self.cb_mode = QComboBox()
-        self.cb_mode.addItems([TEST, PROD])
+        self.cb_mode.addItems([TEST, SEND])
         self.cb_mode.currentIndexChanged.connect(partial(self.mode_change))
         layout.addRow(QLabel("Mode:"), self.cb_mode)
 
@@ -193,7 +192,7 @@ class MonarchGnucashServices(QDialog):
     def mode_change(self):
         """Monarch_Copy: need Gnucash file and domain only if in PROD mode"""
         if self.cb_script.currentText() == MON_COPY:
-            if self.cb_mode.currentText() == PROD:
+            if self.cb_mode.currentText() == SEND:
                 self.gnc_file_btn.setText(self.gnc_btn_title)
                 self.cb_domain.setCurrentText(BOTH)
             else:
@@ -223,7 +222,7 @@ class MonarchGnucashServices(QDialog):
                     self.gnc_file_btn.setText(self.gnc_btn_title)
                     self.cb_domain.setCurrentText(NO_NEED)
                 else:
-                    if new_script == MON_COPY and self.cb_mode.currentText() == PROD:
+                    if new_script == MON_COPY and self.cb_mode.currentText() == SEND:
                         self.gnc_file_btn.setText(self.gnc_btn_title)
                         self.cb_domain.setCurrentText(BOTH)
                     else:
@@ -266,7 +265,7 @@ class MonarchGnucashServices(QDialog):
                 cl_params = ['-m' + self.mon_file]
                 if self.ch_json.isChecked(): cl_params.append('--json')
                 if self.ch_debug.isChecked(): cl_params.append('--debug')
-                if mode == PROD:
+                if mode == SEND:
                     if self.gnc_file is None:
                         self.response_box.setText('>>> MUST select a Gnucash File!')
                         return
