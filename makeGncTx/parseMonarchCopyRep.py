@@ -29,13 +29,16 @@ class ParseMonarchCopyReport:
         self.monarch_record  = InvestmentRecord()
         self.gnc_session = None
 
-        self.logger   = SattoLog(my_color=MAGENTA, do_logging=p_debug)
-        self.__log('class ParseMonarchCopyReport')
+        self._logger = SattoLog(my_color=MAGENTA, do_logging=p_debug)
+        self._log('class ParseMonarchCopyReport')
 
-    def __log(self, p_msg:str, p_color:str=''):
-        if self.logger:
+    def _log(self, p_msg:object, p_color:str= ''):
+        if self._logger:
             calling_frame = inspect.currentframe().f_back
-            self.logger.print_info(p_msg, p_color, p_frame = calling_frame)
+            self._logger.print_info(p_msg, p_color, p_frame = calling_frame)
+
+    def _err(self, p_msg:object):
+        self._log(p_msg, BR_RED)
 
     def set_filename(self, fn:str):
         self.monarch_record.set_filename(fn)
@@ -44,7 +47,7 @@ class ParseMonarchCopyReport:
         return self.monarch_record
 
     def get_log(self):
-        return self.logger.get_log()
+        return self._logger.get_log()
 
     def parse_copy_info(self):
         """
@@ -66,7 +69,7 @@ class ParseMonarchCopyReport:
                     record fund, desc, gross, units, price, load, trade date
         :return nil
         """
-        self.__log("ParseMonarchCopyReport.parse_copy_info()")
+        self._log("ParseMonarchCopyReport.parse_copy_info()")
 
         re_date = re.compile(r"([0-9]{2}-\w{3}-[0-9]{4})")
 
@@ -77,7 +80,7 @@ class ParseMonarchCopyReport:
             ct = 0
             for line in fp:
                 ct += 1
-                # self.__log("Line {}".format(ct))
+                # self._log("Line {}".format(ct))
 
                 words = line.split()
                 if len(words) <= 1:
@@ -87,7 +90,7 @@ class ParseMonarchCopyReport:
                     re_match = re.match(re_date, words[0])
                     if re_match:
                         doc_date = re_match.group(1)
-                        self.__log("Document date: {}".format(doc_date))
+                        self._log("Document date: {}".format(doc_date))
                         mon_state = FIND_OWNER
                         continue
 
@@ -95,7 +98,7 @@ class ParseMonarchCopyReport:
                     if words[0] == OPEN:
                         owner = MON_MARK if MON_ROBB in words else MON_LULU
                         self.monarch_record.set_owner(owner)
-                        self.__log("\n\t\u0022Current owner: {}\u0022".format(owner))
+                        self._log("\n\t\u0022Current owner: {}\u0022".format(owner))
                         mon_state = STATE_SEARCH
                         continue
 
@@ -104,8 +107,8 @@ class ParseMonarchCopyReport:
                         if word in PLAN_IDS:
                             plan_type = PLAN_IDS[word][PLAN_TYPE]
                             plan_id = word
-                            self.__log("\n\t\u0022Current plan: type = {} ; id = {}\u0022"
-                                                   .format(plan_type, plan_id))
+                            self._log("\n\t\u0022Current plan: type = {} ; id = {}\u0022"
+                                      .format(plan_type, plan_id))
                             continue
 
                 if mon_state == STATE_SEARCH:
@@ -116,45 +119,45 @@ class ParseMonarchCopyReport:
                 # PRICES
                 if words[0] in FUND_NAME_CODE:
                     fd_co = words[0]
-                    self.__log("Fund company = {}".format(fd_co))
+                    self._log("Fund company = {}".format(fd_co))
                     fund = words[-10].replace('-', ' ')
-                    self.__log("Fund = {}".format(fund))
+                    self._log("Fund = {}".format(fund))
                     bal = words[-8]
-                    self.__log("Final balance = {}".format(bal))
+                    self._log("Final balance = {}".format(bal))
                     price = words[-7]
-                    self.__log("Final price = {}".format(price))
+                    self._log("Final price = {}".format(price))
 
                     curr_tx = {DATE: doc_date, DESC: PRICE, FUND_CMPY: fd_co, FUND: fund, UNIT_BAL: bal, PRICE: price}
                     self.monarch_record.add_tx(plan_type, PRICE, curr_tx)
-                    self.__log('ADD current Price Tx to Collection!')
+                    self._log('ADD current Price Tx to Collection!')
                     continue
 
                 # TRADES
                 re_match = re.match(re_date, words[0])
                 if re_match:
                     tx_date = re_match.group(1)
-                    self.__log("FOUND a NEW tx! Date: {}".format(tx_date))
+                    self._log("FOUND a NEW tx! Date: {}".format(tx_date))
                     curr_tx = {TRADE_DATE: tx_date}
 
                     fund_co = words[-8]
                     fund = fund_co + " " + words[-7]
                     curr_tx[FUND] = fund
-                    self.__log("curr_tx[FUND]: {}".format(curr_tx[FUND]))
+                    self._log("curr_tx[FUND]: {}".format(curr_tx[FUND]))
                     tx_type = words[1]
                     desc = TX_TYPES[words[2]] if tx_type == INTRCL else TX_TYPES[tx_type]
                     curr_tx[DESC] = COMPANY_NAME[fund_co] + ": " + desc
-                    self.__log("curr_tx[DESC]: {}".format(curr_tx[DESC]))
+                    self._log("curr_tx[DESC]: {}".format(curr_tx[DESC]))
                     curr_tx[GROSS] = words[-4]
-                    self.__log("curr_tx[GROSS]: {}".format(curr_tx[GROSS]))
+                    self._log("curr_tx[GROSS]: {}".format(curr_tx[GROSS]))
                     curr_tx[UNITS] = words[-1]
-                    self.__log("curr_tx[UNITS]: {}".format(curr_tx[UNITS]))
+                    self._log("curr_tx[UNITS]: {}".format(curr_tx[UNITS]))
                     curr_tx[PRICE] = words[-2]
-                    self.__log("curr_tx[PRICE]: {}".format(curr_tx[PRICE]))
+                    self._log("curr_tx[PRICE]: {}".format(curr_tx[PRICE]))
                     curr_tx[LOAD] = words[-5]
-                    self.__log("curr_tx[LOAD]: {}".format(curr_tx[LOAD]))
+                    self._log("curr_tx[LOAD]: {}".format(curr_tx[LOAD]))
 
                     self.monarch_record.add_tx(plan_type, TRADE, curr_tx)
-                    self.__log('ADD current Trade Tx to Collection!')
+                    self._log('ADD current Trade Tx to Collection!')
 
     def get_trade_info(self, mon_tx:TxRecord, plan_type:str, ast_parent:Account, rev_acct:Account):
         """
@@ -171,7 +174,7 @@ class ParseMonarchCopyReport:
         :param   rev_acct: Revenue account
         :return: dict, dict
         """
-        self.__log('ParseMonarchCopyReport.get_trade_info()', BLUE)
+        self._log('ParseMonarchCopyReport.get_trade_info()', BLUE)
 
         # set the regex needed to match the required groups in each value
         re_gross  = re.compile(r"^(-?)\$([0-9,]{1,6})\.([0-9]{2}).*")
@@ -184,14 +187,14 @@ class ParseMonarchCopyReport:
         # self.dbg.print_info("converted date = {}".format(conv_date))
         init_tx = { FUND:fund_name, TRADE_DATE:mon_tx[TRADE_DATE],
                     TRADE_DAY:conv_date.day, TRADE_MTH:conv_date.month, TRADE_YR:conv_date.year }
-        self.__log("trade day-month-year = '{}-{}-{}'"
-                               .format(init_tx[TRADE_DAY], init_tx[TRADE_MTH], init_tx[TRADE_YR]))
+        self._log("trade day-month-year = '{}-{}-{}'"
+                  .format(init_tx[TRADE_DAY], init_tx[TRADE_MTH], init_tx[TRADE_YR]))
 
         # check if we have a switch-in/out
         sw_ind = mon_tx[DESC].split()[-1]
         switch = True if sw_ind == SW_IN or sw_ind == SW_OUT else False
         init_tx[SWITCH] = switch
-        self.__log("{} Have a Switch!".format('***' if switch else 'DO NOT'), BLUE)
+        self._log("{} Have a Switch!".format('***' if switch else 'DO NOT'), BLUE)
 
         asset_acct, rev_acct = self.gnc_session.get_accounts(ast_parent, fund_name, rev_acct)
         init_tx[ACCT] = asset_acct
@@ -207,7 +210,7 @@ class ParseMonarchCopyReport:
             # if match group 1 is not empty, amount is negative
             if re_match.group(1) != '':
                 gross_curr *= -1
-            self.__log("gross_curr = {}".format(gross_curr))
+            self._log("gross_curr = {}".format(gross_curr))
             init_tx[GROSS] = gross_curr
         else:
             raise Exception("PROBLEM[100]!! re_gross DID NOT match with value '{}'!".format(mon_tx[GROSS]))
@@ -220,24 +223,24 @@ class ParseMonarchCopyReport:
             if re_match.group(1) != '':
                 units *= -1
             init_tx[UNITS] = units
-            self.__log("units = {}".format(units))
+            self._log("units = {}".format(units))
         else:
             raise Exception("PROBLEM[105]!! re_units DID NOT match with value '{}'!".format(mon_tx[UNITS]))
 
         # assemble the Description string
         descr = "{} {}".format(mon_tx[DESC], fund_name)
         init_tx[DESC] = descr
-        self.__log("descr = {}".format(init_tx[DESC]), CYAN)
+        self._log("descr = {}".format(init_tx[DESC]), CYAN)
 
         # notes field
         notes = mon_tx[NOTES] if NOTES in mon_tx else "{} Load = {}".format(fund_name, mon_tx[LOAD])
         init_tx[NOTES] = notes
-        self.__log("notes = {}".format(init_tx[NOTES]), CYAN)
+        self._log("notes = {}".format(init_tx[NOTES]), CYAN)
 
         pair_tx = None
         have_pair = False
         if switch:
-            self.__log("Tx is a Switch to OTHER Monarch account.", BLUE)
+            self._log("Tx is a Switch to OTHER Monarch account.", BLUE)
             # look for switches in this plan type with same company, day, month and opposite gross value
             for itx in self.monarch_record.plans[plan_type][TRADE]:
                 if itx[SWITCH] and itx[FUND].split()[0] == init_tx[FUND].split()[0] and itx[GROSS] == (gross_curr * -1) \
@@ -245,13 +248,13 @@ class ParseMonarchCopyReport:
                     # ALREADY HAVE THE FIRST ITEM OF THE PAIR
                     have_pair = True
                     pair_tx = itx
-                    self.__log('*** Found the MATCH of a pair ***', YELLOW)
+                    self._log('*** Found the MATCH of a pair ***', YELLOW)
                     break
 
             if not have_pair:
                 # store the tx until we find the matching tx
                 self.monarch_record.plans[plan_type][TRADE].append(init_tx)
-                self.__log('Found the FIRST of a pair...\n', YELLOW)
+                self._log('Found the FIRST of a pair...\n', YELLOW)
 
         return init_tx, pair_tx
 
@@ -264,7 +267,7 @@ class ParseMonarchCopyReport:
         :param   rev_acct: Revenue account
         :return: nil
         """
-        self.__log('ParseMonarchCopyReport.process_monarch_trade()', BLUE)
+        self._log('ParseMonarchCopyReport.process_monarch_trade()', BLUE)
         try:
             # get the additional required information from the Monarch json
             tx1, tx2 = self.get_trade_info(mtx, plan_type, ast_parent, rev_acct)
@@ -276,7 +279,7 @@ class ParseMonarchCopyReport:
             self.gnc_session.create_trade_tx(tx1, tx2)
 
         except Exception as ie:
-            self.logger.print_error("process_monarch_trade() EXCEPTION!! '{}'\n".format(str(ie)))
+            self._err("process_monarch_trade() EXCEPTION!! '{}'\n".format(str(ie)))
 
     def add_balance_to_trade(self):
         """
@@ -286,9 +289,9 @@ class ParseMonarchCopyReport:
                 if found, add the Unit Balance from the Price tx to the Trade tx
         :return: nil
         """
-        self.__log('ParseMonarchCopyReport.add_balance_to_trade()')
+        self._log('ParseMonarchCopyReport.add_balance_to_trade()')
         for pl in self.monarch_record.plans:
-            self.__log("plan type = {}".format(repr(pl)))
+            self._log("plan type = {}".format(repr(pl)))
             plan = self.monarch_record.plans[pl]
             for prc in plan[PRICE]:
                 indx = 0
@@ -301,7 +304,7 @@ class ParseMonarchCopyReport:
                         dte = dt.strptime(trd[TRADE_DATE], '%d-%b-%Y')
                         if latest_dte is None or dte > latest_dte:
                             latest_dte = dte
-                            self.__log("Latest date for {} is {}".format(fnd, latest_dte))
+                            self._log("Latest date for {} is {}".format(fnd, latest_dte))
                             latest_indx = indx
                     indx += 1
                 if latest_indx > -1:
@@ -313,26 +316,26 @@ class ParseMonarchCopyReport:
         transfer the Monarch information to a Gnucash file
         :return: message
         """
-        self.__log("ParseMonarchCopyReport.save_to_gnucash_file()")
+        self._log("ParseMonarchCopyReport.save_to_gnucash_file()")
         self.gnc_session = p_gncs
         msg = [TEST]
         try:
             owner = self.monarch_record.get_owner()
-            self.__log("Owner = {}".format(owner))
+            self._log("Owner = {}".format(owner))
 
             self.gnc_session.begin_session()
             self.create_gnucash_info(owner)
             self.gnc_session.end_session(self.mode == SEND)
 
-            msg = self.logger.get_log()
+            msg = self._logger.get_log()
 
         except Exception as se:
             msg = ["save_to_gnucash_file() EXCEPTION!! '{}'".format(repr(se))]
-            self.logger.print_error(msg)
+            self._err(msg)
             self.gnc_session.check_end_session(locals())
             raise se
 
-        self.logger.append(msg)
+        self._logger.append(msg)
         return msg
 
     def create_gnucash_info(self, p_owner:str):
@@ -340,11 +343,11 @@ class ParseMonarchCopyReport:
         Process each transaction from the Monarch input file to get the required Gnucash information
         :return: nil
         """
-        self.__log("ParseMonarchCopyReport.create_gnucash_info()")
+        self._log("ParseMonarchCopyReport.create_gnucash_info()")
         domain = self.gnc_session.get_domain()
         plans = self.monarch_record.get_plans()
         for plan_type in plans:
-            self.__log("\n\t\u0022Plan type = {}\u0022".format(plan_type), BROWN)
+            self._log("\n\t\u0022Plan type = {}\u0022".format(plan_type), BROWN)
 
             asset_parent, rev_acct = self.gnc_session.get_asset_revenue_info(plan_type, p_owner)
 
