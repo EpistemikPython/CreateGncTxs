@@ -41,7 +41,8 @@ CONT  = 'Contingent'
 NEC   = 'Necessary'
 DEDNS = 'Emp_Dedns'
 TEST  = 'test'
-SEND  = 'send'
+SEND  = 'SEND'
+PROD  = SEND
 
 GNC:str       = 'Gnucash'
 MON:str       = 'Monarch'
@@ -309,8 +310,10 @@ class InvestmentRecord:
         }
 
     def __getitem__(self, item:str):
-        if item == OPEN:
-            return self.plans[OPEN]
+        if item in (OPEN, TFSA, RRSP):
+            return self.plans[item]
+        SattoLog.print_warning("BAD plan: {}".format(str(item)))
+        return None
 
     def set_owner(self, own):
         self.owner = str(own)
