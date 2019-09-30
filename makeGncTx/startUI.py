@@ -9,9 +9,9 @@ __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __python_version__ = 3.6
 __created__ = '2018'
-__updated__ = '2019-09-07'
+__updated__ = '2019-09-29'
 
-import sys
+from sys import argv
 from PyQt5.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QHBoxLayout, QGroupBox, QDialog, QFileDialog,
                              QPushButton, QFormLayout, QDialogButtonBox, QLabel, QTextEdit, QCheckBox)
 from functools import partial
@@ -20,7 +20,7 @@ from parseMonarchQtrRep import mon_qtr_rep_main
 from createGnucashTxs import create_gnc_txs_main
 from parseMonarchFundsRep import mon_funds_rep_main
 from parseMonarchCopyRep import *
-sys.path.append('/home/marksa/dev/git/Python/Gnucash/createGncTxs/parsePdf')
+path.append('/home/marksa/dev/git/Python/Gnucash/createGncTxs/parsePdf')
 from parsePdf import parse_pdf_main
 
 
@@ -62,7 +62,7 @@ NEED_GNUCASH_FILE = [GNC_TXS, FD_COPY, QTRS] # and maybe MON_COPY depending on m
 class MonarchGnucashServices(QDialog):
     def __init__(self):
         super().__init__()
-        self.logger = SattoLog(True)
+        self.logger = SattoLog(my_color=MAGENTA, do_logging=True)
         self.title = 'Monarch & Gnucash Services'
         self.left = 640
         self.top = 160
@@ -295,10 +295,10 @@ class MonarchGnucashServices(QDialog):
 
 
 def ui_main():
-    app = QApplication(sys.argv)
+    app = QApplication(argv)
     dialog = MonarchGnucashServices()
     dialog.show()
-    sys.exit(app.exec_())
+    exit(app.exec_())
 
 
 if __name__ == '__main__':
