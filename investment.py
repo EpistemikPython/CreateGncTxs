@@ -9,7 +9,7 @@ __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __python_version__ = 3.6
 __created__ = '2018'
-__updated__ = '2019-09-28'
+__updated__ = '2019-10-05'
 
 from sys import path
 path.append("/home/marksa/dev/git/Python/Utilities/")
@@ -245,26 +245,34 @@ FILL_CURR_TX = 0x0090
 
 
 # TODO: TxRecord in standard format for both Monarch and Gnucash
+# noinspection PyAttributeOutsideInit
 class TxRecord:
     """
     All the required information for an individual transaction
     """
-    def __init__(self, p_dt:dt, p_cmpy:str, p_code:str, p_name:str, p_gross:float, p_price:float, p_units:float):
-        self.date = p_dt
-        self.company = p_cmpy
-        self.fd_name = p_name
-        self.fd_code = p_code
-        self.gross = p_gross
-        self.price = p_price
-        self.units = p_units
+    def __init__(self, p_dt:dt=None, p_dt_str:str='', p_sw:bool=False,
+                 p_fcmpy:str='', p_fcode:str='', p_fname:str='',
+                 p_gr:float=0.0, p_gr_str:str='', p_pr:float=0.0, p_pr_str:str='', p_un:float=0.0, p_un_str:str=''):
+        self.set_date(p_dt)
+        self.date_str = p_dt_str
+        self.switch = p_sw
+        self.company = p_fcmpy
+        self.fd_name = p_fname
+        self.fd_code = p_fcode
+        self.gross = p_gr
+        self.gross_str = p_gr_str
+        self.price = p_pr
+        self.price_str = p_pr_str
+        self.units = p_un
+        self.units_str = p_un_str
 
     def __getitem__(self, item):
+        if item == DATE:
+            return self.date
         if item == FUND:
             return self.fd_name
         if item == GROSS:
             return self.gross
-        if item == DATE:
-            return self.date
         if item in (FUND_CMPY, COMPANY_NAME):
             return self.company
         if item == FUND_CODE:
@@ -273,9 +281,26 @@ class TxRecord:
             return self.price
         if item == UNITS:
             return self.units
+        if item == SWITCH:
+            return self.switch
         else:
             SattoLog.print_warning("UNKNOWN item: {}".format(item))
             return None
+
+    def set_fund_cmpy(self, p_co:str):
+        self.company = p_co
+
+    def set_fund_code(self, p_code:str):
+        self.fd_code = p_code
+
+    def set_fund_name(self, p_name:str):
+        self.fd_name = p_name
+
+    def set_type(self, p_type):
+        if p_type in (TRADE, PRICE):
+            self.type = p_type
+        else:
+            SattoLog.print_warning("BAD type: {}".format(str(p_type)))
 
     def set_date(self, p_date:dt) -> dt:
         old_date = self.date
@@ -297,12 +322,12 @@ class InvestmentRecord:
         if logger: logger.print_info("\n\tInvestmentRecord(): Runtime = {}".format(strnow))
         if p_owner is not None:
             assert (p_owner == MON_MARK or p_owner == MON_LULU), 'MUST be a valid Owner!'
-        self.owner:str = p_owner
-        self.date = p_date if p_date is not None and isinstance(p_date, dt) else dtnow
+        self._owner:str = p_owner
+        self._date = p_date if p_date is not None and isinstance(p_date, dt) else dtnow
         if p_fname is not None:
             assert (isinstance(p_fname, str) and osp.isfile(p_fname)), 'MUST be a valid filename!'
-        self.filename:str = p_fname
-        self.plans = {
+        self._filename:str = p_fname
+        self._plans = {
             # lists of TxRecords
             OPEN : {TRADE:[], PRICE:[]} ,
             TFSA : {TRADE:[], PRICE:[]} ,
@@ -311,67 +336,79 @@ class InvestmentRecord:
 
     def __getitem__(self, item:str):
         if item in (OPEN, TFSA, RRSP):
-            return self.plans[item]
+            return self._plans[item]
         SattoLog.print_warning("BAD plan: {}".format(str(item)))
         return None
 
     def set_owner(self, own):
-        self.owner = str(own)
+        self._owner = str(own)
 
-    def get_owner(self):
-        return UNKNOWN if self.owner is None or self.owner == '' else self.owner
+    def get_owner(self) -> str:
+        return UNKNOWN if self._owner is None or self._owner == '' else self._owner
 
     def set_date(self, dte):
         if isinstance(dte, dt):
-            self.date = dte
+            self._date = dte
         else:
             SattoLog.print_warning("dte is type: {}".format(type(dte)))
 
-    def get_plans(self):
-        return self.plans
+    def get_plans(self) -> dict:
+        return self._plans
 
-    def get_plan(self, plan:str) -> dict:
-        if plan in (OPEN, TFSA, RRSP):
-            return self.plans[plan]
-        SattoLog.print_warning("UNKNOWN plan: {}".format(plan))
+    def get_plan(self, p_plan:str) -> dict:
+        if p_plan in (OPEN, TFSA, RRSP):
+            return self._plans[p_plan]
+        SattoLog.print_warning("UNKNOWN plan: {}".format(p_plan))
         return {}
 
-    def get_next(self):
+    def get_trades(self, p_plan) -> list:
+        if p_plan in (OPEN, TFSA, RRSP):
+            return self._plans[p_plan][TRADE]
+        SattoLog.print_warning("UNKNOWN plan: {}".format(p_plan))
+        return []
+
+    def get_prices(self, p_plan) -> list:
+        if p_plan in (OPEN, TFSA, RRSP):
+            return self._plans[p_plan][PRICE]
+        SattoLog.print_warning("UNKNOWN plan: {}".format(p_plan))
+        return []
+
+    def get_next(self) ->dict:
         # keep track of TxRecords and return next
-        return self.plans[OPEN][PRICE][0]
+        return self._plans[OPEN][PRICE][0]
 
-    def get_date(self):
-        return self.date
+    def get_date(self) -> dt:
+        return self._date
 
-    def get_date_str(self):
-        return self.date.strftime(DATE_STR_FORMAT)
+    def get_date_str(self) -> str:
+        return self._date.strftime(DATE_STR_FORMAT)
 
     def set_filename(self, fn):
-        self.filename = str(fn)
+        self._filename = str(fn)
 
-    def get_filename(self):
-        return UNKNOWN if self.filename is None or self.filename == '' else self.filename
+    def get_filename(self) -> str:
+        return UNKNOWN if self._filename is None or self._filename == '' else self._filename
 
-    def get_size(self, p_spec:str = None, q_spec:str = None):
-        if p_spec is None:
+    def get_size(self, p_spec:str='', q_spec:str='') -> int:
+        if not p_spec:
             return self.get_size(OPEN) + self.get_size(TFSA) + self.get_size(RRSP)
-        if q_spec is None:
+        if not q_spec:
             if p_spec == OPEN or p_spec == TFSA or p_spec == RRSP:
-                return len(self.plans[p_spec][PRICE]) + len(self.plans[p_spec][TRADE])
+                return len(self._plans[p_spec][PRICE]) + len(self._plans[p_spec][TRADE])
             if p_spec == PRICE or p_spec == TRADE:
-                return len(self.plans[OPEN][p_spec]) + len(self.plans[TFSA][p_spec]) + len(self.plans[RRSP][p_spec])
-        return len(self.plans[p_spec][q_spec])
+                return len(self._plans[OPEN][p_spec]) + len(self._plans[TFSA][p_spec]) + len(self._plans[RRSP][p_spec])
+        return len(self._plans[p_spec][q_spec])
 
-    def get_size_str(self, str_spec:str = None):
-        if str_spec is not None:
+    def get_size_str(self, str_spec:str='') -> str:
+        if not str_spec:
             return "P{}/T{}".format(self.get_size(str_spec, PRICE), self.get_size(str_spec, TRADE))
         return "{} = {}:{} + {}:{} + {}:{}".format(self.get_size() , OPEN , self.get_size_str(OPEN) ,
                                                    TFSA , self.get_size_str(TFSA) , RRSP , self.get_size_str(RRSP))
 
     def add_tx(self, plan, tx_type, obj):
-        if isinstance(plan, str) and plan in self.plans.keys():
-            if obj is not None:
-                self.plans[plan][tx_type].append(obj)
+        if isinstance(plan, str) and plan in self._plans.keys():
+            if obj and tx_type in (TRADE, PRICE):
+                self._plans[plan][tx_type].append(obj)
 
     def to_json(self):
         return {
@@ -381,7 +418,7 @@ class InvestmentRecord:
             "Source File"  : self.get_filename()     ,
             "Date"         : self.get_date_str()     ,
             "Size"         : self.get_size_str()     ,
-            PLAN_DATA      : self.plans
+            PLAN_DATA      : self._plans
         }
 
 # END class InvestmentRecord
