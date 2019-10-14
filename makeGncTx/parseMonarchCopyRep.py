@@ -11,7 +11,7 @@ __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __python_version__ = 3.6
 __created__ = '2019-06-22'
-__updated__ = '2019-10-05'
+__updated__ = '2019-10-13'
 
 from sys import path
 
@@ -35,13 +35,14 @@ class ParseMonarchCopyReport:
         self._logger = SattoLog(my_color=MAGENTA, do_logging=p_debug)
         self._log('class ParseMonarchCopyReport')
 
-    def _log(self, p_msg:object, p_color:str= ''):
+    def _log(self, p_msg:object, p_color:str=''):
         if self._logger:
             calling_frame = inspect.currentframe().f_back
-            self._logger.print_info(p_msg, p_color, p_frame = calling_frame)
+            self._logger.print_info(p_msg, p_color, p_frame=calling_frame)
 
-    def _err(self, p_msg:object):
-        self._log(p_msg, BR_RED)
+    def _err(self, p_msg:object, err_frame:FrameType):
+        if self._logger:
+            self._logger.print_info(p_msg, BR_RED, p_frame=err_frame)
 
     def set_filename(self, fn:str):
         self.monarch_txs.set_filename(fn)
@@ -150,9 +151,14 @@ class ParseMonarchCopyReport:
                     curr_tx[FUND] = fund
                     self._log("curr_tx[FUND]: {}".format(curr_tx[FUND]))
                     tx_type = words[1]
+                    # HAVE TO HANDLE REDEMPTION AND PURCHASE TYPES
                     desc = TX_TYPES[words[2]] if tx_type == INTRCL else TX_TYPES[tx_type]
-                    curr_tx[DESC] = COMPANY_NAME[fund_co] + ": " + desc
-                    self._log("curr_tx[DESC]: {}".format(curr_tx[DESC]))
+                    curr_tx[TYPE] = desc
+                    self._log("curr_tx[TYPE]: {}".format(curr_tx[TYPE]))
+                    curr_tx[CMPY] = COMPANY_NAME[fund_co]
+                    self._log("curr_tx[CMPY]: {}".format(curr_tx[CMPY]))
+                    curr_tx[DESC] = curr_tx[CMPY] + ": " + desc
+                    # self._log("curr_tx[DESC]: {}".format(curr_tx[DESC]))
                     curr_tx[GROSS] = words[-4]
                     self._log("curr_tx[GROSS]: {}".format(curr_tx[GROSS]))
                     curr_tx[UNITS] = words[-1]
@@ -165,9 +171,11 @@ class ParseMonarchCopyReport:
                     self.monarch_txs.add_tx(plan_type, TRADE, curr_tx)
                     self._log('ADD current Trade Tx to Collection!')
 
+    # TODO: Produce Gnucash txs directly in a GnucashSession function??
     def get_trade_info(self, mon_tx:dict, plan_type:str, ast_parent:Account, rev_acct:Account):
         """
         Parse the Monarch trade transactions from the member InvestmentRecord instance
+        ** useful to have this intermediate function to obtain matching 'in' and 'out' Switch txs...
         Asset accounts: use the proper path to find the parent then search for the Fund Code in the descendants
         Revenue accounts: pick the proper account based on owner and plan type
         gross_curr: re match to Gross then concatenate the two match groups
@@ -183,7 +191,8 @@ class ParseMonarchCopyReport:
         self._log('ParseMonarchCopyReport.get_trade_info()', BLUE)
 
         # set the regex needed to match the required groups in each value
-        re_gross = re.compile(r"^(-?)\$([0-9,]{1,6})\.([0-9]{2}).*")
+        # re_gross must match (leading minus sign) OR (amount is in parentheses) to indicate NEGATIVE number
+        re_gross = re.compile(r"^([-(]?)\$([0-9,]{1,6})\.([0-9]{2}).*(\)?)")
         re_units = re.compile(r"^(-?)([0-9]{1,5})\.([0-9]{4}).*")
 
         fund_name = mon_tx[FUND]
@@ -198,9 +207,14 @@ class ParseMonarchCopyReport:
 
         # check if we have a switch-in/out
         sw_ind = mon_tx[DESC].split()[-1]
-        switch = True if sw_ind == SW_IN or sw_ind == SW_OUT else False
+        switch = True if sw_ind in (SW_IN, SW_OUT) else False
         init_tx[SWITCH] = switch
         self._log("{} Have a Switch!".format('***' if switch else 'DO NOT'), BLUE)
+
+        """different accounts depending if Switch, Redemption, Purchase, Distribution"""
+
+        init_tx[TYPE] = mon_tx[TYPE]
+        init_tx[CMPY] = mon_tx[CMPY]
 
         asset_acct, rev_acct = self.gnc_session.get_accounts(ast_parent, fund_name, rev_acct)
         init_tx[ACCT] = asset_acct
@@ -214,7 +228,7 @@ class ParseMonarchCopyReport:
             # remove possible comma
             gross_curr = int(str_gross_curr.replace(',', ''))
             # if match group 1 is not empty, amount is negative
-            if re_match.group(1) != '':
+            if re_match.group(1):
                 gross_curr *= -1
             self._log("gross_curr = {}".format(gross_curr))
             init_tx[GROSS] = gross_curr
@@ -226,7 +240,7 @@ class ParseMonarchCopyReport:
         if re_match:
             units = int(re_match.group(2) + re_match.group(3))
             # if match group 1 is not empty, units is negative
-            if re_match.group(1) != '':
+            if re_match.group(1):
                 units *= -1
             init_tx[UNITS] = units
             self._log("units = {}".format(units))
@@ -246,7 +260,7 @@ class ParseMonarchCopyReport:
         pair_tx = None
         have_pair = False
         if switch:
-            self._log("Tx is a Switch to OTHER Monarch account.", BLUE)
+            self._log("Tx is a Switch to OTHER account in SAME Fund company.", BLUE)
             # look for switches in this plan type with same company, day, month and opposite gross value
             for gnc_tx in self.gnucash_txs.get_trades(plan_type):
                 if gnc_tx[SWITCH] and gnc_tx[FUND].split()[0] == init_tx[FUND].split()[0] \
@@ -285,8 +299,9 @@ class ParseMonarchCopyReport:
 
             self.gnc_session.create_trade_tx(tx1, tx2)
 
-        except Exception as ie:
-            self._err("process_monarch_trade() EXCEPTION!! '{}'\n".format(str(ie)))
+        except Exception as pmte:
+            self._err("process_monarch_trade() EXCEPTION!! '{}'\n".format(repr(pmte)), inspect.currentframe().f_back)
+            raise pmte
 
     def add_balance_to_trade(self):
         """
@@ -336,11 +351,11 @@ class ParseMonarchCopyReport:
 
             msg = self._logger.get_log()
 
-        except Exception as se:
-            msg = ["save_to_gnucash_file() EXCEPTION!! '{}'".format(repr(se))]
-            self._err(msg)
+        except Exception as sgfe:
+            msg = ["save_to_gnucash_file() EXCEPTION!! '{}'".format(repr(sgfe))]
+            self._err(msg, inspect.currentframe().f_back)
             self.gnc_session.check_end_session(locals())
-            raise se
+            raise sgfe
 
         self._logger.append(msg)
         return msg
@@ -355,6 +370,8 @@ class ParseMonarchCopyReport:
         plans = self.monarch_txs.get_plans()
         for plan_type in plans:
             self._log("\n\t\u0022Plan type = {}\u0022".format(plan_type), BROWN)
+
+            # from plan type, owner, fund name, tx type: get accounts needed for gnucash txs
 
             asset_parent, rev_acct = self.gnc_session.get_asset_revenue_info(plan_type, p_owner)
 
