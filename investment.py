@@ -9,7 +9,7 @@ __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __python_version__ = 3.6
 __created__ = '2018'
-__updated__ = '2019-10-05'
+__updated__ = '2019-10-12'
 
 from sys import path
 path.append("/home/marksa/dev/git/Python/Utilities/")
@@ -17,32 +17,33 @@ import os.path as osp
 from python_utilities import *
 
 # constant strings
-AU    = 'Gold'
-AG    = 'Silver'
-CASH  = 'Cash'
-BANK  = 'Bank'
-RWRDS = 'Rewards'
-RESP  = 'RESP'
-HOUSE = 'House'
-TOTAL = 'Total'
-ASTS  = 'FAMILY'
-LIAB  = 'LIABS'
-CHAL  = 'XCHALET'
-TODAY = 'Today'
-QTR   = 'Quarter'
-YR    = 'Year'
-MTH   = 'Month'
-REV   = 'Revenue'
-INV   = 'Invest'
-OTH   = 'Other'
-EMP   = 'Employment'
-BAL   = 'Balance'
-CONT  = 'Contingent'
-NEC   = 'Necessary'
-DEDNS = 'Emp_Dedns'
-TEST  = 'test'
-SEND  = 'SEND'
-PROD  = SEND
+AU:str    = 'Gold'
+AG:str    = 'Silver'
+CASH:str  = 'Cash'
+BANK:str  = 'Bank'
+RWRDS:str = 'Rewards'
+RESP:str  = 'RESP'
+HOUSE:str = 'House'
+TOTAL:str = 'Total'
+ASTS:str  = 'FAMILY'
+LIAB:str  = 'LIABS'
+CHAL:str  = 'XCHALET'
+HOLD:str  = 'HOLD'
+TODAY:str = 'Today'
+QTR:str   = 'Quarter'
+YR:str    = 'Year'
+MTH:str   = 'Month'
+REV:str   = 'Revenue'
+INV:str   = 'Invest'
+OTH:str   = 'Other'
+EMP:str   = 'Employment'
+BAL:str   = 'Balance'
+CONT:str  = 'Contingent'
+NEC:str   = 'Necessary'
+DEDNS:str = 'Emp_Dedns'
+TEST:str  = 'test'
+SEND:str  = 'SEND'
+PROD:str  = SEND
 
 GNC:str       = 'Gnucash'
 MON:str       = 'Monarch'
@@ -55,52 +56,57 @@ TFSA:str      = "TFSA"
 RRSP:str      = "RRSP"
 OWNER:str     = "Owner"
 JOINT:str     = "Joint"
+EQUITY:str    = "EQUITY"
 TRUST:str     = "TRUST"
 AUTO_SYS:str  = "Automatic/Systematic"
 DOLLARS:str   = '$'
 CENTS:str     = '\u00A2'
 UNKNOWN:str   = "UNKNOWN"
 
-REVENUE:str  = "Revenue"
-ASSET:str    = "Asset"
-MON_SATT:str = "Sattolo"
-MON_MARK:str = "Mark H. " + MON_SATT
-MON_ROBB:str = "Robb"
-MON_LULU:str = "Louise " + MON_ROBB
-GNC_MARK:str = "Mark"
-GNC_LULU:str = "Lulu"
+REVENUE:str   = "Revenue"
+ASSET:str     = "Asset"
+MON_SATT:str  = "Sattolo"
+MON_MARK:str  = "Mark H. " + MON_SATT
+MON_ROBB:str  = "Robb"
+MON_LULU:str  = "Louise " + MON_ROBB
+GNC_MARK:str  = "Mark"
+GNC_LULU:str  = "Lulu"
 
 # Tx categories
-FUND:str       = "Fund"
-FUND_CODE:str  = FUND + " Code"
-FUND_CMPY:str  = FUND + " Company"
-DATE:str       = "Date"
-TRADE:str      = "Trade"
-TRADE_DATE:str = TRADE + " " + DATE
-TRADE_DAY:str  = TRADE + " Day"
-TRADE_MTH:str  = TRADE + " Month"
-TRADE_YR:str   = TRADE + " Year"
-DESC:str       = "Description"
-SWITCH:str     = "Switch"
-GROSS:str      = "Gross"
-NET:str        = "Net"
-UNITS:str      = "Units"
-PRICE:str      = "Price"
-BOTH:str       = "Both"
-UNIT_BAL:str   = "Unit Balance"
-ACCT:str       = "Account"  # in Gnucash
-NOTES:str      = "Notes"
-LOAD:str       = "Load"
-FEE:str        = "Fee"
-FEE_RD:str     = FEE + " Redemption"
-DIST:str       = "Dist"
-SW_IN:str      = SWITCH + "-in"
-SW_OUT:str     = SWITCH + "-out"
-INTRF:str      = "Internal Transfer"
-INTRF_IN:str   = INTRF + "-In"
-INTRF_OUT:str  = INTRF + "-Out"
-REINV:str      = "Reinvested"
-INTRCL:str     = "Inter-Class"
+FUND:str        = "Fund"
+CMPY:str        = "Company"
+FUND_CODE:str   = FUND + " Code"
+FUND_CMPY:str   = FUND + " " + CMPY
+DATE:str        = "Date"
+TRADE:str       = "Trade"
+TRADE_DATE:str  = TRADE + " " + DATE
+TRADE_DAY:str   = TRADE + " Day"
+TRADE_MTH:str   = TRADE + " Month"
+TRADE_YR:str    = TRADE + " Year"
+TYPE:str        = "Type"
+DESC:str        = "Description"
+SWITCH:str      = "Switch"
+GROSS:str       = "Gross"
+NET:str         = "Net"
+UNITS:str       = "Units"
+PRICE:str       = "Price"
+BOTH:str        = "Both"
+UNIT_BAL:str    = "Unit Balance"
+ACCT:str        = "Account"  # in Gnucash
+NOTES:str       = "Notes"
+LOAD:str        = "Load"
+FEE:str         = "Fee"
+RDMPN:str       = "Redemption"
+FEE_RD:str      = FEE + " " + RDMPN
+PURCH:str       = "Purchase"
+DIST:str        = "Dist"
+SW_IN:str       = SWITCH + "-in"
+SW_OUT:str      = SWITCH + "-out"
+INTRF:str       = "Internal Transfer"
+INTRF_IN:str    = INTRF + "-In"
+INTRF_OUT:str   = INTRF + "-Out"
+REINV:str       = "Reinvested"
+INTRCL:str      = "Inter-Class"
 
 # Fund companies
 ATL:str = "ATL"
@@ -115,7 +121,9 @@ TX_TYPES = {
     SW_IN    : SW_IN  ,
     SW_OUT   : SW_OUT ,
     REINV    : REINV + " Distribution" ,
-    AUTO_SYS : AUTO_SYS + " Withdrawal Plan"
+    AUTO_SYS : AUTO_SYS + " Withdrawal Plan" ,
+    RDMPN    : RDMPN ,
+    PURCH    : PURCH
 }
 
 # Company names
@@ -220,7 +228,7 @@ PLAN_IDS = {
 MONEY_MKT_FUNDS = [MFC_298, MFC_4378, TML_204, TML_703]
 
 TRUST_AST_ACCT = CIG_18140
-TRUST_REV_ACCT = "Trust Base"
+TRUST_EQY_ACCT = "Trust Base"
 
 # find the proper path to the account in the gnucash file
 ACCT_PATHS = {
@@ -318,27 +326,37 @@ class InvestmentRecord:
     """
     All transactions from an investment report
     """
-    def __init__(self, p_owner:str=None, p_date:dt=None, p_fname:str=None, logger:SattoLog=None):
-        if logger: logger.print_info("\n\tInvestmentRecord(): Runtime = {}".format(strnow))
-        if p_owner is not None:
+    def __init__(self, p_owner:str='', p_date:dt=None, p_fname:str='', logger:SattoLog=None):
+        self._logger = logger
+        if p_owner:
             assert (p_owner == MON_MARK or p_owner == MON_LULU), 'MUST be a valid Owner!'
-        self._owner:str = p_owner
+        self._owner = p_owner
         self._date = p_date if p_date is not None and isinstance(p_date, dt) else dtnow
-        if p_fname is not None:
+        if p_fname:
             assert (isinstance(p_fname, str) and osp.isfile(p_fname)), 'MUST be a valid filename!'
-        self._filename:str = p_fname
+        self._filename = p_fname
+
         self._plans = {
             # lists of TxRecords
             OPEN : {TRADE:[], PRICE:[]} ,
             TFSA : {TRADE:[], PRICE:[]} ,
             RRSP : {TRADE:[], PRICE:[]}
         }
+        self._log("\n\tInvestmentRecord(): Runtime = {}".format(strnow))
 
     def __getitem__(self, item:str):
         if item in (OPEN, TFSA, RRSP):
             return self._plans[item]
-        SattoLog.print_warning("BAD plan: {}".format(str(item)))
+        self._log("BAD plan: {}".format(str(item)))
         return None
+
+    def _log(self, p_msg:str, p_color:str=''):
+        if self._logger:
+            self._logger.print_info(p_msg, p_color, p_frame=inspect.currentframe().f_back)
+
+    def _err(self, p_msg:str):
+        if self._logger:
+            self._logger.print_info(p_msg, BR_RED, p_frame=inspect.currentframe().f_back)
 
     def set_owner(self, own):
         self._owner = str(own)
@@ -346,11 +364,11 @@ class InvestmentRecord:
     def get_owner(self) -> str:
         return UNKNOWN if self._owner is None or self._owner == '' else self._owner
 
-    def set_date(self, dte):
-        if isinstance(dte, dt):
-            self._date = dte
+    def set_date(self, p_date):
+        if isinstance(p_date, dt):
+            self._date = p_date
         else:
-            SattoLog.print_warning("dte is type: {}".format(type(dte)))
+            self._err("Submitted date of improper type: {}".format(type(p_date)))
 
     def get_plans(self) -> dict:
         return self._plans
@@ -358,24 +376,16 @@ class InvestmentRecord:
     def get_plan(self, p_plan:str) -> dict:
         if p_plan in (OPEN, TFSA, RRSP):
             return self._plans[p_plan]
-        SattoLog.print_warning("UNKNOWN plan: {}".format(p_plan))
+        self._err("UNKNOWN plan: {}".format(p_plan))
         return {}
 
     def get_trades(self, p_plan) -> list:
-        if p_plan in (OPEN, TFSA, RRSP):
-            return self._plans[p_plan][TRADE]
-        SattoLog.print_warning("UNKNOWN plan: {}".format(p_plan))
-        return []
+        plan = self.get_plan(p_plan)
+        return plan[TRADE] if plan else []
 
     def get_prices(self, p_plan) -> list:
-        if p_plan in (OPEN, TFSA, RRSP):
-            return self._plans[p_plan][PRICE]
-        SattoLog.print_warning("UNKNOWN plan: {}".format(p_plan))
-        return []
-
-    def get_next(self) ->dict:
-        # keep track of TxRecords and return next
-        return self._plans[OPEN][PRICE][0]
+        plan = self.get_plan(p_plan)
+        return plan[PRICE] if plan else []
 
     def get_date(self) -> dt:
         return self._date
@@ -389,35 +399,38 @@ class InvestmentRecord:
     def get_filename(self) -> str:
         return UNKNOWN if self._filename is None or self._filename == '' else self._filename
 
-    def get_size(self, p_spec:str='', q_spec:str='') -> int:
-        if not p_spec:
+    def get_size(self, plan_spec:str='', type_spec:str='') -> int:
+        if not plan_spec:
+            if type_spec in (PRICE, TRADE):
+                return len(self._plans[OPEN][type_spec]) + len(self._plans[TFSA][type_spec]) + len(self._plans[RRSP][type_spec])
             return self.get_size(OPEN) + self.get_size(TFSA) + self.get_size(RRSP)
-        if not q_spec:
-            if p_spec == OPEN or p_spec == TFSA or p_spec == RRSP:
-                return len(self._plans[p_spec][PRICE]) + len(self._plans[p_spec][TRADE])
-            if p_spec == PRICE or p_spec == TRADE:
-                return len(self._plans[OPEN][p_spec]) + len(self._plans[TFSA][p_spec]) + len(self._plans[RRSP][p_spec])
-        return len(self._plans[p_spec][q_spec])
+        if not type_spec:
+            if plan_spec in (OPEN, RRSP, TFSA):
+                return len(self._plans[plan_spec][PRICE]) + len(self._plans[plan_spec][TRADE])
+        return len(self._plans[plan_spec][type_spec])
 
-    def get_size_str(self, str_spec:str='') -> str:
-        if not str_spec:
-            return "P{}/T{}".format(self.get_size(str_spec, PRICE), self.get_size(str_spec, TRADE))
-        return "{} = {}:{} + {}:{} + {}:{}".format(self.get_size() , OPEN , self.get_size_str(OPEN) ,
-                                                   TFSA , self.get_size_str(TFSA) , RRSP , self.get_size_str(RRSP))
+    def get_size_str(self, plan_spec:str='', type_spec:str='') -> str:
+        if plan_spec in (OPEN, RRSP, TFSA):
+            if type_spec in (PRICE, TRADE):
+                return "{}[{}]".format(type_spec, self.get_size(plan_spec, type_spec))
+            return "P{}/T{}".format(self.get_size(plan_spec, PRICE), self.get_size(plan_spec, TRADE))
+        # return information for all plans and types
+        return "{} = {}:{} + {}:{} + {}:{}".format(self.get_size(), OPEN, self.get_size_str(OPEN),
+                                                   TFSA, self.get_size_str(TFSA), RRSP, self.get_size_str(RRSP))
 
     def add_tx(self, plan, tx_type, obj):
         if isinstance(plan, str) and plan in self._plans.keys():
             if obj and tx_type in (TRADE, PRICE):
                 self._plans[plan][tx_type].append(obj)
 
-    def to_json(self):
+    def to_json(self, plan_spec:str='', type_spec:str=''):
         return {
             "__class__"    : self.__class__.__name__ ,
             "__module__"   : self.__module__         ,
             OWNER          : self.get_owner()        ,
             "Source File"  : self.get_filename()     ,
             "Date"         : self.get_date_str()     ,
-            "Size"         : self.get_size_str()     ,
+            "Size"         : self.get_size_str(plan_spec, type_spec) ,
             PLAN_DATA      : self._plans
         }
 
