@@ -161,6 +161,8 @@ class ParseMonarchCopyReport:
                     # self._log("curr_tx[DESC]: {}".format(curr_tx[DESC]))
                     curr_tx[GROSS] = words[-4]
                     self._log("curr_tx[GROSS]: {}".format(curr_tx[GROSS]))
+                    curr_tx[NET] = words[-3]
+                    self._log("curr_tx[NET]: {}".format(curr_tx[NET]))
                     curr_tx[UNITS] = words[-1]
                     self._log("curr_tx[UNITS]: {}".format(curr_tx[UNITS]))
                     curr_tx[PRICE] = words[-2]
@@ -178,7 +180,7 @@ class ParseMonarchCopyReport:
         ** useful to have this intermediate function to obtain matching 'in' and 'out' Switch txs...
         Asset accounts: use the proper path to find the parent then search for the Fund Code in the descendants
         Revenue accounts: pick the proper account based on owner and plan type
-        gross_curr: re match to Gross then concatenate the two match groups
+        Amounts: re match to Gross and Net then use the match groups
         date: convert the date then get day, month and year to form a Gnc date
         Units: re match and concatenate the two groups on either side of decimal point
         Description: use DESC and Fund Company
@@ -191,9 +193,9 @@ class ParseMonarchCopyReport:
         self._log('ParseMonarchCopyReport.get_trade_info()', BLUE)
 
         # set the regex needed to match the required groups in each value
-        # re_gross must match (leading minus sign) OR (amount is in parentheses) to indicate NEGATIVE number
-        re_gross = re.compile(r"^([-(]?)\$([0-9,]{1,6})\.([0-9]{2}).*(\)?)")
-        re_units = re.compile(r"^(-?)([0-9]{1,5})\.([0-9]{4}).*")
+        # re_dollars must match (leading minus sign) OR (amount is in parentheses) to indicate NEGATIVE number
+        re_dollars = re.compile(r"^([-(]?)\$([0-9,]{1,6})\.([0-9]{2}).*(\)?)")
+        re_units   = re.compile(r"^(-?)([0-9]{1,5})\.([0-9]{4}).*")
 
         fund_name = mon_tx[FUND]
 
@@ -221,19 +223,33 @@ class ParseMonarchCopyReport:
         # save the (possibly modified) Revenue account to the Gnc tx
         init_tx[REVENUE] = rev_acct
 
-        # get the dollar value of the tx
-        re_match = re.match(re_gross, mon_tx[GROSS])
+        # get the gross dollar value of the tx
+        re_match = re.match(re_dollars, mon_tx[GROSS])
         if re_match:
-            str_gross_curr = re_match.group(2) + re_match.group(3)
+            str_gross = re_match.group(2) + re_match.group(3)
             # remove possible comma
-            gross_curr = int(str_gross_curr.replace(',', ''))
+            gross_amt = int(str_gross.replace(',', ''))
             # if match group 1 is not empty, amount is negative
             if re_match.group(1):
-                gross_curr *= -1
-            self._log("gross_curr = {}".format(gross_curr))
-            init_tx[GROSS] = gross_curr
+                gross_amt *= -1
+            self._log("gross amount = {}".format(gross_amt))
+            init_tx[GROSS] = gross_amt
         else:
-            raise Exception("PROBLEM[100]!! re_gross DID NOT match with value '{}'!".format(mon_tx[GROSS]))
+            raise Exception("PROBLEM: gross amount DID NOT match with value '{}'!".format(mon_tx[GROSS]))
+
+        # get the net dollar value of the tx
+        re_match = re.match(re_dollars, mon_tx[NET])
+        if re_match:
+            str_net = re_match.group(2) + re_match.group(3)
+            # remove possible comma
+            net_amount = int(str_net.replace(',', ''))
+            # if match group 1 is not empty, amount is negative
+            if re_match.group(1):
+                net_amount *= -1
+            self._log("net_amount = {}".format(net_amount))
+            init_tx[NET] = net_amount
+        else:
+            raise Exception("PROBLEM: net amount DID NOT match with value '{}'!".format(mon_tx[NET]))
 
         # get the units of the tx
         re_match = re.match(re_units, mon_tx[UNITS])
@@ -264,17 +280,17 @@ class ParseMonarchCopyReport:
             # look for switches in this plan type with same company, day, month and opposite gross value
             for gnc_tx in self.gnucash_txs.get_trades(plan_type):
                 if gnc_tx[SWITCH] and gnc_tx[FUND].split()[0] == init_tx[FUND].split()[0] \
-                        and gnc_tx[GROSS] == (gross_curr * -1) and gnc_tx[TRADE_DATE] == init_tx[TRADE_DATE]:
+                        and gnc_tx[GROSS] == (net_amount * -1) and gnc_tx[TRADE_DATE] == init_tx[TRADE_DATE]:
                     # ALREADY HAVE THE FIRST ITEM OF THE PAIR
                     have_pair = True
                     pair_tx = gnc_tx
-                    self._log('*** Found the MATCH of a pair ***', YELLOW)
+                    self._log('*** Found the MATCH of a pair ***', BROWN)
                     break
 
             if not have_pair:
                 # store the tx until we find the matching tx
                 self.gnucash_txs.add_tx(plan_type, TRADE, init_tx)
-                self._log('Found the FIRST of a pair...\n', YELLOW)
+                self._log('Found the FIRST of a pair...\n', BROWN)
 
         return init_tx, pair_tx
 
