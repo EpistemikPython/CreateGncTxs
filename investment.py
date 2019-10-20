@@ -44,6 +44,8 @@ DEDNS:str = 'Emp_Dedns'
 TEST:str  = 'test'
 SEND:str  = 'SEND'
 PROD:str  = SEND
+BUY:str   = 'Buy'
+SELL:str  = 'Sell'
 
 GNC:str       = 'Gnucash'
 MON:str       = 'Monarch'
@@ -59,9 +61,10 @@ JOINT:str     = "Joint"
 EQUITY:str    = "EQUITY"
 TRUST:str     = "TRUST"
 AUTO_SYS:str  = "Automatic/Systematic"
+UNKNOWN:str   = "UNKNOWN"
+FIN_SERV:str  = "FinServices"
 DOLLARS:str   = '$'
 CENTS:str     = '\u00A2'
-UNKNOWN:str   = "UNKNOWN"
 
 REVENUE:str   = "Revenue"
 ASSET:str     = "Asset"
