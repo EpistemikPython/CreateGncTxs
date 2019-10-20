@@ -9,70 +9,68 @@ __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __python_version__ = 3.6
 __created__ = '2018'
-__updated__ = '2019-09-29'
+__updated__ = '2019-10-19'
 
 from sys import argv
 from PyQt5.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QHBoxLayout, QGroupBox, QDialog, QFileDialog,
                              QPushButton, QFormLayout, QDialogButtonBox, QLabel, QTextEdit, QCheckBox)
 from functools import partial
-from parseMonarchTxRep import mon_tx_rep_main
-from parseMonarchQtrRep import mon_qtr_rep_main
-from createGnucashTxs import create_gnc_txs_main
-from parseMonarchFundsRep import mon_funds_rep_main
 from parseMonarchCopyRep import *
 path.append('/home/marksa/dev/git/Python/Gnucash/createGncTxs/parsePdf')
-from parsePdf import parse_pdf_main
 
 
 # constant strings
-QTRS:str       = MON + ' Qtrly Report'
-PDF:str        = MON + ' PDF'
-TX:str         = MON + ' Txs Report'
-GNC_TXS        = 'Create Gnc Txs'
-COPY:str       = 'Copy'
-FUNDS:str      = 'Funds'
-MON_COPY:str   = MON + ' ' + COPY
-FD_COPY:str    = MON + ' ' + FUNDS + ' ' + COPY
-TX_COPY:str    = MON + ' Tx ' + COPY
 GNC_SFX:str    = 'gnc'
 MON_SFX:str    = 'txt'
-PDF_SFX:str    = 'pdf'
-JSON:str       = 'json'
 FILE_LABEL:str = ' File:'
+FUNDS:str      = FUND + 's'
+MON_COPY:str   = MON + ' Copy'
+LEGACY:str     = 'LEGACY'
+FD_COPY:str    = LEGACY
+TX_COPY:str    = LEGACY
+PDF:str        = LEGACY
+TX:str         = LEGACY
+QTRS:str       = LEGACY
+GNC_TXS        = LEGACY
 NO_NEED:str    = 'NOT NEEDED'
 
 MAIN_FXNS = {
     # with the new format Monarch report, this is now the only script actually needed...
-    MON_COPY : mon_copy_rep_main   ,
+    MON_COPY : mon_copy_rep_main ,
     # legacy
-    GNC_TXS  : create_gnc_txs_main ,
-    FD_COPY  : mon_funds_rep_main  ,
-    TX_COPY  : mon_tx_rep_main     ,
-    PDF      : parse_pdf_main      ,
-    TX       : mon_tx_rep_main     ,
-    QTRS     : mon_qtr_rep_main
+    FD_COPY  : NO_NEED ,
+    TX_COPY  : NO_NEED ,
+    PDF      : NO_NEED ,
+    TX       : NO_NEED ,
+    QTRS     : NO_NEED
 }
-
-NEED_MONARCH_TEXT = [MON_COPY, FD_COPY, TX_COPY, TX, QTRS]
-NEED_MONARCH_JSON = [GNC_TXS]
-NEED_GNUCASH_FILE = [GNC_TXS, FD_COPY, QTRS] # and maybe MON_COPY depending on mode
 
 
 # noinspection PyAttributeOutsideInit
 class MonarchGnucashServices(QDialog):
     def __init__(self):
         super().__init__()
-        self.logger = SattoLog(my_color=MAGENTA, do_logging=True)
+        self._logger = SattoLog(my_color=MAGENTA, do_logging=True)
         self.title = 'Monarch & Gnucash Services'
-        self.left = 640
+        self.left = 120
         self.top = 160
         self.width = 600
         self.height = 800
         self.pdf_file = None
         self.mon_file = None
         self.gnc_file = None
-        self.logger.print_info("startUI:MonarchGnucashServices()\nRuntime = {}\n".format(strnow), MAGENTA)
+
         self.init_ui()
+        self._log("startUI:MonarchGnucashServices()\nRuntime = {}\n".format(strnow))
+
+    def _log(self, p_msg:object, p_color:str=''):
+        if self._logger:
+            calling_frame = inspect.currentframe().f_back
+            self._logger.print_info(p_msg, p_color, p_frame=calling_frame)
+
+    def _err(self, p_msg:object, err_frame:FrameType):
+        if self._logger:
+            self._logger.print_info(p_msg, BR_RED, p_frame=err_frame)
 
     def init_ui(self):
         self.setWindowTitle(self.title)
@@ -104,12 +102,7 @@ class MonarchGnucashServices(QDialog):
 
         self.cb_script = QComboBox()
         self.cb_script.addItems(x for x in MAIN_FXNS)
-        self.cb_script.currentIndexChanged.connect(partial(self.script_change))
         layout.addRow(QLabel("Script:"), self.cb_script)
-        self.script = self.cb_script.currentText()
-
-        self.add_pdf_file_btn()
-        layout.addRow(self.pdf_label, self.pdf_file_btn)
 
         self.add_mon_file_btn()
         layout.addRow(self.mon_label, self.mon_file_btn)
@@ -124,7 +117,6 @@ class MonarchGnucashServices(QDialog):
 
         self.cb_domain = QComboBox()
         self.cb_domain.addItems([NO_NEED, BOTH, TRADE, PRICE])
-        # self.cb_domain.currentIndexChanged.connect(partial(self.domain_change))
         layout.addRow(QLabel("Domain:"), self.cb_domain)
 
         horiz_box = QGroupBox("Check:")
@@ -141,12 +133,6 @@ class MonarchGnucashServices(QDialog):
         layout.addRow(QLabel("Execute:"), self.exe_btn)
 
         self.gb_main.setLayout(layout)
-
-    def add_pdf_file_btn(self):
-        self.pdf_btn_title = 'Get ' + PDF + ' file'
-        self.pdf_file_btn  = QPushButton(NO_NEED)
-        self.pdf_label     = QLabel(PDF+FILE_LABEL)
-        self.pdf_file_btn.clicked.connect(partial(self.open_file_name_dialog, PDF))
 
     def add_mon_file_btn(self):
         self.mon_btn_title = 'Get ' + MON + ' file'
@@ -166,23 +152,17 @@ class MonarchGnucashServices(QDialog):
         caption = "Get {} Files".format(label)
         base_filter  = "{} (*.{});;All Files (*)"
 
-        self.logger.print_info(label)
-        if label == PDF:
-            ffilter = base_filter.format(PDF, PDF_SFX)
-        elif label == MON:
-            fsuffix = JSON if self.script in NEED_MONARCH_JSON else MON_SFX
-            ffilter = base_filter.format(MON, fsuffix)
+        self._log(label)
+        if label == MON:
+            ffilter = base_filter.format(MON, MON_SFX)
         else: # GNC
             ffilter = base_filter.format(GNC, GNC_SFX)
 
         file_name, _ = QFileDialog.getOpenFileName(self, caption, "", ffilter, options=options)
         if file_name:
-            self.logger.print_info("\nFile selected: {}".format(file_name), BLUE)
+            self._log("\nFile selected: {}".format(file_name), BLUE)
             display_name = file_name.split('/')[-1]
-            if label == PDF:
-                self.pdf_file = file_name
-                self.pdf_file_btn.setText(display_name)
-            elif label == MON:
+            if label == MON:
                 self.mon_file = file_name
                 self.mon_file_btn.setText(display_name)
             else: # GNC
@@ -199,97 +179,48 @@ class MonarchGnucashServices(QDialog):
                 self.gnc_file_btn.setText(NO_NEED)
                 self.cb_domain.setCurrentText(NO_NEED)
 
-    def script_change(self):
-        """need for various input files depends on which script is selected"""
-        new_script = self.cb_script.currentText()
-        self.logger.print_info("Script changed to: {}.".format(new_script), MAGENTA)
-
-        if new_script != self.script:
-            self.mon_file = None
-            self.gnc_file = None
-            if new_script == PDF:
-                # PDF button ONLY
-                self.pdf_file_btn.setText(self.pdf_btn_title)
-                self.mon_file_btn.setText(NO_NEED)
-                self.gnc_file_btn.setText(NO_NEED)
-                self.cb_domain.setCurrentText(NO_NEED)
-            else:
-                # restore proper text for Monarch file button
-                self.mon_file_btn.setText(self.mon_btn_title)
-
-                # if needed, restore proper text for Gnucash file button
-                if new_script in NEED_GNUCASH_FILE:
-                    self.gnc_file_btn.setText(self.gnc_btn_title)
-                    self.cb_domain.setCurrentText(NO_NEED)
-                else:
-                    if new_script == MON_COPY and self.cb_mode.currentText() == SEND:
-                        self.gnc_file_btn.setText(self.gnc_btn_title)
-                        self.cb_domain.setCurrentText(BOTH)
-                    else:
-                        self.gnc_file_btn.setText(NO_NEED)
-                        self.cb_domain.setCurrentText(NO_NEED)
-                if self.script == PDF:
-                    self.pdf_file_btn.setText(NO_NEED)
-                    self.pdf_file = None
-
-            self.script = new_script
-
     def button_click(self):
         """prepare the executable and parameters string"""
-        self.logger.print_info("Clicked '{}'.".format(self.exe_btn.text()), CYAN)
+        self._log("Clicked '{}'.".format(self.exe_btn.text()), CYAN)
+        cl_params = []
 
         mode = self.cb_mode.currentText()
         selected_fxn = self.cb_script.currentText()
 
         main_fxn = MAIN_FXNS[selected_fxn]
-        self.logger.print_info("Function to run: {}".format(str(main_fxn)), YELLOW)
+        self._log("Function to run: {}".format(str(main_fxn)), BROWN)
 
         # check that necessary files have been selected
-        if selected_fxn == PDF:
-            if self.pdf_file is None:
-                self.response_box.setText('>>> MUST select a PDF File!')
-                return
-            cl_params = [self.pdf_file]
-        else:
-            if self.mon_file is None:
-                self.response_box.setText('>>> MUST select a Monarch File!')
-                return
-            if selected_fxn == TXS or selected_fxn == TX_COPY:
-                cl_params = [self.mon_file, mode]
-            elif selected_fxn in NEED_GNUCASH_FILE:
+        if selected_fxn == MON_COPY:
+            cl_params.append('-m' + self.mon_file)
+            if self.ch_json.isChecked(): cl_params.append('--json')
+            if self.ch_debug.isChecked(): cl_params.append('--debug')
+            if mode == SEND:
                 if self.gnc_file is None:
                     self.response_box.setText('>>> MUST select a Gnucash File!')
                     return
-                cl_params = [self.mon_file, self.gnc_file, mode]
-            else: # MON_COPY
-                cl_params = ['-m' + self.mon_file]
-                if self.ch_json.isChecked(): cl_params.append('--json')
-                if self.ch_debug.isChecked(): cl_params.append('--debug')
-                if mode == SEND:
-                    if self.gnc_file is None:
-                        self.response_box.setText('>>> MUST select a Gnucash File!')
-                        return
-                    if self.cb_domain.currentText() == NO_NEED:
-                        self.response_box.setText('>>> MUST select a Domain!')
-                        return
-                    cl_params.append('gnc')
-                    cl_params.append('-f' + self.gnc_file)
-                    cl_params.append('-t' + self.cb_domain.currentText())
+                if self.cb_domain.currentText() == NO_NEED:
+                    self.response_box.setText('>>> MUST select a Domain!')
+                    return
+                cl_params.append('gnc')
+                cl_params.append('-f' + self.gnc_file)
+                cl_params.append('-t' + self.cb_domain.currentText())
 
-        self.logger.print_info("Parameters = \n{}".format(json.dumps(cl_params, indent=4)), GREEN)
+            self._log("Parameters = \n{}".format(json.dumps(cl_params, indent=4)), GREEN)
 
-        if selected_fxn != MON_COPY and mode == TEST:
-            self.logger.print_info('TEST mode', GREEN)
-            reply = {'mode': 'TEST', 'log': self.logger.get_log()}
+        if callable(main_fxn):
+            self._log('Sending...', MAGENTA)
+            response = main_fxn(cl_params)
+            reply = {'response': response, 'log': self._logger.get_log()}
+        elif main_fxn == NO_NEED:
+            # legacy function
+            msg = "legacy function: {}".format(main_fxn)
+            self._log(msg)
+            reply = {'msg': msg}
         else:
-            if callable(main_fxn):
-                self.logger.print_info('Sending...', MAGENTA)
-                response = main_fxn(cl_params)
-                reply = {'response': response, 'log': self.logger.get_log()}
-            else:
-                msg = "Problem with main??!! '{}'".format(main_fxn)
-                self.logger.print_error(msg)
-                reply = {'log': self.logger.get_log(), 'msg': msg}
+            msg = "Problem with main??!! '{}'".format(main_fxn)
+            self._err(msg, inspect.currentframe().fback)
+            reply = {'log': self._logger.get_log(), 'msg': msg}
 
         self.response_box.setText(json.dumps(reply, indent=4))
 
