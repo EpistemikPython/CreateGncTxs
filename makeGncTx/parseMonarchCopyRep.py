@@ -30,7 +30,6 @@ class ParseMonarchCopyReport:
         self.debug = p_debug
         self.monarch_txs = InvestmentRecord()
         self.gnucash_txs = InvestmentRecord()
-        self.gnc_session = None
 
         self._logger = SattoLog(my_color=MAGENTA, do_logging=p_debug)
         self._log('class ParseMonarchCopyReport')
@@ -345,6 +344,7 @@ class ParseMonarchCopyReport:
         :return: message
         """
         self._log("ParseMonarchCopyReport.save_to_gnucash_file()")
+        # noinspection PyAttributeOutsideInit
         self.gnc_session = p_gncs
         msg = [TEST]
         try:
@@ -374,19 +374,18 @@ class ParseMonarchCopyReport:
         domain = self.gnc_session.get_domain()
         plans = self.monarch_txs.get_plans()
         for plan_type in plans:
-            self._log("\n\t\u0022Plan type = {}\u0022".format(plan_type), BROWN)
+            self._log(f"\n\t\u0022Plan type = ${plan_type}\u0022", BROWN)
 
-            # from plan type, owner, fund name, tx type: get accounts needed for gnucash txs
-
-            asset_parent, rev_acct = self.gnc_session.get_asset_revenue_info(plan_type, p_owner)
+            asset_parent = self.gnc_session.get_asset_account(plan_type, p_owner)
+            rev_acct = self.gnc_session.get_revenue_account(plan_type, p_owner)
             self._log("create_gnucash_info(): asset parent = {}; revenue account = {}"
                       .format(asset_parent.GetName(), rev_acct.GetName()))
 
-            if domain in (TRADE, BOTH):
+            if domain in (TRADE,BOTH):
                 for mon_tx in plans[plan_type][TRADE]:
                     self.process_monarch_trade(mon_tx, plan_type, asset_parent, rev_acct)
 
-            if domain in (PRICE, BOTH):
+            if domain in (PRICE,BOTH):
                 for mon_tx in plans[plan_type][PRICE]:
                     self.gnc_session.create_price_tx(mon_tx, asset_parent)
 
