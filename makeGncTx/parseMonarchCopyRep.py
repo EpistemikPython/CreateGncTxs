@@ -31,17 +31,14 @@ class ParseMonarchCopyReport:
         self.monarch_txs = InvestmentRecord()
         self.gnucash_txs = InvestmentRecord()
 
-        self._logger = SattoLog(my_color=MAGENTA, do_logging=p_debug)
+        self._logger = SattoLog(my_color=MAGENTA, do_printing=p_debug)
         self._log('class ParseMonarchCopyReport')
 
     def _log(self, p_msg:object, p_color:str=''):
-        if self._logger:
-            calling_frame = inspect.currentframe().f_back
-            self._logger.print_info(p_msg, p_color, p_frame=calling_frame)
+        self._logger.print_info(p_msg, p_color, p_frame=inspect.currentframe().f_back)
 
     def _err(self, p_msg:object, err_frame:FrameType):
-        if self._logger:
-            self._logger.print_info(p_msg, BR_RED, p_frame=err_frame)
+        self._logger.print_info(p_msg, BR_RED, p_frame=err_frame)
 
     def set_filename(self, fn:str):
         self.monarch_txs.set_filename(fn)
@@ -94,7 +91,7 @@ class ParseMonarchCopyReport:
                     re_match = re.match(re_date, words[0])
                     if re_match:
                         doc_date = re_match.group(1)
-                        self._log("Document date: {}".format(doc_date))
+                        self._log(F"Document date: {doc_date}")
                         mon_state = FIND_OWNER
                         continue
 
@@ -102,7 +99,7 @@ class ParseMonarchCopyReport:
                     if words[0] == OPEN:
                         owner = MON_MARK if MON_ROBB in words else MON_LULU
                         self.monarch_txs.set_owner(owner)
-                        self._log("\n\t\u0022Current owner: {}\u0022".format(owner))
+                        self._log(F"\n\t\u0022Current owner: {owner}\u0022")
                         mon_state = STATE_SEARCH
                         continue
 
@@ -111,8 +108,7 @@ class ParseMonarchCopyReport:
                         if word in PLAN_IDS:
                             plan_type = PLAN_IDS[word][PLAN_TYPE]
                             plan_id = word
-                            self._log("\n\t\u0022Current plan: type = {} ; id = {}\u0022"
-                                      .format(plan_type, plan_id))
+                            self._log(F"\n\t\u0022Current plan: type = {plan_type} ; id = {plan_id}\u0022")
                             continue
 
                 if mon_state == STATE_SEARCH:
@@ -374,7 +370,7 @@ class ParseMonarchCopyReport:
         domain = self.gnc_session.get_domain()
         plans = self.monarch_txs.get_plans()
         for plan_type in plans:
-            self._log(f"\n\t\u0022Plan type = ${plan_type}\u0022", BROWN)
+            self._log(F"\n\t\u0022Plan type = {plan_type}\u0022", BROWN)
 
             asset_parent = self.gnc_session.get_asset_account(plan_type, p_owner)
             rev_acct = self.gnc_session.get_revenue_account(plan_type, p_owner)
