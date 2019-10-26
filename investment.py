@@ -355,11 +355,11 @@ class InvestmentRecord:
 
     def _log(self, p_msg:str, p_color:str=''):
         if self._logger:
-            self._logger.print_info(p_msg, p_color, p_frame=inspect.currentframe().f_back)
+            self._logger.print_info(p_msg, p_color, p_info=inspect.currentframe().f_back)
 
-    def _err(self, p_msg: str, err_frame:FrameType):
+    def _err(self, p_msg: str, err_info:object):
         if self._logger:
-            self._logger.print_info(p_msg, BR_RED, p_frame = err_frame)
+            self._logger.print_info(p_msg, BR_RED, p_info=err_info)
 
     def set_owner(self, own):
         self._owner = str(own)

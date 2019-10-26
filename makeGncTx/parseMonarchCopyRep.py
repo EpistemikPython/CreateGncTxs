@@ -32,10 +32,10 @@ class ParseMonarchCopyReport:
         self._log('class ParseMonarchCopyReport')
 
     def _log(self, p_msg:object, p_color:str=''):
-        self._logger.print_info(p_msg, p_color, p_frame=inspect.currentframe().f_back)
+        self._logger.print_info(p_msg, p_color, p_info=inspect.currentframe().f_back)
 
-    def _err(self, p_msg:object, err_frame:FrameType):
-        self._logger.print_info(p_msg, BR_RED, p_frame=err_frame)
+    def _err(self, p_msg:object, err_info:object):
+        self._logger.print_info(p_msg, BR_RED, p_info=err_info)
 
     def set_filename(self, fn:str):
         self._monarch_txs.set_filename(fn)

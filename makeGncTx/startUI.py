@@ -50,7 +50,7 @@ MAIN_FXNS = {
 class MonarchGnucashServices(QDialog):
     def __init__(self):
         super().__init__()
-        self._logger = SattoLog(my_color=MAGENTA, do_logging=True)
+        self._logger = SattoLog(my_color=MAGENTA, do_printing=True)
         self.title = 'Monarch & Gnucash Services'
         self.left = 120
         self.top = 160
@@ -66,11 +66,11 @@ class MonarchGnucashServices(QDialog):
     def _log(self, p_msg:object, p_color:str=''):
         if self._logger:
             calling_frame = inspect.currentframe().f_back
-            self._logger.print_info(p_msg, p_color, p_frame=calling_frame)
+            self._logger.print_info(p_msg, p_color, p_info=calling_frame)
 
     def _err(self, p_msg:object, err_frame:FrameType):
         if self._logger:
-            self._logger.print_info(p_msg, BR_RED, p_frame=err_frame)
+            self._logger.print_info(p_msg, BR_RED, p_info=err_frame)
 
     def init_ui(self):
         self.setWindowTitle(self.title)
