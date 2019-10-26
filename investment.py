@@ -9,11 +9,11 @@ __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __python_version__ = 3.6
 __created__ = '2018'
-__updated__ = '2019-10-12'
+__updated__ = '2019-10-25'
 
 from sys import path
-path.append("/home/marksa/dev/git/Python/Utilities/")
 import os.path as osp
+path.append("/home/marksa/dev/git/Python/Utilities/")
 from python_utilities import *
 
 # constant strings
@@ -36,7 +36,7 @@ MTH:str   = 'Month'
 REV:str   = 'Revenue'
 INV:str   = 'Invest'
 OTH:str   = 'Other'
-EMP:str   = 'Employment'
+EMPL:str  = 'Employment'
 BAL:str   = 'Balance'
 CONT:str  = 'Contingent'
 NEC:str   = 'Necessary'
@@ -348,18 +348,18 @@ class InvestmentRecord:
         self._log("\n\tInvestmentRecord(): Runtime = {}".format(strnow))
 
     def __getitem__(self, item:str):
-        if item in (OPEN, TFSA, RRSP):
+        if item in (OPEN,TFSA,RRSP):
             return self._plans[item]
-        self._log("BAD plan: {}".format(str(item)))
+        self._err(F"BAD plan: {str(item)}", inspect.currentframe().f_back)
         return None
 
     def _log(self, p_msg:str, p_color:str=''):
         if self._logger:
             self._logger.print_info(p_msg, p_color, p_frame=inspect.currentframe().f_back)
 
-    def _err(self, p_msg:str):
+    def _err(self, p_msg: str, err_frame:FrameType):
         if self._logger:
-            self._logger.print_info(p_msg, BR_RED, p_frame=inspect.currentframe().f_back)
+            self._logger.print_info(p_msg, BR_RED, p_frame = err_frame)
 
     def set_owner(self, own):
         self._owner = str(own)
@@ -371,15 +371,15 @@ class InvestmentRecord:
         if isinstance(p_date, dt):
             self._date = p_date
         else:
-            self._err("Submitted date of improper type: {}".format(type(p_date)))
+            self._err(F"Submitted date of improper type: {type(p_date)}", inspect.currentframe().f_back)
 
     def get_plans(self) -> dict:
         return self._plans
 
     def get_plan(self, p_plan:str) -> dict:
-        if p_plan in (OPEN, TFSA, RRSP):
+        if p_plan in (OPEN,TFSA,RRSP):
             return self._plans[p_plan]
-        self._err("UNKNOWN plan: {}".format(p_plan))
+        self._err(F"UNKNOWN plan: {p_plan}", inspect.currentframe().f_back)
         return {}
 
     def get_trades(self, p_plan) -> list:
