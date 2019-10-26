@@ -11,15 +11,13 @@ __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __python_version__ = 3.6
 __created__ = '2019-06-22'
-__updated__ = '2019-10-19'
+__updated__ = '2019-10-25'
 
 from sys import path
-
-path.append("/home/marksa/dev/git/Python/Gnucash/updateBudgetQtrly")
 import re
 from argparse import ArgumentParser
+path.append("/home/marksa/dev/git/Python/Gnucash/updateBudgetQtrly")
 from gnucash_utilities import *
-from investment import *
 
 
 # TODO: use investment.TxRecord instead of dicts to store Monarch & Gnucash information
@@ -119,52 +117,34 @@ class ParseMonarchCopyReport:
                 # PRICES
                 if words[0] in FUND_NAME_CODE:
                     fd_co = words[0]
-                    self._log("Fund company = {}".format(fd_co))
                     fund = words[-10].replace('-', ' ')
-                    self._log("Fund = {}".format(fund))
                     bal = words[-8]
-                    self._log("Final balance = {}".format(bal))
                     price = words[-7]
-                    self._log("Final price = {}".format(price))
-
                     curr_tx = {DATE:doc_date, DESC:PRICE, FUND_CMPY:fd_co, FUND:fund, UNIT_BAL:bal, PRICE:price}
                     self.monarch_txs.add_tx(plan_type, PRICE, curr_tx)
-                    self._log('ADD current Price Tx to Collection!')
+                    self._log(F"ADD current Price Tx:\n\t{curr_tx}")
                     continue
 
                 # TRADES
                 re_match = re.match(re_date, words[0])
                 if re_match:
                     tx_date = re_match.group(1)
-                    self._log("FOUND a NEW tx! Date: {}".format(tx_date))
-                    curr_tx = {TRADE_DATE:tx_date}
-
+                    self._log(F"FOUND a NEW tx! Date: {tx_date}")
                     fund_co = words[-8]
                     fund = fund_co + " " + words[-7]
-                    curr_tx[FUND] = fund
-                    self._log("curr_tx[FUND]: {}".format(curr_tx[FUND]))
                     tx_type = words[1]
                     # have to identify & handle different types
                     desc = TX_TYPES[words[2]] if tx_type == INTRCL else TX_TYPES[tx_type]
-                    curr_tx[TYPE] = desc
-                    self._log("curr_tx[TYPE]: {}".format(curr_tx[TYPE]))
-                    curr_tx[CMPY] = COMPANY_NAME[fund_co]
-                    self._log("curr_tx[CMPY]: {}".format(curr_tx[CMPY]))
+                    # noinspection PyDictCreation
+                    curr_tx = {TRADE_DATE:tx_date, FUND:fund, TYPE:desc, CMPY:COMPANY_NAME[fund_co]}
                     curr_tx[DESC] = curr_tx[CMPY] + ": " + desc
-                    # self._log("curr_tx[DESC]: {}".format(curr_tx[DESC]))
                     curr_tx[GROSS] = words[-4]
-                    self._log("curr_tx[GROSS]: {}".format(curr_tx[GROSS]))
                     curr_tx[NET] = words[-3]
-                    self._log("curr_tx[NET]: {}".format(curr_tx[NET]))
                     curr_tx[UNITS] = words[-1]
-                    self._log("curr_tx[UNITS]: {}".format(curr_tx[UNITS]))
                     curr_tx[PRICE] = words[-2]
-                    self._log("curr_tx[PRICE]: {}".format(curr_tx[PRICE]))
                     curr_tx[LOAD] = words[-5]
-                    self._log("curr_tx[LOAD]: {}".format(curr_tx[LOAD]))
-
                     self.monarch_txs.add_tx(plan_type, TRADE, curr_tx)
-                    self._log('ADD current Trade Tx to Collection!')
+                    self._log(F"ADD current Trade Tx:\n\t{curr_tx}")
 
     # TODO: Produce Gnucash txs directly in a GnucashSession function??
     def get_trade_info(self, mon_tx:dict, plan_type:str, ast_parent:Account, rev_acct:Account):
@@ -195,8 +175,7 @@ class ParseMonarchCopyReport:
         conv_date = dt.strptime(mon_tx[TRADE_DATE], "%d-%b-%Y")
         init_tx = {FUND:fund_name, TRADE_DATE:mon_tx[TRADE_DATE],
                    TRADE_DAY:conv_date.day, TRADE_MTH:conv_date.month, TRADE_YR:conv_date.year}
-        self._log("trade day-month-year = '{}-{}-{}'"
-                  .format(init_tx[TRADE_DAY], init_tx[TRADE_MTH], init_tx[TRADE_YR]))
+        self._log(F"trade day-month-year = {init_tx[TRADE_DAY]}-{init_tx[TRADE_MTH]}-{init_tx[TRADE_YR]}")
 
         # different accounts depending if Switch, Redemption, Purchase, Distribution
 
@@ -204,8 +183,7 @@ class ParseMonarchCopyReport:
         init_tx[CMPY] = mon_tx[CMPY]
 
         asset_acct = self.gnc_session.get_account(ast_parent, fund_name)
-        self._log("get_trade_info(): asset account = {}; revenue account = {}"
-                  .format(asset_acct.GetName(), rev_acct.GetName()))
+        self._log(F"get_trade_info(): asset account = {asset_acct.GetName()}; revenue account = {rev_acct.GetName()}")
         init_tx[ACCT] = asset_acct
         init_tx[REVENUE] = rev_acct
 
@@ -218,10 +196,10 @@ class ParseMonarchCopyReport:
             # if match group 1 is not empty, amount is negative
             if re_match.group(1):
                 gross_amt *= -1
-            self._log("gross amount = {}".format(gross_amt))
+            self._log(F"gross amount = {gross_amt}")
             init_tx[GROSS] = gross_amt
         else:
-            raise Exception("PROBLEM: gross amount DID NOT match with value '{}'!".format(mon_tx[GROSS]))
+            raise Exception(F"PROBLEM: gross amount DID NOT match with value '{mon_tx[GROSS]}'!")
 
         # get the net dollar value of the tx
         re_match = re.match(re_dollars, mon_tx[NET])
@@ -232,10 +210,10 @@ class ParseMonarchCopyReport:
             # if match group 1 is not empty, amount is negative
             if re_match.group(1):
                 net_amount *= -1
-            self._log("net_amount = {}".format(net_amount))
+            self._log(F"net_amount = {net_amount}")
             init_tx[NET] = net_amount
         else:
-            raise Exception("PROBLEM: net amount DID NOT match with value '{}'!".format(mon_tx[NET]))
+            raise Exception(F"PROBLEM: net amount DID NOT match with value '{mon_tx[NET]}'!")
 
         # get the units of the tx
         re_match = re.match(re_units, mon_tx[UNITS])
@@ -247,17 +225,17 @@ class ParseMonarchCopyReport:
             init_tx[UNITS] = units
             self._log("units = {}".format(units))
         else:
-            raise Exception("PROBLEM[105]!! re_units DID NOT match with value '{}'!".format(mon_tx[UNITS]))
+            raise Exception(F"PROBLEM: re_units DID NOT match with value '{mon_tx[UNITS]}'!")
 
         # assemble the Description string
         descr = "{} {}".format(mon_tx[DESC], fund_name)
         init_tx[DESC] = descr
-        self._log("descr = {}".format(init_tx[DESC]), CYAN)
+        self._log(F"descr = {init_tx[DESC]}", CYAN)
 
         # notes field
         notes = mon_tx[NOTES] if NOTES in mon_tx else "{} Load = {}".format(fund_name, mon_tx[LOAD])
         init_tx[NOTES] = notes
-        self._log("notes = {}".format(init_tx[NOTES]), CYAN)
+        self._log(F"notes = {init_tx[NOTES]}", CYAN)
 
         pair_tx = None
         have_pair = False
@@ -302,7 +280,7 @@ class ParseMonarchCopyReport:
             self.gnc_session.create_trade_tx(tx1, tx2)
 
         except Exception as pmte:
-            self._err("process_monarch_trade() EXCEPTION!! '{}'\n".format(repr(pmte)), inspect.currentframe().f_back)
+            self._err(F"process_monarch_trade() EXCEPTION!! '{repr(pmte)}'\n", sys.exc_traceback)
             raise pmte
 
     def add_balance_to_trade(self):
@@ -345,7 +323,7 @@ class ParseMonarchCopyReport:
         msg = [TEST]
         try:
             owner = self.monarch_txs.get_owner()
-            self._log("Owner = {}".format(owner))
+            self._log(F"Owner = {owner}")
 
             self.gnc_session.begin_session()
             self.create_gnucash_info(owner)
@@ -355,9 +333,10 @@ class ParseMonarchCopyReport:
 
         except Exception as sgfe:
             msg = ["save_to_gnucash_file() EXCEPTION!! '{}'".format(repr(sgfe))]
-            self._err(msg, inspect.currentframe().f_back)
+            tb = sys.exc_info()[2]
+            self._err(msg, tb)
             self.gnc_session.check_end_session(locals())
-            raise sgfe
+            raise sgfe.with_traceback(tb)
 
         self._logger.append(msg)
         return msg
@@ -415,32 +394,32 @@ def process_input_parameters(argv:list):
         SattoLog.print_text('Printing ALL Debug output!!', RED)
 
     if not osp.isfile(args.monarch):
-        SattoLog.print_text("File path '{}' does not exist! Exiting...".format(args.monarch), RED)
+        SattoLog.print_text(F"File path '{args.monarch}' does not exist! Exiting...", RED)
         exit(423)
-    SattoLog.print_text("\nMonarch file = {}".format(args.monarch), CYAN)
+    SattoLog.print_text(F"\nMonarch file = {args.monarch}", CYAN)
 
     domain = BOTH
     mode = TEST
     gnc_file = None
     if 'filename' in args:
         if not osp.isfile(args.filename):
-            SattoLog.print_text("File path '{}' does not exist. Exiting...".format(args.filename), RED)
+            SattoLog.print_text(F"File path '{args.filename}' does not exist. Exiting...", RED)
             exit(432)
         gnc_file = args.filename
-        SattoLog.print_text("\nGnucash file = {}".format(gnc_file), CYAN)
+        SattoLog.print_text(F"\nGnucash file = {gnc_file}", CYAN)
         mode = SEND
         domain = args.type
-        SattoLog.print_text("Saving '{}' transaction types to Gnucash.".format(domain), BROWN)
+        SattoLog.print_text("Saving '{domain}' transaction types to Gnucash.", BROWN)
 
     return args.monarch, args.json, args.debug, mode, gnc_file, domain
 
 
 def mon_copy_rep_main(args:list) -> list:
-    SattoLog.print_text("Parameters = \n{}".format(json.dumps(args, indent=4)), GREEN)
+    SattoLog.print_text(F"Parameters = \n{json.dumps(args, indent=4)}", GREEN)
     mon_file, save_json, debug, mode, gnc_file, domain = process_input_parameters(args)
 
     mcr_now = dt.now().strftime(DATE_STR_FORMAT)
-    SattoLog.print_text("mon_copy_rep_main(): Runtime = {}".format(mcr_now), BLUE)
+    SattoLog.print_text(F"mon_copy_rep_main(): Runtime = {mcr_now}", BLUE)
 
     try:
         # parse an external Monarch COPIED report file
@@ -466,10 +445,10 @@ def mon_copy_rep_main(args:list) -> list:
 
             out_file = save_to_json(json_path + '/' + basename, mcr_now,
                                     parser.get_monarch_record().to_json(), p_color = MAGENTA)
-            msg.append("\nmon_copy_rep_main() created JSON file:\n{}".format(out_file))
+            msg.append(F"\nmon_copy_rep_main() created JSON file:\n{out_file}")
 
     except Exception as e:
-        msg = ["mon_copy_rep_main() EXCEPTION: {}!!".format(repr(e))]
+        msg = [F"mon_copy_rep_main() EXCEPTION: {repr(e)}!!"]
         SattoLog.print_warning(msg)
 
     SattoLog.print_text("\n >>> PROGRAM ENDED.", GREEN)
