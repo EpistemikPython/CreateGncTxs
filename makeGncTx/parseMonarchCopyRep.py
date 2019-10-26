@@ -11,9 +11,9 @@ __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __python_version__ = 3.6
 __created__ = '2019-06-22'
-__updated__ = '2019-10-25'
+__updated__ = '2019-10-26'
 
-from sys import path
+from sys import path, exc_info
 import re
 from argparse import ArgumentParser
 path.append("/home/marksa/dev/git/Python/Gnucash/updateBudgetQtrly")
@@ -22,12 +22,11 @@ from gnucash_utilities import *
 
 # TODO: use investment.TxRecord instead of dicts to store Monarch & Gnucash information
 class ParseMonarchCopyReport:
-    def __init__(self, p_monfile:str, p_mode:str, p_debug:bool=False):
+    def __init__(self, p_monfile:str, p_debug:bool=False):
         self.mon_file = p_monfile
-        self.mode = p_mode
         self.debug = p_debug
-        self.monarch_txs = InvestmentRecord()
-        self.gnucash_txs = InvestmentRecord()
+        self._monarch_txs = InvestmentRecord()
+        self._gnucash_txs = InvestmentRecord()
 
         self._logger = SattoLog(my_color=MAGENTA, do_printing=p_debug)
         self._log('class ParseMonarchCopyReport')
@@ -39,15 +38,15 @@ class ParseMonarchCopyReport:
         self._logger.print_info(p_msg, BR_RED, p_frame=err_frame)
 
     def set_filename(self, fn:str):
-        self.monarch_txs.set_filename(fn)
+        self._monarch_txs.set_filename(fn)
 
     def get_monarch_record(self) -> InvestmentRecord:
-        return self.monarch_txs
+        return self._monarch_txs
 
     def get_gnucash_record(self) -> InvestmentRecord:
-        return self.gnucash_txs
+        return self._gnucash_txs
 
-    def get_log(self):
+    def get_log(self) -> list:
         return self._logger.get_log()
 
     def parse_copy_info(self):
@@ -96,7 +95,7 @@ class ParseMonarchCopyReport:
                 if mon_state == FIND_OWNER:
                     if words[0] == OPEN:
                         owner = MON_MARK if MON_ROBB in words else MON_LULU
-                        self.monarch_txs.set_owner(owner)
+                        self._monarch_txs.set_owner(owner)
                         self._log(F"\n\t\u0022Current owner: {owner}\u0022")
                         mon_state = STATE_SEARCH
                         continue
@@ -121,7 +120,7 @@ class ParseMonarchCopyReport:
                     bal = words[-8]
                     price = words[-7]
                     curr_tx = {DATE:doc_date, DESC:PRICE, FUND_CMPY:fd_co, FUND:fund, UNIT_BAL:bal, PRICE:price}
-                    self.monarch_txs.add_tx(plan_type, PRICE, curr_tx)
+                    self._monarch_txs.add_tx(plan_type, PRICE, curr_tx)
                     self._log(F"ADD current Price Tx:\n\t{curr_tx}")
                     continue
 
@@ -143,7 +142,7 @@ class ParseMonarchCopyReport:
                     curr_tx[UNITS] = words[-1]
                     curr_tx[PRICE] = words[-2]
                     curr_tx[LOAD] = words[-5]
-                    self.monarch_txs.add_tx(plan_type, TRADE, curr_tx)
+                    self._monarch_txs.add_tx(plan_type, TRADE, curr_tx)
                     self._log(F"ADD current Trade Tx:\n\t{curr_tx}")
 
     # TODO: Produce Gnucash txs directly in a GnucashSession function??
@@ -242,7 +241,7 @@ class ParseMonarchCopyReport:
         if init_tx[TYPE] in (SW_IN,SW_OUT):
             self._log("Tx is a Switch to OTHER account in SAME Fund company.", BLUE)
             # look for switches in this plan type with same company, day, month and opposite gross value
-            for gnc_tx in self.gnucash_txs.get_trades(plan_type):
+            for gnc_tx in self._gnucash_txs.get_trades(plan_type):
                 if gnc_tx[TYPE] in (SW_IN,SW_OUT) and gnc_tx[FUND].split()[0] == init_tx[FUND].split()[0] \
                         and gnc_tx[GROSS] == (net_amount * -1) and gnc_tx[TRADE_DATE] == init_tx[TRADE_DATE]:
                     # ALREADY HAVE THE FIRST ITEM OF THE PAIR
@@ -253,7 +252,7 @@ class ParseMonarchCopyReport:
 
             if not have_pair:
                 # store the tx until we find the matching tx
-                self.gnucash_txs.add_tx(plan_type, TRADE, init_tx)
+                self._gnucash_txs.add_tx(plan_type, TRADE, init_tx)
                 self._log('Found the FIRST of a pair...\n', BROWN)
 
         return init_tx, pair_tx
@@ -280,8 +279,10 @@ class ParseMonarchCopyReport:
             self.gnc_session.create_trade_tx(tx1, tx2)
 
         except Exception as pmte:
-            self._err(F"process_monarch_trade() EXCEPTION!! '{repr(pmte)}'\n", sys.exc_traceback)
-            raise pmte
+            pmte_msg = F"process_monarch_trade() EXCEPTION: {repr(pmte)}!\n"
+            tb = exc_info()[2]
+            self._err(pmte_msg, tb)
+            raise pmte.with_traceback(tb)
 
     def add_balance_to_trade(self):
         """
@@ -292,9 +293,9 @@ class ParseMonarchCopyReport:
         :return: nil
         """
         self._log('ParseMonarchCopyReport.add_balance_to_trade()')
-        for iplan in self.monarch_txs.get_plans():
+        for iplan in self._monarch_txs.get_plans():
             self._log("plan type = {}".format(repr(iplan)))
-            plan = self.monarch_txs.get_plan(iplan)
+            plan = self._monarch_txs.get_plan(iplan)
             for prc in plan[PRICE]:
                 indx = 0
                 latest_indx = -1
@@ -322,19 +323,19 @@ class ParseMonarchCopyReport:
         self.gnc_session = p_gncs
         msg = [TEST]
         try:
-            owner = self.monarch_txs.get_owner()
+            owner = self._monarch_txs.get_owner()
             self._log(F"Owner = {owner}")
 
             self.gnc_session.begin_session()
             self.create_gnucash_info(owner)
-            self.gnc_session.end_session(self.mode == SEND)
+            self.gnc_session.end_session()
 
             msg = self._logger.get_log()
 
         except Exception as sgfe:
-            msg = ["save_to_gnucash_file() EXCEPTION!! '{}'".format(repr(sgfe))]
-            tb = sys.exc_info()[2]
-            self._err(msg, tb)
+            sgfe_msg = F"save_to_gnucash_file() EXCEPTION: {repr(sgfe)}!"
+            tb = exc_info()[2]
+            self._err(sgfe_msg, tb)
             self.gnc_session.check_end_session(locals())
             raise sgfe.with_traceback(tb)
 
@@ -347,7 +348,7 @@ class ParseMonarchCopyReport:
         :return: nil
         """
         domain = self.gnc_session.get_domain()
-        plans = self.monarch_txs.get_plans()
+        plans = self._monarch_txs.get_plans()
         for plan_type in plans:
             self._log(F"\n\t\u0022Plan type = {plan_type}\u0022", BROWN)
 
@@ -388,28 +389,30 @@ def process_args():
 
 def process_input_parameters(argv:list):
     args = process_args().parse_args(argv)
-    SattoLog.print_text("\nargs = {}".format(args), BROWN)
+    SattoLog.print_text(F"\nargs = {args}", BROWN)
 
     if args.debug:
         SattoLog.print_text('Printing ALL Debug output!!', RED)
 
     if not osp.isfile(args.monarch):
-        SattoLog.print_text(F"File path '{args.monarch}' does not exist! Exiting...", RED)
-        exit(423)
+        msg = F"File path '{args.monarch}' does not exist! Exiting..."
+        SattoLog.print_text(msg, RED)
+        raise Exception(msg)
     SattoLog.print_text(F"\nMonarch file = {args.monarch}", CYAN)
 
-    domain = BOTH
     mode = TEST
+    domain = BOTH
     gnc_file = None
     if 'filename' in args:
         if not osp.isfile(args.filename):
-            SattoLog.print_text(F"File path '{args.filename}' does not exist. Exiting...", RED)
-            exit(432)
+            msg = F"File path '{args.filename}' does not exist. Exiting..."
+            SattoLog.print_text(msg, RED)
+            raise Exception(msg)
         gnc_file = args.filename
         SattoLog.print_text(F"\nGnucash file = {gnc_file}", CYAN)
         mode = SEND
         domain = args.type
-        SattoLog.print_text("Saving '{domain}' transaction types to Gnucash.", BROWN)
+        SattoLog.print_text(F"Saving '{domain}' transaction types to Gnucash.", BROWN)
 
     return args.monarch, args.json, args.debug, mode, gnc_file, domain
 
@@ -423,7 +426,7 @@ def mon_copy_rep_main(args:list) -> list:
 
     try:
         # parse an external Monarch COPIED report file
-        parser = ParseMonarchCopyReport(mon_file, mode, debug)
+        parser = ParseMonarchCopyReport(mon_file, debug)
 
         parser.parse_copy_info()
         parser.add_balance_to_trade()
@@ -444,14 +447,16 @@ def mon_copy_rep_main(args:list) -> list:
             basename, ext = osp.splitext(fname)
 
             out_file = save_to_json(json_path + '/' + basename, mcr_now,
-                                    parser.get_monarch_record().to_json(), p_color = MAGENTA)
+                                    parser.get_monarch_record().to_json(), p_color=MAGENTA)
             msg.append(F"\nmon_copy_rep_main() created JSON file:\n{out_file}")
 
-    except Exception as e:
-        msg = [F"mon_copy_rep_main() EXCEPTION: {repr(e)}!!"]
-        SattoLog.print_warning(msg)
+    except Exception as mcre:
+        mcre_msg = F"mon_copy_rep_main() EXCEPTION: {repr(mcre)}!!"
+        tb = exc_info()[2]
+        SattoLog.print_warning(mcre_msg, tb)
+        msg = [mcre_msg]
 
-    SattoLog.print_text("\n >>> PROGRAM ENDED.", GREEN)
+    SattoLog.print_text('\n >>> PROGRAM ENDED.', GREEN)
     return msg
 
 
