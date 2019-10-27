@@ -69,7 +69,7 @@ class ParseMonarchCopyReport:
                     record fund, desc, gross, units, price, load, trade date
         :return nil
         """
-        self._log("ParseMonarchCopyReport.parse_copy_info()")
+        self._log('ParseMonarchCopyReport.parse_copy_info()')
 
         re_date = re.compile(r"([0-9]{2}-\w{3}-[0-9]{4})")
 
@@ -146,9 +146,9 @@ class ParseMonarchCopyReport:
                     self._log(F"ADD current Trade Tx:\n\t{curr_tx}")
 
     # TODO: Produce Gnucash txs directly in a GnucashSession function??
-    def get_trade_info(self, mon_tx:dict, plan_type:str, ast_parent:Account, rev_acct:Account):
+    def get_trade_info(self, mon_tx:dict, plan_type:str, ast_parent:Account, rev_acct:Account) -> (dict,dict):
         """
-        Parse the Monarch trade transactions from the member InvestmentRecord instance
+        Parse a Monarch trade transaction
         ** useful to have this intermediate function to obtain matching 'in' and 'out' Switch txs...
         Asset accounts: use the proper path to find the parent then search for the Fund Code in the descendants
         Revenue accounts: pick the proper account based on owner and plan type
@@ -160,7 +160,7 @@ class ParseMonarchCopyReport:
         :param  plan_type: plan name from InvestmentRecord
         :param ast_parent: Asset parent account
         :param   rev_acct: Revenue account
-        :return: dict, dict
+        :return: one trade tx or both txs of a switch, if available
         """
         self._log('ParseMonarchCopyReport.get_trade_info()', BLUE)
 
@@ -222,7 +222,7 @@ class ParseMonarchCopyReport:
             if re_match.group(1):
                 units *= -1
             init_tx[UNITS] = units
-            self._log("units = {}".format(units))
+            self._log(F"units = {units}")
         else:
             raise Exception(F"PROBLEM: re_units DID NOT match with value '{mon_tx[UNITS]}'!")
 
@@ -232,14 +232,14 @@ class ParseMonarchCopyReport:
         self._log(F"descr = {init_tx[DESC]}", CYAN)
 
         # notes field
-        notes = mon_tx[NOTES] if NOTES in mon_tx else "{} Load = {}".format(fund_name, mon_tx[LOAD])
+        notes = mon_tx[NOTES] if NOTES in mon_tx else F"Load = {mon_tx[LOAD]}"
         init_tx[NOTES] = notes
         self._log(F"notes = {init_tx[NOTES]}", CYAN)
 
         pair_tx = None
         have_pair = False
         if init_tx[TYPE] in (SW_IN,SW_OUT):
-            self._log("Tx is a Switch to OTHER account in SAME Fund company.", BLUE)
+            self._log('Tx is a Switch to OTHER account in SAME Fund company.', BLUE)
             # look for switches in this plan type with same company, day, month and opposite gross value
             for gnc_tx in self._gnucash_txs.get_trades(plan_type):
                 if gnc_tx[TYPE] in (SW_IN,SW_OUT) and gnc_tx[FUND].split()[0] == init_tx[FUND].split()[0] \
@@ -294,31 +294,30 @@ class ParseMonarchCopyReport:
         """
         self._log('ParseMonarchCopyReport.add_balance_to_trade()')
         for iplan in self._monarch_txs.get_plans():
-            self._log("plan type = {}".format(repr(iplan)))
+            self._log(F"plan type = {repr(iplan)}")
             plan = self._monarch_txs.get_plan(iplan)
-            for prc in plan[PRICE]:
+            for tx in plan[PRICE]:
                 indx = 0
                 latest_indx = -1
                 latest_dte = None
-                fnd = prc[FUND]
                 for trd in plan[TRADE]:
-                    if trd[FUND] == fnd:
-                        dte = dt.strptime(trd[TRADE_DATE], '%d-%b-%Y')
-                        if latest_dte is None or dte > latest_dte:
-                            latest_dte = dte
-                            self._log("Latest date for {} is {}".format(fnd, latest_dte))
+                    if trd[FUND] == tx[FUND]:
+                        trd_date = dt.strptime(trd[TRADE_DATE], '%d-%b-%Y')
+                        if latest_dte is None or trd_date > latest_dte:
+                            latest_dte = trd_date
+                            self._log(F"Latest date for {tx[FUND]} is {latest_dte}")
                             latest_indx = indx
                     indx += 1
                 if latest_indx > -1:
-                    plan[TRADE][latest_indx][UNIT_BAL] = prc[UNIT_BAL]
-                    plan[TRADE][latest_indx][NOTES] = fnd + " Balance = " + prc[UNIT_BAL]
+                    plan[TRADE][latest_indx][UNIT_BAL] = tx[UNIT_BAL]
+                    plan[TRADE][latest_indx][NOTES] = F"{tx[FUND]} Balance = {tx[UNIT_BAL]}"
 
     def save_to_gnucash_file(self, p_gncs:GnucashSession) -> list:
         """
         transfer the Monarch information to a Gnucash file
         :return: message
         """
-        self._log("ParseMonarchCopyReport.save_to_gnucash_file()")
+        self._log('ParseMonarchCopyReport.save_to_gnucash_file()')
         # noinspection PyAttributeOutsideInit
         self.gnc_session = p_gncs
         msg = [TEST]
