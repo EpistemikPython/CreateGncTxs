@@ -9,7 +9,7 @@ __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __python_version__ = 3.6
 __created__ = '2018'
-__updated__ = '2019-10-25'
+__updated__ = '2019-10-27'
 
 from sys import path
 import os.path as osp
@@ -256,14 +256,13 @@ FILL_CURR_TX = 0x0090
 
 
 # TODO: TxRecord in standard format for both Monarch and Gnucash
-# noinspection PyAttributeOutsideInit
 class TxRecord:
     """
     All the required information for an individual transaction
     """
-    def __init__(self, p_dt:dt=None, p_dt_str:str='', p_sw:bool=False,
-                 p_fcmpy:str='', p_fcode:str='', p_fname:str='',
-                 p_gr:float=0.0, p_gr_str:str='', p_pr:float=0.0, p_pr_str:str='', p_un:float=0.0, p_un_str:str=''):
+    def __init__(self, p_dt:dt=None, p_dt_str:str='', p_sw:bool=False, p_fcmpy:str='', p_fcode:str='', p_fname:str='',
+                 p_gr:float=0.0, p_gr_str:str='', p_pr:float=0.0, p_pr_str:str='', p_un:float=0.0, p_un_str:str='',
+                 p_logger:SattoLog=None):
         self.set_date(p_dt)
         self.date_str = p_dt_str
         self.switch = p_sw
@@ -276,6 +275,7 @@ class TxRecord:
         self.price_str = p_pr_str
         self.units = p_un
         self.units_str = p_un_str
+        self._logger = p_logger
 
     def __getitem__(self, item):
         if item == DATE:
@@ -295,8 +295,16 @@ class TxRecord:
         if item == SWITCH:
             return self.switch
         else:
-            SattoLog.print_warning("UNKNOWN item: {}".format(item))
+            self._log(F"UNKNOWN item: {item}")
             return None
+
+    def _log(self, p_msg:str, p_color:str=''):
+        if self._logger:
+            self._logger.print_info(p_msg, p_color, p_info=inspect.currentframe().f_back)
+
+    def _err(self, p_msg: str, err_info:object):
+        if self._logger:
+            self._logger.print_info(p_msg, BR_RED, p_info=err_info)
 
     def set_fund_cmpy(self, p_co:str):
         self.company = p_co
@@ -308,17 +316,17 @@ class TxRecord:
         self.fd_name = p_name
 
     def set_type(self, p_type):
-        if p_type in (TRADE, PRICE):
+        if p_type in (TRADE,PRICE):
             self.type = p_type
         else:
-            SattoLog.print_warning("BAD type: {}".format(str(p_type)))
+            self._log(F"BAD type: {p_type}")
 
     def set_date(self, p_date:dt) -> dt:
         old_date = self.date
         if p_date is not None and isinstance(p_date, dt):
             self.date = p_date
         else:
-            SattoLog.print_warning("BAD date: {}".format(str(p_date)))
+            self._log(F"BAD date: {p_date}")
         return old_date
 
 # END class TxRecord
@@ -415,11 +423,11 @@ class InvestmentRecord:
     def get_size_str(self, plan_spec:str='', type_spec:str='') -> str:
         if plan_spec in (OPEN, RRSP, TFSA):
             if type_spec in (PRICE, TRADE):
-                return "{}[{}]".format(type_spec, self.get_size(plan_spec, type_spec))
-            return "P{}/T{}".format(self.get_size(plan_spec, PRICE), self.get_size(plan_spec, TRADE))
+                return F"{type_spec}[{self.get_size(plan_spec,type_spec)}]"
+            return F"P{self.get_size(plan_spec,PRICE)}/T{self.get_size(plan_spec,TRADE)}"
         # return information for all plans and types
-        return "{} = {}:{} + {}:{} + {}:{}".format(self.get_size(), OPEN, self.get_size_str(OPEN),
-                                                   TFSA, self.get_size_str(TFSA), RRSP, self.get_size_str(RRSP))
+        return F"{self.get_size()} = {OPEN}:{self.get_size_str(OPEN)} + "\
+               + F"{TFSA}:{self.get_size_str(TFSA)} + {RRSP}:{self.get_size_str(RRSP)}"
 
     def add_tx(self, plan, tx_type, obj):
         if isinstance(plan, str) and plan in self._plans.keys():
