@@ -4,6 +4,7 @@
 /py3bindings
 **/in/Monarch
 **/out/
+**/gncout/
 **/logs/
 **/venv/
 **/Downloads
@@ -19,5 +20,6 @@
 *.bin
 *.exe
 *.x
+gncFiles
 # find <dir/>* -type l >> .gitignore
 
