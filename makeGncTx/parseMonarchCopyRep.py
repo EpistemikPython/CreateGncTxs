@@ -198,7 +198,7 @@ class ParseMonarchCopyReport:
             self._log(F"gross amount = {gross_amt}")
             init_tx[GROSS] = gross_amt
         else:
-            raise Exception(F"PROBLEM: gross amount DID NOT match with value '{mon_tx[GROSS]}'!")
+            raise Exception(F"PROBLEM: gross amount DID NOT match with value: {mon_tx[GROSS]}!")
 
         # get the net dollar value of the tx
         re_match = re.match(re_dollars, mon_tx[NET])
@@ -212,7 +212,7 @@ class ParseMonarchCopyReport:
             self._log(F"net_amount = {net_amount}")
             init_tx[NET] = net_amount
         else:
-            raise Exception(F"PROBLEM: net amount DID NOT match with value '{mon_tx[NET]}'!")
+            raise Exception(F"PROBLEM: net amount DID NOT match with value: {mon_tx[NET]}!")
 
         # get the units of the tx
         re_match = re.match(re_units, mon_tx[UNITS])
@@ -221,10 +221,10 @@ class ParseMonarchCopyReport:
             # if match group 1 is not empty, units is negative
             if re_match.group(1):
                 units *= -1
-            init_tx[UNITS] = units
             self._log(F"units = {units}")
+            init_tx[UNITS] = units
         else:
-            raise Exception(F"PROBLEM: re_units DID NOT match with value '{mon_tx[UNITS]}'!")
+            raise Exception(F"PROBLEM: units DID NOT match with value: {mon_tx[UNITS]}!")
 
         # assemble the Description string
         descr = "{} {}".format(mon_tx[DESC], fund_name)
@@ -247,13 +247,13 @@ class ParseMonarchCopyReport:
                     # ALREADY HAVE THE FIRST ITEM OF THE PAIR
                     have_pair = True
                     pair_tx = gnc_tx
-                    self._log('*** Found the MATCH of a pair ***', BROWN)
+                    self._log('*** Found the MATCH of a Switch pair ***', BROWN)
                     break
 
             if not have_pair:
                 # store the tx until we find the matching tx
                 self._gnucash_txs.add_tx(plan_type, TRADE, init_tx)
-                self._log('Found the FIRST of a pair...\n', BROWN)
+                self._log('Found the FIRST of a Switch pair...\n', BROWN)
 
         return init_tx, pair_tx
 
@@ -265,7 +265,6 @@ class ParseMonarchCopyReport:
         :param  plan_type: plan names from Configuration.InvestmentRecord
         :param ast_parent: Asset parent account
         :param   rev_acct: Revenue account
-        :return: nil
         """
         self._log('ParseMonarchCopyReport.process_monarch_trade()', BLUE)
         try:
@@ -344,7 +343,6 @@ class ParseMonarchCopyReport:
     def create_gnucash_info(self, p_owner:str):
         """
         Process each transaction from the Monarch input file to get the required Gnucash information
-        :return: nil
         """
         domain = self.gnc_session.get_domain()
         plans = self._monarch_txs.get_plans()
