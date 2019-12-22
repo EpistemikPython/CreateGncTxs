@@ -192,6 +192,9 @@ class MonarchGnucashServices(QDialog):
 
         # check that necessary files have been selected
         if selected_fxn == MON_COPY:
+            if self.mon_file is None:
+                self.response_box.setText('>>> MUST select a Monarch File!')
+                return
             cl_params.append('-m' + self.mon_file)
             if self.ch_json.isChecked(): cl_params.append('--json')
             if self.ch_debug.isChecked(): cl_params.append('--debug')
