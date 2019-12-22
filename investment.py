@@ -146,6 +146,7 @@ FUND_NAME_CODE = {
     "CI"          : CIG ,
     "Cambridge"   : CIG ,
     "Signature"   : CIG ,
+    "Sentry"      : CIG ,
     "Dynamic"     : DYN ,
     "Mackenzie"   : MFC ,
     "Manulife"    : MMF ,
@@ -232,6 +233,7 @@ MONEY_MKT_FUNDS = [MFC_298, MFC_4378, TML_204, TML_703]
 
 TRUST_AST_ACCT = CIG_18140
 TRUST_EQY_ACCT = "Trust Base"
+TRUST_REV_ACCT = "Trust_Dist"
 
 # find the proper path to the account in the gnucash file
 ACCT_PATHS = {
@@ -256,6 +258,7 @@ FILL_CURR_TX = 0x0090
 
 
 # TODO: TxRecord in standard format for both Monarch and Gnucash
+# noinspection PyAttributeOutsideInit
 class TxRecord:
     """
     All the required information for an individual transaction

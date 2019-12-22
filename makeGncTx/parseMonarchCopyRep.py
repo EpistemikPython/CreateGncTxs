@@ -131,17 +131,17 @@ class ParseMonarchCopyReport:
                     self._log(F"FOUND a NEW tx! Date: {tx_date}")
                     fund_co = words[-8]
                     fund = fund_co + " " + words[-7]
-                    tx_type = words[1]
+                    tx_type = TX_TYPES[words[1]]
                     # have to identify & handle different types
-                    desc = TX_TYPES[words[2]] if tx_type == INTRCL else TX_TYPES[tx_type]
+                    desc = words[2] if words[1] == INTRCL else tx_type
                     # noinspection PyDictCreation
                     curr_tx = {TRADE_DATE:tx_date, FUND:fund, TYPE:desc, CMPY:COMPANY_NAME[fund_co]}
-                    curr_tx[DESC] = curr_tx[CMPY] + ": " + desc
+                    curr_tx[DESC]  = curr_tx[CMPY] + ": " + desc
                     curr_tx[GROSS] = words[-4]
-                    curr_tx[NET] = words[-3]
+                    curr_tx[NET]   = words[-3]
                     curr_tx[UNITS] = words[-1]
                     curr_tx[PRICE] = words[-2]
-                    curr_tx[LOAD] = words[-5]
+                    curr_tx[LOAD]  = words[-5]
                     self._monarch_txs.add_tx(plan_type, TRADE, curr_tx)
                     self._log(F"ADD current Trade Tx:\n\t{curr_tx}")
 
@@ -170,21 +170,21 @@ class ParseMonarchCopyReport:
         re_units   = re.compile(r"^(-?)([0-9]{1,5})\.([0-9]{4}).*")
 
         fund_name = mon_tx[FUND]
+        asset_acct = self.gnc_session.get_account(fund_name, ast_parent)
+        # special locations for Trust accounts
+        if fund_name == TRUST_AST_ACCT:
+            trust_acct = TRUST_REV_ACCT if mon_tx[TYPE] == REINV else TRUST_EQY_ACCT
+            rev_acct = self.gnc_session.get_account(trust_acct)
+        self._log(F"get_trade_info(): asset account = {asset_acct.GetName()}; revenue account = {rev_acct.GetName()}")
 
         conv_date = dt.strptime(mon_tx[TRADE_DATE], "%d-%b-%Y")
-        init_tx = {FUND:fund_name, TRADE_DATE:mon_tx[TRADE_DATE],
+        init_tx = {FUND:fund_name, ACCT:asset_acct, REVENUE:rev_acct, TRADE_DATE:mon_tx[TRADE_DATE],
                    TRADE_DAY:conv_date.day, TRADE_MTH:conv_date.month, TRADE_YR:conv_date.year}
         self._log(F"trade day-month-year = {init_tx[TRADE_DAY]}-{init_tx[TRADE_MTH]}-{init_tx[TRADE_YR]}")
 
         # different accounts depending if Switch, Redemption, Purchase, Distribution
-
         init_tx[TYPE] = mon_tx[TYPE]
         init_tx[CMPY] = mon_tx[CMPY]
-
-        asset_acct = self.gnc_session.get_account(ast_parent, fund_name)
-        self._log(F"get_trade_info(): asset account = {asset_acct.GetName()}; revenue account = {rev_acct.GetName()}")
-        init_tx[ACCT] = asset_acct
-        init_tx[REVENUE] = rev_acct
 
         # get the gross dollar value of the tx
         re_match = re.match(re_dollars, mon_tx[GROSS])
@@ -257,17 +257,19 @@ class ParseMonarchCopyReport:
 
         return init_tx, pair_tx
 
-    def process_monarch_trade(self, mon_tx:dict, plan_type:str, ast_parent:Account, rev_acct:Account):
+    def process_monarch_trade(self, mon_tx:dict, plan_type:str, ast_parent:Account, p_owner:str):
         """
         Obtain each Monarch trade as a transaction item, or pair of transactions where required,
         and forward to Gnucash processing
         :param     mon_tx: Monarch transaction information
         :param  plan_type: plan names from Configuration.InvestmentRecord
         :param ast_parent: Asset parent account
-        :param   rev_acct: Revenue account
+        :param    p_owner: str name
         """
         self._log('ParseMonarchCopyReport.process_monarch_trade()', BLUE)
         try:
+            rev_acct = self.gnc_session.get_revenue_account(plan_type, p_owner)
+
             # get the additional required information from the Monarch json
             tx1, tx2 = self.get_trade_info(mon_tx, plan_type, ast_parent, rev_acct)
 
@@ -349,14 +351,12 @@ class ParseMonarchCopyReport:
         for plan_type in plans:
             self._log(F"\n\t\u0022Plan type = {plan_type}\u0022", BROWN)
 
-            asset_parent = self.gnc_session.get_asset_account(plan_type, p_owner)
-            rev_acct = self.gnc_session.get_revenue_account(plan_type, p_owner)
-            self._log("create_gnucash_info(): asset parent = {}; revenue account = {}"
-                      .format(asset_parent.GetName(), rev_acct.GetName()))
+            asset_parent = self.gnc_session.get_asset_parent(plan_type, p_owner)
+            self._log(F"create_gnucash_info(): asset parent = {asset_parent.GetName()}")
 
             if domain in (TRADE,BOTH):
                 for mon_tx in plans[plan_type][TRADE]:
-                    self.process_monarch_trade(mon_tx, plan_type, asset_parent, rev_acct)
+                    self.process_monarch_trade(mon_tx, plan_type, asset_parent, p_owner)
 
             if domain in (PRICE,BOTH):
                 for mon_tx in plans[plan_type][PRICE]:
