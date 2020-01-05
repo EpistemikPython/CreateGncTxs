@@ -3,25 +3,22 @@
 #
 # startUI.py -- run the UI for the functions
 #
-# Copyright (c) 2019 Mark Sattolo <epistemik@gmail.com>
+# Copyright (c) 2020 Mark Sattolo <epistemik@gmail.com>
 #
 __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
-__python_version__ = 3.6
+__python_version__ = 3.9
 __created__ = '2018'
-__updated__ = '2019-10-19'
+__updated__ = '2020-01-04'
 
-from sys import argv
 from PyQt5.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QHBoxLayout, QGroupBox, QDialog, QFileDialog,
                              QPushButton, QFormLayout, QDialogButtonBox, QLabel, QTextEdit, QCheckBox)
 from functools import partial
 from parseMonarchCopyRep import *
-path.append('/home/marksa/dev/git/Python/Gnucash/createGncTxs/parsePdf')
-
 
 # constant strings
 GNC_SFX:str    = 'gnc'
-MON_SFX:str    = 'txt'
+MON_SFX:str    = 'monarch'
 FILE_LABEL:str = ' File:'
 FUNDS:str      = FUND + 's'
 MON_COPY:str   = MON + ' Copy'

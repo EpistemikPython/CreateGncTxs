@@ -3,13 +3,13 @@
 #
 # investment.py -- classes, constants, variables & functions used with my investment scripts
 #
-# Copyright (c) 2019 Mark Sattolo <epistemik@gmail.com>
+# Copyright (c) 2020 Mark Sattolo <epistemik@gmail.com>
 #
 __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
-__python_version__ = 3.6
+__python_version__ = 3.9
 __created__ = '2018'
-__updated__ = '2019-10-27'
+__updated__ = '2020-01-04'
 
 from sys import path
 import os.path as osp
@@ -88,7 +88,6 @@ TRADE_MTH:str   = TRADE + " Month"
 TRADE_YR:str    = TRADE + " Year"
 TYPE:str        = "Type"
 DESC:str        = "Description"
-SWITCH:str      = "Switch"
 GROSS:str       = "Gross"
 NET:str         = "Net"
 UNITS:str       = "Units"
@@ -103,6 +102,7 @@ RDMPN:str       = "Redemption"
 FEE_RD:str      = FEE + " " + RDMPN
 PURCH:str       = "Purchase"
 DIST:str        = "Dist"
+SWITCH:str      = "Switch"
 SW_IN:str       = SWITCH + "-in"
 SW_OUT:str      = SWITCH + "-out"
 INTRF:str       = "Internal Transfer"
@@ -110,6 +110,10 @@ INTRF_IN:str    = INTRF + "-In"
 INTRF_OUT:str   = INTRF + "-Out"
 REINV:str       = "Reinvested"
 INTRCL:str      = "Inter-Class"
+DOLLAR:str      = "Dollar"
+COST_AVE:str    = " Cost Averaging "
+DCA_IN:str      = DOLLAR + COST_AVE + SW_IN
+DCA_OUT:str     = DOLLAR + COST_AVE + SW_OUT
 
 # Fund companies
 ATL:str = "ATL"
@@ -125,8 +129,10 @@ TX_TYPES = {
     SW_OUT   : SW_OUT ,
     REINV    : REINV + " Distribution" ,
     AUTO_SYS : AUTO_SYS + " Withdrawal Plan" ,
-    RDMPN    : RDMPN ,
-    PURCH    : PURCH
+    RDMPN    : RDMPN   ,
+    PURCH    : PURCH   ,
+    DCA_IN   : DCA_IN  ,
+    DCA_OUT  : DCA_OUT
 }
 
 # Company names

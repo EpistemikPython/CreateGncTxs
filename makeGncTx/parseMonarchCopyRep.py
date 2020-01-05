@@ -5,15 +5,15 @@
 #                           the information as transaction and price parameters in an InvestmentRecord,
 #                           then saving to a specified Gnucash file
 #
-# Copyright (c) 2019 Mark Sattolo <epistemik@gmail.com>
+# Copyright (c) 2020 Mark Sattolo <epistemik@gmail.com>
 #
 __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
-__python_version__ = 3.6
+__python_version__ = 3.9
 __created__ = '2019-06-22'
-__updated__ = '2019-10-26'
+__updated__ = '2020-01-04'
 
-from sys import path, exc_info
+from sys import path, argv, exc_info
 import re
 from argparse import ArgumentParser
 path.append("/home/marksa/dev/git/Python/Gnucash/updateBudgetQtrly")
@@ -131,9 +131,11 @@ class ParseMonarchCopyReport:
                     self._log(F"FOUND a NEW tx! Date: {tx_date}")
                     fund_co = words[-8]
                     fund = fund_co + " " + words[-7]
-                    tx_type = TX_TYPES[words[1]]
+                    tx_type = words[1]
+                    if tx_type == DOLLAR:
+                        tx_type = DCA_IN if words[4] == SW_IN else DCA_OUT
                     # have to identify & handle different types
-                    desc = words[2] if words[1] == INTRCL else tx_type
+                    desc = words[2] if tx_type == INTRCL else TX_TYPES[tx_type]
                     # noinspection PyDictCreation
                     curr_tx = {TRADE_DATE:tx_date, FUND:fund, TYPE:desc, CMPY:COMPANY_NAME[fund_co]}
                     curr_tx[DESC]  = curr_tx[CMPY] + ": " + desc
@@ -171,12 +173,15 @@ class ParseMonarchCopyReport:
 
         fund_name = mon_tx[FUND]
         asset_acct = self.gnc_session.get_account(fund_name, ast_parent)
-        # special locations for Trust accounts
+
+        # special locations for Trust revenue accounts
         if fund_name == TRUST_AST_ACCT:
-            trust_acct = TRUST_REV_ACCT if mon_tx[TYPE] == REINV else TRUST_EQY_ACCT
+            trust_acct = TRUST_REV_ACCT if mon_tx[TYPE] == TX_TYPES[REINV] else TRUST_EQY_ACCT
             rev_acct = self.gnc_session.get_account(trust_acct)
+
         self._log(F"get_trade_info(): asset account = {asset_acct.GetName()}; revenue account = {rev_acct.GetName()}")
 
+        # get required date fields
         conv_date = dt.strptime(mon_tx[TRADE_DATE], "%d-%b-%Y")
         init_tx = {FUND:fund_name, ACCT:asset_acct, REVENUE:rev_acct, TRADE_DATE:mon_tx[TRADE_DATE],
                    TRADE_DAY:conv_date.day, TRADE_MTH:conv_date.month, TRADE_YR:conv_date.year}
@@ -287,9 +292,10 @@ class ParseMonarchCopyReport:
 
     def add_balance_to_trade(self):
         """
+        Append the current unit balance from the Price list to the latest Trade tx.
         for each plan type:
             go through Price txs:
-                for each fund, find the latest tx in the Trade txs, if any...
+                for each tx, find the latest Trade tx for that fund, if any...
                 if found, add the Unit Balance from the Price tx to the Trade tx
         :return: nil
         """
@@ -313,12 +319,12 @@ class ParseMonarchCopyReport:
                     plan[TRADE][latest_indx][UNIT_BAL] = tx[UNIT_BAL]
                     plan[TRADE][latest_indx][NOTES] = F"{tx[FUND]} Balance = {tx[UNIT_BAL]}"
 
-    def save_to_gnucash_file(self, p_gncs:GnucashSession) -> list:
+    def insert_txs_to_gnucash_file(self, p_gncs:GnucashSession) -> list:
         """
         transfer the Monarch information to a Gnucash file
-        :return: message
+        :return: gnucash session log or error message
         """
-        self._log('ParseMonarchCopyReport.save_to_gnucash_file()')
+        self._log('ParseMonarchCopyReport.insert_txs_to_gnucash_file()')
         # noinspection PyAttributeOutsideInit
         self.gnc_session = p_gncs
         msg = [TEST]
@@ -332,12 +338,12 @@ class ParseMonarchCopyReport:
 
             msg = self._logger.get_log()
 
-        except Exception as sgfe:
-            sgfe_msg = F"save_to_gnucash_file() EXCEPTION: {repr(sgfe)}!"
+        except Exception as itgfe:
+            sgfe_msg = F"insert_txs_to_gnucash_file() EXCEPTION: {repr(itgfe)}!"
             tb = exc_info()[2]
             self._err(sgfe_msg, tb)
             self.gnc_session.check_end_session(locals())
-            raise sgfe.with_traceback(tb)
+            raise itgfe.with_traceback(tb)
 
         self._logger.append(msg)
         return msg
@@ -373,10 +379,10 @@ def process_args():
     required.add_argument('-m', '--monarch', required=True, help='path & filename of the copied Monarch Report file')
     # required if PROD
     subparsers = arg_parser.add_subparsers(help='with gnc option: MUST specify -f FILENAME and -t TX_TYPE')
-    gnc_parser = subparsers.add_parser('gnc', help='Save the parsed trade and/or price transactions to a Gnucash file')
+    gnc_parser = subparsers.add_parser('gnc', help='Insert the parsed trade and/or price transactions to a Gnucash file')
     gnc_parser.add_argument('-f', '--filename', required=True, help='path & filename of the Gnucash file')
     gnc_parser.add_argument('-t', '--type', required=True, choices=[TRADE, PRICE, BOTH],
-                            help="type of transaction to save: {} or {} or {}".format(TRADE, PRICE, BOTH))
+                            help="type of transaction to record: {} or {} or {}".format(TRADE, PRICE, BOTH))
     # optional arguments
     arg_parser.add_argument('--json',  action='store_true', help='Write the parsed Monarch data to a JSON file')
     arg_parser.add_argument('--debug', action='store_true', help='GENERATE DEBUG OUTPUT: MANY LINES!')
@@ -384,8 +390,8 @@ def process_args():
     return arg_parser
 
 
-def process_input_parameters(argv:list):
-    args = process_args().parse_args(argv)
+def process_input_parameters(argx:list):
+    args = process_args().parse_args(argx)
     SattoLog.print_text(F"\nargs = {args}", BROWN)
 
     if args.debug:
@@ -409,13 +415,12 @@ def process_input_parameters(argv:list):
         SattoLog.print_text(F"\nGnucash file = {gnc_file}", CYAN)
         mode = SEND
         domain = args.type
-        SattoLog.print_text(F"Saving '{domain}' transaction types to Gnucash.", BROWN)
+        SattoLog.print_text(F"Inserting '{domain}' transaction types to Gnucash.", BROWN)
 
     return args.monarch, args.json, args.debug, mode, gnc_file, domain
 
 
 def mon_copy_rep_main(args:list) -> list:
-    SattoLog.print_text(F"Parameters = \n{json.dumps(args, indent=4)}", GREEN)
     mon_file, save_json, debug, mode, gnc_file, domain = process_input_parameters(args)
 
     mcr_now = dt.now().strftime(DATE_STR_FORMAT)
@@ -432,7 +437,7 @@ def mon_copy_rep_main(args:list) -> list:
 
         if mode == SEND:
             gnc_session = GnucashSession(mode, gnc_file, debug, domain)
-            parser.save_to_gnucash_file(gnc_session)
+            parser.insert_txs_to_gnucash_file(gnc_session)
 
         msg = parser.get_log()
 
@@ -458,5 +463,4 @@ def mon_copy_rep_main(args:list) -> list:
 
 
 if __name__ == '__main__':
-    import sys
-    mon_copy_rep_main(sys.argv[1:])
+    mon_copy_rep_main(argv[1:])
