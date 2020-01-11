@@ -7,12 +7,14 @@
 #
 __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
-__python_version__ = 3.9
+__python_version__  = 3.9
+__gnucash_version__ = 3.8
 __created__ = '2018'
-__updated__ = '2020-01-04'
+__updated__ = '2020-01-11'
 
 from PyQt5.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QHBoxLayout, QGroupBox, QDialog, QFileDialog,
                              QPushButton, QFormLayout, QDialogButtonBox, QLabel, QTextEdit, QCheckBox)
+from PyQt5.QtCore import Qt
 from functools import partial
 from parseMonarchCopyRep import *
 
@@ -43,10 +45,10 @@ MAIN_FXNS = {
 }
 
 
-# noinspection PyAttributeOutsideInit
+# noinspection PyAttributeOutsideInit,PyCallByClass,PyTypeChecker
 class MonarchGnucashServices(QDialog):
     def __init__(self):
-        super().__init__()
+        super().__init__(flags=Qt.WindowSystemMenuHint|Qt.WindowTitleHint)
         self._logger = SattoLog(my_color=MAGENTA, do_printing=True)
         self.title = 'Monarch & Gnucash Services'
         self.left = 120
@@ -69,6 +71,7 @@ class MonarchGnucashServices(QDialog):
         if self._logger:
             self._logger.print_info(p_msg, BR_RED, p_info=err_frame)
 
+    # noinspection PyArgumentList
     def init_ui(self):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
@@ -85,9 +88,10 @@ class MonarchGnucashServices(QDialog):
         button_box.rejected.connect(self.reject)
 
         qvb_layout = QVBoxLayout()
+        # ?? none of the Alignment flags seem to give the same widget appearance as just leaving out the flag...
         qvb_layout.addWidget(self.gb_main)
         qvb_layout.addWidget(self.response_box)
-        qvb_layout.addWidget(button_box)
+        qvb_layout.addWidget(button_box, alignment=Qt.AlignAbsolute)
 
         self.setLayout(qvb_layout)
         self.show()
@@ -118,10 +122,10 @@ class MonarchGnucashServices(QDialog):
 
         horiz_box = QGroupBox("Check:")
         horiz_layout = QHBoxLayout()
-        self.ch_json = QCheckBox("Save Monarch info to JSON file?")
-        self.ch_debug = QCheckBox("Print DEBUG info?")
-        horiz_layout.addWidget(self.ch_json)
-        horiz_layout.addWidget(self.ch_debug)
+        self.chbx_json = QCheckBox("Save Monarch info to JSON file?")
+        self.chbx_debug = QCheckBox("Print DEBUG info?")
+        horiz_layout.addWidget(self.chbx_json, alignment=Qt.AlignAbsolute)
+        horiz_layout.addWidget(self.chbx_debug, alignment=Qt.AlignAbsolute)
         horiz_box.setLayout(horiz_layout)
         layout.addRow(QLabel("Options"), horiz_box)
 
@@ -144,18 +148,18 @@ class MonarchGnucashServices(QDialog):
         self.gnc_file_btn.clicked.connect(partial(self.open_file_name_dialog, GNC))
 
     def open_file_name_dialog(self, label:str):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        caption = "Get {} Files".format(label)
+        f_options = QFileDialog.Options()
+        f_options |= QFileDialog.DontUseNativeDialog
+        f_caption = "Get {} Files".format(label)
         base_filter  = "{} (*.{});;All Files (*)"
 
         self._log(label)
         if label == MON:
-            ffilter = base_filter.format(MON, MON_SFX)
+            f_filter = base_filter.format(MON, MON_SFX)
         else: # GNC
-            ffilter = base_filter.format(GNC, GNC_SFX)
+            f_filter = base_filter.format(GNC, GNC_SFX)
 
-        file_name, _ = QFileDialog.getOpenFileName(self, caption, "", ffilter, options=options)
+        file_name, _ = QFileDialog.getOpenFileName(self, caption=f_caption, filter=f_filter, options=f_options)
         if file_name:
             self._log("\nFile selected: {}".format(file_name), BLUE)
             display_name = file_name.split('/')[-1]
@@ -167,13 +171,15 @@ class MonarchGnucashServices(QDialog):
                 self.gnc_file_btn.setText(display_name)
 
     def mode_change(self):
-        """Monarch_Copy: need Gnucash file and domain only if in PROD mode"""
+        """Monarch_Copy: need Gnucash file and domain only if in SEND mode"""
         if self.cb_script.currentText() == MON_COPY:
             if self.cb_mode.currentText() == SEND:
-                self.gnc_file_btn.setText(self.gnc_btn_title)
+                if self.gnc_file is None:
+                    self.gnc_file_btn.setText(self.gnc_btn_title)
                 self.cb_domain.setCurrentText(BOTH)
             else:
                 self.gnc_file_btn.setText(NO_NEED)
+                self.gnc_file = None
                 self.cb_domain.setCurrentText(NO_NEED)
 
     def button_click(self):
@@ -190,17 +196,17 @@ class MonarchGnucashServices(QDialog):
         # check that necessary files have been selected
         if selected_fxn == MON_COPY:
             if self.mon_file is None:
-                self.response_box.setText('>>> MUST select a Monarch File!')
+                self.response_box.append('>>> MUST select a Monarch File!')
                 return
             cl_params.append('-m' + self.mon_file)
-            if self.ch_json.isChecked(): cl_params.append('--json')
-            if self.ch_debug.isChecked(): cl_params.append('--debug')
+            if self.chbx_json.isChecked(): cl_params.append('--json')
+            if self.chbx_debug.isChecked(): cl_params.append('--debug')
             if mode == SEND:
                 if self.gnc_file is None:
-                    self.response_box.setText('>>> MUST select a Gnucash File!')
+                    self.response_box.append('>>> MUST select a Gnucash File!')
                     return
                 if self.cb_domain.currentText() == NO_NEED:
-                    self.response_box.setText('>>> MUST select a Domain!')
+                    self.response_box.append('>>> MUST select a Domain!')
                     return
                 cl_params.append('gnc')
                 cl_params.append('-f' + self.gnc_file)
