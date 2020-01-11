@@ -9,15 +9,18 @@
 #
 __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
-__python_version__ = 3.9
+__python_version__  = 3.9
+__gnucash_version__ = 3.8
 __created__ = '2019-06-22'
-__updated__ = '2020-01-04'
+__updated__ = '2020-01-11'
 
 from sys import path, argv, exc_info
 import re
 from argparse import ArgumentParser
 path.append("/home/marksa/dev/git/Python/Gnucash/updateBudgetQtrly")
 from gnucash_utilities import *
+
+JSON_FOLDER = 'jsonFromTxt'
 
 
 # TODO: use investment.TxRecord instead of dicts to store Monarch & Gnucash information
@@ -243,11 +246,11 @@ class ParseMonarchCopyReport:
 
         pair_tx = None
         have_pair = False
-        if init_tx[TYPE] in (SW_IN,SW_OUT):
-            self._log('Tx is a Switch to OTHER account in SAME Fund company.', BLUE)
-            # look for switches in this plan type with same company, day, month and opposite gross value
+        if init_tx[TYPE] in PAIRED_TYPES:
+            self._log('Tx is a Switch to ANOTHER account in SAME Fund company.', BLUE)
+            # look for switches in this plan type with same company and date but with opposite gross value
             for gnc_tx in self._gnucash_txs.get_trades(plan_type):
-                if gnc_tx[TYPE] in (SW_IN,SW_OUT) and gnc_tx[FUND].split()[0] == init_tx[FUND].split()[0] \
+                if gnc_tx[TYPE] in PAIRED_TYPES and gnc_tx[FUND].split()[0] == init_tx[FUND].split()[0] \
                         and gnc_tx[GROSS] == (net_amount * -1) and gnc_tx[TRADE_DATE] == init_tx[TRADE_DATE]:
                     # ALREADY HAVE THE FIRST ITEM OF THE PAIR
                     have_pair = True
@@ -279,7 +282,7 @@ class ParseMonarchCopyReport:
             tx1, tx2 = self.get_trade_info(mon_tx, plan_type, ast_parent, rev_acct)
 
             # just return if there is a matching tx but we don't have it yet
-            if tx1[TYPE] in (SW_IN,SW_OUT) and tx2 is None:
+            if tx1[TYPE] in PAIRED_TYPES and tx2 is None:
                 return
 
             self.gnc_session.create_trade_tx(tx1, tx2)
@@ -355,7 +358,7 @@ class ParseMonarchCopyReport:
         domain = self.gnc_session.get_domain()
         plans = self._monarch_txs.get_plans()
         for plan_type in plans:
-            self._log(F"\n\t\u0022Plan type = {plan_type}\u0022", BROWN)
+            self._log(F"\n\n\t\t\u0022Plan type = {plan_type}\u0022", BROWN)
 
             asset_parent = self.gnc_session.get_asset_parent(plan_type, p_owner)
             self._log(F"create_gnucash_info(): asset parent = {asset_parent.GetName()}")
@@ -442,10 +445,9 @@ def mon_copy_rep_main(args:list) -> list:
         msg = parser.get_log()
 
         if save_json:
-            src_dir = 'copyTxt'
-            # pluck path and basename from mon_file to use for the saved json file
-            ospath, fname = osp.split(mon_file)
-            json_path = ospath.replace(src_dir, 'jsonFromTxt')
+            # pluck basename from mon_file to use for the saved json file
+            _, fname = osp.split(mon_file)
+            json_path = JSON_FOLDER
             basename, ext = osp.splitext(fname)
 
             out_file = save_to_json(json_path + '/' + basename, mcr_now,

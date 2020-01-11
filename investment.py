@@ -7,9 +7,10 @@
 #
 __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
-__python_version__ = 3.9
+__python_version__  = 3.9
+__gnucash_version__ = 3.8
 __created__ = '2018'
-__updated__ = '2020-01-04'
+__updated__ = '2020-01-11'
 
 from sys import path
 import os.path as osp
@@ -99,7 +100,7 @@ NOTES:str       = "Notes"
 LOAD:str        = "Load"
 FEE:str         = "Fee"
 RDMPN:str       = "Redemption"
-FEE_RD:str      = FEE + " " + RDMPN
+FEE_RDM:str     = FEE + " " + RDMPN
 PURCH:str       = "Purchase"
 DIST:str        = "Dist"
 SWITCH:str      = "Switch"
@@ -110,10 +111,10 @@ INTRF_IN:str    = INTRF + "-In"
 INTRF_OUT:str   = INTRF + "-Out"
 REINV:str       = "Reinvested"
 INTRCL:str      = "Inter-Class"
-DOLLAR:str      = "Dollar"
-COST_AVE:str    = " Cost Averaging "
-DCA_IN:str      = DOLLAR + COST_AVE + SW_IN
-DCA_OUT:str     = DOLLAR + COST_AVE + SW_OUT
+DOLLAR:str      = 'Dollar'
+DLR_AVE:str     = DOLLAR + ' Cost Averaging '
+DCA_IN:str      = DLR_AVE + SW_IN
+DCA_OUT:str     = DLR_AVE + SW_OUT
 
 # Fund companies
 ATL:str = "ATL"
@@ -123,8 +124,10 @@ MFC:str = "MFC"
 MMF:str = "MMF"
 TML:str = "TML"
 
+PAIRED_TYPES = [SW_IN, SW_OUT, DCA_IN, DCA_OUT, INTRF_IN, INTRF_OUT]
+
 TX_TYPES = {
-    FEE      : FEE_RD ,
+    FEE      : FEE_RDM ,
     SW_IN    : SW_IN  ,
     SW_OUT   : SW_OUT ,
     REINV    : REINV + " Distribution" ,
