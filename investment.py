@@ -77,12 +77,13 @@ GNC_MARK:str  = "Mark"
 GNC_LULU:str  = "Lulu"
 
 # Tx categories
-FUND:str        = "Fund"
-CMPY:str        = "Company"
+FUND:str        = 'Fund'
+CMPY:str        = 'Company'
 FUND_CODE:str   = FUND + " Code"
 FUND_CMPY:str   = FUND + " " + CMPY
-DATE:str        = "Date"
-TRADE:str       = "Trade"
+DATE:str        = 'Date'
+TIME:str        = 'Time'
+TRADE:str       = 'Trade'
 TRADE_DATE:str  = TRADE + " " + DATE
 TRADE_DAY:str   = TRADE + " Day"
 TRADE_MTH:str   = TRADE + " Month"
