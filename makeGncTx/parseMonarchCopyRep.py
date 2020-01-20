@@ -9,16 +9,25 @@
 #
 __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
-__python_version__  = 3.9
+__python_version__  = 3.6
 __gnucash_version__ = 3.8
 __created__ = '2019-06-22'
-__updated__ = '2020-01-11'
+__updated__ = '2020-01-19'
 
 from sys import path, argv, exc_info
 import re
+import logging as lg
+import logging.config as lgconf
 from argparse import ArgumentParser
 path.append("/home/marksa/dev/git/Python/Gnucash/updateBudgetQtrly")
 from gnucash_utilities import *
+
+with open('logging.json', 'r') as f:
+    log_cfg = json.load(f)
+lgconf.dictConfig(log_cfg)
+
+# create logger
+gnc_logger = lg.getLogger('gnucash')
 
 JSON_FOLDER = 'jsonFromTxt'
 
@@ -33,6 +42,8 @@ class ParseMonarchCopyReport:
 
         self._logger = SattoLog(my_color=MAGENTA, do_printing=p_debug)
         self._log('class ParseMonarchCopyReport')
+
+        gnc_logger.info('class ParseMonarchCopyReport')
 
     def _log(self, p_msg:object, p_color:str=''):
         self._logger.print_info(p_msg, p_color, p_info=inspect.currentframe().f_back)
@@ -134,10 +145,10 @@ class ParseMonarchCopyReport:
                     self._log(F"FOUND a NEW tx! Date: {tx_date}")
                     fund_co = words[-8]
                     fund = fund_co + " " + words[-7]
+                    # have to identify & handle different types
                     tx_type = words[1]
                     if tx_type == DOLLAR:
                         tx_type = DCA_IN if words[4] == SW_IN else DCA_OUT
-                    # have to identify & handle different types
                     desc = words[2] if tx_type == INTRCL else TX_TYPES[tx_type]
                     # noinspection PyDictCreation
                     curr_tx = {TRADE_DATE:tx_date, FUND:fund, TYPE:desc, CMPY:COMPANY_NAME[fund_co]}
