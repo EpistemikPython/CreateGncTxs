@@ -1,26 +1,31 @@
 version: 1
 formatters:
     simple:
-        format: '%(name)s - %(levelname)s - %(message)s'
+        style: '$'
+        format: '$name - $levelname - $message'
     complex:
-        format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        style: '$'
+        format: '$asctime - $levelname - $filename[$lineno] - $message'
 handlers:
     console:
         class: logging.StreamHandler
-        level: DEBUG
+        level: INFO
         formatter: simple
         stream: ext://sys.stdout
     fileh:
         class: logging.FileHandler
-        level: INFO
+        level: DEBUG
         formatter: complex
-        filename: 'gnucash.log'
-        filemode: 'w'
+        filename: 'GncTxsFromMonarch.gncout'
+        filters: [special]
+filters:
+    special:
+        (): parseMonarchCopyRep.SpecialFilter
 loggers:
     gnucash:
-        level: INFO
+        level: DEBUG
         handlers: [console,fileh]
         propagate: no
-    root:
-        level: DEBUG
-        handlers: [console]
+root:
+    level: INFO
+    handlers: [console]
