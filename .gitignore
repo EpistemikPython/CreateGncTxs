@@ -14,6 +14,8 @@
 **/bin/
 *.py[cdo]
 *.out
+*.gnc*
+*.gnucash
 *.log
 *.o
 *.so
