@@ -12,12 +12,11 @@ __author_email__ = 'epistemik@gmail.com'
 __python_version__  = 3.9
 __gnucash_version__ = 3.8
 __created__ = '2019-06-22'
-__updated__ = '2020-01-19'
+__updated__ = '2020-01-25'
 
 from sys import path, argv, exc_info
 import re
 import yaml
-import logging as lg
 import logging.config as lgconf
 import shutil
 from argparse import ArgumentParser
@@ -27,7 +26,7 @@ from gnucash_utilities import *
 JSON_FOLDER = 'jsonFromTxt'
 log_now = dt.now().strftime("%Y-%m-%dT%Hh%M")
 dynamic_log_name = F"GncTxsFromMonarch_{log_now}.gncout"
-saved_log_info = []
+saved_log_info = list()
 
 
 class SpecialFilter(lg.Filter):
@@ -42,6 +41,7 @@ class SpecialFilter(lg.Filter):
         return True
 
 
+# load the logging config
 with open('logging.yaml', 'r') as fp:
     log_cfg = yaml.safe_load(fp.read())
 lgconf.dictConfig(log_cfg)
@@ -58,8 +58,8 @@ class ParseMonarchCopyReport:
     def __init__(self, p_monfile:str, p_debug:bool=False):
         self.mon_file = p_monfile
         self.debug = p_debug
-        self._monarch_txs = InvestmentRecord()
-        self._gnucash_txs = InvestmentRecord()
+        self._monarch_txs = InvestmentRecord(lgr)
+        self._gnucash_txs = InvestmentRecord(lgr)
 
         lgr.info('class ParseMonarchCopyReport')
 
@@ -309,9 +309,8 @@ class ParseMonarchCopyReport:
 
         except Exception as pmte:
             pmte_msg = F"process_monarch_trade() EXCEPTION: {repr(pmte)}!\n"
-            tb = exc_info()[2]
             lgr.error(pmte_msg)
-            raise pmte.with_traceback(tb)
+            raise pmte.with_traceback( exc_info()[2] )
 
     def add_balance_to_trade(self):
         """
@@ -350,7 +349,7 @@ class ParseMonarchCopyReport:
         lgr.info('ParseMonarchCopyReport.insert_txs_to_gnucash_file()')
         # noinspection PyAttributeOutsideInit
         self.gnc_session = p_gncs
-        msg = [TEST]
+        msg = saved_log_info
         try:
             owner = self._monarch_txs.get_owner()
             lgr.debug(F"Owner = {owner}")
@@ -359,16 +358,12 @@ class ParseMonarchCopyReport:
             self.create_gnucash_info(owner)
             self.gnc_session.end_session()
 
-            msg = ['self._logger.get_log()']
-
         except Exception as itgfe:
             sgfe_msg = F"insert_txs_to_gnucash_file() EXCEPTION: {repr(itgfe)}!"
-            tb = exc_info()[2]
             lgr.error(sgfe_msg)
             self.gnc_session.check_end_session(locals())
-            raise itgfe.with_traceback(tb)
+            raise itgfe.with_traceback( exc_info()[2] )
 
-        # self._logger.append(msg)
         return msg
 
     def create_gnucash_info(self, p_owner:str):
@@ -447,8 +442,8 @@ def mon_copy_rep_main(args:list) -> list:
     mon_file, save_json, debug, mode, gnc_file, domain = process_input_parameters(args)
 
     mcr_now = dt.now().strftime(DATE_STR_FORMAT)
-    print(lgr.handlers)
-    # lgr.filter()
+    lgr.info(str(lgr.handlers))
+
     lgr.info(F"mon_copy_rep_main(): Runtime = {mcr_now}")
 
     try:
@@ -461,7 +456,7 @@ def mon_copy_rep_main(args:list) -> list:
         parser.set_filename(mon_file)
 
         if mode == SEND:
-            gnc_session = GnucashSession(mode, gnc_file, debug, domain)
+            gnc_session = GnucashSession(mode, gnc_file, domain, lgr)
             parser.insert_txs_to_gnucash_file(gnc_session)
 
         msg = saved_log_info
@@ -473,13 +468,12 @@ def mon_copy_rep_main(args:list) -> list:
             basename, ext = osp.splitext(fname)
 
             out_file = save_to_json(json_path + '/' + basename, mcr_now,
-                                    parser.get_monarch_record().to_json(), p_color=MAGENTA)
+                                    parser.get_monarch_record().to_json(), p_logger=lgr)
             msg.append(F"\nmon_copy_rep_main() created JSON file:\n{out_file}")
 
     except Exception as mcre:
         mcre_msg = F"mon_copy_rep_main() EXCEPTION: {repr(mcre)}!!"
-        tb = exc_info()[2]
-        SattoLog.print_warning(mcre_msg, tb)
+        lgr.error(mcre_msg)
         msg = [mcre_msg]
 
     lgr.debug('\n >>> PROGRAM ENDED.')

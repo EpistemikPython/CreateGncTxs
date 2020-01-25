@@ -10,7 +10,7 @@ __author_email__ = 'epistemik@gmail.com'
 __python_version__  = 3.9
 __gnucash_version__ = 3.8
 __created__ = '2018'
-__updated__ = '2020-01-11'
+__updated__ = '2020-01-25'
 
 from sys import path
 import os.path as osp
@@ -267,95 +267,19 @@ FIND_NEXT_TX = 0x0080
 FILL_CURR_TX = 0x0090
 
 
-# TODO: TxRecord in standard format for both Monarch and Gnucash
-# noinspection PyAttributeOutsideInit
-class TxRecord:
-    """
-    All the required information for an individual transaction
-    """
-    def __init__(self, p_dt:dt=None, p_dt_str:str='', p_sw:bool=False, p_fcmpy:str='', p_fcode:str='', p_fname:str='',
-                 p_gr:float=0.0, p_gr_str:str='', p_pr:float=0.0, p_pr_str:str='', p_un:float=0.0, p_un_str:str='',
-                 p_logger:SattoLog=None):
-        self.set_date(p_dt)
-        self.date_str = p_dt_str
-        self.switch = p_sw
-        self.company = p_fcmpy
-        self.fd_name = p_fname
-        self.fd_code = p_fcode
-        self.gross = p_gr
-        self.gross_str = p_gr_str
-        self.price = p_pr
-        self.price_str = p_pr_str
-        self.units = p_un
-        self.units_str = p_un_str
-        self._logger = p_logger
-
-    def __getitem__(self, item):
-        if item == DATE:
-            return self.date
-        if item == FUND:
-            return self.fd_name
-        if item == GROSS:
-            return self.gross
-        if item in (FUND_CMPY, COMPANY_NAME):
-            return self.company
-        if item == FUND_CODE:
-            return self.fd_code
-        if item == PRICE:
-            return self.price
-        if item == UNITS:
-            return self.units
-        if item == SWITCH:
-            return self.switch
-        else:
-            self._log(F"UNKNOWN item: {item}")
-            return None
-
-    def _log(self, p_msg:str, p_color:str=''):
-        if self._logger:
-            self._logger.print_info(p_msg, p_color, p_info=inspect.currentframe().f_back)
-
-    def _err(self, p_msg: str, err_info:object):
-        if self._logger:
-            self._logger.print_info(p_msg, BR_RED, p_info=err_info)
-
-    def set_fund_cmpy(self, p_co:str):
-        self.company = p_co
-
-    def set_fund_code(self, p_code:str):
-        self.fd_code = p_code
-
-    def set_fund_name(self, p_name:str):
-        self.fd_name = p_name
-
-    def set_type(self, p_type):
-        if p_type in (TRADE,PRICE):
-            self.type = p_type
-        else:
-            self._log(F"BAD type: {p_type}")
-
-    def set_date(self, p_date:dt) -> dt:
-        old_date = self.date
-        if p_date is not None and isinstance(p_date, dt):
-            self.date = p_date
-        else:
-            self._log(F"BAD date: {p_date}")
-        return old_date
-
-# END class TxRecord
-
-
 # TODO: data date and run date?
 class InvestmentRecord:
     """
     All transactions from an investment report
     """
-    def __init__(self, p_owner:str='', p_date:dt=None, p_fname:str='', logger:SattoLog=None):
-        self._logger = logger
+    def __init__(self, p_logger:lg.Logger, p_owner:str='', p_date:dt=None, p_fname:str=''):
+        self._lgr  = p_logger
+        self._date = p_date if p_date is not None and isinstance(p_date, dt) else dtnow
+
         if p_owner:
             assert (p_owner == MON_MARK or p_owner == MON_LULU), 'MUST be a valid Owner!'
         self._owner = p_owner
-        self._date = p_date if p_date is not None and isinstance(p_date, dt) else dtnow
+
         if p_fname:
             assert (isinstance(p_fname, str) and osp.isfile(p_fname)), 'MUST be a valid filename!'
         self._filename = p_fname
@@ -366,21 +290,14 @@ class InvestmentRecord:
             TFSA : {TRADE:[], PRICE:[]} ,
             RRSP : {TRADE:[], PRICE:[]}
         }
-        self._log("\n\tInvestmentRecord(): Runtime = {}".format(strnow))
+
+        self._lgr.info(F"\n\tInvestmentRecord: Runtime = {strnow}")
 
     def __getitem__(self, item:str):
         if item in (OPEN,TFSA,RRSP):
             return self._plans[item]
-        self._err(F"BAD plan: {str(item)}", inspect.currentframe().f_back)
+        self._lgr.warning(F"BAD plan: {str(item)}")
         return None
-
-    def _log(self, p_msg:str, p_color:str=''):
-        if self._logger:
-            self._logger.print_info(p_msg, p_color, p_info=inspect.currentframe().f_back)
-
-    def _err(self, p_msg: str, err_info:object):
-        if self._logger:
-            self._logger.print_info(p_msg, BR_RED, p_info=err_info)
 
     def set_owner(self, own):
         self._owner = str(own)
@@ -392,7 +309,7 @@ class InvestmentRecord:
         if isinstance(p_date, dt):
             self._date = p_date
         else:
-            self._err(F"Submitted date of improper type: {type(p_date)}", inspect.currentframe().f_back)
+            self._lgr.warning(F"Submitted date of improper type: {type(p_date)}")
 
     def get_plans(self) -> dict:
         return self._plans
@@ -400,7 +317,7 @@ class InvestmentRecord:
     def get_plan(self, p_plan:str) -> dict:
         if p_plan in (OPEN,TFSA,RRSP):
             return self._plans[p_plan]
-        self._err(F"UNKNOWN plan: {p_plan}", inspect.currentframe().f_back)
+        self._lgr.warning(F"UNKNOWN plan: {p_plan}")
         return {}
 
     def get_trades(self, p_plan) -> list:
@@ -459,3 +376,73 @@ class InvestmentRecord:
         }
 
 # END class InvestmentRecord
+
+
+# TODO: TxRecord in standard format for both Monarch and Gnucash
+# noinspection PyAttributeOutsideInit
+class TxRecord:
+    """
+    All the required information for an individual transaction
+    """
+    def __init__(self, p_logger:lg.Logger, p_dt:dt=None, p_dt_str:str='', p_sw:bool=False,
+                 p_fcmpy:str='', p_fcode:str='', p_fname:str='', p_gr:float=0.0, p_gr_str:str='',
+                 p_pr:float=0.0, p_pr_str:str='', p_un:float=0.0, p_un_str:str=''):
+        self.set_date(p_dt)
+        self.date_str = p_dt_str
+        self.switch = p_sw
+        self.company = p_fcmpy
+        self.fd_name = p_fname
+        self.fd_code = p_fcode
+        self.gross = p_gr
+        self.gross_str = p_gr_str
+        self.price = p_pr
+        self.price_str = p_pr_str
+        self.units = p_un
+        self.units_str = p_un_str
+        self.lgr = p_logger
+
+    def __getitem__(self, item):
+        if item == DATE:
+            return self.date
+        if item == FUND:
+            return self.fd_name
+        if item == GROSS:
+            return self.gross
+        if item in (FUND_CMPY, COMPANY_NAME):
+            return self.company
+        if item == FUND_CODE:
+            return self.fd_code
+        if item == PRICE:
+            return self.price
+        if item == UNITS:
+            return self.units
+        if item == SWITCH:
+            return self.switch
+        else:
+            self.lgr.info(F"UNKNOWN item: {item}")
+            return None
+
+    def set_fund_cmpy(self, p_co:str):
+        self.company = p_co
+
+    def set_fund_code(self, p_code:str):
+        self.fd_code = p_code
+
+    def set_fund_name(self, p_name:str):
+        self.fd_name = p_name
+
+    def set_type(self, p_type):
+        if p_type in (TRADE,PRICE):
+            self.type = p_type
+        else:
+            self.lgr.warning(F"BAD type: {p_type}")
+
+    def set_date(self, p_date:dt) -> dt:
+        old_date = self.date
+        if p_date is not None and isinstance(p_date, dt):
+            self.date = p_date
+        else:
+            self.lgr.warning(F"BAD date: {p_date}")
+        return old_date
+
+# END class TxRecord
