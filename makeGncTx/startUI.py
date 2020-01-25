@@ -49,7 +49,6 @@ MAIN_FXNS = {
 class MonarchGnucashServices(QDialog):
     def __init__(self):
         super().__init__(flags=Qt.WindowSystemMenuHint|Qt.WindowTitleHint)
-        self._logger = SattoLog(my_color=MAGENTA, do_printing=True)
         self.title = 'Monarch & Gnucash Services'
         self.left = 120
         self.top = 160
@@ -60,16 +59,7 @@ class MonarchGnucashServices(QDialog):
         self.gnc_file = None
 
         self.init_ui()
-        self._log(F"startUI:MonarchGnucashServices()\nRuntime = {strnow}\n")
-
-    def _log(self, p_msg:object, p_color:str=''):
-        if self._logger:
-            calling_frame = inspect.currentframe().f_back
-            self._logger.print_info(p_msg, p_color, p_info=calling_frame)
-
-    def _err(self, p_msg:object, err_frame:FrameType):
-        if self._logger:
-            self._logger.print_info(p_msg, BR_RED, p_info=err_frame)
+        ui_lgr.info(F"startUI.MonarchGnucashServices() Runtime = {strnow}\n")
 
     # noinspection PyArgumentList
     def init_ui(self):
@@ -153,7 +143,7 @@ class MonarchGnucashServices(QDialog):
         f_caption = F"Get {label} Files"
         base_filter  = "{} (*.{});;All Files (*)"
 
-        self._log(label)
+        ui_lgr.info(label)
         if label == MON:
             f_filter = base_filter.format(MON, MON_SFX)
         else: # GNC
@@ -161,7 +151,7 @@ class MonarchGnucashServices(QDialog):
 
         file_name, _ = QFileDialog.getOpenFileName(self, caption=f_caption, filter=f_filter, options=f_options)
         if file_name:
-            self._log(F"\nFile selected: {file_name}", BLUE)
+            ui_lgr.info(F"\nFile selected: {file_name}")
             display_name = file_name.split('/')[-1]
             if label == MON:
                 self.mon_file = file_name
@@ -184,14 +174,14 @@ class MonarchGnucashServices(QDialog):
 
     def button_click(self):
         """prepare the executable and parameters string"""
-        self._log(F"Clicked '{self.exe_btn.text()}'.", CYAN)
+        ui_lgr.info(F"Clicked '{self.exe_btn.text()}'.")
         cl_params = []
 
         mode = self.cb_mode.currentText()
         selected_fxn = self.cb_script.currentText()
 
         main_fxn = MAIN_FXNS[selected_fxn]
-        self._log(F"Function to run: {str(main_fxn)}", BROWN)
+        ui_lgr.info(F"Function to run: {str(main_fxn)}")
 
         # check that necessary files have been selected
         if selected_fxn == MON_COPY:
@@ -212,23 +202,25 @@ class MonarchGnucashServices(QDialog):
                 cl_params.append('-f' + self.gnc_file)
                 cl_params.append('-t' + self.cb_domain.currentText())
 
-            self._log(F"Parameters = \n{json.dumps(cl_params, indent=4)}", GREEN)
+            ui_lgr.info(F"Parameters = \n{json.dumps(cl_params, indent=4)}")
 
         if callable(main_fxn):
-            self._log('Sending...', MAGENTA)
+            ui_lgr.info('Sending...')
             response = main_fxn(cl_params)
-            reply = {'response': response, 'log': self._logger.get_log()}
+            reply = {'response': response, 'log': 'self._logger.get_log()'}
         elif main_fxn == NO_NEED:
             # legacy function
             msg = F"legacy function: {main_fxn}"
-            self._log(msg)
+            ui_lgr.info(msg)
             reply = {'msg': msg}
         else:
             msg = F"Problem with main??!! '{main_fxn}'"
-            self._err(msg, inspect.currentframe().fback)
-            reply = {'log': self._logger.get_log(), 'msg': msg}
+            ui_lgr.error(msg)
+            reply = {'log': 'self._logger.get_log()', 'msg': msg}
 
         self.response_box.setText(json.dumps(reply, indent=4))
+
+# END class MonarchGnucashServices
 
 
 def ui_main():
@@ -239,4 +231,8 @@ def ui_main():
 
 
 if __name__ == '__main__':
+    with open('logging.yaml', 'r') as fp:
+        ui_log_cfg = yaml.safe_load(fp.read())
+    lgconf.dictConfig(ui_log_cfg)
+    ui_lgr = lg.getLogger('gnucash')
     ui_main()

@@ -19,11 +19,38 @@ import re
 import yaml
 import logging as lg
 import logging.config as lgconf
+import shutil
 from argparse import ArgumentParser
 path.append("/home/marksa/dev/git/Python/Gnucash/updateBudgetQtrly")
 from gnucash_utilities import *
 
 JSON_FOLDER = 'jsonFromTxt'
+log_now = dt.now().strftime("%Y-%m-%dT%Hh%M")
+dynamic_log_name = F"GncTxsFromMonarch_{log_now}.gncout"
+saved_log_info = []
+
+
+class SpecialFilter(lg.Filter):
+    def filter(self, record):
+        # SAVE TO A SEPARATE LOG FILE
+        # log_file = open(dynamic_log_name, "a")
+        # log_file.write(record.msg + '\n')
+        # log_file.close()
+
+        # SAVE A COPY OF LOG MESSAGES
+        saved_log_info.append(record.msg + '\n')
+        return True
+
+
+with open('logging.yaml', 'r') as fp:
+    log_cfg = yaml.safe_load(fp.read())
+lgconf.dictConfig(log_cfg)
+lgr = lg.getLogger('gnucash')
+
+
+def finish_logging():
+    # move the standard log file to a time-stamped file to save each execution separately
+    shutil.move('GncTxsFromMonarch.gncout', dynamic_log_name)
 
 
 # TODO: use investment.TxRecord instead of dicts to store Monarch & Gnucash information
@@ -141,7 +168,7 @@ class ParseMonarchCopyReport:
                     curr_tx[PRICE] = words[-2]
                     curr_tx[LOAD]  = words[-5]
                     self._monarch_txs.add_tx(plan_type, TRADE, curr_tx)
-                    lgr.info(F"ADD current Trade Tx:\n\t{curr_tx}")
+                    lgr.debug(F"ADD current Trade Tx:\n\t{curr_tx}")
 
     # TODO: Produce Gnucash txs directly in a GnucashSession function??
     def get_trade_info(self, mon_tx:dict, plan_type:str, ast_parent:Account, rev_acct:Account) -> (dict,dict):
@@ -416,16 +443,6 @@ def process_input_parameters(argx:list):
     return args.monarch, args.json, args.debug, mode, gnc_file, domain
 
 
-class SpecialFilter(lg.Filter):
-    def filter(self, record):
-        log_now = dt.now().strftime("%Y-%m-%dT%Hh%M")
-        dynamic_log_name = F"GncTxsFromMonarch_{log_now}.gncout"
-        log_file = open(dynamic_log_name, "a")
-        log_file.write(record.msg + '\n')
-        log_file.close()
-        return True
-
-
 def mon_copy_rep_main(args:list) -> list:
     mon_file, save_json, debug, mode, gnc_file, domain = process_input_parameters(args)
 
@@ -447,7 +464,7 @@ def mon_copy_rep_main(args:list) -> list:
             gnc_session = GnucashSession(mode, gnc_file, debug, domain)
             parser.insert_txs_to_gnucash_file(gnc_session)
 
-        msg = ['parser.get_log()']
+        msg = saved_log_info
 
         if save_json:
             # pluck basename from mon_file to use for the saved json file
@@ -466,12 +483,9 @@ def mon_copy_rep_main(args:list) -> list:
         msg = [mcre_msg]
 
     lgr.debug('\n >>> PROGRAM ENDED.')
+    finish_logging()
     return msg
 
 
 if __name__ == '__main__':
-    with open('logging.yaml', 'r') as fp:
-        log_cfg = yaml.safe_load(fp.read())
-    lgconf.dictConfig(log_cfg)
-    lgr = lg.getLogger('gnucash')
     mon_copy_rep_main(argv[1:])
