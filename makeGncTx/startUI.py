@@ -10,7 +10,7 @@ __author_email__ = 'epistemik@gmail.com'
 __python_version__  = 3.9
 __gnucash_version__ = 3.8
 __created__ = '2018'
-__updated__ = '2020-01-25'
+__updated__ = '2020-01-26'
 
 # noinspection PyUnresolvedReferences
 from PyQt5.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QHBoxLayout, QGroupBox, QDialog, QFileDialog,
@@ -76,9 +76,7 @@ class MonarchGnucashServices(QDialog):
         self.response_box.setText('Hello there!')
 
         button_box = QDialogButtonBox(QDialogButtonBox.Close)
-        # button_box.accepted.connect(self.accept)
         button_box.rejected.connect(partial(self.close))
-        # button_box.rejected.connect(self.reject)
 
         qvb_layout = QVBoxLayout()
         # ?? none of the Alignment flags seem to give the same widget appearance as just leaving out the flag...
@@ -242,5 +240,5 @@ if __name__ == '__main__':
     with open(YAML_CONFIG_FILE, 'r') as fp:
         ui_log_cfg = yaml.safe_load(fp.read())
     lgconf.dictConfig(ui_log_cfg)
-    ui_lgr = lg.getLogger('monarch')
+    ui_lgr = lg.getLogger('gnucash')
     ui_main()

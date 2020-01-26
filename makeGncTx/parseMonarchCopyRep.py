@@ -12,7 +12,7 @@ __author_email__ = 'epistemik@gmail.com'
 __python_version__  = 3.9
 __gnucash_version__ = 3.8
 __created__ = '2019-06-22'
-__updated__ = '2020-01-25'
+__updated__ = '2020-01-26'
 
 from sys import path, argv, exc_info
 import re
@@ -22,7 +22,6 @@ from argparse import ArgumentParser
 path.append("/home/marksa/dev/git/Python/Gnucash/updateBudgetQtrly")
 from gnucash_utilities import *
 
-MONARCH_BASENAME = 'GncTxsFromMonarch'
 JSON_FOLDER = 'jsonFromTxt'
 
 MULTI_LOGGING = True
@@ -32,7 +31,7 @@ print('MULTI_LOGGING = True')
 with open(YAML_CONFIG_FILE, 'r') as fp:
     log_cfg = yaml.safe_load(fp.read())
 lgconf.dictConfig(log_cfg)
-lgr = lg.getLogger('monarch')
+lgr = lg.getLogger('gnucash')
 
 
 # TODO: use investment.TxRecord instead of dicts to store Monarch & Gnucash information?
