@@ -18,42 +18,24 @@ from sys import path, argv, exc_info
 import re
 import yaml
 import logging.config as lgconf
-import shutil
 from argparse import ArgumentParser
 path.append("/home/marksa/dev/git/Python/Gnucash/updateBudgetQtrly")
 from gnucash_utilities import *
 
+MONARCH_BASENAME = 'GncTxsFromMonarch'
 JSON_FOLDER = 'jsonFromTxt'
-log_now = dt.now().strftime("%Y-%m-%dT%Hh%M")
-dynamic_log_name = F"GncTxsFromMonarch_{log_now}.gncout"
-saved_log_info = list()
 
-
-class SpecialFilter(lg.Filter):
-    def filter(self, record):
-        # SAVE TO A SEPARATE LOG FILE
-        # log_file = open(dynamic_log_name, "a")
-        # log_file.write(record.msg + '\n')
-        # log_file.close()
-
-        # SAVE A COPY OF LOG MESSAGES
-        saved_log_info.append(record.msg + '\n')
-        return True
-
+MULTI_LOGGING = True
+print('MULTI_LOGGING = True')
 
 # load the logging config
-with open('logging.yaml', 'r') as fp:
+with open(YAML_CONFIG_FILE, 'r') as fp:
     log_cfg = yaml.safe_load(fp.read())
 lgconf.dictConfig(log_cfg)
-lgr = lg.getLogger('gnucash')
+lgr = lg.getLogger('monarch')
 
 
-def finish_logging():
-    # move the standard log file to a time-stamped file to save each execution separately
-    shutil.move('GncTxsFromMonarch.gncout', dynamic_log_name)
-
-
-# TODO: use investment.TxRecord instead of dicts to store Monarch & Gnucash information
+# TODO: use investment.TxRecord instead of dicts to store Monarch & Gnucash information?
 class ParseMonarchCopyReport:
     def __init__(self, p_monfile:str, p_debug:bool=False):
         self.mon_file = p_monfile
@@ -477,9 +459,12 @@ def mon_copy_rep_main(args:list) -> list:
         msg = [mcre_msg]
 
     lgr.debug('\n >>> PROGRAM ENDED.')
-    finish_logging()
+    if not MULTI_LOGGING:
+        finish_logging(MONARCH_BASENAME, mcr_now)
     return msg
 
 
 if __name__ == '__main__':
+    MULTI_LOGGING = False
+    print('MULTI_LOGGING = False')
     mon_copy_rep_main(argv[1:])

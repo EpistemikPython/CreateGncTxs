@@ -10,10 +10,12 @@ __author_email__ = 'epistemik@gmail.com'
 __python_version__  = 3.9
 __gnucash_version__ = 3.8
 __created__ = '2018'
-__updated__ = '2020-01-11'
+__updated__ = '2020-01-25'
 
+# noinspection PyUnresolvedReferences
 from PyQt5.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QHBoxLayout, QGroupBox, QDialog, QFileDialog,
                              QPushButton, QFormLayout, QDialogButtonBox, QLabel, QTextEdit, QCheckBox)
+# noinspection PyUnresolvedReferences
 from PyQt5.QtCore import Qt
 from functools import partial
 from parseMonarchCopyRep import *
@@ -36,7 +38,7 @@ NO_NEED:str    = 'NOT NEEDED'
 MAIN_FXNS = {
     # with the new format Monarch report, this is now the only script actually needed...
     MON_COPY : mon_copy_rep_main ,
-    # legacy
+    # LEGACY
     FD_COPY  : NO_NEED ,
     TX_COPY  : NO_NEED ,
     PDF      : NO_NEED ,
@@ -45,14 +47,14 @@ MAIN_FXNS = {
 }
 
 
-# noinspection PyAttributeOutsideInit,PyCallByClass,PyTypeChecker
+# noinspection PyAttributeOutsideInit,PyCallByClass,PyTypeChecker,PyMethodMayBeStatic
 class MonarchGnucashServices(QDialog):
     def __init__(self):
         super().__init__(flags=Qt.WindowSystemMenuHint|Qt.WindowTitleHint)
         self.title = 'Monarch & Gnucash Services'
         self.left = 120
-        self.top = 160
-        self.width = 600
+        self.top  = 160
+        self.width  = 600
         self.height = 800
         self.pdf_file = None
         self.mon_file = None
@@ -74,8 +76,9 @@ class MonarchGnucashServices(QDialog):
         self.response_box.setText('Hello there!')
 
         button_box = QDialogButtonBox(QDialogButtonBox.Close)
-        button_box.accepted.connect(self.accept)
-        button_box.rejected.connect(self.reject)
+        # button_box.accepted.connect(self.accept)
+        button_box.rejected.connect(partial(self.close))
+        # button_box.rejected.connect(self.reject)
 
         qvb_layout = QVBoxLayout()
         # ?? none of the Alignment flags seem to give the same widget appearance as just leaving out the flag...
@@ -209,7 +212,7 @@ class MonarchGnucashServices(QDialog):
             response = main_fxn(cl_params)
             reply = {'response': response, 'log': 'self._logger.get_log()'}
         elif main_fxn == NO_NEED:
-            # legacy function
+            # LEGACY function
             msg = F"legacy function: {main_fxn}"
             ui_lgr.info(msg)
             reply = {'msg': msg}
@@ -219,6 +222,11 @@ class MonarchGnucashServices(QDialog):
             reply = {'log': 'self._logger.get_log()', 'msg': msg}
 
         self.response_box.setText(json.dumps(reply, indent=4))
+
+    def close(self):
+        finish_logging(MONARCH_BASENAME)
+        # TODO: should be some better way to exit here??
+        exit()
 
 # END class MonarchGnucashServices
 
@@ -231,8 +239,8 @@ def ui_main():
 
 
 if __name__ == '__main__':
-    with open('logging.yaml', 'r') as fp:
+    with open(YAML_CONFIG_FILE, 'r') as fp:
         ui_log_cfg = yaml.safe_load(fp.read())
     lgconf.dictConfig(ui_log_cfg)
-    ui_lgr = lg.getLogger('gnucash')
+    ui_lgr = lg.getLogger('monarch')
     ui_main()
