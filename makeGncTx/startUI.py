@@ -61,7 +61,7 @@ class MonarchGnucashServices(QDialog):
         self.gnc_file = None
 
         self.init_ui()
-        ui_lgr.info(F"startUI.MonarchGnucashServices() Runtime = {strnow}\n")
+        ui_lgr.info(F"startUI.MonarchGnucashServices() Runtime = {file_ts}\n")
 
     # noinspection PyArgumentList
     def init_ui(self):
@@ -206,9 +206,9 @@ class MonarchGnucashServices(QDialog):
             ui_lgr.info(F"Parameters = \n{json.dumps(cl_params, indent=4)}")
 
         if callable(main_fxn):
-            ui_lgr.info('Sending...')
+            ui_lgr.info('Calling main function...')
             response = main_fxn(cl_params)
-            reply = {'response': response, 'log': 'self._logger.get_log()'}
+            reply = {'response': response}
         elif main_fxn == NO_NEED:
             # LEGACY function
             msg = F"legacy function: {main_fxn}"
@@ -217,7 +217,7 @@ class MonarchGnucashServices(QDialog):
         else:
             msg = F"Problem with main??!! '{main_fxn}'"
             ui_lgr.error(msg)
-            reply = {'log': 'self._logger.get_log()', 'msg': msg}
+            reply = {'msg': msg, 'log': saved_log_info}
 
         self.response_box.setText(json.dumps(reply, indent=4))
 

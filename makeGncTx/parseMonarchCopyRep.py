@@ -22,8 +22,6 @@ from argparse import ArgumentParser
 path.append("/home/marksa/dev/git/Python/Gnucash/updateBudgetQtrly")
 from gnucash_utilities import *
 
-JSON_FOLDER = 'jsonFromTxt'
-
 MULTI_LOGGING = True
 print('MULTI_LOGGING = True')
 
@@ -109,7 +107,7 @@ class ParseMonarchCopyReport:
                         if word in PLAN_IDS:
                             plan_type = PLAN_IDS[word][PLAN_TYPE]
                             plan_id = word
-                            lgr.debug(F"\n\t\u0022Current plan: type = {plan_type} ; id = {plan_id}\u0022")
+                            lgr.debug(F"\n\n\t\t\u0022Current plan: type = {plan_type} ; id = {plan_id}\u0022")
                             continue
 
                 if mon_state == STATE_SEARCH:
@@ -289,7 +287,7 @@ class ParseMonarchCopyReport:
             self.gnc_session.create_trade_tx(tx1, tx2)
 
         except Exception as pmte:
-            pmte_msg = F"process_monarch_trade() EXCEPTION: {repr(pmte)}!\n"
+            pmte_msg = F"EXCEPTION: {repr(pmte)}!\n"
             lgr.error(pmte_msg)
             raise pmte.with_traceback( exc_info()[2] )
 
@@ -302,7 +300,7 @@ class ParseMonarchCopyReport:
                 if found, add the Unit Balance from the Price tx to the Trade tx
         :return: nil
         """
-        lgr.info('ParseMonarchCopyReport.add_balance_to_trade()')
+        lgr.info('\n\t\t\u0022ParseMonarchCopyReport.add_balance_to_trade()\u0022')
         for iplan in self._monarch_txs.get_plans():
             lgr.debug(F"plan type = {repr(iplan)}")
             plan = self._monarch_txs.get_plan(iplan)
@@ -315,7 +313,7 @@ class ParseMonarchCopyReport:
                         trd_date = dt.strptime(trd[TRADE_DATE], '%d-%b-%Y')
                         if latest_dte is None or trd_date > latest_dte:
                             latest_dte = trd_date
-                            lgr.debug(F"Latest date for {tx[FUND]} is {latest_dte}")
+                            lgr.debug(F"Latest date for {tx[FUND]} = {latest_dte}")
                             latest_indx = indx
                     indx += 1
                 if latest_indx > -1:
@@ -340,7 +338,7 @@ class ParseMonarchCopyReport:
             self.gnc_session.end_session()
 
         except Exception as itgfe:
-            sgfe_msg = F"insert_txs_to_gnucash_file() EXCEPTION: {repr(itgfe)}!"
+            sgfe_msg = F"EXCEPTION: {repr(itgfe)}!"
             lgr.error(sgfe_msg)
             self.gnc_session.check_end_session(locals())
             raise itgfe.with_traceback( exc_info()[2] )
@@ -391,7 +389,7 @@ def process_args():
 
 def process_input_parameters(argx:list):
     args = process_args().parse_args(argx)
-    lgr.info(F"\nargs = {args}")
+    lgr.info(F"\n\targs = {args}")
 
     if args.debug:
         lgr.info('Printing ALL Debug output!!')
@@ -400,7 +398,7 @@ def process_input_parameters(argx:list):
         msg = F"File path '{args.monarch}' does not exist! Exiting..."
         lgr.error(msg)
         raise Exception(msg)
-    lgr.info(F"\nMonarch file = {args.monarch}")
+    lgr.info(F"\n\tMonarch file = {args.monarch}")
 
     mode = TEST
     domain = BOTH
@@ -411,7 +409,7 @@ def process_input_parameters(argx:list):
             lgr.error(msg)
             raise Exception(msg)
         gnc_file = args.filename
-        lgr.info(F"\nGnucash file = {gnc_file}")
+        lgr.info(F"\n\tGnucash file = {gnc_file}")
         mode = SEND
         domain = args.type
         lgr.info(F"Inserting '{domain}' transaction types to Gnucash.")
@@ -422,7 +420,7 @@ def process_input_parameters(argx:list):
 def mon_copy_rep_main(args:list) -> list:
     mon_file, save_json, debug, mode, gnc_file, domain = process_input_parameters(args)
 
-    mcr_now = dt.now().strftime(DATE_STR_FORMAT)
+    mcr_now = dt.now().strftime(FILE_DATE_FORMAT)
     lgr.info(str(lgr.handlers))
 
     lgr.info(F"mon_copy_rep_main(): Runtime = {mcr_now}")
@@ -445,15 +443,13 @@ def mon_copy_rep_main(args:list) -> list:
         if save_json:
             # pluck basename from mon_file to use for the saved json file
             _, fname = osp.split(mon_file)
-            json_path = JSON_FOLDER
             basename, ext = osp.splitext(fname)
 
-            out_file = save_to_json(json_path + '/' + basename, mcr_now,
-                                    parser.get_monarch_record().to_json(), p_logger=lgr)
-            msg.append(F"\nmon_copy_rep_main() created JSON file:\n{out_file}")
+            out_file = save_to_json(basename, parser.get_monarch_record().to_json(), mcr_now)
+            msg.append(F"\nCreated JSON file:\n{out_file}")
 
     except Exception as mcre:
-        mcre_msg = F"mon_copy_rep_main() EXCEPTION: {repr(mcre)}!!"
+        mcre_msg = F"EXCEPTION: {repr(mcre)}!!"
         lgr.error(mcre_msg)
         msg = [mcre_msg]
 

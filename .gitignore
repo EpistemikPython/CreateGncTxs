@@ -25,4 +25,4 @@
 *.x
 gncFiles
 # find <dir/>* -type l >> .gitignore
-
+secret*

@@ -10,12 +10,13 @@ __author_email__ = 'epistemik@gmail.com'
 __python_version__  = 3.9
 __gnucash_version__ = 3.8
 __created__ = '2018'
-__updated__ = '2020-01-25'
+__updated__ = '2020-01-27'
 
 from sys import path
 import os.path as osp
 path.append("/home/marksa/dev/git/Python/Utilities/")
 from python_utilities import *
+from secret import *
 
 # constant strings
 AU:str    = 'Gold'
@@ -52,12 +53,6 @@ GNC:str       = 'Gnucash'
 MON:str       = 'Monarch'
 TXS:str       = "TRANSACTIONS"
 CLIENT_TX:str = "CLIENT " + TXS
-PLAN_TYPE:str = "Plan Type:"
-PLAN_DATA:str = "Plan Data"
-OPEN:str      = "OPEN"
-TFSA:str      = "TFSA"
-RRSP:str      = "RRSP"
-OWNER:str     = "Owner"
 JOINT:str     = "Joint"
 EQUITY:str    = "EQUITY"
 TRUST:str     = "TRUST"
@@ -69,12 +64,6 @@ CENTS:str     = '\u00A2'
 
 REVENUE:str   = "Revenue"
 ASSET:str     = "Asset"
-MON_SATT:str  = "Sattolo"
-MON_MARK:str  = "Mark H. " + MON_SATT
-MON_ROBB:str  = "Robb"
-MON_LULU:str  = "Louise " + MON_ROBB
-GNC_MARK:str  = "Mark"
-GNC_LULU:str  = "Lulu"
 
 # Tx categories
 FUND:str        = 'Fund'
@@ -223,22 +212,6 @@ FUNDS_LIST = [
     MMF_44424, MMF_4524, MMF_3517, MMF_13417
 ]
 
-# Plan IDs
-JOINT_PLAN_ID:str = '78512'
-LULU_TRUST_ID:str = '78514'
-LULU_RRSP_ID:str  = '278825'
-LULU_TFSA_ID:str  = '278826'
-MARK_RRSP_ID:str  = '278827'
-MARK_TFSA_ID:str  = '300787'
-PLAN_IDS = {
-    JOINT_PLAN_ID : {PLAN_TYPE: OPEN, OWNER: MON_MARK} ,
-    LULU_TRUST_ID : {PLAN_TYPE: OPEN, OWNER: MON_LULU} ,
-    LULU_RRSP_ID  : {PLAN_TYPE: RRSP, OWNER: MON_LULU} ,
-    LULU_TFSA_ID  : {PLAN_TYPE: TFSA, OWNER: MON_LULU} ,
-    MARK_RRSP_ID  : {PLAN_TYPE: RRSP, OWNER: MON_MARK} ,
-    MARK_TFSA_ID  : {PLAN_TYPE: TFSA, OWNER: MON_MARK}
-}
-
 MONEY_MKT_FUNDS = [MFC_298, MFC_4378, TML_204, TML_703]
 
 TRUST_AST_ACCT = CIG_18140
@@ -274,7 +247,7 @@ class InvestmentRecord:
     """
     def __init__(self, p_logger:lg.Logger, p_owner:str='', p_date:dt=None, p_fname:str=''):
         self._lgr  = p_logger
-        self._date = p_date if p_date is not None and isinstance(p_date, dt) else dtnow
+        self._date = p_date if p_date is not None and isinstance(p_date, dt) else now_dt
 
         if p_owner:
             assert (p_owner == MON_MARK or p_owner == MON_LULU), 'MUST be a valid Owner!'
@@ -291,7 +264,7 @@ class InvestmentRecord:
             RRSP : {TRADE:[], PRICE:[]}
         }
 
-        self._lgr.info(F"\n\tInvestmentRecord: Runtime = {strnow}")
+        self._lgr.info(F"\n\tInvestmentRecord: Runtime = {file_ts}")
 
     def __getitem__(self, item:str):
         if item in (OPEN,TFSA,RRSP):
@@ -332,7 +305,7 @@ class InvestmentRecord:
         return self._date
 
     def get_date_str(self) -> str:
-        return self._date.strftime(DATE_STR_FORMAT)
+        return self._date.strftime(FILE_DATE_FORMAT)
 
     def set_filename(self, fn):
         self._filename = str(fn)
