@@ -7,15 +7,11 @@
 #
 __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
-__python_version__  = 3.9
-__gnucash_version__ = 3.8
 __created__ = '2018'
-__updated__ = '2020-01-26'
+__updated__ = '2020-01-28'
 
-# noinspection PyUnresolvedReferences
 from PyQt5.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QHBoxLayout, QGroupBox, QDialog, QFileDialog,
                              QPushButton, QFormLayout, QDialogButtonBox, QLabel, QTextEdit, QCheckBox)
-# noinspection PyUnresolvedReferences
 from PyQt5.QtCore import Qt
 from functools import partial
 from parseMonarchCopyRep import *
@@ -61,7 +57,7 @@ class MonarchGnucashServices(QDialog):
         self.gnc_file = None
 
         self.init_ui()
-        ui_lgr.info(F"startUI.MonarchGnucashServices() Runtime = {file_ts}\n")
+        ui_lgr.info(F"{self.title} Runtime = {run_ts}\n")
 
     # noinspection PyArgumentList
     def init_ui(self):
