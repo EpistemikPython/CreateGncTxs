@@ -9,17 +9,15 @@
 #
 __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
-__python_version__  = 3.9
-__gnucash_version__ = 3.8
 __created__ = '2019-06-22'
-__updated__ = '2020-01-26'
+__updated__ = '2020-01-28'
 
 from sys import path, argv, exc_info
 import re
 import yaml
 import logging.config as lgconf
 from argparse import ArgumentParser
-path.append("/home/marksa/dev/git/Python/Gnucash/updateBudgetQtrly")
+path.append("/newdata/dev/git/Python/Gnucash/updateBudgetQuarterly")
 from gnucash_utilities import *
 
 MULTI_LOGGING = True
@@ -40,7 +38,7 @@ class ParseMonarchCopyReport:
         self._monarch_txs = InvestmentRecord(lgr)
         self._gnucash_txs = InvestmentRecord(lgr)
 
-        lgr.info('class ParseMonarchCopyReport')
+        lgr.info(get_current_time())
 
     def set_filename(self, fn:str):
         self._monarch_txs.set_filename(fn)
@@ -71,7 +69,7 @@ class ParseMonarchCopyReport:
                     record fund, desc, gross, units, price, load, trade date
         :return nil
         """
-        lgr.info('ParseMonarchCopyReport.parse_copy_info()')
+        lgr.info(get_current_time())
 
         re_date = re.compile(r"([0-9]{2}-\w{3}-[0-9]{4})")
 
@@ -166,7 +164,7 @@ class ParseMonarchCopyReport:
         :param   rev_acct: Revenue account
         :return: one trade tx or both txs of a switch, if available
         """
-        lgr.info('ParseMonarchCopyReport.get_trade_info()')
+        lgr.info(get_current_time())
 
         # set the regex needed to match the required groups in each value
         # re_dollars must match (leading minus sign) OR (amount is in parentheses) to indicate NEGATIVE number
@@ -273,7 +271,7 @@ class ParseMonarchCopyReport:
         :param ast_parent: Asset parent account
         :param    p_owner: str name
         """
-        lgr.info('ParseMonarchCopyReport.process_monarch_trade()')
+        lgr.info(get_current_time())
         try:
             rev_acct = self.gnc_session.get_revenue_account(plan_type, p_owner)
 
@@ -300,7 +298,7 @@ class ParseMonarchCopyReport:
                 if found, add the Unit Balance from the Price tx to the Trade tx
         :return: nil
         """
-        lgr.info('\n\t\t\u0022ParseMonarchCopyReport.add_balance_to_trade()\u0022')
+        lgr.info('\n\t\t' + get_current_time())
         for iplan in self._monarch_txs.get_plans():
             lgr.debug(F"plan type = {repr(iplan)}")
             plan = self._monarch_txs.get_plan(iplan)
@@ -325,7 +323,7 @@ class ParseMonarchCopyReport:
         transfer the Monarch information to a Gnucash file
         :return: gnucash session log or error message
         """
-        lgr.info('ParseMonarchCopyReport.insert_txs_to_gnucash_file()')
+        lgr.info(get_current_time())
         # noinspection PyAttributeOutsideInit
         self.gnc_session = p_gncs
         msg = saved_log_info
@@ -420,10 +418,10 @@ def process_input_parameters(argx:list):
 def mon_copy_rep_main(args:list) -> list:
     mon_file, save_json, debug, mode, gnc_file, domain = process_input_parameters(args)
 
-    mcr_now = dt.now().strftime(FILE_DATE_FORMAT)
+    mcr_now = run_ts
     lgr.info(str(lgr.handlers))
 
-    lgr.info(F"mon_copy_rep_main(): Runtime = {mcr_now}")
+    lgr.info(F"Runtime = {mcr_now}")
 
     try:
         # parse an external Monarch COPIED report file
