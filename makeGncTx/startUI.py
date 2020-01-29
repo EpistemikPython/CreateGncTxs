@@ -187,7 +187,7 @@ class MonarchGnucashServices(QDialog):
                 return
             cl_params.append('-m' + self.mon_file)
             if self.chbx_json.isChecked(): cl_params.append('--json')
-            if self.chbx_debug.isChecked(): cl_params.append('--debug')
+            if self.chbx_debug.isChecked(): cl_params.append('-l'+str(lg.DEBUG))
             if mode == SEND:
                 if self.gnc_file is None:
                     self.response_box.append('>>> MUST select a Gnucash File!')
