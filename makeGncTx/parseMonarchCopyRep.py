@@ -17,7 +17,8 @@ import re
 import yaml
 import logging.config as lgconf
 from argparse import ArgumentParser
-path.append("/newdata/dev/git/Python/Gnucash/updateBudgetQuarterly")
+path.append('/newdata/dev/git/Python/Gnucash/updateBudgetQtrly')
+print(path)
 from gnucash_utilities import *
 
 MULTI_LOGGING = True
@@ -379,8 +380,8 @@ def process_args():
     gnc_parser.add_argument('-t', '--type', required=True, choices=[TRADE, PRICE, BOTH],
                             help="type of transaction to record: {} or {} or {}".format(TRADE, PRICE, BOTH))
     # optional arguments
+    arg_parser.add_argument('-l', '--level', type=int, default=lg.INFO, help='set LEVEL of logging output')
     arg_parser.add_argument('--json',  action='store_true', help='Write the parsed Monarch data to a JSON file')
-    arg_parser.add_argument('--debug', action='store_true', help='GENERATE DEBUG OUTPUT: MANY LINES!')
 
     return arg_parser
 
@@ -389,8 +390,7 @@ def process_input_parameters(argx:list):
     args = process_args().parse_args(argx)
     lgr.info(F"\n\targs = {args}")
 
-    if args.debug:
-        lgr.info('Printing ALL Debug output!!')
+    lgr.info(F"logger level set to {args.level}")
 
     if not osp.isfile(args.monarch):
         msg = F"File path '{args.monarch}' does not exist! Exiting..."
@@ -412,16 +412,18 @@ def process_input_parameters(argx:list):
         domain = args.type
         lgr.info(F"Inserting '{domain}' transaction types to Gnucash.")
 
-    return args.monarch, args.json, args.debug, mode, gnc_file, domain
+    return args.monarch, args.json, args.level, mode, gnc_file, domain
 
 
 def mon_copy_rep_main(args:list) -> list:
-    mon_file, save_json, debug, mode, gnc_file, domain = process_input_parameters(args)
+    mon_file, save_json, level, mode, gnc_file, domain = process_input_parameters(args)
 
-    mcr_now = run_ts
+    mcr_now = dt.now().strftime(FILE_DATE_FORMAT)
+
+    lgr.setLevel(level)
+    lgr.log(level, F"\n\t\tRuntime = {mcr_now}")
     lgr.info(str(lgr.handlers))
-
-    lgr.info(F"Runtime = {mcr_now}")
+    debug = lgr.level < lg.INFO
 
     try:
         # parse an external Monarch COPIED report file
