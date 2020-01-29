@@ -5,16 +5,14 @@
 #
 # Copyright (c) 2020 Mark Sattolo <epistemik@gmail.com>
 #
-__author__ = 'Mark Sattolo'
+__author__       = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
-__python_version__  = 3.9
-__gnucash_version__ = 3.8
 __created__ = '2018'
 __updated__ = '2020-01-27'
 
 from sys import path
 import os.path as osp
-path.append("/home/marksa/dev/git/Python/Utilities/")
+path.append("/newdata/dev/git/Python/Utilities/")
 from python_utilities import *
 from secret import *
 
@@ -42,7 +40,7 @@ EMPL:str  = 'Employment'
 BAL:str   = 'Balance'
 CONT:str  = 'Contingent'
 NEC:str   = 'Necessary'
-DEDNS:str = 'Emp_Dedns'
+DEDNS:str = EMPL + ' Dedns'
 TEST:str  = 'test'
 SEND:str  = 'SEND'
 PROD:str  = SEND
