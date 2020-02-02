@@ -72,7 +72,7 @@ class MonarchGnucashServices(QDialog):
         self.response_box.setText('Hello there!')
 
         button_box = QDialogButtonBox(QDialogButtonBox.Close)
-        button_box.rejected.connect(partial(self.close))
+        button_box.rejected.connect(partial(self.close_ui))
 
         qvb_layout = QVBoxLayout()
         # ?? none of the Alignment flags seem to give the same widget appearance as just leaving out the flag...
@@ -217,7 +217,7 @@ class MonarchGnucashServices(QDialog):
 
         self.response_box.setText(json.dumps(reply, indent=4))
 
-    def close(self):
+    def close_ui(self):
         finish_logging(MONARCH_BASENAME)
         # TODO: should be some better way to exit here??
         exit()

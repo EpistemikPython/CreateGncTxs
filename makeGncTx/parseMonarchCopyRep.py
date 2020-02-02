@@ -10,7 +10,7 @@
 __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __created__ = '2019-06-22'
-__updated__ = '2020-01-28'
+__updated__ = '2020-02-01'
 
 from sys import path, argv, exc_info
 import re
@@ -446,14 +446,14 @@ def mon_copy_rep_main(args:list) -> list:
             basename, ext = osp.splitext(fname)
 
             out_file = save_to_json(basename, parser.get_monarch_record().to_json(), mcr_now)
-            msg.append(F"\nCreated JSON file:\n{out_file}")
+            lgr.info(F"Created JSON file: {out_file}")
 
     except Exception as mcre:
         mcre_msg = F"EXCEPTION: {repr(mcre)}!!"
         lgr.error(mcre_msg)
         msg = [mcre_msg]
 
-    lgr.debug('\n >>> PROGRAM ENDED.')
+    lgr.warning('\n >>> PROGRAM ENDED.')
     if not MULTI_LOGGING:
         finish_logging(MONARCH_BASENAME, mcr_now)
     return msg
