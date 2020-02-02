@@ -11,7 +11,7 @@ __created__ = '2018'
 __updated__ = '2020-01-28'
 
 from PyQt5.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QHBoxLayout, QGroupBox, QDialog, QFileDialog,
-                             QPushButton, QFormLayout, QDialogButtonBox, QLabel, QTextEdit, QCheckBox)
+                             QPushButton, QFormLayout, QDialogButtonBox, QLabel, QTextEdit, QCheckBox, QInputDialog)
 from PyQt5.QtCore import Qt
 from functools import partial
 from parseMonarchCopyRep import *
@@ -64,6 +64,8 @@ class MonarchGnucashServices(QDialog):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
 
+        self.log_level = lg.INFO
+
         self.create_group_box()
 
         self.response_box = QTextEdit()
@@ -72,7 +74,7 @@ class MonarchGnucashServices(QDialog):
         self.response_box.setText('Hello there!')
 
         button_box = QDialogButtonBox(QDialogButtonBox.Close)
-        button_box.rejected.connect(partial(self.close_ui))
+        button_box.rejected.connect(self.close_ui)
 
         qvb_layout = QVBoxLayout()
         # ?? none of the Alignment flags seem to give the same widget appearance as just leaving out the flag...
@@ -100,7 +102,7 @@ class MonarchGnucashServices(QDialog):
 
         self.cb_mode = QComboBox()
         self.cb_mode.addItems([TEST, SEND])
-        self.cb_mode.currentIndexChanged.connect(partial(self.mode_change))
+        self.cb_mode.currentIndexChanged.connect(self.mode_change)
         layout.addRow(QLabel("Mode:"), self.cb_mode)
 
         self.cb_domain = QComboBox()
@@ -109,15 +111,19 @@ class MonarchGnucashServices(QDialog):
 
         horiz_box = QGroupBox("Check:")
         horiz_layout = QHBoxLayout()
+
         self.chbx_json = QCheckBox("Save Monarch info to JSON file?")
-        self.chbx_debug = QCheckBox("Print DEBUG info?")
+        self.pb_logging = QPushButton("Change the logging level?")
+        self.pb_logging.clicked.connect(self.get_log_level)
+        # self.chbx_debug = QCheckBox("Print DEBUG info?")
+
         horiz_layout.addWidget(self.chbx_json, alignment=Qt.AlignAbsolute)
-        horiz_layout.addWidget(self.chbx_debug, alignment=Qt.AlignAbsolute)
+        horiz_layout.addWidget(self.pb_logging, alignment=Qt.AlignAbsolute)
         horiz_box.setLayout(horiz_layout)
         layout.addRow(QLabel("Options"), horiz_box)
 
         self.exe_btn = QPushButton('Go!')
-        self.exe_btn.clicked.connect(partial(self.button_click))
+        self.exe_btn.clicked.connect(self.button_click)
         layout.addRow(QLabel("Execute:"), self.exe_btn)
 
         self.gb_main.setLayout(layout)
@@ -187,7 +193,10 @@ class MonarchGnucashServices(QDialog):
                 return
             cl_params.append('-m' + self.mon_file)
             if self.chbx_json.isChecked(): cl_params.append('--json')
-            if self.chbx_debug.isChecked(): cl_params.append('-l'+str(lg.DEBUG))
+
+            # if self.chbx_debug.isChecked(): cl_params.append('-l'+str(lg.DEBUG))
+            cl_params.append('-l'+str(self.log_level))
+
             if mode == SEND:
                 if self.gnc_file is None:
                     self.response_box.append('>>> MUST select a Gnucash File!')
@@ -216,6 +225,12 @@ class MonarchGnucashServices(QDialog):
             reply = {'msg': msg, 'log': saved_log_info}
 
         self.response_box.setText(json.dumps(reply, indent=4))
+
+    def get_log_level(self):
+        num, ok = QInputDialog.getInt(self, "Logging Level", "Enter a value (0-100)", value=self.log_level, min=0, max=100)
+        if ok:
+            self.log_level = num
+            ui_lgr.info(F"logging level changed to {num}.")
 
     def close_ui(self):
         finish_logging(MONARCH_BASENAME)
