@@ -21,14 +21,11 @@ path.append('/newdata/dev/git/Python/Gnucash/updateBudgetQtrly')
 print(path)
 from gnucash_utilities import *
 
-MULTI_LOGGING = True
-print('MULTI_LOGGING = True')
-
 # load the logging config
 with open(YAML_CONFIG_FILE, 'r') as fp:
     log_cfg = yaml.safe_load(fp.read())
 lgconf.dictConfig(log_cfg)
-lgr = lg.getLogger('gnucash')
+lgr = lg.getLogger(LOGGERS[__file__][0])
 
 
 # TODO: use investment.TxRecord instead of dicts to store Monarch & Gnucash information?
@@ -454,12 +451,9 @@ def mon_copy_rep_main(args:list) -> list:
         msg = [mcre_msg]
 
     lgr.warning('\n >>> PROGRAM ENDED.')
-    if not MULTI_LOGGING:
-        finish_logging(MONARCH_BASENAME, mcr_now)
+    finish_logging(__file__, mon_file.split('.')[0], mcr_now)
     return msg
 
 
 if __name__ == '__main__':
-    MULTI_LOGGING = False
-    print('MULTI_LOGGING = False')
     mon_copy_rep_main(argv[1:])

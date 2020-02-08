@@ -74,7 +74,8 @@ class MonarchGnucashServices(QDialog):
         self.response_box.setText('Hello there!')
 
         button_box = QDialogButtonBox(QDialogButtonBox.Close)
-        button_box.rejected.connect(self.close_ui)
+        button_box.rejected.connect(self.rejected)
+        button_box.accepted.connect(self.accept)
 
         qvb_layout = QVBoxLayout()
         # ?? none of the Alignment flags seem to give the same widget appearance as just leaving out the flag...
@@ -232,11 +233,6 @@ class MonarchGnucashServices(QDialog):
             self.log_level = num
             ui_lgr.info(F"logging level changed to {num}.")
 
-    def close_ui(self):
-        finish_logging(MONARCH_BASENAME)
-        # TODO: should be some better way to exit here??
-        exit()
-
 # END class MonarchGnucashServices
 
 
@@ -244,6 +240,7 @@ def ui_main():
     app = QApplication(argv)
     dialog = MonarchGnucashServices()
     dialog.show()
+    finish_logging(MonarchGnucashServices.__name__, LOGGERS[MonarchGnucashServices.__name__][1])
     exit(app.exec_())
 
 
@@ -251,5 +248,5 @@ if __name__ == '__main__':
     with open(YAML_CONFIG_FILE, 'r') as fp:
         ui_log_cfg = yaml.safe_load(fp.read())
     lgconf.dictConfig(ui_log_cfg)
-    ui_lgr = lg.getLogger('gnucash')
+    ui_lgr = lg.getLogger(LOGGERS[MonarchGnucashServices.__name__][0])
     ui_main()
