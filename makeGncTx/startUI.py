@@ -8,7 +8,7 @@
 __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __created__ = '2018'
-__updated__ = '2020-01-28'
+__updated__ = '2020-03-17'
 
 from PyQt5.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QHBoxLayout, QGroupBox, QDialog, QFileDialog,
                              QPushButton, QFormLayout, QDialogButtonBox, QLabel, QTextEdit, QCheckBox, QInputDialog)
@@ -74,8 +74,8 @@ class MonarchGnucashServices(QDialog):
         self.response_box.setText('Hello there!')
 
         button_box = QDialogButtonBox(QDialogButtonBox.Close)
-        button_box.rejected.connect(self.rejected)
         button_box.accepted.connect(self.accept)
+        button_box.rejected.connect(self.reject)
 
         qvb_layout = QVBoxLayout()
         # ?? none of the Alignment flags seem to give the same widget appearance as just leaving out the flag...
@@ -240,13 +240,11 @@ def ui_main():
     app = QApplication(argv)
     dialog = MonarchGnucashServices()
     dialog.show()
-    finish_logging(MonarchGnucashServices.__name__, LOGGERS[MonarchGnucashServices.__name__][1])
-    exit(app.exec_())
+    app.exec_()
 
 
 if __name__ == '__main__':
-    with open(YAML_CONFIG_FILE, 'r') as fp:
-        ui_log_cfg = yaml.safe_load(fp.read())
-    lgconf.dictConfig(ui_log_cfg)
-    ui_lgr = lg.getLogger(LOGGERS[MonarchGnucashServices.__name__][0])
+    ui_lgr = get_logger(LOGGERS.get(MonarchGnucashServices.__name__)[0])
     ui_main()
+    finish_logging(MonarchGnucashServices.__name__, LOGGERS.get(MonarchGnucashServices.__name__)[1])
+    exit()

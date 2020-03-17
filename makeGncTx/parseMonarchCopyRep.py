@@ -10,33 +10,28 @@
 __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __created__ = '2019-06-22'
-__updated__ = '2020-02-01'
+__updated__ = '2020-03-17'
+
+base_run_file = __file__.split('/')[-1]
+print(base_run_file)
 
 from sys import path, argv, exc_info
 import re
-import yaml
-import logging.config as lgconf
 from argparse import ArgumentParser
 path.append('/newdata/dev/git/Python/Gnucash/updateBudgetQtrly')
 print(path)
 from gnucash_utilities import *
 
-# load the logging config
-with open(YAML_CONFIG_FILE, 'r') as fp:
-    log_cfg = yaml.safe_load(fp.read())
-lgconf.dictConfig(log_cfg)
-lgr = lg.getLogger(LOGGERS[__file__][0])
-
 
 # TODO: use investment.TxRecord instead of dicts to store Monarch & Gnucash information?
 class ParseMonarchCopyReport:
-    def __init__(self, p_monfile:str, p_debug:bool=False):
+    def __init__(self, p_monfile:str, p_lgr:lg.Logger):
         self.mon_file = p_monfile
-        self.debug = p_debug
-        self._monarch_txs = InvestmentRecord(lgr)
-        self._gnucash_txs = InvestmentRecord(lgr)
+        self._monarch_txs = InvestmentRecord(p_lgr)
+        self._gnucash_txs = InvestmentRecord(p_lgr)
 
-        lgr.info(get_current_time())
+        p_lgr.info(get_current_time())
+        self._lgr = p_lgr
 
     def set_filename(self, fn:str):
         self._monarch_txs.set_filename(fn)
@@ -67,7 +62,7 @@ class ParseMonarchCopyReport:
                     record fund, desc, gross, units, price, load, trade date
         :return nil
         """
-        lgr.info(get_current_time())
+        self._lgr.info(get_current_time())
 
         re_date = re.compile(r"([0-9]{2}-\w{3}-[0-9]{4})")
 
@@ -86,7 +81,7 @@ class ParseMonarchCopyReport:
                     re_match = re.match(re_date, words[0])
                     if re_match:
                         doc_date = re_match.group(1)
-                        lgr.debug(F"Document date: {doc_date}")
+                        self._lgr.debug(F"Document date: {doc_date}")
                         mon_state = FIND_OWNER
                         continue
 
@@ -94,7 +89,7 @@ class ParseMonarchCopyReport:
                     if words[0] == OPEN:
                         owner = MON_MARK if MON_ROBB in words else MON_LULU
                         self._monarch_txs.set_owner(owner)
-                        lgr.debug(F"\n\t\u0022Current owner: {owner}\u0022")
+                        self._lgr.debug(F"\n\t\u0022Current owner: {owner}\u0022")
                         mon_state = STATE_SEARCH
                         continue
 
@@ -103,7 +98,7 @@ class ParseMonarchCopyReport:
                         if word in PLAN_IDS:
                             plan_type = PLAN_IDS[word][PLAN_TYPE]
                             plan_id = word
-                            lgr.debug(F"\n\n\t\t\u0022Current plan: type = {plan_type} ; id = {plan_id}\u0022")
+                            self._lgr.debug(F"\n\n\t\t\u0022Current plan: type = {plan_type} ; id = {plan_id}\u0022")
                             continue
 
                 if mon_state == STATE_SEARCH:
@@ -119,14 +114,14 @@ class ParseMonarchCopyReport:
                     price = words[-7]
                     curr_tx = {DATE:doc_date, DESC:PRICE, FUND_CMPY:fd_co, FUND:fund, UNIT_BAL:bal, PRICE:price}
                     self._monarch_txs.add_tx(plan_type, PRICE, curr_tx)
-                    lgr.debug(F"ADD current Price Tx:\n\t{curr_tx}")
+                    self._lgr.debug(F"ADD current Price Tx:\n\t{curr_tx}")
                     continue
 
                 # TRADES
                 re_match = re.match(re_date, words[0])
                 if re_match:
                     tx_date = re_match.group(1)
-                    lgr.debug(F"FOUND a NEW tx! Date: {tx_date}")
+                    self._lgr.debug(F"FOUND a NEW tx! Date: {tx_date}")
                     fund_co = words[-8]
                     fund = fund_co + " " + words[-7]
                     # have to identify & handle different types
@@ -143,7 +138,7 @@ class ParseMonarchCopyReport:
                     curr_tx[PRICE] = words[-2]
                     curr_tx[LOAD]  = words[-5]
                     self._monarch_txs.add_tx(plan_type, TRADE, curr_tx)
-                    lgr.debug(F"ADD current Trade Tx:\n\t{curr_tx}")
+                    self._lgr.debug(F"ADD current Trade Tx:\n\t{curr_tx}")
 
     # TODO: Produce Gnucash txs directly in a GnucashSession function??
     def get_trade_info(self, mon_tx:dict, plan_type:str, ast_parent:Account, rev_acct:Account) -> (dict,dict):
@@ -162,7 +157,7 @@ class ParseMonarchCopyReport:
         :param   rev_acct: Revenue account
         :return: one trade tx or both txs of a switch, if available
         """
-        lgr.info(get_current_time())
+        self._lgr.log(5, get_current_time())
 
         # set the regex needed to match the required groups in each value
         # re_dollars must match (leading minus sign) OR (amount is in parentheses) to indicate NEGATIVE number
@@ -177,13 +172,13 @@ class ParseMonarchCopyReport:
             trust_acct = TRUST_REV_ACCT if mon_tx[TYPE] == TX_TYPES[REINV] else TRUST_EQY_ACCT
             rev_acct = self.gnc_session.get_account(trust_acct)
 
-        lgr.debug(F"get_trade_info(): asset account = {asset_acct.GetName()}; revenue account = {rev_acct.GetName()}")
+        self._lgr.debug(F"get_trade_info(): asset account = {asset_acct.GetName()}; revenue account = {rev_acct.GetName()}")
 
         # get required date fields
         conv_date = dt.strptime(mon_tx[TRADE_DATE], "%d-%b-%Y")
         init_tx = {FUND:fund_name, ACCT:asset_acct, REVENUE:rev_acct, TRADE_DATE:mon_tx[TRADE_DATE],
                    TRADE_DAY:conv_date.day, TRADE_MTH:conv_date.month, TRADE_YR:conv_date.year}
-        lgr.debug(F"trade day-month-year = {init_tx[TRADE_DAY]}-{init_tx[TRADE_MTH]}-{init_tx[TRADE_YR]}")
+        self._lgr.debug(F"trade day-month-year = {init_tx[TRADE_DAY]}-{init_tx[TRADE_MTH]}-{init_tx[TRADE_YR]}")
 
         # different accounts depending if Switch, Redemption, Purchase, Distribution
         init_tx[TYPE] = mon_tx[TYPE]
@@ -198,7 +193,7 @@ class ParseMonarchCopyReport:
             # if match group 1 is not empty, amount is negative
             if re_match.group(1):
                 gross_amt *= -1
-            lgr.debug(F"gross amount = {gross_amt}")
+            self._lgr.debug(F"gross amount = {gross_amt}")
             init_tx[GROSS] = gross_amt
         else:
             raise Exception(F"PROBLEM: gross amount DID NOT match with value: {mon_tx[GROSS]}!")
@@ -212,7 +207,7 @@ class ParseMonarchCopyReport:
             # if match group 1 is not empty, amount is negative
             if re_match.group(1):
                 net_amount *= -1
-            lgr.debug(F"net_amount = {net_amount}")
+            self._lgr.debug(F"net_amount = {net_amount}")
             init_tx[NET] = net_amount
         else:
             raise Exception(F"PROBLEM: net amount DID NOT match with value: {mon_tx[NET]}!")
@@ -224,7 +219,7 @@ class ParseMonarchCopyReport:
             # if match group 1 is not empty, units is negative
             if re_match.group(1):
                 units *= -1
-            lgr.debug(F"units = {units}")
+            self._lgr.debug(F"units = {units}")
             init_tx[UNITS] = units
         else:
             raise Exception(F"PROBLEM: units DID NOT match with value: {mon_tx[UNITS]}!")
@@ -232,17 +227,17 @@ class ParseMonarchCopyReport:
         # assemble the Description string
         descr = "{} {}".format(mon_tx[DESC], fund_name)
         init_tx[DESC] = descr
-        lgr.debug(F"descr = {init_tx[DESC]}")
+        self._lgr.debug(F"descr = {init_tx[DESC]}")
 
         # notes field
         notes = mon_tx[NOTES] if NOTES in mon_tx else F"Load = {mon_tx[LOAD]}"
         init_tx[NOTES] = notes
-        lgr.debug(F"notes = {init_tx[NOTES]}")
+        self._lgr.debug(F"notes = {init_tx[NOTES]}")
 
         pair_tx = None
         have_pair = False
         if init_tx[TYPE] in PAIRED_TYPES:
-            lgr.debug('Tx is a Switch to ANOTHER account in SAME Fund company.')
+            self._lgr.debug('Tx is a Switch to ANOTHER account in SAME Fund company.')
             # look for switches in this plan type with same company and date but with opposite gross value
             for gnc_tx in self._gnucash_txs.get_trades(plan_type):
                 if gnc_tx[TYPE] in PAIRED_TYPES and gnc_tx[FUND].split()[0] == init_tx[FUND].split()[0] \
@@ -250,13 +245,13 @@ class ParseMonarchCopyReport:
                     # ALREADY HAVE THE FIRST ITEM OF THE PAIR
                     have_pair = True
                     pair_tx = gnc_tx
-                    lgr.debug('*** Found the MATCH of a Switch pair ***')
+                    self._lgr.debug('*** Found the MATCH of a Switch pair ***')
                     break
 
             if not have_pair:
                 # store the tx until we find the matching tx
                 self._gnucash_txs.add_tx(plan_type, TRADE, init_tx)
-                lgr.debug('Found the FIRST of a Switch pair...\n')
+                self._lgr.debug('Found the FIRST of a Switch pair...\n')
 
         return init_tx, pair_tx
 
@@ -269,7 +264,7 @@ class ParseMonarchCopyReport:
         :param ast_parent: Asset parent account
         :param    p_owner: str name
         """
-        lgr.info(get_current_time())
+        self._lgr.log(5, get_current_time())
         try:
             rev_acct = self.gnc_session.get_revenue_account(plan_type, p_owner)
 
@@ -284,7 +279,7 @@ class ParseMonarchCopyReport:
 
         except Exception as pmte:
             pmte_msg = F"EXCEPTION: {repr(pmte)}!\n"
-            lgr.error(pmte_msg)
+            self._lgr.error(pmte_msg)
             raise pmte.with_traceback( exc_info()[2] )
 
     def add_balance_to_trade(self):
@@ -296,9 +291,9 @@ class ParseMonarchCopyReport:
                 if found, add the Unit Balance from the Price tx to the Trade tx
         :return: nil
         """
-        lgr.info('\n\t\t' + get_current_time())
+        self._lgr.info('\n\t\t' + get_current_time())
         for iplan in self._monarch_txs.get_plans():
-            lgr.debug(F"plan type = {repr(iplan)}")
+            self._lgr.debug(F"plan type = {repr(iplan)}")
             plan = self._monarch_txs.get_plan(iplan)
             for tx in plan[PRICE]:
                 indx = 0
@@ -309,7 +304,7 @@ class ParseMonarchCopyReport:
                         trd_date = dt.strptime(trd[TRADE_DATE], '%d-%b-%Y')
                         if latest_dte is None or trd_date > latest_dte:
                             latest_dte = trd_date
-                            lgr.debug(F"Latest date for {tx[FUND]} = {latest_dte}")
+                            self._lgr.debug(F"Latest date for {tx[FUND]} = {latest_dte}")
                             latest_indx = indx
                     indx += 1
                 if latest_indx > -1:
@@ -321,13 +316,13 @@ class ParseMonarchCopyReport:
         transfer the Monarch information to a Gnucash file
         :return: gnucash session log or error message
         """
-        lgr.info(get_current_time())
+        self._lgr.info(get_current_time())
         # noinspection PyAttributeOutsideInit
         self.gnc_session = p_gncs
         msg = saved_log_info
         try:
             owner = self._monarch_txs.get_owner()
-            lgr.debug(F"Owner = {owner}")
+            self._lgr.debug(F"Owner = {owner}")
 
             self.gnc_session.begin_session()
             self.create_gnucash_info(owner)
@@ -335,7 +330,7 @@ class ParseMonarchCopyReport:
 
         except Exception as itgfe:
             sgfe_msg = F"EXCEPTION: {repr(itgfe)}!"
-            lgr.error(sgfe_msg)
+            self._lgr.error(sgfe_msg)
             self.gnc_session.check_end_session(locals())
             raise itgfe.with_traceback( exc_info()[2] )
 
@@ -348,10 +343,10 @@ class ParseMonarchCopyReport:
         domain = self.gnc_session.get_domain()
         plans = self._monarch_txs.get_plans()
         for plan_type in plans:
-            lgr.debug(F"\n\n\t\t\u0022Plan type = {plan_type}\u0022")
+            self._lgr.debug(F"\n\n\t\t\u0022Plan type = {plan_type}\u0022")
 
             asset_parent = self.gnc_session.get_asset_parent(plan_type, p_owner)
-            lgr.debug(F"create_gnucash_info(): asset parent = {asset_parent.GetName()}")
+            self._lgr.debug(F"create_gnucash_info(): asset parent = {asset_parent.GetName()}")
 
             if domain in (TRADE,BOTH):
                 for mon_tx in plans[plan_type][TRADE]:
@@ -383,7 +378,7 @@ def process_args():
     return arg_parser
 
 
-def process_input_parameters(argx:list):
+def process_input_parameters(argx:list, lgr:lg.Logger):
     args = process_args().parse_args(argx)
     lgr.info(F"\n\targs = {args}")
 
@@ -413,18 +408,23 @@ def process_input_parameters(argx:list):
 
 
 def mon_copy_rep_main(args:list) -> list:
-    mon_file, save_json, level, mode, gnc_file, domain = process_input_parameters(args)
+    lgr = get_logger(LOGGERS[base_run_file][0])
+
+    mon_file, save_json, level, mode, gnc_file, domain = process_input_parameters(args, lgr)
+
+    # pluck basename from mon_file
+    _, fname = osp.split(mon_file)
+    basename, _ = osp.splitext(fname)
 
     mcr_now = dt.now().strftime(FILE_DATE_FORMAT)
 
     lgr.setLevel(level)
     lgr.log(level, F"\n\t\tRuntime = {mcr_now}")
     lgr.info(str(lgr.handlers))
-    debug = lgr.level < lg.INFO
 
     try:
         # parse an external Monarch COPIED report file
-        parser = ParseMonarchCopyReport(mon_file, debug)
+        parser = ParseMonarchCopyReport(mon_file, lgr)
 
         parser.parse_copy_info()
         parser.add_balance_to_trade()
@@ -438,10 +438,6 @@ def mon_copy_rep_main(args:list) -> list:
         msg = saved_log_info
 
         if save_json:
-            # pluck basename from mon_file to use for the saved json file
-            _, fname = osp.split(mon_file)
-            basename, ext = osp.splitext(fname)
-
             out_file = save_to_json(basename, parser.get_monarch_record().to_json(), mcr_now)
             lgr.info(F"Created JSON file: {out_file}")
 
@@ -451,7 +447,7 @@ def mon_copy_rep_main(args:list) -> list:
         msg = [mcre_msg]
 
     lgr.warning('\n >>> PROGRAM ENDED.')
-    finish_logging(__file__, mon_file.split('.')[0], mcr_now)
+    finish_logging(base_run_file, basename, mcr_now)
     return msg
 
 
