@@ -8,7 +8,7 @@
 __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __created__ = '2018'
-__updated__ = '2020-03-17'
+__updated__ = '2020-03-22'
 
 from PyQt5.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QHBoxLayout, QGroupBox, QDialog, QFileDialog,
                              QPushButton, QFormLayout, QDialogButtonBox, QLabel, QTextEdit, QCheckBox, QInputDialog)
@@ -244,7 +244,7 @@ def ui_main():
 
 
 if __name__ == '__main__':
-    ui_lgr = get_logger(LOGGERS.get(MonarchGnucashServices.__name__)[0])
+    ui_lgr = get_logger(MonarchGnucashServices.__name__)
     ui_main()
-    finish_logging(MonarchGnucashServices.__name__, LOGGERS.get(MonarchGnucashServices.__name__)[1])
+    finish_logging(MonarchGnucashServices.__name__)
     exit()

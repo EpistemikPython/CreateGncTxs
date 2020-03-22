@@ -8,7 +8,7 @@
 __author__       = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __created__ = '2018'
-__updated__ = '2020-01-27'
+__updated__ = '2020-03-17'
 
 from sys import path
 import os.path as osp

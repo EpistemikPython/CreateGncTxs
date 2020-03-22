@@ -12,15 +12,15 @@ __author_email__ = 'epistemik@gmail.com'
 __created__ = '2019-06-22'
 __updated__ = '2020-03-17'
 
-base_run_file = __file__.split('/')[-1]
-print(base_run_file)
-
 from sys import path, argv, exc_info
 import re
 from argparse import ArgumentParser
 path.append('/newdata/dev/git/Python/Gnucash/updateBudgetQtrly')
 print(path)
 from gnucash_utilities import *
+
+base_run_file = get_base_filename(__file__)
+print(base_run_file)
 
 
 # TODO: use investment.TxRecord instead of dicts to store Monarch & Gnucash information?
@@ -66,6 +66,7 @@ class ParseMonarchCopyReport:
 
         re_date = re.compile(r"([0-9]{2}-\w{3}-[0-9]{4})")
 
+        # TODO: improve parsing
         mon_state = FIND_DATE
         plan_type = UNKNOWN
         plan_id = UNKNOWN
@@ -98,7 +99,7 @@ class ParseMonarchCopyReport:
                         if word in PLAN_IDS:
                             plan_type = PLAN_IDS[word][PLAN_TYPE]
                             plan_id = word
-                            self._lgr.debug(F"\n\n\t\t\u0022Current plan: type = {plan_type} ; id = {plan_id}\u0022")
+                            self._lgr.debug(F"\n\t\t\u0022Current plan: type = {plan_type} ; id = {plan_id}\u0022")
                             continue
 
                 if mon_state == STATE_SEARCH:
@@ -408,7 +409,7 @@ def process_input_parameters(argx:list, lgr:lg.Logger):
 
 
 def mon_copy_rep_main(args:list) -> list:
-    lgr = get_logger(LOGGERS[base_run_file][0])
+    lgr = get_logger(base_run_file)
 
     mon_file, save_json, level, mode, gnc_file, domain = process_input_parameters(args, lgr)
 
