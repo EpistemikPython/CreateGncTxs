@@ -46,6 +46,8 @@ SEND:str  = 'SEND'
 PROD:str  = SEND
 BUY:str   = 'Buy'
 SELL:str  = 'Sell'
+BASE:str  = 'Base'
+SPAN:str  = 'Span'
 
 GNC:str       = 'Gnucash'
 MON:str       = 'Monarch'

@@ -23,6 +23,6 @@
 *.bin
 *.exe
 *.x
-gncFiles
+app-files
 # find <dir/>* -type l >> .gitignore
 secret*
