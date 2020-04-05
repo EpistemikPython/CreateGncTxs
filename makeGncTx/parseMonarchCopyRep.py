@@ -413,7 +413,7 @@ def mon_copy_rep_main(args:list) -> list:
 
     mon_file, save_json, level, mode, gnc_file, domain = process_input_parameters(args, lgr)
 
-    # pluck basename from mon_file
+    # construct log name from monarch file name
     _, fname = osp.split(mon_file)
     basename, _ = osp.splitext(fname)
 
@@ -433,6 +433,11 @@ def mon_copy_rep_main(args:list) -> list:
         parser.set_filename(mon_file)
 
         if mode == SEND:
+            # add gnc file name to log file name
+            _, fname = osp.split(gnc_file)
+            gname, _ = osp.splitext(fname)
+            basename += '_' + gname
+
             gnc_session = GnucashSession(mode, gnc_file, domain, lgr)
             parser.insert_txs_to_gnucash_file(gnc_session)
 
