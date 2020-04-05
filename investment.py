@@ -49,6 +49,11 @@ SELL:str  = 'Sell'
 BASE:str  = 'Base'
 SPAN:str  = 'Span'
 
+BASE_YEAR:str = BASE + YR
+YEAR_SPAN:str = BASE_YEAR + SPAN
+QTR_SPAN:str  = QTR + SPAN
+HDR_SPAN:str  = 'Header' + SPAN
+
 GNC:str       = 'Gnucash'
 MON:str       = 'Monarch'
 TXS:str       = "TRANSACTIONS"
