@@ -50,7 +50,7 @@ class MonarchGnucashServices(QDialog):
         self.title = 'Monarch & Gnucash Services'
         self.left = 120
         self.top  = 160
-        self.width  = 600
+        self.width  = 800
         self.height = 800
         self.pdf_file = None
         self.mon_file = None
@@ -98,13 +98,13 @@ class MonarchGnucashServices(QDialog):
         self.add_mon_file_btn()
         layout.addRow(self.mon_label, self.mon_file_btn)
 
-        self.add_gnc_file_btn()
-        layout.addRow(self.gnc_label, self.gnc_file_btn)
-
         self.cb_mode = QComboBox()
         self.cb_mode.addItems([TEST, SEND])
         self.cb_mode.currentIndexChanged.connect(self.mode_change)
         layout.addRow(QLabel("Mode:"), self.cb_mode)
+
+        self.add_gnc_file_btn()
+        layout.addRow(self.gnc_label, self.gnc_file_btn)
 
         self.cb_domain = QComboBox()
         self.cb_domain.addItems([NO_NEED, BOTH, TRADE, PRICE])
