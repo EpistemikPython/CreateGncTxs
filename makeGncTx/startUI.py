@@ -8,19 +8,16 @@
 __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __created__ = '2018'
-__updated__ = '2020-03-22'
+__updated__ = '2020-04-06'
 
-from PyQt5.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QHBoxLayout, QGroupBox, QDialog, QFileDialog,
-                             QPushButton, QFormLayout, QDialogButtonBox, QLabel, QTextEdit, QCheckBox, QInputDialog)
+from PyQt5.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QGroupBox, QDialog, QFileDialog, QLabel,
+                             QPushButton, QFormLayout, QDialogButtonBox, QTextEdit, QCheckBox, QInputDialog)
 from PyQt5.QtCore import Qt
 from functools import partial
 from parseMonarchCopyRep import *
 
 # constant strings
-GNC_SFX:str    = 'gnc'
-MON_SFX:str    = 'monarch'
 FILE_LABEL:str = ' File:'
-FUNDS:str      = FUND + 's'
 MON_COPY:str   = MON + ' Copy'
 LEGACY:str     = 'LEGACY'
 FD_COPY:str    = LEGACY
@@ -34,7 +31,7 @@ NO_NEED:str    = 'NOT NEEDED'
 MAIN_FXNS = {
     # with the new format Monarch report, this is now the only script actually needed...
     MON_COPY : mon_copy_rep_main ,
-    # LEGACY
+    # legacy
     FD_COPY  : NO_NEED ,
     TX_COPY  : NO_NEED ,
     PDF      : NO_NEED ,
@@ -110,22 +107,16 @@ class MonarchGnucashServices(QDialog):
         self.cb_domain.addItems([NO_NEED, BOTH, TRADE, PRICE])
         layout.addRow(QLabel("Domain:"), self.cb_domain)
 
-        horiz_box = QGroupBox("Check:")
-        horiz_layout = QHBoxLayout()
-
         self.chbx_json = QCheckBox("Save Monarch info to JSON file?")
+        layout.addRow(QLabel("Save:"), self.chbx_json)
+
         self.pb_logging = QPushButton("Change the logging level?")
         self.pb_logging.clicked.connect(self.get_log_level)
-        # self.chbx_debug = QCheckBox("Print DEBUG info?")
-
-        horiz_layout.addWidget(self.chbx_json, alignment=Qt.AlignAbsolute)
-        horiz_layout.addWidget(self.pb_logging, alignment=Qt.AlignAbsolute)
-        horiz_box.setLayout(horiz_layout)
-        layout.addRow(QLabel("Options"), horiz_box)
+        layout.addRow(QLabel("Logging:"), self.pb_logging)
 
         self.exe_btn = QPushButton('Go!')
         self.exe_btn.clicked.connect(self.button_click)
-        layout.addRow(QLabel("Execute:"), self.exe_btn)
+        layout.addRow(QLabel("EXECUTE:"), self.exe_btn)
 
         self.gb_main.setLayout(layout)
 
@@ -145,15 +136,16 @@ class MonarchGnucashServices(QDialog):
         f_options = QFileDialog.Options()
         f_options |= QFileDialog.DontUseNativeDialog
         f_caption = F"Get {label} Files"
-        base_filter  = "{} (*.{});;All Files (*)"
 
         ui_lgr.info(label)
         if label == MON:
-            f_filter = base_filter.format(MON, MON_SFX)
+            f_filter = F"{MON} (*.monarch);;All Files (*)"
+            f_dir = '/newdata/dev/git/Python/Gnucash/createGncTxs/makeGncTx/copyMonarch'
         else: # GNC
-            f_filter = base_filter.format(GNC, GNC_SFX)
+            f_filter = F"{GNC} (*.gnc *.gnucash);;All Files (*)"
+            f_dir = '/newdata/dev/git/Python/Gnucash/app-files'
 
-        file_name, _ = QFileDialog.getOpenFileName(self, caption=f_caption, filter=f_filter, options=f_options)
+        file_name, _ = QFileDialog.getOpenFileName(self, caption=f_caption, filter=f_filter, directory=f_dir, options=f_options)
         if file_name:
             ui_lgr.info(F"\nFile selected: {file_name}")
             display_name = file_name.split('/')[-1]
@@ -176,6 +168,12 @@ class MonarchGnucashServices(QDialog):
                 self.gnc_file = None
                 self.cb_domain.setCurrentText(NO_NEED)
 
+    def get_log_level(self):
+        num, ok = QInputDialog.getInt(self, "Logging Level", "Enter a value (0-100)", value=self.log_level, min=0, max=100)
+        if ok:
+            self.log_level = num
+            ui_lgr.info(F"logging level changed to {num}.")
+
     def button_click(self):
         """prepare the executable and parameters string"""
         ui_lgr.info(F"Clicked '{self.exe_btn.text()}'.")
@@ -195,7 +193,6 @@ class MonarchGnucashServices(QDialog):
             cl_params.append('-m' + self.mon_file)
             if self.chbx_json.isChecked(): cl_params.append('--json')
 
-            # if self.chbx_debug.isChecked(): cl_params.append('-l'+str(lg.DEBUG))
             cl_params.append('-l'+str(self.log_level))
 
             if mode == SEND:
@@ -226,12 +223,6 @@ class MonarchGnucashServices(QDialog):
             reply = {'msg': msg, 'log': saved_log_info}
 
         self.response_box.setText(json.dumps(reply, indent=4))
-
-    def get_log_level(self):
-        num, ok = QInputDialog.getInt(self, "Logging Level", "Enter a value (0-100)", value=self.log_level, min=0, max=100)
-        if ok:
-            self.log_level = num
-            ui_lgr.info(F"logging level changed to {num}.")
 
 # END class MonarchGnucashServices
 
