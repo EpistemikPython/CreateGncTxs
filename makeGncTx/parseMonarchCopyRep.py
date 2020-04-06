@@ -10,7 +10,7 @@
 __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __created__ = '2019-06-22'
-__updated__ = '2020-03-17'
+__updated__ = '2020-04-06'
 
 from sys import path, argv, exc_info
 import re
@@ -144,21 +144,21 @@ class ParseMonarchCopyReport:
     # TODO: Produce Gnucash txs directly in a GnucashSession function??
     def get_trade_info(self, mon_tx:dict, plan_type:str, ast_parent:Account, rev_acct:Account) -> (dict,dict):
         """
-        Parse a Monarch trade transaction
+        Parse a Monarch trade transaction:
         ** useful to have this intermediate function to obtain matching 'in' and 'out' Switch txs...
-        Asset accounts: use the proper path to find the parent then search for the Fund Code in the descendants
-        Revenue accounts: pick the proper account based on owner and plan type
-        Amounts: re match to Gross and Net then use the match groups
-        date: convert the date then get day, month and year to form a Gnc date
-        Units: re match and concatenate the two groups on either side of decimal point
-        Description: use DESC and Fund Company
+            Asset accounts: use the proper path to find the parent then search for the Fund Code in the descendants
+            Revenue accounts: pick the proper account based on owner and plan type
+            Amounts: re match to Gross and Net then use the match groups
+            date: convert the date then get day, month and year to form a Gnc date
+            Units: re match and concatenate the two groups on either side of decimal point
+            Description: use DESC and Fund Company
         :param     mon_tx: Monarch transaction
         :param  plan_type: plan name from InvestmentRecord
         :param ast_parent: Asset parent account
         :param   rev_acct: Revenue account
         :return: one trade tx or both txs of a switch, if available
         """
-        self._lgr.log(5, get_current_time())
+        self._lgr.debug(F"plan type = {plan_type}, asset parent = {ast_parent.GetName()}")
 
         # set the regex needed to match the required groups in each value
         # re_dollars must match (leading minus sign) OR (amount is in parentheses) to indicate NEGATIVE number
@@ -265,7 +265,7 @@ class ParseMonarchCopyReport:
         :param ast_parent: Asset parent account
         :param    p_owner: str name
         """
-        self._lgr.log(5, get_current_time())
+        self._lgr.debug(F"plan type = {plan_type}, asset parent = {ast_parent.GetName()}, owner = {p_owner}")
         try:
             rev_acct = self.gnc_session.get_revenue_account(plan_type, p_owner)
 
@@ -381,7 +381,7 @@ def process_args():
 
 def process_input_parameters(argx:list, lgr:lg.Logger):
     args = process_args().parse_args(argx)
-    lgr.info(F"\n\targs = {args}")
+    lgr.debug(F"\n\targs = {args}")
 
     lgr.info(F"logger level set to {args.level}")
 
@@ -420,8 +420,8 @@ def mon_copy_rep_main(args:list) -> list:
     mcr_now = dt.now().strftime(FILE_DATE_FORMAT)
 
     lgr.setLevel(level)
-    lgr.log(level, F"\n\t\tRuntime = {mcr_now}")
-    lgr.info(str(lgr.handlers))
+    lgr.info(F"\n\t\tRuntime = {mcr_now}")
+    lgr.debug(str(lgr.handlers))
 
     try:
         # parse an external Monarch COPIED report file
@@ -459,3 +459,4 @@ def mon_copy_rep_main(args:list) -> list:
 
 if __name__ == '__main__':
     mon_copy_rep_main(argv[1:])
+    exit()
