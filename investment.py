@@ -8,7 +8,7 @@
 __author__       = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __created__ = '2018'
-__updated__ = '2020-03-17'
+__updated__ = '2020-04-09'
 
 from sys import path
 import os.path as osp
@@ -32,6 +32,7 @@ HOLD:str  = 'HOLD'
 TODAY:str = 'Today'
 QTR:str   = 'Quarter'
 YR:str    = 'Year'
+YEAR:str  = YR
 MTH:str   = 'Month'
 REV:str   = 'Revenue'
 INV:str   = 'Invest'
@@ -49,11 +50,8 @@ SELL:str  = 'Sell'
 BASE:str  = 'Base'
 SPAN:str  = 'Span'
 
-BASE_YEAR:str = BASE + YR
-YEAR_SPAN:str = BASE_YEAR + SPAN
-QTR_SPAN:str  = QTR + SPAN
-HDR_SPAN:str  = 'Header' + SPAN
-
+ALL:str       = 'ALL'
+ALL_YRS:str   = ALL + ' Years'
 GNC:str       = 'Gnucash'
 MON:str       = 'Monarch'
 TXS:str       = "TRANSACTIONS"
