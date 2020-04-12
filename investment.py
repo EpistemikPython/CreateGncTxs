@@ -49,6 +49,7 @@ BUY:str   = 'Buy'
 SELL:str  = 'Sell'
 BASE:str  = 'Base'
 SPAN:str  = 'Span'
+SHEET:str = 'Sheet'
 
 ALL:str       = 'ALL'
 ALL_YRS:str   = ALL + ' Years'
