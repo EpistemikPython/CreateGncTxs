@@ -19,24 +19,11 @@ from parseMonarchCopyRep import *
 # constant strings
 FILE_LABEL:str = ' File:'
 MON_COPY:str   = MON + ' Copy'
-LEGACY:str     = 'LEGACY'
-FD_COPY:str    = LEGACY
-TX_COPY:str    = LEGACY
-PDF:str        = LEGACY
-TX:str         = LEGACY
-QTRS:str       = LEGACY
-GNC_TXS        = LEGACY
 NO_NEED:str    = 'NOT NEEDED'
 
 MAIN_FXNS = {
     # with the new format Monarch report, this is now the only script actually needed...
-    MON_COPY : mon_copy_rep_main ,
-    # legacy
-    FD_COPY  : NO_NEED ,
-    TX_COPY  : NO_NEED ,
-    PDF      : NO_NEED ,
-    TX       : NO_NEED ,
-    QTRS     : NO_NEED
+    MON_COPY : mon_copy_rep_main
 }
 
 
@@ -56,6 +43,7 @@ class MonarchGnucashServices(QDialog):
         self.init_ui()
         ui_lgr.info(F"{self.title} Runtime = {run_ts}\n")
 
+    # TODO: better layout of widgets
     def init_ui(self):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
@@ -151,14 +139,13 @@ class MonarchGnucashServices(QDialog):
                 self.gnc_file_btn.setText(display_name)
 
     def mode_change(self):
-        """Monarch_Copy: need Gnucash file and domain only if in SEND mode"""
-        if self.cb_script.currentText() == MON_COPY:
-            if self.cb_mode.currentText() == TEST:
-                self.gnc_file_btn.setText(NO_NEED)
-                self.gnc_file = None
-            else:
-                if self.gnc_file is None:
-                    self.gnc_file_btn.setText(self.gnc_btn_title)
+        """Monarch_Copy: need Gnucash file and domain only if in a SEND mode"""
+        if self.cb_mode.currentText() == TEST:
+            self.gnc_file_btn.setText(NO_NEED)
+            self.gnc_file = None
+        else:
+            if self.gnc_file is None:
+                self.gnc_file_btn.setText(self.gnc_btn_title)
 
     def get_log_level(self):
         num, ok = QInputDialog.getInt(self, "Logging Level", "Enter a value (0-100)", value=self.log_level, min=0, max=100)
@@ -169,7 +156,6 @@ class MonarchGnucashServices(QDialog):
     def button_click(self):
         """prepare the executable and parameters string"""
         ui_lgr.info(F"Clicked '{self.exe_btn.text()}'.")
-        cl_params = []
 
         mode = self.cb_mode.currentText()
         selected_fxn = self.cb_script.currentText()
@@ -178,34 +164,27 @@ class MonarchGnucashServices(QDialog):
         ui_lgr.info(F"Function to run: {str(main_fxn)}")
 
         # check that necessary files have been selected
-        if selected_fxn == MON_COPY:
-            if self.mon_file is None:
-                self.response_box.append('>>> MUST select a Monarch File!')
+        if self.mon_file is None:
+            self.response_box.append('>>> MUST select a Monarch File!')
+            return
+
+        cl_params = ['-m' + self.mon_file, '-l' + str(self.log_level)]
+        if self.chbx_json.isChecked(): cl_params.append('--json')
+
+        if mode != TEST:
+            if self.gnc_file is None:
+                self.response_box.append('>>> MUST select a Gnucash File!')
                 return
-            cl_params.append('-m' + self.mon_file)
-            if self.chbx_json.isChecked(): cl_params.append('--json')
+            cl_params.append('gnc')
+            cl_params.append('-f' + self.gnc_file)
+            cl_params.append('-t' + mode)
 
-            cl_params.append('-l'+str(self.log_level))
-
-            if mode != TEST:
-                if self.gnc_file is None:
-                    self.response_box.append('>>> MUST select a Gnucash File!')
-                    return
-                cl_params.append('gnc')
-                cl_params.append('-f' + self.gnc_file)
-                cl_params.append('-t' + mode)
-
-            ui_lgr.info(F"Parameters = \n{json.dumps(cl_params, indent=4)}")
+        ui_lgr.info(F"Parameters = \n{json.dumps(cl_params, indent=4)}")
 
         if callable(main_fxn):
             ui_lgr.info('Calling main function...')
             response = main_fxn(cl_params)
             reply = {'response': response}
-        elif main_fxn == NO_NEED:
-            # LEGACY function
-            msg = F"legacy function: {main_fxn}"
-            ui_lgr.info(msg)
-            reply = {'msg': msg}
         else:
             msg = F"Problem with main??!! '{main_fxn}'"
             ui_lgr.error(msg)
