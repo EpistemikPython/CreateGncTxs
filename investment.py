@@ -8,7 +8,7 @@
 __author__       = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __created__ = '2018'
-__updated__ = '2020-04-09'
+__updated__ = '2020-04-13'
 
 from sys import path
 import os.path as osp
@@ -268,7 +268,7 @@ class InvestmentRecord:
             RRSP : {TRADE:[], PRICE:[]}
         }
 
-        self._lgr.info(F"\n\tInvestmentRecord: Runtime = {file_ts}")
+        self._lgr.info(F"\n\t{self.__class__.__name__}: Runtime = {get_current_time()}")
 
     def __getitem__(self, item:str):
         if item in (OPEN,TFSA,RRSP):
@@ -309,7 +309,7 @@ class InvestmentRecord:
         return self._date
 
     def get_date_str(self) -> str:
-        return self._date.strftime(FILE_DATE_FORMAT)
+        return self._date.strftime(FILE_DATETIME_FORMAT)
 
     def set_filename(self, fn):
         self._filename = str(fn)
@@ -376,7 +376,9 @@ class TxRecord:
         self.price_str = p_pr_str
         self.units = p_un
         self.units_str = p_un_str
-        self.lgr = p_logger
+        self._lgr = p_logger
+
+        self._lgr.info(F"\n\t{self.__class__.__name__}: Runtime = {get_current_time()}")
 
     def __getitem__(self, item):
         if item == DATE:
@@ -396,7 +398,7 @@ class TxRecord:
         if item == SWITCH:
             return self.switch
         else:
-            self.lgr.info(F"UNKNOWN item: {item}")
+            self._lgr.info(F"UNKNOWN item: {item}")
             return None
 
     def set_fund_cmpy(self, p_co:str):
@@ -412,14 +414,14 @@ class TxRecord:
         if p_type in (TRADE,PRICE):
             self.type = p_type
         else:
-            self.lgr.warning(F"BAD type: {p_type}")
+            self._lgr.warning(F"BAD type: {p_type}")
 
     def set_date(self, p_date:dt) -> dt:
         old_date = self.date
         if p_date is not None and isinstance(p_date, dt):
             self.date = p_date
         else:
-            self.lgr.warning(F"BAD date: {p_date}")
+            self._lgr.warning(F"BAD date: {p_date}")
         return old_date
 
 # END class TxRecord
