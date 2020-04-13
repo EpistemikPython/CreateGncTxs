@@ -8,7 +8,7 @@
 __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __created__ = '2018'
-__updated__ = '2020-04-06'
+__updated__ = '2020-04-13'
 
 from PyQt5.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QGroupBox, QDialog, QFileDialog, QLabel,
                              QPushButton, QFormLayout, QDialogButtonBox, QTextEdit, QCheckBox, QInputDialog)
@@ -40,7 +40,7 @@ MAIN_FXNS = {
 }
 
 
-# noinspection PyAttributeOutsideInit,PyCallByClass,PyTypeChecker,PyMethodMayBeStatic
+# noinspection PyAttributeOutsideInit
 class MonarchGnucashServices(QDialog):
     def __init__(self):
         super().__init__(flags=Qt.WindowSystemMenuHint|Qt.WindowTitleHint)
@@ -56,7 +56,6 @@ class MonarchGnucashServices(QDialog):
         self.init_ui()
         ui_lgr.info(F"{self.title} Runtime = {run_ts}\n")
 
-    # noinspection PyArgumentList
     def init_ui(self):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
@@ -83,7 +82,6 @@ class MonarchGnucashServices(QDialog):
         self.setLayout(qvb_layout)
         self.show()
 
-    # noinspection PyUnresolvedReferences
     def create_group_box(self):
         self.gb_main = QGroupBox("Parameters:")
         layout = QFormLayout()
@@ -96,16 +94,12 @@ class MonarchGnucashServices(QDialog):
         layout.addRow(self.mon_label, self.mon_file_btn)
 
         self.cb_mode = QComboBox()
-        self.cb_mode.addItems([TEST, SEND])
+        self.cb_mode.addItems([TEST, PRICE, TRADE, BOTH])
         self.cb_mode.currentIndexChanged.connect(self.mode_change)
-        layout.addRow(QLabel("Mode:"), self.cb_mode)
+        layout.addRow(QLabel(MODE+':'), self.cb_mode)
 
         self.add_gnc_file_btn()
         layout.addRow(self.gnc_label, self.gnc_file_btn)
-
-        self.cb_domain = QComboBox()
-        self.cb_domain.addItems([NO_NEED, BOTH, TRADE, PRICE])
-        layout.addRow(QLabel("Domain:"), self.cb_domain)
 
         self.chbx_json = QCheckBox("Save Monarch info to JSON file?")
         layout.addRow(QLabel("Save:"), self.chbx_json)
@@ -159,14 +153,12 @@ class MonarchGnucashServices(QDialog):
     def mode_change(self):
         """Monarch_Copy: need Gnucash file and domain only if in SEND mode"""
         if self.cb_script.currentText() == MON_COPY:
-            if self.cb_mode.currentText() == SEND:
-                if self.gnc_file is None:
-                    self.gnc_file_btn.setText(self.gnc_btn_title)
-                self.cb_domain.setCurrentText(BOTH)
-            else:
+            if self.cb_mode.currentText() == TEST:
                 self.gnc_file_btn.setText(NO_NEED)
                 self.gnc_file = None
-                self.cb_domain.setCurrentText(NO_NEED)
+            else:
+                if self.gnc_file is None:
+                    self.gnc_file_btn.setText(self.gnc_btn_title)
 
     def get_log_level(self):
         num, ok = QInputDialog.getInt(self, "Logging Level", "Enter a value (0-100)", value=self.log_level, min=0, max=100)
@@ -195,16 +187,13 @@ class MonarchGnucashServices(QDialog):
 
             cl_params.append('-l'+str(self.log_level))
 
-            if mode == SEND:
+            if mode != TEST:
                 if self.gnc_file is None:
                     self.response_box.append('>>> MUST select a Gnucash File!')
                     return
-                if self.cb_domain.currentText() == NO_NEED:
-                    self.response_box.append('>>> MUST select a Domain!')
-                    return
                 cl_params.append('gnc')
                 cl_params.append('-f' + self.gnc_file)
-                cl_params.append('-t' + self.cb_domain.currentText())
+                cl_params.append('-t' + mode)
 
             ui_lgr.info(F"Parameters = \n{json.dumps(cl_params, indent=4)}")
 
