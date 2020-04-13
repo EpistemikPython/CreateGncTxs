@@ -10,7 +10,7 @@
 __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __created__ = '2019-06-22'
-__updated__ = '2020-04-06'
+__updated__ = '2020-04-13'
 
 from sys import path, argv, exc_info
 import re
@@ -42,7 +42,7 @@ class ParseMonarchCopyReport:
     def get_gnucash_record(self) -> InvestmentRecord:
         return self._gnucash_txs
 
-    def parse_copy_info(self):
+    def parse_report_info(self):
         """
         parsing for NEW format txt files, ~ May 31, 2019, just COPIED from Monarch web page,
         as new Monarch pdf's are no longer practical to use -- extracted text just too inconsistent...
@@ -141,7 +141,6 @@ class ParseMonarchCopyReport:
                     self._monarch_txs.add_tx(plan_type, TRADE, curr_tx)
                     self._lgr.debug(F"ADD current Trade Tx:\n\t{curr_tx}")
 
-    # TODO: Produce Gnucash txs directly in a GnucashSession function??
     def get_trade_info(self, mon_tx:dict, plan_type:str, ast_parent:Account, rev_acct:Account) -> (dict,dict):
         """
         Parse a Monarch trade transaction:
@@ -256,7 +255,7 @@ class ParseMonarchCopyReport:
 
         return init_tx, pair_tx
 
-    def process_monarch_trade(self, mon_tx:dict, plan_type:str, ast_parent:Account, p_owner:str):
+    def process_monarch_trades(self, mon_tx:dict, plan_type:str, ast_parent:Account, p_owner:str):
         """
         Obtain each Monarch trade as a transaction item, or pair of transactions where required,
         and forward to Gnucash processing
@@ -351,7 +350,7 @@ class ParseMonarchCopyReport:
 
             if domain in (TRADE,BOTH):
                 for mon_tx in plans[plan_type][TRADE]:
-                    self.process_monarch_trade(mon_tx, plan_type, asset_parent, p_owner)
+                    self.process_monarch_trades(mon_tx, plan_type, asset_parent, p_owner)
 
             if domain in (PRICE,BOTH):
                 for mon_tx in plans[plan_type][PRICE]:
@@ -417,17 +416,15 @@ def mon_copy_rep_main(args:list) -> list:
     _, fname = osp.split(mon_file)
     basename, _ = osp.splitext(fname)
 
-    mcr_now = dt.now().strftime(FILE_DATE_FORMAT)
-
     lgr.setLevel(level)
-    lgr.info(F"\n\t\tRuntime = {mcr_now}")
+    lgr.info(F"\n\t\tRuntime = {get_current_time()}")
     lgr.debug(str(lgr.handlers))
 
     try:
         # parse an external Monarch COPIED report file
         parser = ParseMonarchCopyReport(mon_file, lgr)
 
-        parser.parse_copy_info()
+        parser.parse_report_info()
         parser.add_balance_to_trade()
 
         parser.set_filename(mon_file)
@@ -444,7 +441,7 @@ def mon_copy_rep_main(args:list) -> list:
         msg = saved_log_info
 
         if save_json:
-            out_file = save_to_json(basename, parser.get_monarch_record().to_json(), mcr_now)
+            out_file = save_to_json(basename, parser.get_monarch_record().to_json(), get_current_time(FILE_DATETIME_FORMAT))
             lgr.info(F"Created JSON file: {out_file}")
 
     except Exception as mcre:
@@ -453,7 +450,7 @@ def mon_copy_rep_main(args:list) -> list:
         msg = [mcre_msg]
 
     lgr.warning('\n >>> PROGRAM ENDED.')
-    finish_logging(base_run_file, basename, mcr_now)
+    finish_logging(base_run_file, basename, get_current_time())
     return msg
 
 
