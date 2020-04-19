@@ -10,13 +10,13 @@
 __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __created__ = '2019-06-22'
-__updated__ = '2020-04-13'
+__updated__ = '2020-04-19'
 
 from sys import path, argv, exc_info
 import re
 from argparse import ArgumentParser
 path.append('/newdata/dev/git/Python/Gnucash/updateBudgetQtrly')
-print(path)
+# print(path)
 from gnucash_utilities import *
 
 base_run_file = get_base_filename(__file__)
@@ -410,7 +410,7 @@ def process_input_parameters(argx:list, lgr:lg.Logger):
 def mon_copy_rep_main(args:list) -> list:
     lgr = get_logger(base_run_file)
 
-    mon_file, save_json, level, mode, gnc_file, domain = process_input_parameters(args, lgr)
+    mon_file, save_monarch, level, mode, gnc_file, domain = process_input_parameters(args, lgr)
 
     # construct log name from monarch file name
     _, fname = osp.split(mon_file)
@@ -440,17 +440,17 @@ def mon_copy_rep_main(args:list) -> list:
 
         msg = saved_log_info
 
-        if save_json:
+        if save_monarch:
             out_file = save_to_json(basename, parser.get_monarch_record().to_json(), get_current_time(FILE_DATETIME_FORMAT))
-            lgr.info(F"Created JSON file: {out_file}")
+            lgr.info(F"Created Monarch JSON file: {out_file}")
 
     except Exception as mcre:
-        mcre_msg = F"EXCEPTION: {repr(mcre)}!!"
+        mcre_msg = repr(mcre)
         lgr.error(mcre_msg)
         msg = [mcre_msg]
 
     lgr.warning('\n >>> PROGRAM ENDED.')
-    finish_logging(base_run_file, basename, get_current_time())
+    finish_logging(base_run_file, basename, get_current_time(FILE_DATETIME_FORMAT))
     return msg
 
 
