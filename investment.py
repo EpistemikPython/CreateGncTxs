@@ -8,10 +8,9 @@
 __author__       = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __created__ = '2018'
-__updated__ = '2020-04-13'
+__updated__ = '2020-04-15'
 
 from sys import path
-import os.path as osp
 path.append("/newdata/dev/git/Python/Utilities/")
 from python_utilities import *
 from secret import *
