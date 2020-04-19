@@ -8,7 +8,7 @@
 __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __created__ = '2018'
-__updated__ = '2020-04-13'
+__updated__ = '2020-04-19'
 
 from PyQt5.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QGroupBox, QDialog, QFileDialog, QLabel,
                              QPushButton, QFormLayout, QDialogButtonBox, QTextEdit, QCheckBox, QInputDialog)
@@ -20,11 +20,6 @@ from parseMonarchCopyRep import *
 FILE_LABEL:str = ' File:'
 MON_COPY:str   = MON + ' Copy'
 NO_NEED:str    = 'NOT NEEDED'
-
-MAIN_FXNS = {
-    # with the new format Monarch report, this is now the only script actually needed...
-    MON_COPY : mon_copy_rep_main
-}
 
 
 # noinspection PyAttributeOutsideInit
@@ -75,7 +70,7 @@ class MonarchGnucashServices(QDialog):
         layout = QFormLayout()
 
         self.cb_script = QComboBox()
-        self.cb_script.addItems(x for x in MAIN_FXNS)
+        self.cb_script.addItems([MON_COPY])
         layout.addRow(QLabel("Script:"), self.cb_script)
 
         self.add_mon_file_btn()
@@ -157,12 +152,6 @@ class MonarchGnucashServices(QDialog):
         """prepare the executable and parameters string"""
         ui_lgr.info(F"Clicked '{self.exe_btn.text()}'.")
 
-        mode = self.cb_mode.currentText()
-        selected_fxn = self.cb_script.currentText()
-
-        main_fxn = MAIN_FXNS[selected_fxn]
-        ui_lgr.info(F"Function to run: {str(main_fxn)}")
-
         # check that necessary files have been selected
         if self.mon_file is None:
             self.response_box.append('>>> MUST select a Monarch File!')
@@ -171,6 +160,7 @@ class MonarchGnucashServices(QDialog):
         cl_params = ['-m' + self.mon_file, '-l' + str(self.log_level)]
         if self.chbx_json.isChecked(): cl_params.append('--json')
 
+        mode = self.cb_mode.currentText()
         if mode != TEST:
             if self.gnc_file is None:
                 self.response_box.append('>>> MUST select a Gnucash File!')
@@ -181,14 +171,14 @@ class MonarchGnucashServices(QDialog):
 
         ui_lgr.info(F"Parameters = \n{json.dumps(cl_params, indent=4)}")
 
-        if callable(main_fxn):
-            ui_lgr.info('Calling main function...')
-            response = main_fxn(cl_params)
+        try:
+            ui_lgr.info('Calling mon_copy_rep_main...')
+            response = mon_copy_rep_main(cl_params)
             reply = {'response': response}
-        else:
-            msg = F"Problem with main??!! '{main_fxn}'"
+        except Exception as bcce:
+            msg = repr(bcce)
             ui_lgr.error(msg)
-            reply = {'msg': msg, 'log': saved_log_info}
+            reply = {"EXCEPTION" : msg}
 
         self.response_box.setText(json.dumps(reply, indent=4))
 
