@@ -8,7 +8,7 @@
 __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __created__ = '2018'
-__updated__ = '2020-04-19'
+__updated__ = '2020-06-06'
 
 from PyQt5.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QGroupBox, QDialog, QFileDialog, QLabel,
                              QPushButton, QFormLayout, QDialogButtonBox, QTextEdit, QCheckBox, QInputDialog)
@@ -26,7 +26,7 @@ NO_NEED:str    = 'NOT NEEDED'
 class MonarchGnucashServices(QDialog):
     def __init__(self):
         super().__init__(flags=Qt.WindowSystemMenuHint|Qt.WindowTitleHint)
-        self.title = 'Monarch & Gnucash Services'
+        self.title = 'Monarch & Gnucash Services UI'
         self.left = 120
         self.top  = 160
         self.width  = 800
@@ -43,7 +43,7 @@ class MonarchGnucashServices(QDialog):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
 
-        self.log_level = lg.INFO
+        self.log_level:int = lg.INFO
 
         self.create_group_box()
 
@@ -134,8 +134,8 @@ class MonarchGnucashServices(QDialog):
                 self.gnc_file_btn.setText(display_name)
 
     def mode_change(self):
-        """Monarch_Copy: need Gnucash file and domain only if in a SEND mode"""
         if self.cb_mode.currentText() == TEST:
+            # need Gnucash file and domain only if in SEND mode
             self.gnc_file_btn.setText(NO_NEED)
             self.gnc_file = None
         else:
@@ -149,7 +149,9 @@ class MonarchGnucashServices(QDialog):
             ui_lgr.info(F"logging level changed to {num}.")
 
     def button_click(self):
-        """prepare the executable and parameters string"""
+        """
+        prepare the parameters string and send to parseMonarchCopyRep.mon_copy_rep_main()
+        """
         ui_lgr.info(F"Clicked '{self.exe_btn.text()}'.")
 
         # check that necessary files have been selected

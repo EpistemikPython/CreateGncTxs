@@ -6,7 +6,7 @@
 #                           then saving to a specified Gnucash file
 #
 # Copyright (c) 2020 Mark Sattolo <epistemik@gmail.com>
-#
+
 __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __created__ = '2019-06-22'
@@ -311,13 +311,13 @@ class ParseMonarchCopyReport:
                     plan[TRADE][latest_indx][UNIT_BAL] = tx[UNIT_BAL]
                     plan[TRADE][latest_indx][NOTES] = F"{tx[FUND]} Balance = {tx[UNIT_BAL]}"
 
+    # noinspection PyAttributeOutsideInit
     def insert_txs_to_gnucash_file(self, p_gncs:GnucashSession) -> list:
         """
         transfer the Monarch information to a Gnucash file
         :return: gnucash session log or error message
         """
         self._lgr.info(get_current_time())
-        # noinspection PyAttributeOutsideInit
         self.gnc_session = p_gncs
         msg = saved_log_info
         try:
