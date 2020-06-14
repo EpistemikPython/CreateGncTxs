@@ -10,7 +10,7 @@
 __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __created__ = '2019-06-22'
-__updated__ = '2020-04-19'
+__updated__ = '2020-06-13'
 
 from sys import path, argv, exc_info
 import re
@@ -113,7 +113,7 @@ class ParseMonarchCopyReport:
                     fund = words[-10].replace('-', ' ')
                     bal = words[-8]
                     price = words[-7]
-                    curr_tx = {DATE:doc_date, DESC:PRICE, FUND_CMPY:fd_co, FUND:fund, UNIT_BAL:bal, PRICE:price}
+                    curr_tx = { DATE:doc_date, DESC:PRICE, FUND_CMPY:fd_co, FUND:fund, UNIT_BAL:bal, PRICE:price }
                     self._monarch_txs.add_tx(plan_type, PRICE, curr_tx)
                     self._lgr.debug(F"ADD current Price Tx:\n\t{curr_tx}")
                     continue
@@ -131,7 +131,7 @@ class ParseMonarchCopyReport:
                         tx_type = DCA_IN if words[4] == SW_IN else DCA_OUT
                     desc = words[2] if tx_type == INTRCL else TX_TYPES[tx_type]
                     # noinspection PyDictCreation
-                    curr_tx = {TRADE_DATE:tx_date, FUND:fund, TYPE:desc, CMPY:COMPANY_NAME[fund_co]}
+                    curr_tx = { TRADE_DATE:tx_date, FUND:fund, TYPE:desc, CMPY:COMPANY_NAME[fund_co] }
                     curr_tx[DESC]  = curr_tx[CMPY] + ": " + desc
                     curr_tx[GROSS] = words[-4]
                     curr_tx[NET]   = words[-3]
@@ -144,7 +144,9 @@ class ParseMonarchCopyReport:
     def get_trade_info(self, mon_tx:dict, plan_type:str, ast_parent:Account, rev_acct:Account) -> (dict,dict):
         """
         Parse a Monarch trade transaction:
-        ** useful to have this intermediate function to obtain matching 'in' and 'out' Switch txs...
+        * useful to have this intermediate function to obtain a collection of txs with the Gnucash data handy
+          and also to ensure that all the matching 'in' and 'out' Switch txs are properly paired up...
+          before creating the actual Gnucash.Transactions
             Asset accounts: use the proper path to find the parent then search for the Fund Code in the descendants
             Revenue accounts: pick the proper account based on owner and plan type
             Amounts: re match to Gross and Net then use the match groups
@@ -176,8 +178,8 @@ class ParseMonarchCopyReport:
 
         # get required date fields
         conv_date = dt.strptime(mon_tx[TRADE_DATE], "%d-%b-%Y")
-        init_tx = {FUND:fund_name, ACCT:asset_acct, REVENUE:rev_acct, TRADE_DATE:mon_tx[TRADE_DATE],
-                   TRADE_DAY:conv_date.day, TRADE_MTH:conv_date.month, TRADE_YR:conv_date.year}
+        init_tx = { FUND:fund_name, ACCT:asset_acct, REVENUE:rev_acct, TRADE_DATE:mon_tx[TRADE_DATE],
+                    TRADE_DAY:conv_date.day, TRADE_MTH:conv_date.month, TRADE_YR:conv_date.year }
         self._lgr.debug(F"trade day-month-year = {init_tx[TRADE_DAY]}-{init_tx[TRADE_MTH]}-{init_tx[TRADE_YR]}")
 
         # different accounts depending if Switch, Redemption, Purchase, Distribution
@@ -242,7 +244,7 @@ class ParseMonarchCopyReport:
             for gnc_tx in self._gnucash_txs.get_trades(plan_type):
                 if gnc_tx[TYPE] in PAIRED_TYPES and gnc_tx[FUND].split()[0] == init_tx[FUND].split()[0] \
                         and gnc_tx[GROSS] == (net_amount * -1) and gnc_tx[TRADE_DATE] == init_tx[TRADE_DATE]:
-                    # ALREADY HAVE THE FIRST ITEM OF THE PAIR
+                    # FOUND THE FIRST ITEM IN THIS PAIR
                     have_pair = True
                     pair_tx = gnc_tx
                     self._lgr.debug('*** Found the MATCH of a Switch pair ***')
@@ -268,13 +270,14 @@ class ParseMonarchCopyReport:
         try:
             rev_acct = self.gnc_session.get_revenue_account(plan_type, p_owner)
 
-            # get the additional required information from the Monarch json
+            # get all the tx required information from the Monarch json
             tx1, tx2 = self.get_trade_info(mon_tx, plan_type, ast_parent, rev_acct)
 
             # just return if there is a matching tx but we don't have it yet
             if tx1[TYPE] in PAIRED_TYPES and tx2 is None:
                 return
 
+            # use the Gnucash API to create Transactions and save to a Gnucash file
             self.gnc_session.create_trade_tx(tx1, tx2)
 
         except Exception as pmte:
@@ -345,7 +348,7 @@ class ParseMonarchCopyReport:
         for plan_type in plans:
             self._lgr.debug(F"\n\n\t\t\u0022Plan type = {plan_type}\u0022")
 
-            asset_parent = self.gnc_session.get_asset_parent(plan_type, p_owner)
+            asset_parent = self.gnc_session.get_asset_account(plan_type, p_owner)
             self._lgr.debug(F"create_gnucash_info(): asset parent = {asset_parent.GetName()}")
 
             if domain in (TRADE,BOTH):
@@ -354,7 +357,7 @@ class ParseMonarchCopyReport:
 
             if domain in (PRICE,BOTH):
                 for mon_tx in plans[plan_type][PRICE]:
-                    self.gnc_session.create_price_tx(mon_tx, asset_parent)
+                    self.gnc_session.create_price(mon_tx, asset_parent)
 
 # END class ParseMonarchCopyReport
 
@@ -450,7 +453,7 @@ def mon_copy_rep_main(args:list) -> list:
         msg = [mcre_msg]
 
     lgr.warning('\n >>> PROGRAM ENDED.')
-    finish_logging(base_run_file, basename, get_current_time(FILE_DATETIME_FORMAT))
+    finish_logging(base_run_file, basename, get_current_time(FILE_DATETIME_FORMAT), sfx='gncout')
     return msg
 
 

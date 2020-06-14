@@ -8,7 +8,7 @@
 __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __created__ = '2018'
-__updated__ = '2020-06-06'
+__updated__ = '2020-06-13'
 
 from PyQt5.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QGroupBox, QDialog, QFileDialog, QLabel,
                              QPushButton, QFormLayout, QDialogButtonBox, QTextEdit, QCheckBox, QInputDialog)
@@ -160,7 +160,9 @@ class MonarchGnucashServices(QDialog):
             return
 
         cl_params = ['-m' + self.mon_file, '-l' + str(self.log_level)]
-        if self.chbx_json.isChecked(): cl_params.append('--json')
+
+        if self.chbx_json.isChecked():
+            cl_params.append('--json')
 
         mode = self.cb_mode.currentText()
         if mode != TEST:
@@ -197,5 +199,5 @@ def ui_main():
 if __name__ == '__main__':
     ui_lgr = get_logger(MonarchGnucashServices.__name__)
     ui_main()
-    finish_logging(MonarchGnucashServices.__name__)
+    finish_logging(MonarchGnucashServices.__name__, sfx='gncout')
     exit()
