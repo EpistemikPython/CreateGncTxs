@@ -8,7 +8,7 @@
 __author__       = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __created__ = '2018'
-__updated__ = '2020-04-15'
+__updated__ = '2020-07-04'
 
 from sys import path
 path.append("/newdata/dev/git/Python/Utilities/")
@@ -91,7 +91,7 @@ GROSS:str       = "Gross"
 NET:str         = "Net"
 UNITS:str       = "Units"
 PRICE:str       = "Price"
-BOTH:str        = "Both"
+BOTH:str        = "BOTH"
 UNIT_BAL:str    = "Unit Balance"
 ACCT:str        = "Account"  # in Gnucash
 NOTES:str       = "Notes"
@@ -113,6 +113,7 @@ DOLLAR:str      = 'Dollar'
 DLR_AVE:str     = DOLLAR + ' Cost Averaging '
 DCA_IN:str      = DLR_AVE + SW_IN
 DCA_OUT:str     = DLR_AVE + SW_OUT
+PLAN_DATA:str   = "Plan Data"
 
 # Fund companies
 ATL:str = "ATL"
@@ -349,9 +350,9 @@ class InvestmentRecord:
         return {
             "__class__"    : self.__class__.__name__ ,
             "__module__"   : self.__module__         ,
-            OWNER          : self.get_owner()        ,
+            "Owner"        : self.get_owner()        ,
             "Source File"  : self.get_filename()     ,
-            "Date"         : self.get_date_str()     ,
+            DATE           : self.get_date_str()     ,
             "Size"         : self.get_size_str(plan_spec, type_spec) ,
             PLAN_DATA      : self._plans
         }
