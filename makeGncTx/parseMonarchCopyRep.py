@@ -10,7 +10,7 @@
 __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __created__ = '2019-06-22'
-__updated__ = '2020-06-13'
+__updated__ = '2020-07-04'
 
 from sys import path, argv, exc_info
 import re
@@ -97,7 +97,7 @@ class ParseMonarchCopyReport:
                 if words[0] == FUND.upper():
                     for word in words:
                         if word in PLAN_IDS:
-                            plan_type = PLAN_IDS[word][PLAN_TYPE]
+                            plan_type = PLAN_IDS[word][0]
                             plan_id = word
                             self._lgr.debug(F"\n\t\t\u0022Current plan: type = {plan_type} ; id = {plan_id}\u0022")
                             continue
