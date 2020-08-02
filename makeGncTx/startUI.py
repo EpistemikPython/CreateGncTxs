@@ -8,7 +8,7 @@
 __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __created__ = '2018'
-__updated__ = '2020-06-13'
+__updated__ = '2020-07-19'
 
 from PyQt5.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QGroupBox, QDialog, QFileDialog, QLabel,
                              QPushButton, QFormLayout, QDialogButtonBox, QTextEdit, QCheckBox, QInputDialog)
@@ -43,7 +43,7 @@ class MonarchGnucashServices(QDialog):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
 
-        self.log_level:int = lg.INFO
+        self.log_level:int = lg.DEBUG
 
         self.create_group_box()
 
@@ -65,6 +65,7 @@ class MonarchGnucashServices(QDialog):
         self.setLayout(qvb_layout)
         self.show()
 
+    # noinspection PyUnresolvedReferences
     def create_group_box(self):
         self.gb_main = QGroupBox("Parameters:")
         layout = QFormLayout()
