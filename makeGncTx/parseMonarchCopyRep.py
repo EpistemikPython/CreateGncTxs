@@ -10,7 +10,7 @@
 __author__ = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __created__ = '2019-06-22'
-__updated__ = '2020-07-04'
+__updated__ = '2020-09-17'
 
 from sys import path, argv, exc_info
 import re
@@ -55,18 +55,17 @@ class ParseMonarchCopyReport:
                  find planID in words; type is PLAN_IDS[word][PLAN_TYPE]
             5: Pass if planID is Joint and owner is Lulu
             6: Prices ->
-                 match fund name:
-                    record fund company, fund, balance, price, doc date
+                 match fund name at [0]:
+                    record: fund company, fund, balance, price, doc date
             7: Trades ->
-                 match date:
-                    record fund, desc, gross, units, price, load, trade date
+                 match date at [0]:
+                    record: fund, desc, gross, units, price, load, trade date
         :return nil
         """
         self._lgr.info(get_current_time())
 
         re_date = re.compile(r"([0-9]{2}-\w{3}-[0-9]{4})")
 
-        # TODO: improve parsing
         mon_state = FIND_DATE
         plan_type = UNKNOWN
         plan_id = UNKNOWN
@@ -109,35 +108,67 @@ class ParseMonarchCopyReport:
 
                 # PRICES
                 if words[0] in FUND_NAME_CODE:
-                    fd_co = words[0]
-                    fund = words[-10].replace('-', ' ')
-                    bal = words[-8]
-                    price = words[-7]
-                    curr_tx = { DATE:doc_date, DESC:PRICE, FUND_CMPY:fd_co, FUND:fund, UNIT_BAL:bal, PRICE:price }
-                    self._monarch_txs.add_tx(plan_type, PRICE, curr_tx)
-                    self._lgr.debug(F"ADD current Price Tx:\n\t{curr_tx}")
+                    # NOTE: price lines start with a fund name and have enough words to match the accounts header
+                    if len(words) >= 11:
+                        fd_cpy = words[0]
+                        self._lgr.debug(F"FOUND a NEW Price: {fd_cpy}")
+                        fund = words[-11]
+                        if '-' in fund:
+                            fund = fund.replace('-', ' ')
+                        else:
+                            raise Exception(F"Did NOT find proper fund name: {fund}!")
+                        bal = words[-9]
+                        if '.' not in bal or '$' in bal:
+                            raise Exception(F"Did NOT find proper balance: {bal}!")
+                        price = words[-8]
+                        if '.' not in price or '$' not in price:
+                            raise Exception(F"Did NOT find proper price: {price}!")
+                        curr_tx = { DATE:doc_date, DESC:PRICE, FUND_CMPY:fd_cpy, FUND:fund, UNIT_BAL:bal, PRICE:price }
+                        self._monarch_txs.add_tx(plan_type, PRICE, curr_tx)
+                        self._lgr.debug(F"ADD current Price Tx:\n\t{curr_tx}")
                     continue
 
                 # TRADES
                 re_match = re.match(re_date, words[0])
-                if re_match:
+                # NOTE: trade lines start with a date and have enough words to match the tx header
+                if re_match and len(words) >= 8:
                     tx_date = re_match.group(1)
-                    self._lgr.debug(F"FOUND a NEW tx! Date: {tx_date}")
-                    fund_co = words[-8]
-                    fund = fund_co + " " + words[-7]
+                    self._lgr.debug(F"FOUND a NEW Tx! Date: {tx_date}")
+                    fund_cpy = words[-8]
+                    if fund_cpy not in FUND_NAME_CODE.values():
+                        raise Exception(F"Did NOT find proper Fund company: {fund_cpy}!")
+                    fund_code = words[-7]
+                    if not fund_code.isnumeric():
+                        raise Exception(F"Did NOT find proper Fund code: {fund_code}!")
+                    fund = fund_cpy + " " + fund_code
+
                     # have to identify & handle different types
                     tx_type = words[1]
                     if tx_type == DOLLAR:
                         tx_type = DCA_IN if words[4] == SW_IN else DCA_OUT
                     desc = words[2] if tx_type == INTRCL else TX_TYPES[tx_type]
+                    if not desc.isprintable():
+                        raise Exception(F"Did NOT find proper Description: {desc}!")
+
                     # noinspection PyDictCreation
-                    curr_tx = { TRADE_DATE:tx_date, FUND:fund, TYPE:desc, CMPY:COMPANY_NAME[fund_co] }
+                    curr_tx = { TRADE_DATE:tx_date, FUND:fund, TYPE:desc, CMPY:COMPANY_NAME[fund_cpy] }
                     curr_tx[DESC]  = curr_tx[CMPY] + ": " + desc
-                    curr_tx[GROSS] = words[-4]
-                    curr_tx[NET]   = words[-3]
                     curr_tx[UNITS] = words[-1]
+                    if '.' not in curr_tx[UNITS] or '$' in curr_tx[UNITS]:
+                        raise Exception(F"Did NOT find proper Units!: {curr_tx[UNITS]}")
                     curr_tx[PRICE] = words[-2]
+                    if '.' not in curr_tx[PRICE] or '$' not in curr_tx[PRICE]:
+                        raise Exception(F"Did NOT find proper Price: {curr_tx[PRICE]}!")
+                    curr_tx[NET]   = words[-3]
+                    if '.' not in curr_tx[NET] or '$' not in curr_tx[NET]:
+                        raise Exception(F"Did NOT find proper Net amount: {curr_tx[NET]}!")
+                    curr_tx[GROSS] = words[-4]
+                    if '.' not in curr_tx[GROSS] or '$' not in curr_tx[GROSS]:
+                        raise Exception(F"Did NOT find proper Gross amount: {curr_tx[GROSS]}!")
                     curr_tx[LOAD]  = words[-5]
+                    if not curr_tx[LOAD].isalpha():
+                        raise Exception(F"Did NOT find proper Load: {curr_tx[LOAD]}!")
+
                     self._monarch_txs.add_tx(plan_type, TRADE, curr_tx)
                     self._lgr.debug(F"ADD current Trade Tx:\n\t{curr_tx}")
 
@@ -162,7 +193,7 @@ class ParseMonarchCopyReport:
         self._lgr.debug(F"plan type = {plan_type}, asset parent = {ast_parent.GetName()}")
 
         # set the regex needed to match the required groups in each value
-        # re_dollars must match (leading minus sign) OR (amount is in parentheses) to indicate NEGATIVE number
+        # NOTE: re_dollars must match (leading minus sign) OR (amount is in parentheses) to indicate NEGATIVE number
         re_dollars = re.compile(r"^([-(]?)\$([0-9,]{1,6})\.([0-9]{2}).*(\)?)")
         re_units   = re.compile(r"^(-?)([0-9]{1,5})\.([0-9]{4}).*")
 
@@ -292,7 +323,6 @@ class ParseMonarchCopyReport:
             go through Price txs:
                 for each tx, find the latest Trade tx for that fund, if any...
                 if found, add the Unit Balance from the Price tx to the Trade tx
-        :return: nil
         """
         self._lgr.info('\n\t\t' + get_current_time())
         for iplan in self._monarch_txs.get_plans():
@@ -423,6 +453,7 @@ def mon_copy_rep_main(args:list) -> list:
     lgr.info(F"\n\t\tRuntime = {get_current_time()}")
     lgr.debug(str(lgr.handlers))
 
+    gnc_session = None
     try:
         # parse an external Monarch COPIED report file
         parser = ParseMonarchCopyReport(mon_file, lgr)
@@ -451,6 +482,8 @@ def mon_copy_rep_main(args:list) -> list:
         mcre_msg = repr(mcre)
         lgr.error(mcre_msg)
         msg = [mcre_msg]
+        if gnc_session:
+            gnc_session.end_session(False)
 
     lgr.warning('\n >>> PROGRAM ENDED.')
     finish_logging(base_run_file, basename, get_current_time(FILE_DATETIME_FORMAT), sfx='gncout')
