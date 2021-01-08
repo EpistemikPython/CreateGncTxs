@@ -1,7 +1,7 @@
 .*
 !.gitignore
 /gnucash
-/py3bindings
+examples/
 **/in/Monarch
 **/out/
 **/gncout/
