@@ -209,7 +209,7 @@ class ParseMonarchCopyReport:
 
         # get required date fields
         conv_date = dt.strptime(mon_tx[TRADE_DATE], "%d-%b-%Y")
-        init_tx = { FUND:fund_name, ACCT:asset_acct, REVENUE:rev_acct, TRADE_DATE:mon_tx[TRADE_DATE],
+        init_tx = { FUND:fund_name, ACCT:asset_acct, REV:rev_acct, TRADE_DATE:mon_tx[TRADE_DATE],
                     TRADE_DAY:conv_date.day, TRADE_MTH:conv_date.month, TRADE_YR:conv_date.year }
         self._lgr.debug(F"trade day-month-year = {init_tx[TRADE_DAY]}-{init_tx[TRADE_MTH]}-{init_tx[TRADE_YR]}")
 

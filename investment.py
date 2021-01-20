@@ -3,12 +3,12 @@
 #
 # investment.py -- classes, constants, variables & functions used with my investment scripts
 #
-# Copyright (c) 2020 Mark Sattolo <epistemik@gmail.com>
+# Copyright (c) 2021 Mark Sattolo <epistemik@gmail.com>
 #
 __author__       = 'Mark Sattolo'
 __author_email__ = 'epistemik@gmail.com'
 __created__ = '2018'
-__updated__ = '2021-01-01'
+__updated__ = '2021-01-20'
 
 from sys import path
 path.append("/newdata/dev/git/Python/Utilities/")
@@ -20,23 +20,17 @@ AU:str      = 'Gold'
 AG:str      = 'Silver'
 CASH:str    = 'Cash'
 BANK:str    = 'Bank'
-RWRDS:str   = 'Rewards'
 RESP:str    = 'RESP'
 HOUSE:str   = 'House'
 TOTAL:str   = 'Total'
-FAM:str     = 'FAMILY'
-ASSETS:str  = FAM
+FAM:str     = "FAMILY"
 LIQ:str     = "LIQUID"
 PM:str      = "Prec Metals"
 REW:str     = "Rewards"
 LIAB:str    = 'LIABS'
 CHAL:str    = 'CHALET'
 HOLD:str    = 'HOLD'
-TODAY:str   = 'Today'
-QTR:str     = 'Quarter'
-YR:str      = 'Year'
-YEAR:str    = YR
-MTH:str     = 'Month'
+ASSET:str   = "Asset"
 REV:str     = 'Revenue'
 INV:str     = 'Invest'
 INVEST:str  = INV.upper()
@@ -56,6 +50,11 @@ SPAN:str    = 'Span'
 SHEET:str   = 'Sheet'
 MODE:str    = 'Mode'
 
+TODAY:str       = 'Today'
+QTR:str         = 'Quarter'
+YR:str          = 'Year'
+YEAR:str        =  YR
+MTH:str         = 'Month'
 ALL:str         = 'ALL'
 ALL_YRS:str     =  ALL + ' Years'
 EARLY_YRS:str   = '2008-10'
@@ -74,9 +73,6 @@ UNKNOWN:str     = "UNKNOWN"
 FIN_SERV:str    = "FinServices"
 DOLLARS:str     = '$'
 CENTS:str       = '\u00A2'
-
-REVENUE:str   = "Revenue"
-ASSET:str     = "Asset"
 
 # Tx categories
 FUND:str        = 'Fund'
@@ -234,7 +230,7 @@ TRUST_REV_ACCT = "Trust_Dist"
 
 # find the proper path to the account in the gnucash file
 ACCT_PATHS = {
-    REVENUE  : ["REV_Invest", DIST] ,  # + planType [+ Owner]
+    REV      : ["REV_Invest", DIST] ,  # + planType [+ Owner]
     ASSET    : ["FAMILY", "INVEST"] ,  # + planType [+ Owner]
     MON_MARK : GNC_MARK ,
     MON_LULU : GNC_LULU ,
