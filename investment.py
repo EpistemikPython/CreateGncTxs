@@ -5,10 +5,10 @@
 #
 # Copyright (c) 2021 Mark Sattolo <epistemik@gmail.com>
 #
-__author__       = 'Mark Sattolo'
-__author_email__ = 'epistemik@gmail.com'
-__created__ = '2018'
-__updated__ = '2021-01-20'
+__author__       = "Mark Sattolo"
+__author_email__ = "epistemik@gmail.com"
+__created__ = "2018"
+__updated__ = "2021-02-11"
 
 from sys import path
 path.append("/newdata/dev/git/Python/Utilities/")
@@ -16,53 +16,53 @@ from python_utilities import *
 from secret import *
 
 # constant strings
-AU:str      = 'Gold'
-AG:str      = 'Silver'
-CASH:str    = 'Cash'
-BANK:str    = 'Bank'
-RESP:str    = 'RESP'
-HOUSE:str   = 'House'
-TOTAL:str   = 'Total'
+AU:str      = "Gold"
+AG:str      = "Silver"
+CASH:str    = "Cash"
+BANK:str    = "Bank"
+RESP:str    = "RESP"
+HOUSE:str   = "House"
+TOTAL:str   = "Total"
 FAM:str     = "FAMILY"
 LIQ:str     = "LIQUID"
 PM:str      = "Prec Metals"
 REW:str     = "Rewards"
-LIAB:str    = 'LIABS'
-CHAL:str    = 'CHALET'
-HOLD:str    = 'HOLD'
+LIAB:str    = "LIABS"
+CHAL:str    = "CHALET"
+HOLD:str    = "HOLD"
 ASSET:str   = "Asset"
-REV:str     = 'Revenue'
-INV:str     = 'Invest'
+REV:str     = "Revenue"
+INV:str     = "Invest"
 INVEST:str  = INV.upper()
-OTH:str     = 'Other'
-EMPL:str    = 'Employment'
-BAL:str     = 'Balance'
-CONT:str    = 'Contingent'
-NEC:str     = 'Necessary'
-DEDNS:str   = EMPL + ' Dedns'
-TEST:str    = 'test'
-SEND:str    = 'SEND'
+OTH:str     = "Other"
+EMPL:str    = "Employment"
+BAL:str     = "Balance"
+CONT:str    = "Contingent"
+NEC:str     = "Necessary"
+DEDNS:str   = EMPL + " Dedns"
+TEST:str    = "test"
+SEND:str    = "SEND"
 PROD:str    = SEND
-BUY:str     = 'Buy'
-SELL:str    = 'Sell'
-BASE:str    = 'Base'
-SPAN:str    = 'Span'
-SHEET:str   = 'Sheet'
-MODE:str    = 'Mode'
+BUY:str     = "Buy"
+SELL:str    = "Sell"
+BASE:str    = "Base"
+SPAN:str    = "Span"
+SHEET:str   = "Sheet"
+MODE:str    = "Mode"
 
-TODAY:str       = 'Today'
-QTR:str         = 'Quarter'
-YR:str          = 'Year'
+TODAY:str       = "Today"
+QTR:str         = "Quarter"
+YR:str          = "Year"
 YEAR:str        =  YR
-MTH:str         = 'Month'
-ALL:str         = 'ALL'
-ALL_YRS:str     =  ALL + ' Years'
-EARLY_YRS:str   = '2008-10'
-MID_YRS:str     = '2011-14'
-RECENT_YRS:str  = '2015-18'
-CURRENT_YRS:str = '2019-21'
-GNC:str         = 'Gnucash'
-MON:str         = 'Monarch'
+MTH:str         = "Month"
+ALL:str         = "ALL"
+ALL_YRS:str     =  ALL + " Years"
+EARLY_YRS:str   = "2008-10"
+MID_YRS:str     = "2011-14"
+RECENT_YRS:str  = "2015-18"
+CURRENT_YRS:str = "2019-21"
+GNC:str         = "Gnucash"
+MON:str         = "Monarch"
 TXS:str         = "TRANSACTIONS"
 CLIENT_TX:str   = "CLIENT " + TXS
 JOINT:str       = "Joint"
@@ -75,13 +75,13 @@ DOLLARS:str     = '$'
 CENTS:str       = '\u00A2'
 
 # Tx categories
-FUND:str        = 'Fund'
-CMPY:str        = 'Company'
+FUND:str        = "Fund"
+CMPY:str        = "Company"
 FUND_CODE:str   = FUND + " Code"
 FUND_CMPY:str   = FUND + " " + CMPY
-DATE:str        = 'Date'
-TIME:str        = 'Time'
-TRADE:str       = 'Trade'
+DATE:str        = "Date"
+TIME:str        = "Time"
+TRADE:str       = "Trade"
 TRADE_DATE:str  = TRADE + " " + DATE
 TRADE_DAY:str   = TRADE + " Day"
 TRADE_MTH:str   = TRADE + " Month"
@@ -110,8 +110,8 @@ INTRF_IN:str    = INTRF + "-In"
 INTRF_OUT:str   = INTRF + "-Out"
 REINV:str       = "Reinvested"
 INTRCL:str      = "Inter-Class"
-DOLLAR:str      = 'Dollar'
-DLR_AVE:str     = DOLLAR + ' Cost Averaging '
+DOLLAR:str      = "Dollar"
+DLR_AVE:str     = DOLLAR + " Cost Averaging "
 DCA_IN:str      = DLR_AVE + SW_IN
 DCA_OUT:str     = DLR_AVE + SW_OUT
 PLAN_DATA:str   = "Plan Data"
@@ -260,11 +260,11 @@ class InvestmentRecord:
         self._date = p_date if p_date is not None and isinstance(p_date, dt) else now_dt
 
         if p_owner:
-            assert (p_owner == MON_MARK or p_owner == MON_LULU), 'MUST be a valid Owner!'
+            assert (p_owner == MON_MARK or p_owner == MON_LULU), "MUST be a valid Owner!"
         self._owner = p_owner
 
         if p_fname:
-            assert (isinstance(p_fname, str) and osp.isfile(p_fname)), 'MUST be a valid filename!'
+            assert (isinstance(p_fname, str) and osp.isfile(p_fname)), "MUST be a valid filename!"
         self._filename = p_fname
 
         self._plans = {
