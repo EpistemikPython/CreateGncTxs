@@ -3,12 +3,12 @@
 #
 # startUI.py -- run the UI for the functions
 #
-# Copyright (c) 2020 Mark Sattolo <epistemik@gmail.com>
-#
-__author__ = 'Mark Sattolo'
-__author_email__ = 'epistemik@gmail.com'
-__created__ = '2018'
-__updated__ = '2020-07-19'
+# Copyright (c) 2018-21 Mark Sattolo <epistemik@gmail.com>
+
+__author__ = "Mark Sattolo"
+__author_email__ = "epistemik@gmail.com"
+__created__ = "2018"
+__updated__ = "2021-02-16"
 
 from PyQt5.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QGroupBox, QDialog, QFileDialog, QLabel,
                              QPushButton, QFormLayout, QDialogButtonBox, QTextEdit, QCheckBox, QInputDialog)
@@ -17,16 +17,16 @@ from functools import partial
 from parseMonarchCopyRep import *
 
 # constant strings
-FILE_LABEL:str = ' File:'
-MON_COPY:str   = MON + ' Copy'
-NO_NEED:str    = 'NOT NEEDED'
+FILE_LABEL:str = " File:"
+MON_COPY:str   = MON + " Copy"
+NO_NEED:str    = "NOT NEEDED"
 
 
 # noinspection PyAttributeOutsideInit
 class MonarchGnucashServices(QDialog):
     def __init__(self):
         super().__init__(flags=Qt.WindowSystemMenuHint|Qt.WindowTitleHint)
-        self.title = 'Monarch & Gnucash Services UI'
+        self.title = "Monarch & Gnucash Services UI"
         self.left = 120
         self.top  = 160
         self.width  = 800
@@ -50,7 +50,7 @@ class MonarchGnucashServices(QDialog):
         self.response_box = QTextEdit()
         self.response_box.setReadOnly(True)
         self.response_box.acceptRichText()
-        self.response_box.setText('Hello there!')
+        self.response_box.setText("Hello there!")
 
         button_box = QDialogButtonBox(QDialogButtonBox.Close)
         button_box.accepted.connect(self.accept)
@@ -110,6 +110,7 @@ class MonarchGnucashServices(QDialog):
         self.gnc_label     = QLabel(GNC+FILE_LABEL)
         self.gnc_file_btn.clicked.connect(partial(self.open_file_name_dialog, GNC))
 
+    # TODO: accept as input a json file with previously parsed trades and prices
     def open_file_name_dialog(self, label:str):
         f_options = QFileDialog.Options()
         f_options |= QFileDialog.DontUseNativeDialog
@@ -118,10 +119,10 @@ class MonarchGnucashServices(QDialog):
         ui_lgr.info(label)
         if label == MON:
             f_filter = F"{MON} (*.monarch);;All Files (*)"
-            f_dir = '/newdata/dev/git/Python/Gnucash/createGncTxs/makeGncTx/copyMonarch'
+            f_dir = "/newdata/dev/git/Python/Gnucash/createGncTxs/makeGncTx/copyMonarch"
         else: # GNC
             f_filter = F"{GNC} (*.gnc *.gnucash);;All Files (*)"
-            f_dir = '/newdata/dev/git/Python/Gnucash/app-files'
+            f_dir = "/newdata/dev/git/Python/Gnucash/app-files"
 
         file_name, _ = QFileDialog.getOpenFileName(self, caption=f_caption, filter=f_filter, directory=f_dir, options=f_options)
         if file_name:
@@ -151,13 +152,13 @@ class MonarchGnucashServices(QDialog):
 
     def button_click(self):
         """
-        prepare the parameters string and send to parseMonarchCopyRep.mon_copy_rep_main()
+        prepare the parameters string and send to parseMonarchCopyRep.main_mon_copy_rep()
         """
         ui_lgr.info(F"Clicked '{self.exe_btn.text()}'.")
 
         # check that necessary files have been selected
         if self.mon_file is None:
-            self.response_box.append('>>> MUST select a Monarch File!')
+            self.response_box.append(">>> MUST select a Monarch File!")
             return
 
         cl_params = ['-m' + self.mon_file, '-l' + str(self.log_level)]
@@ -168,7 +169,7 @@ class MonarchGnucashServices(QDialog):
         mode = self.cb_mode.currentText()
         if mode != TEST:
             if self.gnc_file is None:
-                self.response_box.append('>>> MUST select a Gnucash File!')
+                self.response_box.append(">>> MUST select a Gnucash File!")
                 return
             cl_params.append('gnc')
             cl_params.append('-f' + self.gnc_file)
@@ -177,9 +178,9 @@ class MonarchGnucashServices(QDialog):
         ui_lgr.info(F"Parameters = \n{json.dumps(cl_params, indent=4)}")
 
         try:
-            ui_lgr.info('Calling mon_copy_rep_main...')
-            response = mon_copy_rep_main(cl_params)
-            reply = {'response': response}
+            ui_lgr.info("Calling main_mon_copy_rep...")
+            response = main_mon_copy_rep(cl_params)
+            reply = {"response": response}
         except Exception as bcce:
             msg = repr(bcce)
             ui_lgr.error(msg)

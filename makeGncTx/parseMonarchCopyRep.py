@@ -5,17 +5,17 @@
 #                           the information as transaction and price parameters in an InvestmentRecord,
 #                           then saving to a specified Gnucash file
 #
-# Copyright (c) 2020 Mark Sattolo <epistemik@gmail.com>
+# Copyright (c) 2019-21 Mark Sattolo <epistemik@gmail.com>
 
-__author__ = 'Mark Sattolo'
-__author_email__ = 'epistemik@gmail.com'
-__created__ = '2019-06-22'
-__updated__ = '2020-09-17'
+__author__ = "Mark Sattolo"
+__author_email__ = "epistemik@gmail.com"
+__created__ = "2019-06-22"
+__updated__ = "2021-02-16"
 
 from sys import path, argv, exc_info
 import re
 from argparse import ArgumentParser
-path.append('/newdata/dev/git/Python/Gnucash/updateBudgetQtrly')
+path.append("/newdata/dev/git/Python/Gnucash/updateBudgetQtrly")
 # print(path)
 from gnucash_utilities import *
 
@@ -23,7 +23,6 @@ base_run_file = get_base_filename(__file__)
 print(base_run_file)
 
 
-# TODO: use investment.TxRecord instead of dicts to store Monarch & Gnucash information?
 class ParseMonarchCopyReport:
     def __init__(self, p_monfile:str, p_lgr:lg.Logger):
         self.mon_file = p_monfile
@@ -440,9 +439,10 @@ def process_input_parameters(argx:list, lgr:lg.Logger):
     return args.monarch, args.json, args.level, mode, gnc_file, domain
 
 
-def mon_copy_rep_main(args:list) -> list:
+def main_mon_copy_rep(args:list) -> list:
     lgr = get_logger(base_run_file)
 
+    # TODO: accept as input a json file with previously parsed trades and prices
     mon_file, save_monarch, level, mode, gnc_file, domain = process_input_parameters(args, lgr)
 
     # construct log name from monarch file name
@@ -491,5 +491,5 @@ def mon_copy_rep_main(args:list) -> list:
 
 
 if __name__ == '__main__':
-    mon_copy_rep_main(argv[1:])
+    main_mon_copy_rep(argv[1:])
     exit()
