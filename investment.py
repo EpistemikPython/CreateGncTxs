@@ -3,12 +3,12 @@
 #
 # investment.py -- classes, constants, variables & functions used with my investment scripts
 #
-# Copyright (c) 2021 Mark Sattolo <epistemik@gmail.com>
-#
+# Copyright (c) 2018-21 Mark Sattolo <epistemik@gmail.com>
+
 __author__       = "Mark Sattolo"
 __author_email__ = "epistemik@gmail.com"
 __created__ = "2018"
-__updated__ = "2021-02-11"
+__updated__ = "2021-02-16"
 
 from sys import path
 path.append("/newdata/dev/git/Python/Utilities/")
@@ -257,7 +257,7 @@ class InvestmentRecord:
     """
     def __init__(self, p_logger:lg.Logger, p_owner:str='', p_date:dt=None, p_fname:str=''):
         self._lgr  = p_logger
-        self._date = p_date if p_date is not None and isinstance(p_date, dt) else now_dt
+        self._date = p_date if p_date and isinstance(p_date, dt) else now_dt
 
         if p_owner:
             assert (p_owner == MON_MARK or p_owner == MON_LULU), "MUST be a valid Owner!"
@@ -286,7 +286,7 @@ class InvestmentRecord:
         self._owner = str(own)
 
     def get_owner(self) -> str:
-        return UNKNOWN if self._owner is None or self._owner == '' else self._owner
+        return UNKNOWN if not self._owner else self._owner
 
     def set_date(self, p_date):
         if isinstance(p_date, dt):
@@ -321,7 +321,7 @@ class InvestmentRecord:
         self._filename = str(fn)
 
     def get_filename(self) -> str:
-        return UNKNOWN if self._filename is None or self._filename == '' else self._filename
+        return UNKNOWN if not self._filename else self._filename
 
     def get_size(self, plan_spec:str='', type_spec:str='') -> int:
         if not plan_spec:
@@ -424,7 +424,7 @@ class TxRecord:
 
     def set_date(self, p_date:dt) -> dt:
         old_date = self.date
-        if p_date is not None and isinstance(p_date, dt):
+        if p_date and isinstance(p_date, dt):
             self.date = p_date
         else:
             self._lgr.warning(F"BAD date: {p_date}")
