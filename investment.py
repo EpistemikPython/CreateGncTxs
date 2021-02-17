@@ -115,6 +115,7 @@ DLR_AVE:str     = DOLLAR + " Cost Averaging "
 DCA_IN:str      = DLR_AVE + SW_IN
 DCA_OUT:str     = DLR_AVE + SW_OUT
 PLAN_DATA:str   = "Plan Data"
+OWNER:str       = "Owner"
 
 # Fund companies
 ATL:str = "ATL"
@@ -187,7 +188,7 @@ TML_704   = TML + " 704"   # Templeton Global Bond Fund Series A
 TML_694   = TML + " 694"   # Templeton Global Smaller Companies Fund A
 TML_707   = TML + " 707"   # Templeton Global Smaller Companies Fund A
 TML_1017  = TML + " 1017"  # Franklin Bissett Canadian Dividend Fund A
-TML_1018  = TML + " 1018"  # Franklin Bissett Canadian Dividend Fund A
+TML_1018  = 'x' + TML + " 1018"  # Franklin Bissett Canadian Dividend Fund A
 TML_204   = TML + " 204"   # Franklin Bissett Money Market
 TML_703   = TML + " 703"   # Franklin Templeton Treasury Bill
 MFC_756   = MFC + " 756"   # Mackenzie Corporate Bond Fund Series A
@@ -204,9 +205,9 @@ MFC_3689  = MFC + " 3689"  # Mackenzie Strategic Income Class Series T6
 MFC_298   = MFC + " 298"   # Mackenzie Cash Management A
 MFC_4378  = MFC + " 4378"  # Mackenzie Canadian Money Market Fund Series C
 DYN_029   = DYN + " 029"   # Dynamic Equity Income Fund Series A
-DYN_729   = DYN + " 729"   # Dynamic Equity Income Fund Series A
+DYN_729   = 'x' + DYN + " 729"   # Dynamic Equity Income Fund Series A
 DYN_1560  = DYN + " 1560"  # Dynamic Strategic Yield Fund Series A
-DYN_1562  = DYN + " 1562"  # Dynamic Strategic Yield Fund Series A
+DYN_1562  = 'x' + DYN + " 1562"  # Dynamic Strategic Yield Fund Series A
 MMF_4524  = MMF + " 4524"  # Manulife Yield Opportunities Fund Advisor Series
 MMF_44424 = MMF + " 44424" # Manulife Yield Opportunities Fund Advisor Series
 MMF_3517  = MMF + " 3517"  # Manulife Conservative Income Fund Advisor Series
@@ -267,7 +268,7 @@ class InvestmentRecord:
             assert (isinstance(p_fname, str) and osp.isfile(p_fname)), "MUST be a valid filename!"
         self._filename = p_fname
 
-        self._plans = {
+        self._records = {
             # lists of TxRecords
             OPEN : {TRADE:[], PRICE:[]} ,
             TFSA : {TRADE:[], PRICE:[]} ,
@@ -278,9 +279,15 @@ class InvestmentRecord:
 
     def __getitem__(self, item:str):
         if item in (OPEN,TFSA,RRSP):
-            return self._plans[item]
+            return self._records[item]
         self._lgr.warning(F"BAD plan: {str(item)}")
         return None
+
+    def set_data(self, data:dict):
+        self._records = data
+
+    def get_data(self):
+        return self._records
 
     def set_owner(self, own):
         self._owner = str(own)
@@ -294,12 +301,9 @@ class InvestmentRecord:
         else:
             self._lgr.warning(F"Submitted date of improper type: {type(p_date)}")
 
-    def get_plans(self) -> dict:
-        return self._plans
-
     def get_plan(self, p_plan:str) -> dict:
         if p_plan in (OPEN,TFSA,RRSP):
-            return self._plans[p_plan]
+            return self._records[p_plan]
         self._lgr.warning(F"UNKNOWN plan: {p_plan}")
         return {}
 
@@ -317,8 +321,8 @@ class InvestmentRecord:
     def get_date_str(self) -> str:
         return self._date.strftime(FILE_DATETIME_FORMAT)
 
-    def set_filename(self, fn):
-        self._filename = str(fn)
+    def set_filename(self, fn:str):
+        self._filename = fn
 
     def get_filename(self) -> str:
         return UNKNOWN if not self._filename else self._filename
@@ -326,12 +330,12 @@ class InvestmentRecord:
     def get_size(self, plan_spec:str='', type_spec:str='') -> int:
         if not plan_spec:
             if type_spec in (PRICE, TRADE):
-                return len(self._plans[OPEN][type_spec]) + len(self._plans[TFSA][type_spec]) + len(self._plans[RRSP][type_spec])
+                return len(self._records[OPEN][type_spec]) + len(self._records[TFSA][type_spec]) + len(self._records[RRSP][type_spec])
             return self.get_size(OPEN) + self.get_size(TFSA) + self.get_size(RRSP)
         if not type_spec:
             if plan_spec in (OPEN, RRSP, TFSA):
-                return len(self._plans[plan_spec][PRICE]) + len(self._plans[plan_spec][TRADE])
-        return len(self._plans[plan_spec][type_spec])
+                return len(self._records[plan_spec][PRICE]) + len(self._records[plan_spec][TRADE])
+        return len(self._records[plan_spec][type_spec])
 
     def get_size_str(self, plan_spec:str='', type_spec:str='') -> str:
         if plan_spec in (OPEN, RRSP, TFSA):
@@ -343,19 +347,19 @@ class InvestmentRecord:
                + F"{TFSA}:{self.get_size_str(TFSA)} + {RRSP}:{self.get_size_str(RRSP)}"
 
     def add_tx(self, plan, tx_type, obj):
-        if isinstance(plan, str) and plan in self._plans.keys():
+        if isinstance(plan, str) and plan in self._records.keys():
             if obj and tx_type in (TRADE, PRICE):
-                self._plans[plan][tx_type].append(obj)
+                self._records[plan][tx_type].append(obj)
 
     def to_json(self, plan_spec:str='', type_spec:str=''):
         return {
             "__class__"    : self.__class__.__name__ ,
             "__module__"   : self.__module__         ,
-            "Owner"        : self.get_owner()        ,
+            OWNER          : self.get_owner()        ,
             "Source File"  : self.get_filename()     ,
             DATE           : self.get_date_str()     ,
             "Size"         : self.get_size_str(plan_spec, type_spec) ,
-            PLAN_DATA      : self._plans
+            PLAN_DATA      : self._records
         }
 
 # END class InvestmentRecord
