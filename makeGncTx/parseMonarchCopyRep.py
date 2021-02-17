@@ -3,14 +3,15 @@
 #
 # parseMonarchCopyRep.py -- parse a file with COPIED Monarch Report text, assembling and saving
 #                           the information as transaction and price parameters in an InvestmentRecord,
-#                           then saving to a specified Gnucash file
+#                           OR a JSON file with previously saved Monarch data,
+#                           then writing the transactions to a specified Gnucash file.
 #
 # Copyright (c) 2019-21 Mark Sattolo <epistemik@gmail.com>
 
 __author__ = "Mark Sattolo"
 __author_email__ = "epistemik@gmail.com"
 __created__ = "2019-06-22"
-__updated__ = "2021-02-16"
+__updated__ = "2021-02-17"
 
 from sys import path, argv, exc_info
 import re
@@ -23,25 +24,43 @@ base_run_file = get_base_filename(__file__)
 print(base_run_file)
 
 
-class ParseMonarchCopyReport:
-    def __init__(self, p_monfile:str, p_lgr:lg.Logger):
-        self.mon_file = p_monfile
-        self._monarch_txs = InvestmentRecord(p_lgr)
-        self._gnucash_txs = InvestmentRecord(p_lgr)
+class ParseMonarchInput:
+    def __init__(self, r_infile:str, r_lgr:lg.Logger):
+        self.in_file = r_infile
+        self._input_txs = InvestmentRecord(r_lgr)
+        self._gnucash_txs = InvestmentRecord(r_lgr)
+        r_lgr.info(get_current_time())
+        self._lgr = r_lgr
 
-        p_lgr.info(get_current_time())
-        self._lgr = p_lgr
-
-    def set_filename(self, fn:str):
-        self._monarch_txs.set_filename(fn)
-
-    def get_monarch_record(self) -> InvestmentRecord:
-        return self._monarch_txs
+    def get_input_record(self) -> InvestmentRecord:
+        return self._input_txs
 
     def get_gnucash_record(self) -> InvestmentRecord:
         return self._gnucash_txs
 
-    def parse_report_info(self):
+    def parse_input_file(self, ftype:str):
+        self._input_txs.set_filename(self.in_file)
+
+        if ftype == MON.lower():
+            self._lgr.info(F"Have a {MON.upper()} type input file.")
+            self.parse_monarch_info()
+            self.add_balance_to_trade()
+        elif ftype == JSON:
+            self._lgr.info(F"Have a {JSON.upper()} type input file.")
+            self.parse_json_info()
+        else:
+            raise ValueError(F"Improper file type: {ftype}")
+
+    def parse_json_info(self):
+        """parse the json file and copy the data to self._input_txs"""
+        self._lgr.info( get_current_time() )
+        with open(self.in_file) as inf:
+            data = json.load(inf)
+        self._input_txs.set_data( data[PLAN_DATA] )
+        self._input_txs.set_owner( data[OWNER] )
+        self._lgr.debug( self._input_txs.get_data() )
+
+    def parse_monarch_info(self):
         """
         parsing for NEW format txt files, ~ May 31, 2019, just COPIED from Monarch web page,
         as new Monarch pdf's are no longer practical to use -- extracted text just too inconsistent...
@@ -59,16 +78,15 @@ class ParseMonarchCopyReport:
             7: Trades ->
                  match date at [0]:
                     record: fund, desc, gross, units, price, load, trade date
-        :return nil
         """
-        self._lgr.info(get_current_time())
+        self._lgr.info( get_current_time() )
 
         re_date = re.compile(r"([0-9]{2}-\w{3}-[0-9]{4})")
 
         mon_state = FIND_DATE
         plan_type = UNKNOWN
         plan_id = UNKNOWN
-        with open(self.mon_file) as mfp:
+        with open(self.in_file) as mfp:
             ct = 0
             for line in mfp:
                 ct += 1
@@ -87,7 +105,7 @@ class ParseMonarchCopyReport:
                 if mon_state == FIND_OWNER:
                     if words[0] == OPEN:
                         owner = MON_MARK if MON_ROBB in words else MON_LULU
-                        self._monarch_txs.set_owner(owner)
+                        self._input_txs.set_owner(owner)
                         self._lgr.debug(F"\n\t\u0022Current owner: {owner}\u0022")
                         mon_state = STATE_SEARCH
                         continue
@@ -123,7 +141,7 @@ class ParseMonarchCopyReport:
                         if '.' not in price or '$' not in price:
                             raise Exception(F"Did NOT find proper price: {price}!")
                         curr_tx = { DATE:doc_date, DESC:PRICE, FUND_CMPY:fd_cpy, FUND:fund, UNIT_BAL:bal, PRICE:price }
-                        self._monarch_txs.add_tx(plan_type, PRICE, curr_tx)
+                        self._input_txs.add_tx(plan_type, PRICE, curr_tx)
                         self._lgr.debug(F"ADD current Price Tx:\n\t{curr_tx}")
                     continue
 
@@ -168,7 +186,7 @@ class ParseMonarchCopyReport:
                     if not curr_tx[LOAD].isalpha():
                         raise Exception(F"Did NOT find proper Load: {curr_tx[LOAD]}!")
 
-                    self._monarch_txs.add_tx(plan_type, TRADE, curr_tx)
+                    self._input_txs.add_tx(plan_type, TRADE, curr_tx)
                     self._lgr.debug(F"ADD current Trade Tx:\n\t{curr_tx}")
 
     def get_trade_info(self, mon_tx:dict, plan_type:str, ast_parent:Account, rev_acct:Account) -> (dict,dict):
@@ -324,9 +342,9 @@ class ParseMonarchCopyReport:
                 if found, add the Unit Balance from the Price tx to the Trade tx
         """
         self._lgr.info('\n\t\t' + get_current_time())
-        for iplan in self._monarch_txs.get_plans():
+        for iplan in self._input_txs.get_data():
             self._lgr.debug(F"plan type = {repr(iplan)}")
-            plan = self._monarch_txs.get_plan(iplan)
+            plan = self._input_txs.get_plan(iplan)
             for tx in plan[PRICE]:
                 indx = 0
                 latest_indx = -1
@@ -353,7 +371,7 @@ class ParseMonarchCopyReport:
         self.gnc_session = p_gncs
         msg = saved_log_info
         try:
-            owner = self._monarch_txs.get_owner()
+            owner = self._input_txs.get_owner()
             self._lgr.debug(F"Owner = {owner}")
 
             self.gnc_session.begin_session()
@@ -373,7 +391,7 @@ class ParseMonarchCopyReport:
         Process each transaction from the Monarch input file to get the required Gnucash information
         """
         domain = self.gnc_session.get_domain()
-        plans = self._monarch_txs.get_plans()
+        plans = self._input_txs.get_data()
         for plan_type in plans:
             self._lgr.debug(F"\n\n\t\t\u0022Plan type = {plan_type}\u0022")
 
@@ -392,20 +410,20 @@ class ParseMonarchCopyReport:
 
 
 def process_args():
-    arg_parser = ArgumentParser(description='Process a copied Monarch Report to obtain Gnucash transactions',
+    arg_parser = ArgumentParser(description='Process Monarch or JSON input data to obtain Gnucash transactions',
                                 prog='parseMonarchCopyRep.py')
     # required arguments
-    required = arg_parser.add_argument_group('REQUIRED')
-    required.add_argument('-m', '--monarch', required=True, help='path & filename of the copied Monarch Report file')
+    required = arg_parser.add_argument_group("REQUIRED")
+    required.add_argument('-i', '--inputfile', required=True, help='path & name of the Monarch or JSON input file')
     # required if PROD
-    subparsers = arg_parser.add_subparsers(help='with gnc option: MUST specify -f FILENAME and -t TX_TYPE')
-    gnc_parser = subparsers.add_parser('gnc', help='Insert the parsed trade and/or price transactions to a Gnucash file')
-    gnc_parser.add_argument('-f', '--filename', required=True, help='path & filename of the Gnucash file')
+    subparsers = arg_parser.add_subparsers(help='with gnc option: MUST specify -g FILENAME and -t TX_TYPE')
+    gnc_parser = subparsers.add_parser("gnc", help='Insert the parsed trade and/or price transactions to a Gnucash file')
+    gnc_parser.add_argument('-g', '--gncfile', required=True, help='path & name of the Gnucash file')
     gnc_parser.add_argument('-t', '--type', required=True, choices=[TRADE, PRICE, BOTH],
                             help="type of transaction to record: {} or {} or {}".format(TRADE, PRICE, BOTH))
     # optional arguments
     arg_parser.add_argument('-l', '--level', type=int, default=lg.INFO, help='set LEVEL of logging output')
-    arg_parser.add_argument('--json',  action='store_true', help='Write the parsed Monarch data to a JSON file')
+    arg_parser.add_argument('--json',  action="store_true", help='Write the parsed Monarch data to a JSON file')
 
     return arg_parser
 
@@ -414,54 +432,49 @@ def process_input_parameters(argx:list, lgr:lg.Logger):
     args = process_args().parse_args(argx)
     lgr.debug(F"\n\targs = {args}")
 
-    lgr.info(F"logger level set to {args.level}")
+    lgr.warning(F"logger level set to {args.level}")
 
-    if not osp.isfile(args.monarch):
-        msg = F"File path '{args.monarch}' does not exist! Exiting..."
+    if not osp.isfile(args.inputfile):
+        msg = F"File path '{args.inputfile}' does not exist! Exiting..."
         lgr.error(msg)
         raise Exception(msg)
-    lgr.info(F"\n\tMonarch file = {args.monarch}")
+    lgr.info(F"\n\tInput file = {args.inputfile}")
 
     mode = TEST
     domain = BOTH
     gnc_file = None
-    if 'filename' in args:
-        if not osp.isfile(args.filename):
-            msg = F"File path '{args.filename}' does not exist. Exiting..."
-            lgr.error(msg)
-            raise Exception(msg)
-        gnc_file = args.filename
+    if "gncfile" in args:
+        if not osp.isfile(args.gncfile):
+            raise Exception(F"File path '{args.gncfile}' does not exist. Exiting...")
+        gnc_file = args.gncfile
         lgr.info(F"\n\tGnucash file = {gnc_file}")
         mode = SEND
         domain = args.type
         lgr.info(F"Inserting '{domain}' transaction types to Gnucash.")
 
-    return args.monarch, args.json, args.level, mode, gnc_file, domain
+    return args.inputfile, args.json, args.level, mode, gnc_file, domain
 
 
-def main_mon_copy_rep(args:list) -> list:
+def main_monarch_input(args:list) -> list:
     lgr = get_logger(base_run_file)
 
-    # TODO: accept as input a json file with previously parsed trades and prices
-    mon_file, save_monarch, level, mode, gnc_file, domain = process_input_parameters(args, lgr)
-
-    # construct log name from monarch file name
-    _, fname = osp.split(mon_file)
-    basename, _ = osp.splitext(fname)
+    in_file, save_monarch, level, mode, gnc_file, domain = process_input_parameters(args, lgr)
 
     lgr.setLevel(level)
     lgr.info(F"\n\t\tRuntime = {get_current_time()}")
-    lgr.debug(str(lgr.handlers))
+    lgr.debug(repr(lgr.handlers))
+
+    # get name parts from the input file path
+    _, fname = osp.split(in_file)
+    basename, ftype = osp.splitext(fname)
+    ftype = ftype[1:]
 
     gnc_session = None
+    parser = ParseMonarchInput(in_file, lgr)
     try:
         # parse an external Monarch COPIED report file
-        parser = ParseMonarchCopyReport(mon_file, lgr)
-
-        parser.parse_report_info()
-        parser.add_balance_to_trade()
-
-        parser.set_filename(mon_file)
+        # OR a JSON file with previously saved Monarch txs and/or prices
+        parser.parse_input_file(ftype)
 
         if mode == SEND:
             # add gnc file name to log file name
@@ -474,22 +487,22 @@ def main_mon_copy_rep(args:list) -> list:
 
         msg = saved_log_info
 
-        if save_monarch:
-            out_file = save_to_json(basename, parser.get_monarch_record().to_json(), get_current_time(FILE_DATETIME_FORMAT))
+        if ftype == MON and save_monarch:
+            out_file = save_to_json(basename, parser.get_input_record().to_json(), get_current_time(FILE_DATETIME_FORMAT))
             lgr.info(F"Created Monarch JSON file: {out_file}")
 
     except Exception as mcre:
         mcre_msg = repr(mcre)
-        lgr.error(mcre_msg)
+        lgr.exception(mcre_msg)
         msg = [mcre_msg]
         if gnc_session:
             gnc_session.end_session(False)
 
     lgr.warning('\n >>> PROGRAM ENDED.')
-    finish_logging(base_run_file, basename, get_current_time(FILE_DATETIME_FORMAT), sfx='gncout')
+    finish_logging(base_run_file, basename, get_current_time(FILE_DATETIME_FORMAT), sfx="gncout")
     return msg
 
 
-if __name__ == '__main__':
-    main_mon_copy_rep(argv[1:])
+if __name__ == "__main__":
+    main_monarch_input(argv[1:])
     exit()
