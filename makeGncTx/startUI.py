@@ -1,7 +1,7 @@
 ###############################################################################################################################
 # coding=utf-8
 #
-# startUI.py -- run the UI for the functions
+# startUI.py -- run the UI to select the main function and options
 #
 # Copyright (c) 2018-21 Mark Sattolo <epistemik@gmail.com>
 
@@ -73,29 +73,29 @@ class MonarchGnucashServices(QDialog):
 
         self.cb_script = QComboBox()
         self.cb_script.addItems([SCRIPT_LABEL])
-        layout.addRow(QLabel("Script:"), self.cb_script)
+        layout.addRow( QLabel("Script:"), self.cb_script )
 
         self.add_mon_file_btn()
-        layout.addRow(self.mon_label, self.mon_file_btn)
+        layout.addRow( self.mon_label, self.mon_file_btn )
 
         self.cb_mode = QComboBox()
         self.cb_mode.addItems([TEST, PRICE, TRADE, BOTH])
         self.cb_mode.currentIndexChanged.connect(self.mode_change)
-        layout.addRow(QLabel(MODE+':'), self.cb_mode)
+        layout.addRow( QLabel(MODE+':'), self.cb_mode )
 
         self.add_gnc_file_btn()
-        layout.addRow(self.gnc_label, self.gnc_file_btn)
+        layout.addRow( self.gnc_label, self.gnc_file_btn )
 
         self.chbx_json = QCheckBox("Save Monarch info to JSON file?")
-        layout.addRow(QLabel("Save:"), self.chbx_json)
+        layout.addRow( QLabel("Save:"), self.chbx_json )
 
         self.pb_logging = QPushButton("Change the logging level?")
         self.pb_logging.clicked.connect(self.get_log_level)
-        layout.addRow(QLabel("Logging:"), self.pb_logging)
+        layout.addRow( QLabel("Logging:"), self.pb_logging )
 
         self.exe_btn = QPushButton('Go!')
         self.exe_btn.clicked.connect(self.button_click)
-        layout.addRow(QLabel("EXECUTE:"), self.exe_btn)
+        layout.addRow( QLabel("EXECUTE:"), self.exe_btn )
 
         self.gb_main.setLayout(layout)
 
@@ -103,15 +103,14 @@ class MonarchGnucashServices(QDialog):
         self.mon_btn_title = F"Get {INPUT} file"
         self.mon_file_btn  = QPushButton(self.mon_btn_title)
         self.mon_label     = QLabel(INPUT+FILE_LABEL)
-        self.mon_file_btn.clicked.connect(partial(self.open_file_name_dialog, INPUT))
+        self.mon_file_btn.clicked.connect( partial(self.open_file_name_dialog, INPUT) )
 
     def add_gnc_file_btn(self):
         self.gnc_btn_title = F"Get {GNC} file"
         self.gnc_file_btn  = QPushButton(NO_NEED)
         self.gnc_label     = QLabel(GNC+FILE_LABEL)
-        self.gnc_file_btn.clicked.connect(partial(self.open_file_name_dialog, GNC))
+        self.gnc_file_btn.clicked.connect( partial(self.open_file_name_dialog, GNC) )
 
-    # TODO: accept as input a json file with previously parsed trades and prices
     def open_file_name_dialog(self, label:str):
         f_options = QFileDialog.Options()
         f_options |= QFileDialog.DontUseNativeDialog
@@ -157,7 +156,7 @@ class MonarchGnucashServices(QDialog):
         """
         ui_lgr.info(F"Clicked '{self.exe_btn.text()}'.")
 
-        # check that necessary files have been selected
+        # must have an input file
         if self.mon_file is None:
             self.response_box.append(">>> MUST select a Monarch Input File!")
             return
@@ -187,7 +186,7 @@ class MonarchGnucashServices(QDialog):
             ui_lgr.error(msg)
             reply = {"EXCEPTION" : msg}
 
-        self.response_box.setText(json.dumps(reply, indent=4))
+        self.response_box.setText( json.dumps(reply, indent=4) )
 
 # END class MonarchGnucashServices
 

@@ -3,8 +3,8 @@
 #
 # parseMonarchCopyRep.py -- parse a file with COPIED Monarch Report text, assembling and saving
 #                           the information as transaction and price parameters in an InvestmentRecord,
-#                           OR a JSON file with previously saved Monarch data,
-#                           then writing the transactions to a specified Gnucash file.
+#                           OR use a JSON file with previously saved Monarch tx/price data,
+#                           then optionally write the transactions/prices to a specified Gnucash file.
 #
 # Copyright (c) 2019-21 Mark Sattolo <epistemik@gmail.com>
 
@@ -473,7 +473,7 @@ def main_monarch_input(args:list) -> list:
     parser = ParseMonarchInput(in_file, lgr)
     try:
         # parse an external Monarch COPIED report file
-        # OR a JSON file with previously saved Monarch txs and/or prices
+        # OR a JSON file with previously saved txs and/or prices
         parser.parse_input_file(ftype)
 
         if mode == SEND:
@@ -487,7 +487,7 @@ def main_monarch_input(args:list) -> list:
 
         msg = saved_log_info
 
-        if ftype == MON and save_monarch:
+        if ftype == MON.lower() and save_monarch:
             out_file = save_to_json(basename, parser.get_input_record().to_json(), get_current_time(FILE_DATETIME_FORMAT))
             lgr.info(F"Created Monarch JSON file: {out_file}")
 
