@@ -8,11 +8,11 @@
 __author__       = "Mark Sattolo"
 __author_email__ = "epistemik@gmail.com"
 __created__ = "2018"
-__updated__ = "2021-02-16"
+__updated__ = "2021-05-10"
 
 from sys import path
-path.append("/newdata/dev/git/Python/Utilities/")
-from python_utilities import *
+path.append("/newdata/dev/git/Python/utils/")
+from mhsUtils import *
 from secret import *
 
 # constant strings
@@ -53,10 +53,10 @@ MODE:str    = "Mode"
 TODAY:str       = "Today"
 QTR:str         = "Quarter"
 YR:str          = "Year"
-YEAR:str        =  YR
+YEAR:str        = YR
 MTH:str         = "Month"
 ALL:str         = "ALL"
-ALL_YRS:str     =  ALL + " Years"
+ALL_YRS:str     = ALL + " Years"
 EARLY_YRS:str   = "2008-10"
 MID_YRS:str     = "2011-14"
 RECENT_YRS:str  = "2015-18"
@@ -253,10 +253,8 @@ FILL_CURR_TX = 0x0090
 
 # TODO: data date and run date?
 class InvestmentRecord:
-    """
-    All transactions from an investment report
-    """
-    def __init__(self, p_logger:lg.Logger, p_owner:str='', p_date:dt=None, p_fname:str=''):
+    """All transactions from an investment report."""
+    def __init__(self, p_logger:lg.Logger, p_owner:str="", p_date:dt=None, p_fname:str=""):
         self._lgr  = p_logger
         self._date = p_date if p_date and isinstance(p_date, dt) else now_dt
 
@@ -275,7 +273,7 @@ class InvestmentRecord:
             RRSP : {TRADE:[], PRICE:[]}
         }
 
-        self._lgr.info(F"\n\t{self.__class__.__name__}: Runtime = {get_current_time()}")
+        self._lgr.info(F"{self.__class__.__name__}: Runtime = {get_current_time()}")
 
     def __getitem__(self, item:str):
         if item in (OPEN,TFSA,RRSP):
@@ -327,17 +325,18 @@ class InvestmentRecord:
     def get_filename(self) -> str:
         return UNKNOWN if not self._filename else self._filename
 
-    def get_size(self, plan_spec:str='', type_spec:str='') -> int:
+    def get_size(self, plan_spec:str="", type_spec:str="") -> int:
         if not plan_spec:
             if type_spec in (PRICE, TRADE):
-                return len(self._records[OPEN][type_spec]) + len(self._records[TFSA][type_spec]) + len(self._records[RRSP][type_spec])
+                return len(self._records[OPEN][type_spec]) + len(self._records[TFSA][type_spec]) \
+                       + len(self._records[RRSP][type_spec])
             return self.get_size(OPEN) + self.get_size(TFSA) + self.get_size(RRSP)
         if not type_spec:
             if plan_spec in (OPEN, RRSP, TFSA):
                 return len(self._records[plan_spec][PRICE]) + len(self._records[plan_spec][TRADE])
         return len(self._records[plan_spec][type_spec])
 
-    def get_size_str(self, plan_spec:str='', type_spec:str='') -> str:
+    def get_size_str(self, plan_spec:str="", type_spec:str="") -> str:
         if plan_spec in (OPEN, RRSP, TFSA):
             if type_spec in (PRICE, TRADE):
                 return F"{type_spec}[{self.get_size(plan_spec,type_spec)}]"
@@ -351,7 +350,7 @@ class InvestmentRecord:
             if obj and tx_type in (TRADE, PRICE):
                 self._records[plan][tx_type].append(obj)
 
-    def to_json(self, plan_spec:str='', type_spec:str=''):
+    def to_json(self, plan_spec:str="", type_spec:str=""):
         return {
             "__class__"    : self.__class__.__name__ ,
             "__module__"   : self.__module__         ,
@@ -368,12 +367,10 @@ class InvestmentRecord:
 # TODO: TxRecord in standard format for both Monarch and Gnucash
 # noinspection PyAttributeOutsideInit
 class TxRecord:
-    """
-    All the required information for an individual transaction
-    """
-    def __init__(self, p_logger:lg.Logger, p_dt:dt=None, p_dt_str:str='', p_sw:bool=False,
-                 p_fcmpy:str='', p_fcode:str='', p_fname:str='', p_gr:float=0.0, p_gr_str:str='',
-                 p_pr:float=0.0, p_pr_str:str='', p_un:float=0.0, p_un_str:str=''):
+    """All the required information for an individual transaction."""
+    def __init__(self, p_logger:lg.Logger, p_dt:dt=None, p_dt_str:str="", p_sw:bool=False,
+                 p_fcmpy:str="", p_fcode:str="", p_fname:str="", p_gr:float=0.0, p_gr_str:str="",
+                 p_pr:float=0.0, p_pr_str:str="", p_un:float=0.0, p_un_str:str=""):
         self.set_date(p_dt)
         self.date_str = p_dt_str
         self.switch = p_sw
@@ -388,7 +385,7 @@ class TxRecord:
         self.units_str = p_un_str
         self._lgr = p_logger
 
-        self._lgr.info(F"\n\t{self.__class__.__name__}: Runtime = {get_current_time()}")
+        self._lgr.info(F"{self.__class__.__name__}: Runtime = {get_current_time()}")
 
     def __getitem__(self, item):
         if item == DATE:

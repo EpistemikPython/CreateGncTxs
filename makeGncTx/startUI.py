@@ -8,7 +8,7 @@
 __author__ = "Mark Sattolo"
 __author_email__ = "epistemik@gmail.com"
 __created__ = "2018"
-__updated__ = "2021-02-17"
+__updated__ = "2021-05-10"
 
 from PyQt5.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QGroupBox, QDialog, QFileDialog, QLabel,
                              QPushButton, QFormLayout, QDialogButtonBox, QTextEdit, QCheckBox, QInputDialog)
@@ -24,7 +24,7 @@ SCRIPT_LABEL:str = MON + ' ' + INPUT
 
 
 # noinspection PyAttributeOutsideInit
-class MonarchGnucashServices(QDialog):
+class MonarchGnucashUI(QDialog):
     def __init__(self):
         super().__init__(flags=Qt.WindowSystemMenuHint|Qt.WindowTitleHint)
         self.title = "Monarch & Gnucash Services UI"
@@ -193,13 +193,14 @@ class MonarchGnucashServices(QDialog):
 
 def ui_main():
     app = QApplication(argv)
-    dialog = MonarchGnucashServices()
+    dialog = MonarchGnucashUI()
     dialog.show()
     app.exec_()
 
 
 if __name__ == '__main__':
-    ui_lgr = get_logger(MonarchGnucashServices.__name__)
+    lg_ctrl = mhsLogging.MhsLogger(MonarchGnucashUI.__name__, suffix = 'gncout')
+    ui_lgr = lg_ctrl.get_logger()
     ui_main()
-    finish_logging(MonarchGnucashServices.__name__, sfx='gncout')
+    # finish_logging()
     exit()

@@ -11,16 +11,18 @@
 __author__ = "Mark Sattolo"
 __author_email__ = "epistemik@gmail.com"
 __created__ = "2019-06-22"
-__updated__ = "2021-02-17"
+__updated__ = "2021-05-10"
 
 from sys import path, argv, exc_info
 import re
 from argparse import ArgumentParser
+path.append("/newdata/dev/git/Python/utils")
+import mhsUtils
+import mhsLogging
 path.append("/newdata/dev/git/Python/Gnucash/updateBudgetQtrly")
-# print(path)
 from gnucash_utilities import *
 
-base_run_file = get_base_filename(__file__)
+base_run_file = mhsUtils.get_base_filename(__file__)
 print(base_run_file)
 
 
@@ -287,7 +289,7 @@ class ParseMonarchInput:
         pair_tx = None
         have_pair = False
         if init_tx[TYPE] in PAIRED_TYPES:
-            self._lgr.debug('Tx is a Switch to ANOTHER account in SAME Fund company.')
+            self._lgr.debug("Tx is a Switch to ANOTHER account in SAME Fund company.")
             # look for switches in this plan type with same company and date but with opposite gross value
             for gnc_tx in self._gnucash_txs.get_trades(plan_type):
                 if gnc_tx[TYPE] in PAIRED_TYPES and gnc_tx[FUND].split()[0] == init_tx[FUND].split()[0] \
@@ -295,13 +297,13 @@ class ParseMonarchInput:
                     # FOUND THE FIRST ITEM IN THIS PAIR
                     have_pair = True
                     pair_tx = gnc_tx
-                    self._lgr.debug('*** Found the MATCH of a Switch pair ***')
+                    self._lgr.debug("*** Found the MATCH of a Switch pair ***")
                     break
 
             if not have_pair:
                 # store the tx until we find the matching tx
                 self._gnucash_txs.add_tx(plan_type, TRADE, init_tx)
-                self._lgr.debug('Found the FIRST of a Switch pair...\n')
+                self._lgr.debug("Found the FIRST of a Switch pair...\n")
 
         return init_tx, pair_tx
 
@@ -341,7 +343,7 @@ class ParseMonarchInput:
                 for each tx, find the latest Trade tx for that fund, if any...
                 if found, add the Unit Balance from the Price tx to the Trade tx
         """
-        self._lgr.info('\n\t\t' + get_current_time())
+        self._lgr.info( get_current_time() )
         for iplan in self._input_txs.get_data():
             self._lgr.debug(F"plan type = {repr(iplan)}")
             plan = self._input_txs.get_plan(iplan)
@@ -351,7 +353,7 @@ class ParseMonarchInput:
                 latest_dte = None
                 for trd in plan[TRADE]:
                     if trd[FUND] == tx[FUND]:
-                        trd_date = dt.strptime(trd[TRADE_DATE], '%d-%b-%Y')
+                        trd_date = dt.strptime(trd[TRADE_DATE], "%d-%b-%Y")
                         if latest_dte is None or trd_date > latest_dte:
                             latest_dte = trd_date
                             self._lgr.debug(F"Latest date for {tx[FUND]} = {latest_dte}")
@@ -362,14 +364,13 @@ class ParseMonarchInput:
                     plan[TRADE][latest_indx][NOTES] = F"{tx[FUND]} Balance = {tx[UNIT_BAL]}"
 
     # noinspection PyAttributeOutsideInit
-    def insert_txs_to_gnucash_file(self, p_gncs:GnucashSession) -> list:
+    def insert_txs_to_gnucash_file(self, p_gncs:GnucashSession):
         """
         transfer the Monarch information to a Gnucash file
         :return: gnucash session log or error message
         """
         self._lgr.info(get_current_time())
         self.gnc_session = p_gncs
-        msg = saved_log_info
         try:
             owner = self._input_txs.get_owner()
             self._lgr.debug(F"Owner = {owner}")
@@ -383,8 +384,6 @@ class ParseMonarchInput:
             self._lgr.error(sgfe_msg)
             self.gnc_session.check_end_session(locals())
             raise itgfe.with_traceback( exc_info()[2] )
-
-        return msg
 
     def create_gnucash_info(self, p_owner:str):
         """
@@ -410,35 +409,31 @@ class ParseMonarchInput:
 
 
 def process_args():
-    arg_parser = ArgumentParser(description='Process Monarch or JSON input data to obtain Gnucash transactions',
-                                prog='parseMonarchCopyRep.py')
+    arg_parser = ArgumentParser(description="Process Monarch or JSON input data to obtain Gnucash transactions",
+                                prog="parseMonarchCopyRep.py")
     # required arguments
     required = arg_parser.add_argument_group("REQUIRED")
-    required.add_argument('-i', '--inputfile', required=True, help='path & name of the Monarch or JSON input file')
+    required.add_argument('-i', '--inputfile', required=True, help="path & name of the Monarch or JSON input file")
     # required if PROD
-    subparsers = arg_parser.add_subparsers(help='with gnc option: MUST specify -g FILENAME and -t TX_TYPE')
-    gnc_parser = subparsers.add_parser("gnc", help='Insert the parsed trade and/or price transactions to a Gnucash file')
-    gnc_parser.add_argument('-g', '--gncfile', required=True, help='path & name of the Gnucash file')
+    subparsers = arg_parser.add_subparsers(help="with gnc option: MUST specify -g FILENAME and -t TX_TYPE")
+    gnc_parser = subparsers.add_parser("gnc", help="Insert the parsed trade and/or price transactions to a Gnucash file")
+    gnc_parser.add_argument('-g', '--gncfile', required=True, help="path & name of the Gnucash file")
     gnc_parser.add_argument('-t', '--type', required=True, choices=[TRADE, PRICE, BOTH],
                             help="type of transaction to record: {} or {} or {}".format(TRADE, PRICE, BOTH))
     # optional arguments
-    arg_parser.add_argument('-l', '--level', type=int, default=lg.INFO, help='set LEVEL of logging output')
-    arg_parser.add_argument('--json',  action="store_true", help='Write the parsed Monarch data to a JSON file')
+    arg_parser.add_argument('-l', '--level', type=int, default=lg.INFO, help="set LEVEL of logging output")
+    arg_parser.add_argument('--json',  action="store_true", help="Write the parsed Monarch data to a JSON file")
 
     return arg_parser
 
 
-def process_input_parameters(argx:list, lgr:lg.Logger):
+def process_input_parameters(argx:list):
     args = process_args().parse_args(argx)
-    lgr.debug(F"\n\targs = {args}")
-
-    lgr.warning(F"logger level set to {args.level}")
+    info = [F"args = {args}"]
 
     if not osp.isfile(args.inputfile):
-        msg = F"File path '{args.inputfile}' does not exist! Exiting..."
-        lgr.error(msg)
-        raise Exception(msg)
-    lgr.info(F"\n\tInput file = {args.inputfile}")
+        raise Exception(F"File path '{args.inputfile}' does not exist! Exiting...")
+    info.append(F"Input file = {args.inputfile}")
 
     mode = TEST
     domain = BOTH
@@ -447,22 +442,25 @@ def process_input_parameters(argx:list, lgr:lg.Logger):
         if not osp.isfile(args.gncfile):
             raise Exception(F"File path '{args.gncfile}' does not exist. Exiting...")
         gnc_file = args.gncfile
-        lgr.info(F"\n\tGnucash file = {gnc_file}")
+        info.append(F"writing to Gnucash file = {gnc_file}")
         mode = SEND
         domain = args.type
-        lgr.info(F"Inserting '{domain}' transaction types to Gnucash.")
+        info.append(F"Inserting '{domain}' transaction types to Gnucash.")
+    else:
+        info.append("mode = TEST")
 
-    return args.inputfile, args.json, args.level, mode, gnc_file, domain
+    return args.inputfile, args.json, args.level, mode, gnc_file, domain, info
 
 
 def main_monarch_input(args:list) -> list:
-    lgr = get_logger(base_run_file)
+    in_file, save_monarch, level, mode, gnc_file, domain, parse_info = process_input_parameters(args)
 
-    in_file, save_monarch, level, mode, gnc_file, domain = process_input_parameters(args, lgr)
+    log_control = mhsLogging.MhsLogger(base_run_file, con_level = level, suffix = "gncout")
+    log_control.log_list(parse_info)
+    lgr = log_control.get_logger()
 
-    lgr.setLevel(level)
-    lgr.info(F"\n\t\tRuntime = {get_current_time()}")
-    lgr.debug(repr(lgr.handlers))
+    log_control.show(F"Runtime = {get_current_time()}")
+    lgr.debug( repr(lgr.handlers) )
 
     # get name parts from the input file path
     _, fname = osp.split(in_file)
@@ -478,14 +476,12 @@ def main_monarch_input(args:list) -> list:
 
         if mode == SEND:
             # add gnc file name to log file name
-            _, fname = osp.split(gnc_file)
-            gname, _ = osp.splitext(fname)
-            basename += '_' + gname
+            basename += '_' + mhsUtils.get_base_filename(gnc_file)
 
             gnc_session = GnucashSession(mode, gnc_file, domain, lgr)
             parser.insert_txs_to_gnucash_file(gnc_session)
 
-        msg = saved_log_info
+        msg = log_control.get_saved_info()
 
         if ftype == MON.lower() and save_monarch:
             out_file = save_to_json(basename, parser.get_input_record().to_json(), get_current_time(FILE_DATETIME_FORMAT))
@@ -498,8 +494,8 @@ def main_monarch_input(args:list) -> list:
         if gnc_session:
             gnc_session.end_session(False)
 
-    lgr.warning('\n >>> PROGRAM ENDED.')
-    finish_logging(base_run_file, basename, get_current_time(FILE_DATETIME_FORMAT), sfx="gncout")
+    lgr.warning(">>> PROGRAM ENDED.")
+    # finish_logging(base_run_file, basename, get_current_time(FILE_DATETIME_FORMAT), sfx="gncout")
     return msg
 
 
