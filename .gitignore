@@ -24,5 +24,6 @@ examples/
 *.exe
 *.x
 app-files
+logs
 # find <dir/>* -type l >> .gitignore
 secret*
