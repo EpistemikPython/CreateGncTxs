@@ -18,13 +18,12 @@ import re
 import json
 from argparse import ArgumentParser
 path.append("/newdata/dev/git/Python/utils")
-from mhsUtils import JSON, save_to_json, get_base_filename
+from mhsUtils import JSON, save_to_json, get_base_filename, get_base_fileparts
 import mhsLogging
 path.append("/newdata/dev/git/Python/Gnucash/common")
 from gncUtils import *
 
 base_run_file = get_base_filename(__file__)
-print(base_run_file)
 
 
 class ParseMonarchInput:
@@ -32,7 +31,6 @@ class ParseMonarchInput:
         self.in_file = r_infile
         self._input_txs = InvestmentRecord(r_lgr)
         self._gnucash_txs = InvestmentRecord(r_lgr)
-        r_lgr.info(get_current_time())
         self._lgr = r_lgr
 
     def get_input_record(self) -> InvestmentRecord:
@@ -82,7 +80,7 @@ class ParseMonarchInput:
                  match date at [0]:
                     record: fund, desc, gross, units, price, load, trade date
         """
-        self._lgr.info( get_current_time() )
+        self._lgr.debug( get_current_time() )
 
         re_date = re.compile(r"([0-9]{2}-\w{3}-[0-9]{4})")
 
@@ -344,7 +342,7 @@ class ParseMonarchInput:
                 for each tx, find the latest Trade tx for that fund, if any...
                 if found, add the Unit Balance from the Price tx to the Trade tx
         """
-        self._lgr.info( get_current_time() )
+        self._lgr.debug( get_current_time() )
         for iplan in self._input_txs.get_data():
             self._lgr.debug(F"plan type = {repr(iplan)}")
             plan = self._input_txs.get_plan(iplan)
@@ -464,8 +462,7 @@ def main_monarch_input(args:list) -> list:
     lgr.debug( repr(lgr.handlers) )
 
     # get name parts from the input file path
-    _, fname = osp.split(in_file)
-    basename, ftype = osp.splitext(fname)
+    basename, ftype = get_base_fileparts(in_file)
     ftype = ftype[1:]
 
     gnc_session = None
@@ -488,15 +485,14 @@ def main_monarch_input(args:list) -> list:
             out_file = save_to_json(basename, parser.get_input_record().to_json(), get_current_time(FILE_DATETIME_FORMAT))
             lgr.info(F"Created Monarch JSON file: {out_file}")
 
-    except Exception as mcre:
-        mcre_msg = repr(mcre)
-        lgr.exception(mcre_msg)
-        msg = [mcre_msg]
+    except Exception as ex:
+        ex_msg = repr(ex)
+        lgr.exception(ex_msg)
+        msg = [ex_msg]
         if gnc_session:
             gnc_session.end_session(False)
 
     lgr.warning(">>> PROGRAM ENDED.")
-    # finish_logging(base_run_file, basename, get_current_time(FILE_DATETIME_FORMAT), sfx="gncout")
     return msg
 
 

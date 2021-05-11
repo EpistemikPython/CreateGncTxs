@@ -8,7 +8,7 @@
 __author__ = "Mark Sattolo"
 __author_email__ = "epistemik@gmail.com"
 __created__ = "2018"
-__updated__ = "2021-05-10"
+__updated__ = "2021-05-11"
 
 import sys
 from PyQt5.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QGroupBox, QDialog, QFileDialog, QLabel,
@@ -30,7 +30,7 @@ SCRIPT_LABEL:str = MON + ' ' + INPUT
 class MonarchGnucashUI(QDialog):
     def __init__(self):
         super().__init__(flags=Qt.WindowSystemMenuHint|Qt.WindowTitleHint)
-        self.title = "Monarch & Gnucash Services UI"
+        self.title = "Monarch Info to Gnucash UI"
         self.left = 120
         self.top  = 160
         self.width  = 800
@@ -96,7 +96,7 @@ class MonarchGnucashUI(QDialog):
         self.pb_logging.clicked.connect(self.get_log_level)
         layout.addRow( QLabel("Logging:"), self.pb_logging )
 
-        self.exe_btn = QPushButton('Go!')
+        self.exe_btn = QPushButton("Go!")
         self.exe_btn.clicked.connect(self.button_click)
         layout.addRow( QLabel("EXECUTE:"), self.exe_btn )
 
@@ -154,9 +154,7 @@ class MonarchGnucashUI(QDialog):
             ui_lgr.info(F"logging level changed to {num}.")
 
     def button_click(self):
-        """
-        prepare the parameters string and send to parseMonarchCopyRep.main_monarch_input()
-        """
+        """Prepare the parameters string and send to parseMonarchCopyRep.main_monarch_input()."""
         ui_lgr.info(F"Clicked '{self.exe_btn.text()}'.")
 
         # must have an input file
@@ -191,7 +189,7 @@ class MonarchGnucashUI(QDialog):
 
         self.response_box.setText( json.dumps(reply, indent=4) )
 
-# END class MonarchGnucashServices
+# END class MonarchGnucashUI
 
 
 def ui_main():
@@ -201,8 +199,8 @@ def ui_main():
     app.exec_()
 
 
-if __name__ == '__main__':
-    lg_ctrl = mhsLogging.MhsLogger(MonarchGnucashUI.__name__, suffix = 'gncout')
+if __name__ == "__main__":
+    lg_ctrl = mhsLogging.MhsLogger(MonarchGnucashUI.__name__, suffix = "gncout")
     ui_lgr = lg_ctrl.get_logger()
     ui_main()
     exit()
