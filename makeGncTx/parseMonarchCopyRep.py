@@ -11,18 +11,19 @@
 __author__ = "Mark Sattolo"
 __author_email__ = "epistemik@gmail.com"
 __created__ = "2019-06-22"
-__updated__ = "2021-05-10"
+__updated__ = "2021-05-11"
 
 from sys import path, argv, exc_info
 import re
+import json
 from argparse import ArgumentParser
 path.append("/newdata/dev/git/Python/utils")
-import mhsUtils
+from mhsUtils import JSON, save_to_json, get_base_filename
 import mhsLogging
-path.append("/newdata/dev/git/Python/Gnucash/updateBudgetQtrly")
-from gnucash_utilities import *
+path.append("/newdata/dev/git/Python/Gnucash/common")
+from gncUtils import *
 
-base_run_file = mhsUtils.get_base_filename(__file__)
+base_run_file = get_base_filename(__file__)
 print(base_run_file)
 
 
@@ -476,7 +477,7 @@ def main_monarch_input(args:list) -> list:
 
         if mode == SEND:
             # add gnc file name to log file name
-            basename += '_' + mhsUtils.get_base_filename(gnc_file)
+            basename += '_' + get_base_filename(gnc_file)
 
             gnc_session = GnucashSession(mode, gnc_file, domain, lgr)
             parser.insert_txs_to_gnucash_file(gnc_session)
