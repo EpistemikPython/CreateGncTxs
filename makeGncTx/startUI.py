@@ -8,7 +8,7 @@
 __author__ = "Mark Sattolo"
 __author_email__ = "epistemik@gmail.com"
 __created__ = "2018"
-__updated__ = "2021-05-11"
+__updated__ = "2021-06-02"
 
 import sys
 from PyQt5.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QGroupBox, QDialog, QFileDialog, QLabel,
@@ -28,6 +28,7 @@ SCRIPT_LABEL:str = MON + ' ' + INPUT
 
 # noinspection PyAttributeOutsideInit
 class MonarchGnucashUI(QDialog):
+    """Create and run the UI to conveniently specify parameters and run the parseMonarchCopyRep program."""
     def __init__(self):
         super().__init__(flags=Qt.WindowSystemMenuHint|Qt.WindowTitleHint)
         self.title = "Monarch Info to Gnucash UI"
@@ -154,7 +155,7 @@ class MonarchGnucashUI(QDialog):
             ui_lgr.info(F"logging level changed to {num}.")
 
     def button_click(self):
-        """Prepare the parameters string and send to parseMonarchCopyRep.main_monarch_input()."""
+        """Prepare the parameters string and send to main function of module parseMonarchCopyRep."""
         ui_lgr.info(F"Clicked '{self.exe_btn.text()}'.")
 
         # must have an input file

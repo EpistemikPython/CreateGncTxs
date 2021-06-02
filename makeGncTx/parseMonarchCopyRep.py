@@ -11,7 +11,7 @@
 __author__ = "Mark Sattolo"
 __author_email__ = "epistemik@gmail.com"
 __created__ = "2019-06-22"
-__updated__ = "2021-05-11"
+__updated__ = "2021-06-02"
 
 from sys import path, argv, exc_info
 import re
@@ -53,7 +53,7 @@ class ParseMonarchInput:
             raise ValueError(F"Improper file type: {ftype}")
 
     def parse_json_info(self):
-        """parse the json file and copy the data to self._input_txs"""
+        """Parse the json file and copy the data to self._input_txs."""
         self._lgr.info( get_current_time() )
         with open(self.in_file) as inf:
             data = json.load(inf)
@@ -63,21 +63,21 @@ class ParseMonarchInput:
 
     def parse_monarch_info(self):
         """
-        parsing for NEW format txt files, ~ May 31, 2019, just COPIED from Monarch web page,
-        as new Monarch pdf's are no longer practical to use -- extracted text just too inconsistent...
+        Parsing for NEW format txt files, as of ~ 2019-May-31, just COPIED from Monarch web page to a text file,
+        as new Monarch pdf's are no longer practical to use -- extracted text just TOO INCONSISTENT...
         >> add ALL price and trade info to an InvestmentRecord instance
-        *loop lines:
-            1: skip if line too short
-            2: date
-            3: owner
-            4: FUND ->
-                 find planID in words; type is PLAN_IDS[word][PLAN_TYPE]
-            5: Pass if planID is Joint and owner is Lulu
-            6: Prices ->
-                 match fund name at [0]:
+           check each line, depending on the current state:
+             1: skip if line too short
+             2: obtain date
+             3: obtain owner
+             4: FUND ->
+                  find planID in words; type is PLAN_IDS[word][PLAN_TYPE]
+             5: Pass if planID is Joint and owner is Lulu
+             6: Prices ->
+                  match fund name at [0]:
                     record: fund company, fund, balance, price, doc date
-            7: Trades ->
-                 match date at [0]:
+             7: Trades ->
+                  match date at [0]:
                     record: fund, desc, gross, units, price, load, trade date
         """
         self._lgr.debug( get_current_time() )
@@ -193,15 +193,15 @@ class ParseMonarchInput:
     def get_trade_info(self, mon_tx:dict, plan_type:str, ast_parent:Account, rev_acct:Account) -> (dict,dict):
         """
         Parse a Monarch trade transaction:
-        * useful to have this intermediate function to obtain a collection of txs with the Gnucash data handy
+          useful to have this intermediate function to obtain a collection of txs with the required Gnucash data
           and also to ensure that all the matching 'in' and 'out' Switch txs are properly paired up...
-          before creating the actual Gnucash.Transactions
-            Asset accounts: use the proper path to find the parent then search for the Fund Code in the descendants
+          BEFORE creating the actual Gnucash.Transactions
+            Asset accounts:   use the proper path to find the parent then search for the Fund Code in the descendants
             Revenue accounts: pick the proper account based on owner and plan type
-            Amounts: re match to Gross and Net then use the match groups
-            date: convert the date then get day, month and year to form a Gnc date
-            Units: re match and concatenate the two groups on either side of decimal point
-            Description: use DESC and Fund Company
+            Amounts:          regex match to Gross and Net then use the match groups
+            date:             convert the date then get day, month and year to form a Gnc date
+            Units:            regex match and concatenate the two groups on either side of decimal point
+            Description:      use DESC and Fund Company
         :param     mon_tx: Monarch transaction
         :param  plan_type: plan name from InvestmentRecord
         :param ast_parent: Asset parent account
@@ -309,7 +309,7 @@ class ParseMonarchInput:
     def process_monarch_trades(self, mon_tx:dict, plan_type:str, ast_parent:Account, p_owner:str):
         """
         Obtain each Monarch trade as a transaction item, or pair of transactions where required,
-        and forward to Gnucash processing
+        and forward to Gnucash processing.
         :param     mon_tx: Monarch transaction information
         :param  plan_type: plan names from Configuration.InvestmentRecord
         :param ast_parent: Asset parent account
@@ -338,9 +338,9 @@ class ParseMonarchInput:
         """
         Append the current unit balance from the Price list to the latest Trade tx.
         for each plan type:
-            go through Price txs:
-                for each tx, find the latest Trade tx for that fund, if any...
-                if found, add the Unit Balance from the Price tx to the Trade tx
+          go through Price txs:
+            for each tx, find the latest Trade tx for that fund, if any...
+            if found, add the Unit Balance from the Price tx to the Trade tx
         """
         self._lgr.debug( get_current_time() )
         for iplan in self._input_txs.get_data():
@@ -365,7 +365,7 @@ class ParseMonarchInput:
     # noinspection PyAttributeOutsideInit
     def insert_txs_to_gnucash_file(self, p_gncs:GnucashSession):
         """
-        transfer the Monarch information to a Gnucash file
+        Transfer the Monarch information to a Gnucash file.
         :return: gnucash session log or error message
         """
         self._lgr.info(get_current_time())
@@ -385,9 +385,7 @@ class ParseMonarchInput:
             raise itgfe.with_traceback( exc_info()[2] )
 
     def create_gnucash_info(self, p_owner:str):
-        """
-        Process each transaction from the Monarch input file to get the required Gnucash information
-        """
+        """Process each transaction from the Monarch input file to get the required Gnucash information."""
         domain = self.gnc_session.get_domain()
         plans = self._input_txs.get_data()
         for plan_type in plans:
@@ -404,7 +402,7 @@ class ParseMonarchInput:
                 for mon_tx in plans[plan_type][PRICE]:
                     self.gnc_session.create_price(mon_tx, asset_parent)
 
-# END class ParseMonarchCopyReport
+# END class ParseMonarchInput
 
 
 def process_args():
