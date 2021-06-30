@@ -11,14 +11,14 @@
 __author__ = "Mark Sattolo"
 __author_email__ = "epistemik@gmail.com"
 __created__ = "2019-06-22"
-__updated__ = "2021-06-02"
+__updated__ = "2021-06-29"
 
 from sys import path, argv, exc_info
 import re
 import json
 from argparse import ArgumentParser
 path.append("/newdata/dev/git/Python/utils")
-from mhsUtils import JSON, save_to_json, get_base_filename, get_base_fileparts
+from mhsUtils import JSON_LABEL, save_to_json, get_base_filename, get_base_fileparts
 import mhsLogging
 path.append("/newdata/dev/git/Python/Gnucash/common")
 from gncUtils import *
@@ -46,8 +46,8 @@ class ParseMonarchInput:
             self._lgr.info(F"Have a {MON.upper()} type input file.")
             self.parse_monarch_info()
             self.add_balance_to_trade()
-        elif ftype == JSON:
-            self._lgr.info(F"Have a {JSON.upper()} type input file.")
+        elif ftype == JSON_LABEL:
+            self._lgr.info(F"Have a {JSON_LABEL.upper()} type input file.")
             self.parse_json_info()
         else:
             raise ValueError(F"Improper file type: {ftype}")
