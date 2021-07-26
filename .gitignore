@@ -27,3 +27,4 @@ app-files
 logs
 # find <dir/>* -type l >> .gitignore
 secret*
+copyMonarch
