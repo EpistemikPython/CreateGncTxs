@@ -11,16 +11,16 @@
 __author__ = "Mark Sattolo"
 __author_email__ = "epistemik@gmail.com"
 __created__ = "2019-06-22"
-__updated__ = "2021-06-29"
+__updated__ = "2021-07-26"
 
 from sys import path, argv, exc_info
 import re
 import json
 from argparse import ArgumentParser
-path.append("/newdata/dev/git/Python/utils")
+path.append("/home/marksa/git/Python/utils")
 from mhsUtils import JSON_LABEL, save_to_json, get_base_filename, get_base_fileparts
 import mhsLogging
-path.append("/newdata/dev/git/Python/Gnucash/common")
+path.append("/home/marksa/git/Python/gnucash/common")
 from gncUtils import *
 
 base_run_file = get_base_filename(__file__)

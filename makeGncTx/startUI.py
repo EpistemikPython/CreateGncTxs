@@ -8,15 +8,15 @@
 __author__ = "Mark Sattolo"
 __author_email__ = "epistemik@gmail.com"
 __created__ = "2018"
-__updated__ = "2021-06-02"
+__updated__ = "2021-07-26"
 
 import sys
 from PyQt5.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QGroupBox, QDialog, QFileDialog, QLabel,
                              QPushButton, QFormLayout, QDialogButtonBox, QTextEdit, QCheckBox, QInputDialog)
 from PyQt5.QtCore import Qt
 from functools import partial
-sys.path.append("/newdata/dev/git/Python/utils")
-from mhsUtils import run_ts
+sys.path.append("/home/marksa/git/Python/utils")
+from mhsUtils import run_ts, BASE_PYTHON_FOLDER
 from parseMonarchCopyRep import *
 
 # constant strings
@@ -30,7 +30,7 @@ SCRIPT_LABEL:str = MON + ' ' + INPUT
 class MonarchGnucashUI(QDialog):
     """Create and run the UI to conveniently specify parameters and run the parseMonarchCopyRep program."""
     def __init__(self):
-        super().__init__(flags=Qt.WindowSystemMenuHint|Qt.WindowTitleHint)
+        super().__init__(flags = Qt.WindowSystemMenuHint | Qt.WindowTitleHint)
         self.title = "Monarch Info to Gnucash UI"
         self.left = 120
         self.top  = 160
@@ -123,10 +123,10 @@ class MonarchGnucashUI(QDialog):
         ui_lgr.info(label)
         if label == INPUT:
             f_filter = F"{INPUT} (*.monarch *.json);;All Files (*)"
-            f_dir = "/newdata/dev/git/Python/Gnucash/createGncTxs/makeGncTx"
+            f_dir = osp.join(BASE_PYTHON_FOLDER, "gnucash" + osp.sep + "CreateGncTxs" + osp.sep + "makeGncTx" + osp.sep)
         else: # GNC
             f_filter = F"{GNC} (*.gnc *.gnucash);;All Files (*)"
-            f_dir = "/newdata/dev/git/Python/Gnucash/app-files"
+            f_dir = osp.join(BASE_GNUCASH_FOLDER, "app-files" + osp.sep)
 
         file_name, _ = QFileDialog.getOpenFileName(self, caption=f_caption, filter=f_filter, directory=f_dir, options=f_options)
         if file_name:
