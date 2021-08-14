@@ -159,6 +159,7 @@ class ParseMonarchInput:
                     if not fund_code.isnumeric():
                         raise Exception(F"Did NOT find proper Fund code: {fund_code}!")
                     fund = fund_cpy + " " + fund_code
+                    self._lgr.debug(F"fund is: {fund}")
 
                     # have to identify & handle different types
                     tx_type = words[1]
@@ -395,6 +396,7 @@ class ParseMonarchInput:
             self._lgr.debug(F"create_gnucash_info(): asset parent = {asset_parent.GetName()}")
 
             if domain in (TRADE,BOTH):
+                # TODO: DO NOT commit txs unless ALL txs are good for this monarch report?
                 for mon_tx in plans[plan_type][TRADE]:
                     self.process_monarch_trades(mon_tx, plan_type, asset_parent, p_owner)
 
