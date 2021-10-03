@@ -8,7 +8,7 @@
 __author__ = "Mark Sattolo"
 __author_email__ = "epistemik@gmail.com"
 __created__ = "2018"
-__updated__ = "2021-07-26"
+__updated__ = "2021-10-03"
 
 import sys
 from PyQt5.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QGroupBox, QDialog, QFileDialog, QLabel,
@@ -16,7 +16,7 @@ from PyQt5.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QGroupBox, QD
 from PyQt5.QtCore import Qt
 from functools import partial
 sys.path.append("/home/marksa/git/Python/utils")
-from mhsUtils import run_ts, BASE_PYTHON_FOLDER
+from mhsUtils import BASE_PYTHON_FOLDER, RUN_DATETIME_FORMAT
 from parseMonarchCopyRep import *
 
 # constant strings
@@ -41,7 +41,7 @@ class MonarchGnucashUI(QDialog):
         self.gnc_file = None
 
         self.init_ui()
-        ui_lgr.info(F"{self.title} Runtime = {run_ts}\n")
+        ui_lgr.info(F"{self.title} Runtime = {dt.now().strftime(RUN_DATETIME_FORMAT)}\n")
 
     # TODO: better layout of widgets
     def init_ui(self):
