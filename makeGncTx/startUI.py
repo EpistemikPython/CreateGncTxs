@@ -8,7 +8,7 @@
 __author__ = "Mark Sattolo"
 __author_email__ = "epistemik@gmail.com"
 __created__ = "2018"
-__updated__ = "2021-10-03"
+__updated__ = "2021-10-09"
 
 import sys
 from PyQt5.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QGroupBox, QDialog, QFileDialog, QLabel,
@@ -32,9 +32,9 @@ class MonarchGnucashUI(QDialog):
     def __init__(self):
         super().__init__(flags = Qt.WindowSystemMenuHint | Qt.WindowTitleHint)
         self.title = "Monarch Info to Gnucash UI"
-        self.left = 120
+        self.left = 40
         self.top  = 160
-        self.width  = 800
+        self.width  = 720
         self.height = 800
         self.pdf_file = None
         self.mon_file = None
