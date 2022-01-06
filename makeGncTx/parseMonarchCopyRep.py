@@ -11,7 +11,7 @@
 __author__ = "Mark Sattolo"
 __author_email__ = "epistemik@gmail.com"
 __created__ = "2019-06-22"
-__updated__ = "2021-07-26"
+__updated__ = "2021-12-31"
 
 from sys import path, argv, exc_info
 import re
@@ -203,11 +203,11 @@ class ParseMonarchInput:
             date:             convert the date then get day, month and year to form a Gnc date
             Units:            regex match and concatenate the two groups on either side of decimal point
             Description:      use DESC and Fund Company
-        :param     mon_tx: Monarch transaction
-        :param  plan_type: plan name from InvestmentRecord
-        :param ast_parent: Asset parent account
-        :param   rev_acct: Revenue account
-        :return: one trade tx or both txs of a switch, if available
+        :param      mon_tx: Monarch transaction
+        :param   plan_type: plan name from InvestmentRecord
+        :param  ast_parent: Asset parent account
+        :param    rev_acct: Revenue account
+        :return one trade tx or both txs of a switch, if available
         """
         self._lgr.debug(F"plan type = {plan_type}, asset parent = {ast_parent.GetName()}")
 
@@ -290,11 +290,11 @@ class ParseMonarchInput:
         have_pair = False
         if init_tx[TYPE] in PAIRED_TYPES:
             self._lgr.debug("Tx is a Switch to ANOTHER account in SAME Fund company.")
-            # look for switches in this plan type with same company and date but with opposite gross value
+            # in this plan type: look for paired Tx with SAME company and date but OPPOSITE gross value
             for gnc_tx in self._gnucash_txs.get_trades(plan_type):
                 if gnc_tx[TYPE] in PAIRED_TYPES and gnc_tx[FUND].split()[0] == init_tx[FUND].split()[0] \
                         and gnc_tx[GROSS] == (net_amount * -1) and gnc_tx[TRADE_DATE] == init_tx[TRADE_DATE]:
-                    # FOUND THE FIRST ITEM IN THIS PAIR
+                    # FOUND THE MATCHING Tx OF THIS PAIR
                     have_pair = True
                     pair_tx = gnc_tx
                     self._lgr.debug("*** Found the MATCH of a Switch pair ***")
@@ -331,8 +331,7 @@ class ParseMonarchInput:
             self.gnc_session.create_trade_tx(tx1, tx2)
 
         except Exception as pmte:
-            pmte_msg = F"EXCEPTION: {repr(pmte)}!\n"
-            self._lgr.error(pmte_msg)
+            self._lgr.error(F"EXCEPTION: {repr(pmte)}!\n")
             raise pmte.with_traceback( exc_info()[2] )
 
     def add_balance_to_trade(self):
@@ -367,7 +366,7 @@ class ParseMonarchInput:
     def insert_txs_to_gnucash_file(self, p_gncs:GnucashSession):
         """
         Transfer the Monarch information to a Gnucash file.
-        :return: gnucash session log or error message
+        :return gnucash session log or error message
         """
         self._lgr.info(get_current_time())
         self.gnc_session = p_gncs
@@ -379,11 +378,10 @@ class ParseMonarchInput:
             self.create_gnucash_info(owner)
             self.gnc_session.end_session()
 
-        except Exception as itgfe:
-            sgfe_msg = F"EXCEPTION: {repr(itgfe)}!"
-            self._lgr.error(sgfe_msg)
+        except Exception as gfe:
+            self._lgr.error(F"EXCEPTION: {repr(gfe)}!")
             self.gnc_session.check_end_session(locals())
-            raise itgfe.with_traceback( exc_info()[2] )
+            raise gfe.with_traceback( exc_info()[2] )
 
     def create_gnucash_info(self, p_owner:str):
         """Process each transaction from the Monarch input file to get the required Gnucash information."""
