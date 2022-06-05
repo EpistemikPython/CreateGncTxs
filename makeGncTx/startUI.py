@@ -3,12 +3,12 @@
 #
 # startUI.py -- run the UI to select the main function and options
 #
-# Copyright (c) 2018-21 Mark Sattolo <epistemik@gmail.com>
+# Copyright (c) 2018-22 Mark Sattolo <epistemik@gmail.com>
 
 __author__ = "Mark Sattolo"
 __author_email__ = "epistemik@gmail.com"
 __created__ = "2018"
-__updated__ = "2021-10-09"
+__updated__ = "2022-06-05"
 
 import sys
 from PyQt5.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QGroupBox, QDialog, QFileDialog, QLabel,
@@ -126,7 +126,7 @@ class MonarchGnucashUI(QDialog):
             f_dir = osp.join(BASE_PYTHON_FOLDER, "gnucash" + osp.sep + "CreateGncTxs" + osp.sep + "makeGncTx" + osp.sep)
         else: # GNC
             f_filter = F"{GNC} (*.gnc *.gnucash);;All Files (*)"
-            f_dir = osp.join(BASE_GNUCASH_FOLDER, "app-files" + osp.sep)
+            f_dir = osp.join(BASE_GNUCASH_FOLDER, "bak-files" + osp.sep)
 
         file_name, _ = QFileDialog.getOpenFileName(self, caption=f_caption, filter=f_filter, directory=f_dir, options=f_options)
         if file_name:
