@@ -1,8 +1,8 @@
 ###############################################################################################################################
 # coding=utf-8
 #
-# parseMonarchCopyRep.py -- parse a file with COPIED Monarch Report text, assembling and saving
-#                           the information as transaction and price parameters in an InvestmentRecord,
+# parseMonarchCopyRep.py -- parse a file with COPIED Monarch Report text,
+#                           assemble and save the information as transaction and price parameters in an InvestmentRecord,
 #                           OR use a JSON file with previously saved Monarch tx/price data,
 #                           then optionally write the transactions/prices to a specified Gnucash file.
 #
@@ -11,7 +11,7 @@
 __author__ = "Mark Sattolo"
 __author_email__ = "epistemik@gmail.com"
 __created__ = "2019-06-22"
-__updated__ = "2021-12-31"
+__updated__ = "2023-01-07"
 
 from sys import path, argv, exc_info
 import re
