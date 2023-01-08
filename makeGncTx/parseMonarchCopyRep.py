@@ -165,7 +165,7 @@ class ParseMonarchInput:
                     tx_type = words[1]
                     if tx_type == DOLLAR:
                         tx_type = DCA_IN if words[4] == SW_IN else DCA_OUT
-                    desc = words[2] if tx_type == INTRCL else TX_TYPES[tx_type]
+                    desc = words[2] if ( tx_type == INTRCL or tx_type == INTRLD ) else TX_TYPES[tx_type]
                     if not desc.isprintable():
                         raise Exception(F"Did NOT find proper Description: {desc}!")
 
