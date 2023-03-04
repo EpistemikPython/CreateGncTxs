@@ -11,7 +11,7 @@
 __author__ = "Mark Sattolo"
 __author_email__ = "epistemik@gmail.com"
 __created__ = "2019-06-22"
-__updated__ = "2023-01-07"
+__updated__ = "2023-03-04"
 
 from sys import path, argv, exc_info
 import re
@@ -104,12 +104,15 @@ class ParseMonarchInput:
                         continue
 
                 if mon_state == FIND_OWNER:
+                    # update 2023-03-04 after redemption of all JOINT OWNER assets:
+                    # owner is LULU if file contains an OPEN account, else MARK
+                    owner = MON_MARK
                     if words[0] == OPEN:
-                        owner = MON_MARK if MON_ROBB in words else MON_LULU
-                        self._input_txs.set_owner(owner)
-                        self._lgr.debug(F"\n\t\u0022Current owner: {owner}\u0022")
-                        mon_state = STATE_SEARCH
-                        continue
+                        owner = MON_LULU
+                    self._input_txs.set_owner(owner)
+                    self._lgr.debug(F"\n\t\u0022Current owner: {owner}\u0022")
+                    mon_state = STATE_SEARCH
+                    continue
 
                 if words[0] == FUND.upper():
                     for word in words:
@@ -387,20 +390,25 @@ class ParseMonarchInput:
         """Process each transaction from the Monarch input file to get the required Gnucash information."""
         domain = self.gnc_session.get_domain()
         plans = self._input_txs.get_data()
-        for plan_type in plans:
-            self._lgr.debug(F"\n\n\t\t\u0022Plan type = {plan_type}\u0022")
+        try:
+            for plan_type in plans:
+                self._lgr.debug(F"\n\n\t\t\u0022Plan type = {plan_type}\u0022")
 
-            asset_parent = self.gnc_session.get_asset_account(plan_type, p_owner)
-            self._lgr.debug(F"create_gnucash_info(): asset parent = {asset_parent.GetName()}")
+                asset_parent = self.gnc_session.get_asset_account(plan_type, p_owner)
+                self._lgr.debug(F"create_gnucash_info(): asset parent = {asset_parent.GetName()}")
 
-            if domain in (TRADE,BOTH):
-                # TODO: DO NOT commit txs unless ALL txs are good for this monarch report?
-                for mon_tx in plans[plan_type][TRADE]:
-                    self.process_monarch_trades(mon_tx, plan_type, asset_parent, p_owner)
+                if domain in (TRADE,BOTH):
+                    # TODO: DO NOT commit txs unless ALL txs are good for this monarch report?
+                    for mon_tx in plans[plan_type][TRADE]:
+                        self.process_monarch_trades(mon_tx, plan_type, asset_parent, p_owner)
 
-            if domain in (PRICE,BOTH):
-                for mon_tx in plans[plan_type][PRICE]:
-                    self.gnc_session.create_price(mon_tx, asset_parent)
+                if domain in (PRICE,BOTH):
+                    for mon_tx in plans[plan_type][PRICE]:
+                        self.gnc_session.create_price(mon_tx, asset_parent)
+
+        except Exception as gie:
+            self._lgr.error(F"EXCEPTION: {repr(gie)}!")
+            raise gie
 
 # END class ParseMonarchInput
 
