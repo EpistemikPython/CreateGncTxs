@@ -11,17 +11,27 @@
 __author__ = "Mark Sattolo"
 __author_email__ = "epistemik@gmail.com"
 __created__ = "2019-06-22"
-__updated__ = "2023-03-04"
+__updated__ = "2023-09-01"
 
 from sys import path, argv, exc_info
 import re
 import json
 from argparse import ArgumentParser
 path.append("/home/marksa/git/Python/utils")
-from mhsUtils import JSON_LABEL, save_to_json, get_base_filename, get_base_fileparts
+from mhsUtils import *
 import mhsLogging
 path.append("/home/marksa/git/Python/gnucash/common")
 from gncUtils import *
+path.append("/home/marksa/git/Python/google/sheets")
+from sheetAccess import *
+
+RECORD_SHEET     = "Gnc Txs"
+RECORD_RANGE     = F"'{RECORD_SHEET}'!A1"
+RECORD_DATE_COL  = 'A'
+RECORD_TIME_COL  = 'B'
+RECORD_INPUTFILE_COL = 'C'
+RECORD_MODE_COL      = 'D'
+RECORD_GNCFILE_COL   = 'E'
 
 base_run_file = get_base_filename(__file__)
 
@@ -187,9 +197,10 @@ class ParseMonarchInput:
                     curr_tx[GROSS] = words[-4]
                     if '.' not in curr_tx[GROSS] or '$' not in curr_tx[GROSS]:
                         raise Exception(F"Did NOT find proper Gross amount: {curr_tx[GROSS]}!")
-                    curr_tx[LOAD]  = words[-5]
-                    if not curr_tx[LOAD].isalpha():
-                        raise Exception(F"Did NOT find proper Load: {curr_tx[LOAD]}!")
+                    load = words[-5]
+                    if not load.isalpha():
+                        raise Exception(F"Did NOT find proper Load: {load}!")
+                    curr_tx[LOAD] = load
 
                     self._input_txs.add_tx(plan_type, TRADE, curr_tx)
                     self._lgr.debug(F"ADD current Trade Tx:\n\t{curr_tx}")
@@ -413,6 +424,47 @@ class ParseMonarchInput:
 # END class ParseMonarchInput
 
 
+class GoogleUpdate:
+    def __init__(self, infile:str, domain:str, gncfile:str, r_lgr:lg.Logger):
+        self._infile = infile
+        self._domain = domain
+        self._gncfile = gncfile
+        self._lgr = r_lgr
+        self._lgr.info(F"Start {self.__class__.__name__} @ {get_current_time()}")
+
+        self._sheet = MhsSheetAccess(self._lgr)
+        self.response = None
+
+    def record_update_info(self):
+        ru_result = self._sheet.read_sheets_data(RECORD_RANGE)
+        current_row = int(ru_result[0][0])
+        # skip header rows
+        if current_row % 100 == 0:
+            current_row += 1
+        self._lgr.info(F"current row = {current_row}\n")
+
+        # keep record of this update
+        self._sheet.fill_cell(RECORD_SHEET, RECORD_DATE_COL, current_row, now_dt.strftime(CELL_DATE_STR))
+        self._sheet.fill_cell(RECORD_SHEET, RECORD_TIME_COL, current_row, now_dt.strftime(CELL_TIME_STR))
+        self._sheet.fill_cell(RECORD_SHEET, RECORD_INPUTFILE_COL, current_row, self._infile)
+        self._sheet.fill_cell(RECORD_SHEET, RECORD_MODE_COL, current_row, self._domain)
+        self._sheet.fill_cell(RECORD_SHEET, RECORD_GNCFILE_COL, current_row, self._gncfile)
+
+        # update the row tally
+        self._sheet.fill_cell(RECORD_SHEET, RECORD_DATE_COL, 1, str(current_row + 1))
+
+    def send_google_data(self):
+        self._sheet.begin_session()
+
+        self.record_update_info()
+        self.response = self._sheet.send_sheets_data()
+        self._lgr.info(F"sent update @ = {get_current_time()}\ngoogle response = {self.response}")
+
+        self._sheet.end_session()
+
+# END class GoogleUpdate
+
+
 def process_args():
     arg_parser = ArgumentParser(description="Process Monarch or JSON input data to obtain Gnucash transactions",
                                 prog="parseMonarchCopyRep.py")
@@ -471,6 +523,8 @@ def main_monarch_input(args:list) -> list:
     basename, ftype = get_base_fileparts(in_file)
     ftype = ftype[1:]
 
+    updater = GoogleUpdate(in_file, domain, gnc_file, lgr)
+
     gnc_session = None
     parser = ParseMonarchInput(in_file, lgr)
     try:
@@ -484,6 +538,9 @@ def main_monarch_input(args:list) -> list:
 
             gnc_session = GnucashSession(mode, gnc_file, domain, lgr)
             parser.insert_txs_to_gnucash_file(gnc_session)
+
+            # keep a record of the update
+            updater.send_google_data()
 
         msg = log_control.get_saved_info()
 
