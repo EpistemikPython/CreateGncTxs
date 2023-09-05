@@ -458,7 +458,7 @@ class GoogleUpdate:
 
         self.record_update_info()
         self.response = self._sheet.send_sheets_data()
-        self._lgr.info(F"sent update @ = {get_current_time()}\ngoogle response = {self.response}")
+        self._lgr.info(F"sent update @ {get_current_time()}\n\tGoogle response = {self.response}")
 
         self._sheet.end_session()
 
