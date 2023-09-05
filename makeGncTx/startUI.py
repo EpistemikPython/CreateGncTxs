@@ -8,15 +8,12 @@
 __author__ = "Mark Sattolo"
 __author_email__ = "epistemik@gmail.com"
 __created__ = "2018"
-__updated__ = "2022-06-05"
+__updated__ = "2023-09-04"
 
-import sys
 from PyQt5.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QGroupBox, QDialog, QFileDialog, QLabel,
                              QPushButton, QFormLayout, QDialogButtonBox, QTextEdit, QCheckBox, QInputDialog)
 from PyQt5.QtCore import Qt
 from functools import partial
-sys.path.append("/home/marksa/git/Python/utils")
-from mhsUtils import BASE_PYTHON_FOLDER, RUN_DATETIME_FORMAT
 from parseMonarchCopyRep import *
 
 # constant strings
