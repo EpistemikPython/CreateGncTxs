@@ -6,12 +6,13 @@
 #                           OR use a JSON file with previously saved Monarch tx/price data,
 #                           then optionally write the transactions/prices to a specified Gnucash file.
 #
-# Copyright (c) 2019-21 Mark Sattolo <epistemik@gmail.com>
+# Copyright (c) 2024 Mark Sattolo <epistemik@gmail.com>
 
-__author__ = "Mark Sattolo"
-__author_email__ = "epistemik@gmail.com"
+__author_name__    = "Mark Sattolo"
+__author_email__   = "epistemik@gmail.com"
+__python_version__ = "3.6+"
 __created__ = "2019-06-22"
-__updated__ = "2023-09-01"
+__updated__ = "2024-01-05"
 
 from sys import path, argv, exc_info
 import re
@@ -26,7 +27,7 @@ path.append("/home/marksa/git/Python/google/sheets")
 from sheetAccess import *
 
 RECORD_SHEET     = "Gnc Txs"
-RECORD_RANGE     = F"'{RECORD_SHEET}'!A1"
+RECORD_RANGE     = f"'{RECORD_SHEET}'!A1"
 RECORD_DATE_COL  = 'A'
 RECORD_TIME_COL  = 'B'
 RECORD_INPUTFILE_COL = 'C'
@@ -420,7 +421,6 @@ class ParseMonarchInput:
         except Exception as gie:
             self._lgr.error(F"EXCEPTION: {repr(gie)}!")
             raise gie
-
 # END class ParseMonarchInput
 
 
@@ -439,7 +439,7 @@ class GoogleUpdate:
         ru_result = self._sheet.read_sheets_data(RECORD_RANGE)
         current_row = int(ru_result[0][0])
         # skip header rows
-        if current_row % 100 == 0:
+        if current_row % 50 == 0:
             current_row += 1
         self._lgr.info(F"current row = {current_row}\n")
 
@@ -461,13 +461,11 @@ class GoogleUpdate:
         self._lgr.info(F"sent update @ {get_current_time()}\n\tGoogle response = {self.response}")
 
         self._sheet.end_session()
-
 # END class GoogleUpdate
 
 
-def process_args():
-    arg_parser = ArgumentParser(description="Process Monarch or JSON input data to obtain Gnucash transactions",
-                                prog="parseMonarchCopyRep.py")
+def set_args():
+    arg_parser = ArgumentParser(description="Process Monarch or JSON input data to obtain Gnucash transactions", prog="python3 parseMonarchCopyRep.py")
     # required arguments
     required = arg_parser.add_argument_group("REQUIRED")
     required.add_argument('-i', '--inputfile', required=True, help="path & name of the Monarch or JSON input file")
@@ -483,9 +481,8 @@ def process_args():
 
     return arg_parser
 
-
 def process_input_parameters(argx:list):
-    args = process_args().parse_args(argx)
+    args = set_args().parse_args(argx)
     info = [F"args = {args}"]
 
     if not osp.isfile(args.inputfile):
@@ -507,7 +504,6 @@ def process_input_parameters(argx:list):
         info.append("mode = TEST")
 
     return args.inputfile, args.json, args.level, mode, gnc_file, domain, info
-
 
 def main_monarch_input(args:list) -> list:
     in_file, save_monarch, level, mode, gnc_file, domain, parse_info = process_input_parameters(args)
