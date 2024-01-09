@@ -3,12 +3,13 @@
 #
 # startUI.py -- run the UI to select the main function and options
 #
-# Copyright (c) 2018-22 Mark Sattolo <epistemik@gmail.com>
+# Copyright (c) 2024 Mark Sattolo <epistemik@gmail.com>
 
-__author__ = "Mark Sattolo"
-__author_email__ = "epistemik@gmail.com"
-__created__ = "2018"
-__updated__ = "2023-09-04"
+__author_name__    = "Mark Sattolo"
+__author_email__   = "epistemik@gmail.com"
+__python_version__ = "3.6+"
+__created__ = "2019-05-19"
+__updated__ = "2024-01-09"
 
 from PyQt5.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QGroupBox, QDialog, QFileDialog, QLabel,
                              QPushButton, QFormLayout, QDialogButtonBox, QTextEdit, QCheckBox, QInputDialog)
@@ -25,7 +26,7 @@ SCRIPT_LABEL:str = MON + ' ' + INPUT
 
 # noinspection PyAttributeOutsideInit
 class MonarchGnucashUI(QDialog):
-    """Create and run the UI to conveniently specify parameters and run the parseMonarchCopyRep program."""
+    """Create and run a UI to conveniently specify parameters and run the parseMonarchCopyRep program."""
     def __init__(self):
         super().__init__(flags = Qt.WindowSystemMenuHint | Qt.WindowTitleHint)
         self.title = "Monarch Info to Gnucash UI"
@@ -121,7 +122,7 @@ class MonarchGnucashUI(QDialog):
         if label == INPUT:
             f_filter = F"{INPUT} (*.monarch *.json);;All Files (*)"
             f_dir = osp.join(BASE_PYTHON_FOLDER, "gnucash" + osp.sep + "CreateGncTxs" + osp.sep + "makeGncTx" + osp.sep)
-        else: # GNC
+        else: # gnucash file
             f_filter = F"{GNC} (*.gnc *.gnucash);;All Files (*)"
             f_dir = osp.join(BASE_GNUCASH_FOLDER, "bak-files" + osp.sep)
 
@@ -186,7 +187,6 @@ class MonarchGnucashUI(QDialog):
             reply = {"EXCEPTION" : msg}
 
         self.response_box.setText( json.dumps(reply, indent=4) )
-
 # END class MonarchGnucashUI
 
 
