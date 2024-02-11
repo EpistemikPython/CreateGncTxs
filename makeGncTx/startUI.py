@@ -1,7 +1,7 @@
 ###############################################################################################################################
 # coding=utf-8
 #
-# startUI.py -- run the UI to select the main function and options
+# startUI.py -- run the UI to select the input files and execution options
 #
 # Copyright (c) 2024 Mark Sattolo <epistemik@gmail.com>
 
@@ -9,7 +9,7 @@ __author_name__    = "Mark Sattolo"
 __author_email__   = "epistemik@gmail.com"
 __python_version__ = "3.6+"
 __created__ = "2019-05-19"
-__updated__ = "2024-01-09"
+__updated__ = "2024-02-08"
 
 from PyQt5.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QGroupBox, QDialog, QFileDialog, QLabel,
                              QPushButton, QFormLayout, QDialogButtonBox, QTextEdit, QCheckBox, QInputDialog)
@@ -27,6 +27,7 @@ SCRIPT_LABEL:str = MON + ' ' + INPUT
 # noinspection PyAttributeOutsideInit
 class MonarchGnucashUI(QDialog):
     """Create and run a UI to conveniently specify parameters and run the parseMonarchCopyRep program."""
+
     def __init__(self):
         super().__init__(flags = Qt.WindowSystemMenuHint | Qt.WindowTitleHint)
         self.title = "Monarch Info to Gnucash UI"
@@ -34,7 +35,6 @@ class MonarchGnucashUI(QDialog):
         self.top  = 160
         self.width  = 720
         self.height = 800
-        self.pdf_file = None
         self.mon_file = None
         self.gnc_file = None
 
@@ -43,11 +43,9 @@ class MonarchGnucashUI(QDialog):
 
     # TODO: better layout of widgets
     def init_ui(self):
+        self.log_level:int = lg.INFO
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
-
-        self.log_level:int = lg.INFO
-
         self.create_group_box()
 
         self.response_box = QTextEdit()
@@ -64,9 +62,7 @@ class MonarchGnucashUI(QDialog):
         qvb_layout.addWidget(self.gb_main)
         qvb_layout.addWidget(self.response_box)
         qvb_layout.addWidget(button_box, alignment=Qt.AlignAbsolute)
-
         self.setLayout(qvb_layout)
-        self.show()
 
     # noinspection PyUnresolvedReferences
     def create_group_box(self):
@@ -154,6 +150,7 @@ class MonarchGnucashUI(QDialog):
 
     def button_click(self):
         """Prepare the parameters string and send to main function of module parseMonarchCopyRep."""
+
         ui_lgr.info(F"Clicked '{self.exe_btn.text()}'.")
 
         # must have an input file
@@ -190,7 +187,7 @@ class MonarchGnucashUI(QDialog):
 # END class MonarchGnucashUI
 
 
-def ui_main():
+def run_ui():
     app = QApplication(argv)
     dialog = MonarchGnucashUI()
     dialog.show()
@@ -200,5 +197,5 @@ def ui_main():
 if __name__ == "__main__":
     lg_ctrl = mhsLogging.MhsLogger(MonarchGnucashUI.__name__, suffix = "gncout")
     ui_lgr = lg_ctrl.get_logger()
-    ui_main()
+    run_ui()
     exit()
