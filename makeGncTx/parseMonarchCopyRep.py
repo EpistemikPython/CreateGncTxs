@@ -12,7 +12,7 @@ __author_name__    = "Mark Sattolo"
 __author_email__   = "epistemik@gmail.com"
 __python_version__ = "3.6+"
 __created__ = "2019-06-22"
-__updated__ = "2024-01-05"
+__updated__ = "2024-05-12"
 
 from sys import path, argv, exc_info
 import re
@@ -26,10 +26,10 @@ from gncUtils import *
 path.append("/home/marksa/git/Python/google/sheets")
 from sheetAccess import *
 
-RECORD_SHEET     = "Gnc Txs"
-RECORD_RANGE     = f"'{RECORD_SHEET}'!A1"
-RECORD_DATE_COL  = 'A'
-RECORD_TIME_COL  = 'B'
+RECORD_SHEET = "Gnc Txs"
+RECORD_RANGE = f"'{RECORD_SHEET}'!A1"
+RECORD_DATE_COL      = 'A'
+RECORD_TIME_COL      = 'B'
 RECORD_INPUTFILE_COL = 'C'
 RECORD_MODE_COL      = 'D'
 RECORD_GNCFILE_COL   = 'E'
@@ -53,7 +53,7 @@ class ParseMonarchInput:
     def parse_input_file(self, ftype:str):
         self._input_txs.set_filename(self.in_file)
 
-        if ftype == MON.lower():
+        if ftype == MON or ftype == MON.lower():
             self._lgr.info(F"Have a {MON.upper()} type input file.")
             self.parse_monarch_info()
             self.add_balance_to_trade()
@@ -74,10 +74,10 @@ class ParseMonarchInput:
 
     def parse_monarch_info(self):
         """
-        Parsing for NEW format txt files, as of ~ 2019-May-31, just COPIED from Monarch web page to a text file,
+        Parsing for NEW format txt files, as of ~ 2019-May-31, COPIED from the Monarch web page to a text file,
         as new Monarch pdf's are no longer practical to use -- extracted text just TOO INCONSISTENT...
         >> add ALL price and trade info to an InvestmentRecord instance
-           check each line, depending on the current state:
+           check EACH line, depending on the current state:
              1: skip if line too short
              2: obtain date
              3: obtain owner
@@ -209,7 +209,7 @@ class ParseMonarchInput:
     def get_trade_info(self, mon_tx:dict, plan_type:str, ast_parent:Account, rev_acct:Account) -> (dict,dict):
         """
         Parse a Monarch trade transaction:
-          useful to have this intermediate function to obtain a collection of txs with the required Gnucash data
+          USEFUL to have this intermediate function to obtain a collection of txs with the required Gnucash data
           and also to ensure that all the matching 'in' and 'out' Switch txs are properly paired up...
           BEFORE creating the actual Gnucash.Transactions
             Asset accounts:   use the proper path to find the parent then search for the Fund Code in the descendants
@@ -226,10 +226,10 @@ class ParseMonarchInput:
         """
         self._lgr.debug(F"plan type = {plan_type}, asset parent = {ast_parent.GetName()}")
 
-        # set the regex needed to match the required groups in each value
+        # set the regex's needed to match the required groups in each value
+        re_units   = re.compile(r"^(-?)([0-9]{1,5})\.([0-9]{4}).*")
         # NOTE: re_dollars must match (leading minus sign) OR (amount is in parentheses) to indicate NEGATIVE number
         re_dollars = re.compile(r"^([-(]?)\$([0-9,]{1,6})\.([0-9]{2}).*(\)?)")
-        re_units   = re.compile(r"^(-?)([0-9]{1,5})\.([0-9]{4}).*")
 
         fund_name = mon_tx[FUND]
         asset_acct = self.gnc_session.get_account(fund_name, ast_parent)
@@ -324,8 +324,7 @@ class ParseMonarchInput:
 
     def process_monarch_trades(self, mon_tx:dict, plan_type:str, ast_parent:Account, p_owner:str):
         """
-        Obtain each Monarch trade as a transaction item, or pair of transactions where required,
-        and forward to Gnucash processing.
+        Obtain EACH Monarch trade as a transaction item, or pair of transactions where required, and forward to Gnucash processing.
         :param     mon_tx: Monarch transaction information
         :param  plan_type: plan names from Configuration.InvestmentRecord
         :param ast_parent: Asset parent account
@@ -352,7 +351,7 @@ class ParseMonarchInput:
     def add_balance_to_trade(self):
         """
         Append the current unit balance from the Price list to the latest Trade tx.
-        for each plan type:
+        for EACH plan type:
           go through Price txs:
             for each tx, find the latest Trade tx for that fund, if any...
             if found, add the Unit Balance from the Price tx to the Trade tx
@@ -465,7 +464,8 @@ class GoogleUpdate:
 
 
 def set_args():
-    arg_parser = ArgumentParser(description="Process Monarch or JSON input data to obtain Gnucash transactions", prog="python3 parseMonarchCopyRep.py")
+    arg_parser = ArgumentParser(description="Process Monarch or JSON input data to obtain Gnucash transactions",
+                                prog="python3 parseMonarchCopyRep.py")
     # required arguments
     required = arg_parser.add_argument_group("REQUIRED")
     required.add_argument('-i', '--inputfile', required=True, help="path & name of the Monarch or JSON input file")
