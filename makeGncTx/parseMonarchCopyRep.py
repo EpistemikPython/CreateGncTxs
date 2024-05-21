@@ -12,7 +12,7 @@ __author_name__    = "Mark Sattolo"
 __author_email__   = "epistemik@gmail.com"
 __python_version__ = "3.6+"
 __created__ = "2019-06-22"
-__updated__ = "2024-05-12"
+__updated__ = "2024-05-17"
 
 from sys import path, argv, exc_info
 import re
@@ -76,13 +76,13 @@ class ParseMonarchInput:
         """
         Parsing for NEW format txt files, as of ~ 2019-May-31, COPIED from the Monarch web page to a text file,
         as new Monarch pdf's are no longer practical to use -- extracted text just TOO INCONSISTENT...
-        >> add ALL price and trade info to an InvestmentRecord instance
+        >> add all required info to a separate PRICE or TRADE dict
            check EACH line, depending on the current state:
              1: skip if line too short
              2: obtain date
              3: obtain owner
              4: FUND ->
-                  find planID in words; type is PLAN_IDS[word][PLAN_TYPE]
+                  find planID in words: type is PLAN_IDS[word][PLAN_TYPE]
              5: Pass if planID is Joint and owner is Lulu
              6: Prices ->
                   match fund name at [0]:
@@ -144,20 +144,20 @@ class ParseMonarchInput:
                     if len(words) >= 11:
                         fd_cpy = words[0]
                         self._lgr.debug(F"FOUND a NEW Price: {fd_cpy}")
-                        fund = words[-11]
-                        if '-' in fund:
-                            fund = fund.replace('-', ' ')
+                        pfund = words[-11]
+                        if '-' in pfund:
+                            pfund = pfund.replace('-', ' ')
                         else:
-                            raise Exception(F"Did NOT find proper fund name: {fund}!")
+                            raise Exception(F"Did NOT find proper fund name: {pfund}!")
                         bal = words[-9]
                         if '.' not in bal or '$' in bal:
                             raise Exception(F"Did NOT find proper balance: {bal}!")
                         price = words[-8]
                         if '.' not in price or '$' not in price:
                             raise Exception(F"Did NOT find proper price: {price}!")
-                        curr_tx = { DATE:doc_date, DESC:PRICE, FUND_CMPY:fd_cpy, FUND:fund, UNIT_BAL:bal, PRICE:price }
-                        self._input_txs.add_tx(plan_type, PRICE, curr_tx)
-                        self._lgr.debug(F"ADD current Price Tx:\n\t{curr_tx}")
+                        price_info = { DATE:doc_date, DESC:PRICE, FUND_CMPY:fd_cpy, FUND:pfund, UNIT_BAL:bal, PRICE:price }
+                        self._input_txs.add_tx(plan_type, PRICE, price_info)
+                        self._lgr.debug(F"ADD current Price tx:\n\t{price_info}")
                     continue
 
                 # TRADES
@@ -172,8 +172,8 @@ class ParseMonarchInput:
                     fund_code = words[-7]
                     if not fund_code.isnumeric():
                         raise Exception(F"Did NOT find proper Fund code: {fund_code}!")
-                    fund = fund_cpy + " " + fund_code
-                    self._lgr.debug(F"fund is: {fund}")
+                    tfund = fund_cpy + " " + fund_code
+                    self._lgr.debug(F"fund is: {tfund}")
 
                     # have to identify & handle different types
                     tx_type = words[1]
@@ -184,52 +184,47 @@ class ParseMonarchInput:
                         raise Exception(F"Did NOT find proper Description: {desc}!")
 
                     # noinspection PyDictCreation
-                    curr_tx = { TRADE_DATE:tx_date, FUND:fund, TYPE:desc, CMPY:COMPANY_NAME[fund_cpy] }
-                    curr_tx[DESC]  = curr_tx[CMPY] + ": " + desc
-                    curr_tx[UNITS] = words[-1]
-                    if '.' not in curr_tx[UNITS] or '$' in curr_tx[UNITS]:
-                        raise Exception(F"Did NOT find proper Units!: {curr_tx[UNITS]}")
-                    curr_tx[PRICE] = words[-2]
-                    if '.' not in curr_tx[PRICE] or '$' not in curr_tx[PRICE]:
-                        raise Exception(F"Did NOT find proper Price: {curr_tx[PRICE]}!")
-                    curr_tx[NET]   = words[-3]
-                    if '.' not in curr_tx[NET] or '$' not in curr_tx[NET]:
-                        raise Exception(F"Did NOT find proper Net amount: {curr_tx[NET]}!")
-                    curr_tx[GROSS] = words[-4]
-                    if '.' not in curr_tx[GROSS] or '$' not in curr_tx[GROSS]:
-                        raise Exception(F"Did NOT find proper Gross amount: {curr_tx[GROSS]}!")
+                    trade_info = { TRADE_DATE:tx_date, FUND:tfund, TYPE:desc, CMPY:COMPANY_NAME[fund_cpy] }
+                    trade_info[DESC] = trade_info[CMPY] + ": " + desc
+                    trade_info[UNITS] = words[-1]
+                    if '.' not in trade_info[UNITS] or '$' in trade_info[UNITS]:
+                        raise Exception(F"Did NOT find proper Units!: {trade_info[UNITS]}")
+                    trade_info[PRICE] = words[-2]
+                    if '.' not in trade_info[PRICE] or '$' not in trade_info[PRICE]:
+                        raise Exception(F"Did NOT find proper Price: {trade_info[PRICE]}!")
+                    trade_info[NET] = words[-3]
+                    if '.' not in trade_info[NET] or '$' not in trade_info[NET]:
+                        raise Exception(F"Did NOT find proper Net amount: {trade_info[NET]}!")
+                    trade_info[GROSS] = words[-4]
+                    if '.' not in trade_info[GROSS] or '$' not in trade_info[GROSS]:
+                        raise Exception(F"Did NOT find proper Gross amount: {trade_info[GROSS]}!")
                     load = words[-5]
                     if not load.isalpha():
                         raise Exception(F"Did NOT find proper Load: {load}!")
-                    curr_tx[LOAD] = load
+                    trade_info[LOAD] = load
 
-                    self._input_txs.add_tx(plan_type, TRADE, curr_tx)
-                    self._lgr.debug(F"ADD current Trade Tx:\n\t{curr_tx}")
+                    self._input_txs.add_tx(plan_type, TRADE, trade_info)
+                    self._lgr.debug(F"ADD current Trade tx:\n\t{trade_info}")
 
     def get_trade_info(self, mon_tx:dict, plan_type:str, ast_parent:Account, rev_acct:Account) -> (dict,dict):
         """
         Parse a Monarch trade transaction:
           USEFUL to have this intermediate function to obtain a collection of txs with the required Gnucash data
-          and also to ensure that all the matching 'in' and 'out' Switch txs are properly paired up...
-          BEFORE creating the actual Gnucash.Transactions
+          and also to ensure that all the matching 'in' and 'out' Switch txs are properly paired up
+          BEFORE creating the actual Gnucash.Transaction's
             Asset accounts:   use the proper path to find the parent then search for the Fund Code in the descendants
             Revenue accounts: pick the proper account based on owner and plan type
             Amounts:          regex match to Gross and Net then use the match groups
-            date:             convert the date then get day, month and year to form a Gnc date
-            Units:            regex match and concatenate the two groups on either side of decimal point
+            Date:             convert the date then get day, month and year to form a Gnc date
+            Units:            regex match and concatenate the groups on either side of decimal point to create a Gnc Amount
             Description:      use DESC and Fund Company
         :param      mon_tx: Monarch transaction
-        :param   plan_type: plan name from InvestmentRecord
+        :param   plan_type: from investment.InvestmentRecord
         :param  ast_parent: Asset parent account
         :param    rev_acct: Revenue account
         :return one trade tx or both txs of a switch, if available
         """
         self._lgr.debug(F"plan type = {plan_type}, asset parent = {ast_parent.GetName()}")
-
-        # set the regex's needed to match the required groups in each value
-        re_units   = re.compile(r"^(-?)([0-9]{1,5})\.([0-9]{4}).*")
-        # NOTE: re_dollars must match (leading minus sign) OR (amount is in parentheses) to indicate NEGATIVE number
-        re_dollars = re.compile(r"^([-(]?)\$([0-9,]{1,6})\.([0-9]{2}).*(\)?)")
 
         fund_name = mon_tx[FUND]
         asset_acct = self.gnc_session.get_account(fund_name, ast_parent)
@@ -251,13 +246,17 @@ class ParseMonarchInput:
         init_tx[TYPE] = mon_tx[TYPE]
         init_tx[CMPY] = mon_tx[CMPY]
 
-        # get the gross dollar value of the tx
+        # NOTE: re_dollars will match (leading minus sign) OR (amount is in parentheses) if a NEGATIVE number
+        re_dollars = re.compile(r'([-(]?)\$([0-9,]{1,6})\.([0-9]{2}).*')
+
+        # get the GROSS dollar value of the tx
         re_match = re.match(re_dollars, mon_tx[GROSS])
         if re_match:
+            self._lgr.info(F"gross dollars = {re_match.groups()}")
             str_gross = re_match.group(2) + re_match.group(3)
             # remove possible comma
             gross_amt = int(str_gross.replace(',', ''))
-            # if match group 1 is not empty, amount is negative
+            # if match group 1 is NOT empty, amount is NEGATIVE
             if re_match.group(1):
                 gross_amt *= -1
             self._lgr.debug(F"gross amount = {gross_amt}")
@@ -265,13 +264,14 @@ class ParseMonarchInput:
         else:
             raise Exception(F"PROBLEM: gross amount DID NOT match with value: {mon_tx[GROSS]}!")
 
-        # get the net dollar value of the tx
+        # get the NET dollar value of the tx
         re_match = re.match(re_dollars, mon_tx[NET])
         if re_match:
+            self._lgr.info(F"net dollars = {re_match.groups()}")
             str_net = re_match.group(2) + re_match.group(3)
             # remove possible comma
             net_amount = int(str_net.replace(',', ''))
-            # if match group 1 is not empty, amount is negative
+            # if match group 1 is NOT empty, amount is negative
             if re_match.group(1):
                 net_amount *= -1
             self._lgr.debug(F"net_amount = {net_amount}")
@@ -279,14 +279,14 @@ class ParseMonarchInput:
         else:
             raise Exception(F"PROBLEM: net amount DID NOT match with value: {mon_tx[NET]}!")
 
-        # get the units of the tx
-        re_match = re.match(re_units, mon_tx[UNITS])
+        # get the number of units for the tx
+        re_match = re.match(r'(-?)([0-9]{1,5})\.([0-9]{4}).*', mon_tx[UNITS])
         if re_match:
+            self._lgr.info(F"tx units = {re_match.groups()}")
             units = int(re_match.group(2) + re_match.group(3))
-            # if match group 1 is not empty, units is negative
+            # if match group 1 is NOT empty, units is negative
             if re_match.group(1):
                 units *= -1
-            self._lgr.debug(F"units = {units}")
             init_tx[UNITS] = units
         else:
             raise Exception(F"PROBLEM: units DID NOT match with value: {mon_tx[UNITS]}!")
@@ -326,7 +326,7 @@ class ParseMonarchInput:
         """
         Obtain EACH Monarch trade as a transaction item, or pair of transactions where required, and forward to Gnucash processing.
         :param     mon_tx: Monarch transaction information
-        :param  plan_type: plan names from Configuration.InvestmentRecord
+        :param  plan_type: from investment.InvestmentRecord
         :param ast_parent: Asset parent account
         :param    p_owner: str name
         """
@@ -424,6 +424,7 @@ class ParseMonarchInput:
 
 
 class GoogleUpdate:
+    """Keep a record of the transactions in my Google sheet."""
     def __init__(self, infile:str, domain:str, gncfile:str, r_lgr:lg.Logger):
         self._infile = infile
         self._domain = domain
