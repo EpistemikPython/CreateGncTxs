@@ -12,7 +12,7 @@ __author_name__    = "Mark Sattolo"
 __author_email__   = "epistemik@gmail.com"
 __python_version__ = "3.6+"
 __created__ = "2019-06-22"
-__updated__ = "2024-05-17"
+__updated__ = "2024-07-05"
 
 from sys import path, argv, exc_info
 import re
@@ -20,7 +20,7 @@ import json
 from argparse import ArgumentParser
 path.append("/home/marksa/git/Python/utils")
 from mhsUtils import *
-import mhsLogging
+from mhsLogging import MhsLogger
 path.append("/home/marksa/git/Python/gnucash/common")
 from gncUtils import *
 path.append("/home/marksa/git/Python/google/sheets")
@@ -38,11 +38,11 @@ base_run_file = get_base_filename(__file__)
 
 
 class ParseMonarchInput:
-    def __init__(self, r_infile:str, r_lgr:lg.Logger):
-        self.in_file = r_infile
-        self._input_txs = InvestmentRecord(r_lgr)
-        self._gnucash_txs = InvestmentRecord(r_lgr)
-        self._lgr = r_lgr
+    def __init__(self, p_infile:str, p_lgr:lg.Logger):
+        self.in_file = p_infile
+        self._input_txs = InvestmentRecord(p_lgr)
+        self._gnucash_txs = InvestmentRecord(p_lgr)
+        self._lgr = p_lgr
 
     def get_input_record(self) -> InvestmentRecord:
         return self._input_txs
@@ -425,11 +425,11 @@ class ParseMonarchInput:
 
 class GoogleUpdate:
     """Keep a record of the transactions in my Google sheet."""
-    def __init__(self, infile:str, domain:str, gncfile:str, r_lgr:lg.Logger):
+    def __init__(self, infile:str, domain:str, gncfile:str, p_lgr:lg.Logger):
         self._infile = infile
         self._domain = domain
         self._gncfile = gncfile
-        self._lgr = r_lgr
+        self._lgr = p_lgr
         self._lgr.info(F"Start {self.__class__.__name__} @ {get_current_time()}")
 
         self._sheet = MhsSheetAccess(self._lgr)
@@ -475,7 +475,7 @@ def set_args():
     gnc_parser = subparsers.add_parser("gnc", help="Insert the parsed trade and/or price transactions to a Gnucash file")
     gnc_parser.add_argument('-g', '--gncfile', required=True, help="path & name of the Gnucash file")
     gnc_parser.add_argument('-t', '--type', required=True, choices=[TRADE, PRICE, BOTH],
-                            help="type of transaction to record: {} or {} or {}".format(TRADE, PRICE, BOTH))
+                            help=f"type of transaction to record: {TRADE} or {PRICE} or {BOTH}")
     # optional arguments
     arg_parser.add_argument('-l', '--level', type=int, default=lg.INFO, help="set LEVEL of logging output")
     arg_parser.add_argument('--json',  action="store_true", help="Write the parsed Monarch data to a JSON file")
@@ -509,7 +509,7 @@ def process_input_parameters(argx:list):
 def main_monarch_input(args:list) -> list:
     in_file, save_monarch, level, mode, gnc_file, domain, parse_info = process_input_parameters(args)
 
-    log_control = mhsLogging.MhsLogger(base_run_file, con_level = level, suffix = "gncout")
+    log_control = MhsLogger(base_run_file, con_level = level, suffix = "gncout")
     log_control.log_list(parse_info)
     lgr = log_control.get_logger()
 
@@ -520,13 +520,10 @@ def main_monarch_input(args:list) -> list:
     basename, ftype = get_base_fileparts(in_file)
     ftype = ftype[1:]
 
-    updater = GoogleUpdate(in_file, domain, gnc_file, lgr)
-
     gnc_session = None
-    parser = ParseMonarchInput(in_file, lgr)
     try:
-        # parse an external Monarch COPIED report file
-        # OR a JSON file with previously saved txs and/or prices
+        # parse an external Monarch COPIED report file OR a JSON file with previously saved txs and/or prices
+        parser = ParseMonarchInput(in_file, lgr)
         parser.parse_input_file(ftype)
 
         if mode == SEND:
@@ -537,7 +534,7 @@ def main_monarch_input(args:list) -> list:
             parser.insert_txs_to_gnucash_file(gnc_session)
 
             # keep a record of the update
-            updater.send_google_data()
+            GoogleUpdate(in_file, domain, gnc_file, lgr).send_google_data()
 
         msg = log_control.get_saved_info()
 
@@ -546,13 +543,13 @@ def main_monarch_input(args:list) -> list:
             lgr.info(F"Created Monarch JSON file: {out_file}")
 
     except Exception as ex:
-        ex_msg = repr(ex)
-        lgr.exception(ex_msg)
-        msg = [ex_msg]
+        lgr.exception(repr(ex))
+        raise ex
+    finally:
         if gnc_session:
-            gnc_session.end_session(False)
+            gnc_session.check_end_session(locals())
 
-    lgr.warning(">>> PROGRAM ENDED.")
+    lgr.info(">>> PROGRAM ENDED.")
     return msg
 
 
