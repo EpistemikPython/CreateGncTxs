@@ -9,7 +9,7 @@ __author_name__    = "Mark Sattolo"
 __author_email__   = "epistemik@gmail.com"
 __python_version__ = "3.6+"
 __created__ = "2024-07-02"
-__updated__ = "2024-07-02"
+__updated__ = "2024-07-05"
 
 from PySide6.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QGroupBox, QDialog, QFileDialog, QLabel,
                                QPushButton, QFormLayout, QDialogButtonBox, QTextEdit, QCheckBox, QInputDialog)
@@ -26,7 +26,7 @@ SCRIPT_LABEL:str = MON + ' ' + INPUT
 
 # noinspection PyAttributeOutsideInit
 class MonarchGnucashUI(QDialog):
-    """Create and run a UI to conveniently specify parameters and run the parseMonarchCopyRep program."""
+    """Use a PySide6 UI to conveniently specify parameters and run the parseMonarchCopyRep program."""
     def __init__(self):
         super().__init__()
         self.title = "Monarch Info to Gnucash UI"
@@ -36,9 +36,10 @@ class MonarchGnucashUI(QDialog):
         self.height = 800
         self.mon_file = None
         self.gnc_file = None
+        self._lgr = log_control.get_logger()
 
         self.init_ui()
-        ui_lgr.info(F"{self.title} Runtime = {dt.now().strftime(RUN_DATETIME_FORMAT)}\n")
+        self._lgr.info(F"{self.title} Runtime = {dt.now().strftime(RUN_DATETIME_FORMAT)}\n")
 
     # TODO: better layout of widgets
     def init_ui(self):
@@ -58,13 +59,11 @@ class MonarchGnucashUI(QDialog):
         button_box.rejected.connect(self.reject)
 
         qvb_layout = QVBoxLayout()
-        # ?? none of the Alignment flags seem to give the same widget appearance as just leaving out the flag...
         qvb_layout.addWidget(self.gb_main)
         qvb_layout.addWidget(self.response_box)
-        qvb_layout.addWidget(button_box, alignment=Qt.AlignAbsolute)
+        qvb_layout.addWidget(button_box, alignment = Qt.AlignAbsolute)
         self.setLayout(qvb_layout)
 
-    # noinspection PyUnresolvedReferences
     def create_group_box(self):
         self.gb_main = QGroupBox("Parameters:")
         layout = QFormLayout()
@@ -92,6 +91,7 @@ class MonarchGnucashUI(QDialog):
         layout.addRow( QLabel("Logging:"), self.pb_logging )
 
         self.exe_btn = QPushButton("Go!")
+        self.exe_btn.setStyleSheet("QPushButton {font-weight: bold; color: red; background-color: yellow;}")
         self.exe_btn.clicked.connect(self.button_click)
         layout.addRow( QLabel("EXECUTE:"), self.exe_btn )
 
@@ -110,10 +110,7 @@ class MonarchGnucashUI(QDialog):
         self.gnc_file_btn.clicked.connect( partial(self.open_file_name_dialog, GNC) )
 
     def open_file_name_dialog(self, label:str):
-        f_option = QFileDialog.Option.DontUseNativeDialog
-        f_caption = F"Get {label} Files"
-
-        ui_lgr.info(label)
+        self._lgr.info(label)
         if label == INPUT:
             f_filter = F"{INPUT} (*.monarch *.json);;All Files (*)"
             f_dir = osp.join(BASE_PYTHON_FOLDER, "gnucash" + osp.sep + "CreateGncTxs" + osp.sep + "makeGncTx" + osp.sep)
@@ -121,10 +118,11 @@ class MonarchGnucashUI(QDialog):
             f_filter = F"{GNC} (*.gnc *.gnucash);;All Files (*)"
             f_dir = osp.join(BASE_GNUCASH_FOLDER, "bak-files" + osp.sep)
 
-        file_name, _ = QFileDialog.getOpenFileName(self, caption=f_caption, filter=f_filter, directory=f_dir, options=f_option)
+        file_name, _ = QFileDialog.getOpenFileName(self, caption = f"Get {label} Files", filter = f_filter, dir = f_dir,
+                                                   options = QFileDialog.Option.DontUseNativeDialog)
         if file_name:
-            ui_lgr.info(F"\nFile selected: {file_name}")
-            display_name = file_name.split('/')[-1]
+            self._lgr.info(F"\nFile selected: {file_name}")
+            display_name = file_name.split(osp.pathsep)[-1]
             if label == INPUT: # either a monarch or json file
                 self.mon_file = file_name
                 self.mon_file_btn.setText(display_name)
@@ -142,15 +140,14 @@ class MonarchGnucashUI(QDialog):
                 self.gnc_file_btn.setText(self.gnc_btn_title)
 
     def get_log_level(self):
-        num, ok = QInputDialog.getInt(self, "Logging Level", "Enter a value (0-100)", value=self.log_level, min=0, max=100)
+        num, ok = QInputDialog.getInt(self, "Logging Level", "Enter a value (0-100)", value=self.log_level, minValue=0, maxValue=100)
         if ok:
             self.log_level = num
-            ui_lgr.info(F"logging level changed to {num}.")
+            self._lgr.info(F"logging level changed to {num}.")
 
     def button_click(self):
         """Prepare the parameters string and send to main function of module parseMonarchCopyRep."""
-
-        ui_lgr.info(F"Clicked '{self.exe_btn.text()}'.")
+        self._lgr.info(F"Clicked '{self.exe_btn.text()}'.")
 
         # must have an input file
         if self.mon_file is None:
@@ -171,30 +168,39 @@ class MonarchGnucashUI(QDialog):
             cl_params.append('-g' + self.gnc_file)
             cl_params.append('-t' + mode)
 
-        ui_lgr.info(F"Parameters = \n{json.dumps(cl_params, indent=4)}")
-
+        self._lgr.info(F"Parameters = \n{json.dumps(cl_params, indent=4)}\nCalling main_monarch_input...")
         try:
-            ui_lgr.info("Calling main_monarch_input...")
             response = main_monarch_input(cl_params)
             reply = {"response": response}
         except Exception as bcce:
             msg = repr(bcce)
-            ui_lgr.error(msg)
-            reply = {"EXCEPTION" : msg}
+            self._lgr.error(msg)
+            self.response_box.append(f"\nEXCEPTION : {msg}\n")
+            raise bcce
 
         self.response_box.setText( json.dumps(reply, indent=4) )
 # END class MonarchGnucashUI
 
 
-def run_ui():
-    app = QApplication(argv)
-    dialog = MonarchGnucashUI()
-    dialog.show()
-    app.exec_()
-
-
 if __name__ == "__main__":
-    lg_ctrl = mhsLogging.MhsLogger(MonarchGnucashUI.__name__, suffix = "gncout")
-    ui_lgr = lg_ctrl.get_logger()
-    run_ui()
-    exit()
+    log_control = MhsLogger(MonarchGnucashUI.__name__, suffix = "gncout")
+    dialog = None
+    app = None
+    code = 0
+    try:
+        app = QApplication(argv)
+        dialog = MonarchGnucashUI()
+        dialog.show()
+        app.exec()
+    except KeyboardInterrupt:
+        log_control.show(">> User interruption.")
+        code = 13
+    except Exception as ex:
+        log_control.show(F"Problem: {repr(ex)}.")
+        code = 66
+    finally:
+        if dialog:
+            dialog.close()
+        if app:
+            app.exit(code)
+    exit(code)
