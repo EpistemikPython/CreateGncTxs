@@ -2,9 +2,9 @@
 # coding=utf-8
 #
 # parseMonarchCopyRep.py -- parse a file with COPIED Monarch Report text,
-#                           assemble and save the information as transaction and price parameters in an InvestmentRecord,
-#                           OR use a JSON file with previously saved Monarch tx/price data,
-#                           then optionally write the transactions/prices to a specified Gnucash file.
+#                           assemble and save the information as transaction and price parameters in an InvestmentRecord
+#                           OR use a JSON file with previously saved Monarch tx/price data.
+#                           THEN optionally write the transactions/prices to a specified Gnucash file
 #
 # Copyright (c) 2024 Mark Sattolo <epistemik@gmail.com>
 
@@ -12,9 +12,9 @@ __author_name__    = "Mark Sattolo"
 __author_email__   = "epistemik@gmail.com"
 __python_version__ = "3.6+"
 __created__ = "2019-06-22"
-__updated__ = "2024-07-05"
+__updated__ = "2024-07-13"
 
-from sys import path, argv, exc_info
+from sys import path, argv
 import re
 import json
 from argparse import ArgumentParser
@@ -345,8 +345,8 @@ class ParseMonarchInput:
             self.gnc_session.create_trade_tx(tx1, tx2)
 
         except Exception as pmte:
-            self._lgr.error(F"EXCEPTION: {repr(pmte)}!\n")
-            raise pmte.with_traceback( exc_info()[2] )
+            self._lgr.exception(pmte)
+            raise pmte
 
     def add_balance_to_trade(self):
         """
@@ -390,12 +390,12 @@ class ParseMonarchInput:
 
             self.gnc_session.begin_session()
             self.create_gnucash_info(owner)
-            self.gnc_session.end_session()
+            self.gnc_session.end_session(True)
 
         except Exception as gfe:
-            self._lgr.error(F"EXCEPTION: {repr(gfe)}!")
+            self._lgr.exception(gfe)
             self.gnc_session.check_end_session(locals())
-            raise gfe.with_traceback( exc_info()[2] )
+            raise gfe
 
     def create_gnucash_info(self, p_owner:str):
         """Process each transaction from the Monarch input file to get the required Gnucash information."""
@@ -418,7 +418,7 @@ class ParseMonarchInput:
                         self.gnc_session.create_price(mon_tx, asset_parent)
 
         except Exception as gie:
-            self._lgr.error(F"EXCEPTION: {repr(gie)}!")
+            self._lgr.exception(gie)
             raise gie
 # END class ParseMonarchInput
 
@@ -491,13 +491,13 @@ def process_input_parameters(argx:list):
     info.append(F"Input file = {args.inputfile}")
 
     mode = TEST
-    domain = BOTH
+    domain = None
     gnc_file = None
     if "gncfile" in args:
         if not osp.isfile(args.gncfile):
-            raise Exception(F"File path '{args.gncfile}' does not exist. Exiting...")
+            raise Exception(F"File path '{args.gncfile}' is NOT valid. Exiting...")
         gnc_file = args.gncfile
-        info.append(F"writing to Gnucash file = {gnc_file}")
+        info.append(F"Writing to Gnucash file = {gnc_file}")
         mode = SEND
         domain = args.type
         info.append(F"Inserting '{domain}' transaction types to Gnucash.")
@@ -535,6 +535,8 @@ def main_monarch_input(args:list) -> list:
 
             # keep a record of the update
             GoogleUpdate(in_file, domain, gnc_file, lgr).send_google_data()
+        else:
+            basename += "_TEST"
 
         msg = log_control.get_saved_info()
 
@@ -542,9 +544,9 @@ def main_monarch_input(args:list) -> list:
             out_file = save_to_json(basename, parser.get_input_record().to_json(), get_current_time(FILE_DATETIME_FORMAT))
             lgr.info(F"Created Monarch JSON file: {out_file}")
 
-    except Exception as ex:
-        lgr.exception(repr(ex))
-        raise ex
+    except Exception as monex:
+        lgr.exception(monex)
+        raise monex
     finally:
         if gnc_session:
             gnc_session.check_end_session(locals())
@@ -554,5 +556,5 @@ def main_monarch_input(args:list) -> list:
 
 
 if __name__ == "__main__":
-    main_monarch_input(argv[1:])
+    print( main_monarch_input(argv[1:]) )
     exit()

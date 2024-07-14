@@ -9,7 +9,7 @@ __author_name__    = "Mark Sattolo"
 __author_email__   = "epistemik@gmail.com"
 __python_version__ = "3.6+"
 __created__ = "2024-07-02"
-__updated__ = "2024-07-05"
+__updated__ = "2024-07-13"
 
 from PySide6.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QGroupBox, QDialog, QFileDialog, QLabel,
                                QPushButton, QFormLayout, QDialogButtonBox, QTextEdit, QCheckBox, QInputDialog)
@@ -173,9 +173,8 @@ class MonarchGnucashUI(QDialog):
             response = main_monarch_input(cl_params)
             reply = {"response": response}
         except Exception as bcce:
-            msg = repr(bcce)
-            self._lgr.error(msg)
-            self.response_box.append(f"\nEXCEPTION : {msg}\n")
+            self.response_box.append(f"\nEXCEPTION:\n{repr(bcce)}\n")
+            self._lgr.exception(bcce)
             raise bcce
 
         self.response_box.setText( json.dumps(reply, indent=4) )
@@ -195,8 +194,8 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         log_control.show(">> User interruption.")
         code = 13
-    except Exception as ex:
-        log_control.show(F"Problem: {repr(ex)}.")
+    except Exception as mex:
+        log_control.show(F"Problem: {repr(mex)}.")
         code = 66
     finally:
         if dialog:
