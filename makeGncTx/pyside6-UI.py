@@ -9,7 +9,7 @@ __author_name__    = "Mark Sattolo"
 __author_email__   = "epistemik@gmail.com"
 __python_version__ = "3.6+"
 __created__ = "2024-07-02"
-__updated__ = "2024-07-13"
+__updated__ = "2024-09-05"
 
 from PySide6.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QGroupBox, QDialog, QFileDialog, QLabel,
                                QPushButton, QFormLayout, QDialogButtonBox, QTextEdit, QCheckBox, QInputDialog)
@@ -45,7 +45,7 @@ class MonarchGnucashUI(QDialog):
     def init_ui(self):
         self.log_level = lg.INFO
         self.setWindowTitle(self.title)
-        self.setWindowFlags(Qt.WindowSystemMenuHint | Qt.WindowTitleHint)
+        self.setWindowFlags(Qt.WindowType.WindowSystemMenuHint | Qt.WindowType.WindowTitleHint)
         self.setGeometry(self.left, self.top, self.width, self.height)
         self.create_group_box()
 
@@ -61,7 +61,7 @@ class MonarchGnucashUI(QDialog):
         qvb_layout = QVBoxLayout()
         qvb_layout.addWidget(self.gb_main)
         qvb_layout.addWidget(self.response_box)
-        qvb_layout.addWidget(button_box, alignment = Qt.AlignAbsolute)
+        qvb_layout.addWidget(button_box, alignment = Qt.AlignmentFlag.AlignAbsolute)
         self.setLayout(qvb_layout)
 
     def create_group_box(self):
@@ -192,10 +192,13 @@ if __name__ == "__main__":
         dialog.show()
         app.exec()
     except KeyboardInterrupt:
-        log_control.show(">> User interruption.")
+        log_control.exception(">> User interruption.")
+        code = 13
+    except ValueError:
+        log_control.exception(">> Value Error.")
         code = 13
     except Exception as mex:
-        log_control.show(F"Problem: {repr(mex)}.")
+        log_control.exception(F"Problem: {repr(mex)}.")
         code = 66
     finally:
         if dialog:
