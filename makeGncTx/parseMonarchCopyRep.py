@@ -12,7 +12,7 @@ __author_name__    = "Mark Sattolo"
 __author_email__   = "epistemik@gmail.com"
 __python_version__ = "3.6+"
 __created__ = "2019-06-22"
-__updated__ = "2024-07-13"
+__updated__ = "2024-09-17"
 
 from sys import path, argv
 import re
@@ -33,8 +33,6 @@ RECORD_TIME_COL      = 'B'
 RECORD_INPUTFILE_COL = 'C'
 RECORD_MODE_COL      = 'D'
 RECORD_GNCFILE_COL   = 'E'
-
-base_run_file = get_base_filename(__file__)
 
 
 class ParseMonarchInput:
@@ -121,7 +119,7 @@ class ParseMonarchInput:
                     if words[0] == OPEN:
                         owner = MON_LULU
                     self._input_txs.set_owner(owner)
-                    self._lgr.debug(F"\n\t\u0022Current owner: {owner}\u0022")
+                    self._lgr.info(F"\n\t\u0022Current owner: {owner}\u0022")
                     mon_state = STATE_SEARCH
                     continue
 
@@ -509,12 +507,9 @@ def process_input_parameters(argx:list):
 def main_monarch_input(args:list) -> list:
     in_file, save_monarch, level, mode, gnc_file, domain, parse_info = process_input_parameters(args)
 
-    log_control = MhsLogger(base_run_file, con_level = level, suffix = "gncout")
+    log_control = MhsLogger( get_base_filename(__file__), con_level = level, suffix = "gncout" )
     log_control.log_list(parse_info)
     lgr = log_control.get_logger()
-
-    log_control.show(F"Runtime = {get_current_time()}")
-    lgr.debug( repr(lgr.handlers) )
 
     # get name parts from the input file path
     basename, ftype = get_base_fileparts(in_file)
