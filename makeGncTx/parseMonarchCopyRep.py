@@ -12,7 +12,7 @@ __author_name__    = "Mark Sattolo"
 __author_email__   = "epistemik@gmail.com"
 __python_version__ = "3.6+"
 __created__ = "2019-06-22"
-__updated__ = "2024-09-17"
+__updated__ = "2024-09-23"
 
 from sys import path, argv
 import re
@@ -35,10 +35,12 @@ RECORD_MODE_COL      = 'D'
 RECORD_GNCFILE_COL   = 'E'
 
 
+# noinspection PyAttributeOutsideInit
 class ParseMonarchInput:
-    def __init__(self, p_infile:str, p_lgr:lg.Logger):
-        self.in_file = p_infile
+    def __init__(self, p_lgr:lg.Logger):
+        # store the information from the input file
         self._input_txs = InvestmentRecord(p_lgr)
+        # temp storage of txs while looking to match pairs
         self._gnucash_txs = InvestmentRecord(p_lgr)
         self._lgr = p_lgr
 
@@ -48,18 +50,23 @@ class ParseMonarchInput:
     def get_gnucash_record(self) -> InvestmentRecord:
         return self._gnucash_txs
 
-    def parse_input_file(self, ftype:str):
+    def parse_file(self, p_file:str):
+        if not osp.isfile(p_file):
+            raise Exception(f"'{p_file}' is NOT a valid file!")
+
+        self.in_file = p_file
         self._input_txs.set_filename(self.in_file)
 
+        ftype = get_filetype(self.in_file)[1:]
         if ftype == MON or ftype == MON.lower():
-            self._lgr.info(F"Have a {MON.upper()} type input file.")
+            self._lgr.info(f"Have a {MON.upper()} type input file.")
             self.parse_monarch_info()
             self.add_balance_to_trade()
         elif ftype == JSON_LABEL:
-            self._lgr.info(F"Have a {JSON_LABEL.upper()} type input file.")
+            self._lgr.info(f"Have a {JSON_LABEL.upper()} type input file.")
             self.parse_json_info()
         else:
-            raise ValueError(F"Improper file type: {ftype}")
+            raise ValueError(f"Improper file type: {ftype}")
 
     def parse_json_info(self):
         """Parse the json file and copy the data to self._input_txs."""
@@ -518,8 +525,8 @@ def main_monarch_input(args:list) -> list:
     gnc_session = None
     try:
         # parse an external Monarch COPIED report file OR a JSON file with previously saved txs and/or prices
-        parser = ParseMonarchInput(in_file, lgr)
-        parser.parse_input_file(ftype)
+        parser = ParseMonarchInput(lgr)
+        parser.parse_file(in_file)
 
         if mode == SEND:
             # add gnc file name to log file name
