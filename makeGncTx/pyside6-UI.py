@@ -1,7 +1,8 @@
 ###############################################################################################################################
 # coding=utf-8
 #
-# pyside6-UI.py -- use a PySide6 UI to select the input files and execution options
+# pyside6-UI.py
+#   -- use a PySide6 UI to select the input files and execution options
 #
 # Copyright (c) 2024 Mark Sattolo <epistemik@gmail.com>
 
@@ -9,7 +10,7 @@ __author_name__    = "Mark Sattolo"
 __author_email__   = "epistemik@gmail.com"
 __python_version__ = "3.6+"
 __created__ = "2024-07-02"
-__updated__ = "2024-09-05"
+__updated__ = "2024-09-23"
 
 from PySide6.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QGroupBox, QDialog, QFileDialog, QLabel,
                                QPushButton, QFormLayout, QDialogButtonBox, QTextEdit, QCheckBox, QInputDialog)
@@ -30,16 +31,16 @@ class MonarchGnucashUI(QDialog):
     def __init__(self):
         super().__init__()
         self.title = "Monarch Info to Gnucash UI"
-        self.left = 40
-        self.top  = 160
-        self.width  = 720
+        self.left = 42
+        self.top  = 64
+        self.width  = 660
         self.height = 800
         self.mon_file = None
         self.gnc_file = None
         self._lgr = log_control.get_logger()
 
         self.init_ui()
-        self._lgr.info(F"{self.title} Runtime = {dt.now().strftime(RUN_DATETIME_FORMAT)}\n")
+        self._lgr.info(f"{self.title} Runtime = {dt.now().strftime(RUN_DATETIME_FORMAT)}\n")
 
     # TODO: better layout of widgets
     def init_ui(self):
