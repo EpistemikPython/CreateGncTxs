@@ -10,9 +10,9 @@
 
 __author_name__    = "Mark Sattolo"
 __author_email__   = "epistemik@gmail.com"
-__python_version__ = "3.6+"
+__python_version__ = "3.9+"
 __created__ = "2019-06-22"
-__updated__ = "2024-09-23"
+__updated__ = "2024-10-05"
 
 from sys import path, argv
 import re
@@ -336,22 +336,17 @@ class ParseMonarchInput:
         :param    p_owner: str name
         """
         self._lgr.debug(F"plan type = {plan_type}, asset parent = {ast_parent.GetName()}, owner = {p_owner}")
-        try:
-            rev_acct = self.gnc_session.get_revenue_account(plan_type, p_owner)
+        rev_acct = self.gnc_session.get_revenue_account(plan_type, p_owner)
 
-            # get all the tx required information from the Monarch json
-            tx1, tx2 = self.get_trade_info(mon_tx, plan_type, ast_parent, rev_acct)
+        # get all the tx required information from the Monarch json
+        tx1, tx2 = self.get_trade_info(mon_tx, plan_type, ast_parent, rev_acct)
 
-            # just return if there is a matching tx but we don't have it yet
-            if tx1[TYPE] in PAIRED_TYPES and tx2 is None:
-                return
+        # just return if there is a matching tx but we don't have it yet
+        if tx1[TYPE] in PAIRED_TYPES and tx2 is None:
+            return
 
-            # use the Gnucash API to create Transactions and save to a Gnucash file
-            self.gnc_session.create_trade_tx(tx1, tx2)
-
-        except Exception as pmte:
-            self._lgr.exception(pmte)
-            raise pmte
+        # use the Gnucash API to create Transactions and save to a Gnucash file
+        self.gnc_session.create_trade_tx(tx1, tx2)
 
     def add_balance_to_trade(self):
         """
@@ -389,42 +384,31 @@ class ParseMonarchInput:
         """
         self._lgr.info(get_current_time())
         self.gnc_session = p_gncs
-        try:
-            owner = self._input_txs.get_owner()
-            self._lgr.debug(F"Owner = {owner}")
+        owner = self._input_txs.get_owner()
+        self._lgr.debug(F"Owner = {owner}")
 
-            self.gnc_session.begin_session()
-            self.create_gnucash_info(owner)
-            self.gnc_session.end_session(True)
-
-        except Exception as gfe:
-            self._lgr.exception(gfe)
-            self.gnc_session.check_end_session(locals())
-            raise gfe
+        self.gnc_session.begin_session()
+        self.create_gnucash_info(owner)
+        self.gnc_session.end_session(True)
 
     def create_gnucash_info(self, p_owner:str):
         """Process each transaction from the Monarch input file to get the required Gnucash information."""
         domain = self.gnc_session.get_domain()
         plans = self._input_txs.get_data()
-        try:
-            for plan_type in plans:
-                self._lgr.debug(F"\n\n\t\t\u0022Plan type = {plan_type}\u0022")
+        for plan_type in plans:
+            self._lgr.debug(F"\n\n\t\t\u0022Plan type = {plan_type}\u0022")
 
-                asset_parent = self.gnc_session.get_asset_account(plan_type, p_owner)
-                self._lgr.debug(F"create_gnucash_info(): asset parent = {asset_parent.GetName()}")
+            asset_parent = self.gnc_session.get_asset_account(plan_type, p_owner)
+            self._lgr.debug(F"create_gnucash_info(): asset parent = {asset_parent.GetName()}")
 
-                if domain in (TRADE,BOTH):
-                    # TODO: DO NOT commit txs unless ALL txs are good for this monarch report?
-                    for mon_tx in plans[plan_type][TRADE]:
-                        self.process_monarch_trades(mon_tx, plan_type, asset_parent, p_owner)
+            if domain in (TRADE,BOTH):
+                # TODO: DO NOT commit txs unless ALL txs are good for this monarch report?
+                for mon_tx in plans[plan_type][TRADE]:
+                    self.process_monarch_trades(mon_tx, plan_type, asset_parent, p_owner)
 
-                if domain in (PRICE,BOTH):
-                    for mon_tx in plans[plan_type][PRICE]:
-                        self.gnc_session.create_price(mon_tx, asset_parent)
-
-        except Exception as gie:
-            self._lgr.exception(gie)
-            raise gie
+            if domain in (PRICE,BOTH):
+                for mon_tx in plans[plan_type][PRICE]:
+                    self.gnc_session.create_price(mon_tx, asset_parent)
 # END class ParseMonarchInput
 
 
