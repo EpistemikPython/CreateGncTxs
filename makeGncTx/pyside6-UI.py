@@ -8,12 +8,12 @@
 
 __author_name__    = "Mark Sattolo"
 __author_email__   = "epistemik@gmail.com"
-__python_version__ = "3.6+"
+__python_version__ = "3.9+"
 __created__ = "2024-07-02"
-__updated__ = "2024-09-23"
+__updated__ = "2024-10-06"
 
-from PySide6.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QGroupBox, QDialog, QFileDialog, QLabel,
-                               QPushButton, QFormLayout, QDialogButtonBox, QTextEdit, QCheckBox, QInputDialog)
+from PySide6.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QGroupBox, QDialog, QFileDialog, QLabel, QTextEdit,
+                               QPushButton, QFormLayout, QDialogButtonBox, QCheckBox, QInputDialog, QMessageBox)
 from PySide6.QtCore import Qt
 from functools import partial
 from parseMonarchCopyRep import *
@@ -150,9 +150,11 @@ class MonarchGnucashUI(QDialog):
         """Prepare the parameters string and send to main function of module parseMonarchCopyRep."""
         self._lgr.info(F"Clicked '{self.exe_btn.text()}'.")
 
-        # must have an input file
         if self.mon_file is None:
-            self.response_box.append(">>> MUST select a Monarch Input File!")
+            msg_box = QMessageBox()
+            msg_box.setIcon(QMessageBox.Icon.Warning)
+            msg_box.setText("MUST select a Monarch Input File!")
+            msg_box.exec()
             return
 
         cl_params = ['-i' + self.mon_file, '-l' + str(self.log_level)]
@@ -163,7 +165,10 @@ class MonarchGnucashUI(QDialog):
         mode = self.cb_mode.currentText()
         if mode != TEST:
             if self.gnc_file is None:
-                self.response_box.append(">>> MUST select a Gnucash File!")
+                msg_box = QMessageBox()
+                msg_box.setIcon(QMessageBox.Icon.Warning)
+                msg_box.setText("MUST select a Gnucash File!")
+                msg_box.exec()
                 return
             cl_params.append('gnc')
             cl_params.append('-g' + self.gnc_file)
@@ -175,10 +180,9 @@ class MonarchGnucashUI(QDialog):
             reply = {"response": response}
         except Exception as bcce:
             self.response_box.append(f"\nEXCEPTION:\n{repr(bcce)}\n")
-            self._lgr.exception(bcce)
             raise bcce
 
-        self.response_box.setText( json.dumps(reply, indent=4) )
+        self.response_box.append( json.dumps(reply, indent=4) )
 # END class MonarchGnucashUI
 
 
@@ -192,14 +196,14 @@ if __name__ == "__main__":
         dialog = MonarchGnucashUI()
         dialog.show()
         app.exec()
-    except KeyboardInterrupt:
-        log_control.exception(">> User interruption.")
+    except KeyboardInterrupt as mki:
+        log_control.exception(mki)
         code = 13
-    except ValueError:
-        log_control.exception(">> Value Error.")
+    except ValueError as mve:
+        log_control.exception(mve)
         code = 13
     except Exception as mex:
-        log_control.exception(F"Problem: {repr(mex)}.")
+        log_control.exception(mex)
         code = 66
     finally:
         if dialog:
