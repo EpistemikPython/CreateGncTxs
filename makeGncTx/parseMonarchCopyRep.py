@@ -12,7 +12,7 @@ __author_name__    = "Mark Sattolo"
 __author_email__   = "epistemik@gmail.com"
 __python_version__ = "3.9+"
 __created__ = "2019-06-22"
-__updated__ = "2024-10-05"
+__updated__ = "2024-10-24"
 
 from sys import path, argv
 import re
@@ -20,7 +20,8 @@ import json
 from argparse import ArgumentParser
 path.append("/home/marksa/git/Python/utils")
 from mhsUtils import *
-from mhsLogging import MhsLogger
+from mhsLogging import MhsLogger, DEFAULT_LOG_LEVEL
+
 path.append("/home/marksa/git/Python/gnucash/common")
 from gncUtils import *
 path.append("/home/marksa/git/Python/google/sheets")
@@ -376,7 +377,6 @@ class ParseMonarchInput:
                     plan[TRADE][latest_indx][UNIT_BAL] = tx[UNIT_BAL]
                     plan[TRADE][latest_indx][NOTES] = F"{tx[FUND]} Balance = {tx[UNIT_BAL]}"
 
-    # noinspection PyAttributeOutsideInit
     def insert_txs_to_gnucash_file(self, p_gncs:GnucashSession):
         """
         Transfer the Monarch information to a Gnucash file.
@@ -499,7 +499,7 @@ def main_monarch_input(args:list) -> list:
     in_file, save_monarch, level, mode, gnc_file, domain, parse_info = process_input_parameters(args)
 
     log_control = MhsLogger( get_base_filename(__file__), con_level = level, suffix = "gncout" )
-    log_control.log_list(parse_info)
+    log_control.log_list(items = parse_info, level = DEFAULT_LOG_LEVEL)
     lgr = log_control.get_logger()
 
     # get name parts from the input file path
