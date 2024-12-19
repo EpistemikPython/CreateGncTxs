@@ -12,7 +12,7 @@ __author_name__    = "Mark Sattolo"
 __author_email__   = "epistemik@gmail.com"
 __python_version__ = "3.9+"
 __created__ = "2019-06-22"
-__updated__ = "2024-10-24"
+__updated__ = "2024-12-19"
 
 from sys import path, argv
 import re
@@ -183,9 +183,12 @@ class ParseMonarchInput:
 
                     # have to identify & handle different types
                     tx_type = words[1]
-                    if tx_type == DOLLAR:
-                        tx_type = DCA_IN if words[4] == SW_IN else DCA_OUT
-                    desc = words[2] if ( tx_type == INTRCL or tx_type == INTRLD ) else TX_TYPES[tx_type]
+                    if tx_type == "In" and words[2] == CASH:
+                        desc = INCASH_TRIN if words[3] == TRANS_IN else INCASH_TROUT
+                    else:
+                        if tx_type == DOLLAR:
+                            tx_type = DCA_IN if words[4] == SW_IN else DCA_OUT
+                        desc = words[2] if ( tx_type == INTRCL or tx_type == INTRLD ) else TX_TYPES[tx_type]
                     if not desc.isprintable():
                         raise Exception(F"Did NOT find proper Description: {desc}!")
 
