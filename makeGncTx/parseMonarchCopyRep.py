@@ -6,13 +6,13 @@
 #                           OR use a JSON file with previously saved Monarch tx/price data.
 #                           THEN optionally write the transactions/prices to a specified Gnucash file
 #
-# Copyright (c) 2024 Mark Sattolo <epistemik@gmail.com>
+# Copyright (c) 2025 Mark Sattolo <epistemik@gmail.com>
 
 __author_name__    = "Mark Sattolo"
 __author_email__   = "epistemik@gmail.com"
 __python_version__ = "3.9+"
 __created__ = "2019-06-22"
-__updated__ = "2024-12-19"
+__updated__ = "2025-02-09"
 
 from sys import path, argv
 import re
@@ -181,16 +181,21 @@ class ParseMonarchInput:
                     tfund = fund_cpy + " " + fund_code
                     self._lgr.debug(F"fund is: {tfund}")
 
-                    # have to identify & handle different types
+                    # set the DESCRIPTION based on the different TYPES
                     tx_type = words[1]
                     if tx_type == "In" and words[2] == CASH:
                         desc = INCASH_TRIN if words[3] == TRANS_IN else INCASH_TROUT
+                    elif tx_type == DOLLAR:
+                        desc = DCA_IN if words[4] == SW_IN else DCA_OUT
+                    elif tx_type == INTRCL or tx_type == INTRLD:
+                        desc = words[2]
+                    elif tx_type == REINV and words[2] == MGMT:
+                        desc = RMFR
                     else:
-                        if tx_type == DOLLAR:
-                            tx_type = DCA_IN if words[4] == SW_IN else DCA_OUT
-                        desc = words[2] if ( tx_type == INTRCL or tx_type == INTRLD ) else TX_TYPES[tx_type]
+                        desc = TX_TYPES[tx_type]
                     if not desc.isprintable():
-                        raise Exception(F"Did NOT find proper Description: {desc}!")
+                        raise Exception(f"Did NOT find proper Description: {desc}!")
+                    self._lgr.debug(f"description = {desc}")
 
                     # noinspection PyDictCreation
                     trade_info = { TRADE_DATE:tx_date, FUND:tfund, TYPE:desc, CMPY:COMPANY_NAME[fund_cpy] }
@@ -301,8 +306,7 @@ class ParseMonarchInput:
             raise Exception(F"PROBLEM: units DID NOT match with value: {mon_tx[UNITS]}!")
 
         # assemble the Description string
-        descr = "{} {}".format(mon_tx[DESC], fund_name)
-        init_tx[DESC] = descr
+        init_tx[DESC] = mon_tx[DESC]
         self._lgr.debug(F"descr = {init_tx[DESC]}")
 
         # notes field
