@@ -12,7 +12,7 @@ __author_name__    = "Mark Sattolo"
 __author_email__   = "epistemik@gmail.com"
 __python_version__ = "3.9+"
 __created__ = "2019-06-22"
-__updated__ = "2025-02-09"
+__updated__ = "2025-07-20"
 
 from sys import path, argv
 import re
@@ -89,11 +89,10 @@ class ParseMonarchInput:
              3: obtain owner
              4: FUND ->
                   find planID in words: type is PLAN_IDS[word][PLAN_TYPE]
-             5: Pass if planID is Joint and owner is Lulu
-             6: Prices ->
+             5: Prices ->
                   match fund name at [0]:
                     record: fund company, fund, balance, price, doc date
-             7: Trades ->
+             6: Trades ->
                   match date at [0]:
                     record: fund, desc, gross, units, price, load, trade date
         """
@@ -103,7 +102,6 @@ class ParseMonarchInput:
 
         mon_state = FIND_DATE
         plan_type = UNKNOWN
-        plan_id = UNKNOWN
         with open(self.in_file) as mfp:
             ct = 0
             for line in mfp:
@@ -116,7 +114,7 @@ class ParseMonarchInput:
                     re_match = re.match(re_date, words[0])
                     if re_match:
                         doc_date = re_match.group(1)
-                        self._lgr.debug(F"Document date: {doc_date}")
+                        self._lgr.debug(f"Document date: {doc_date}")
                         mon_state = FIND_OWNER
                         continue
 
@@ -127,7 +125,7 @@ class ParseMonarchInput:
                     if words[0] == OPEN:
                         owner = MON_LULU
                     self._input_txs.set_owner(owner)
-                    self._lgr.info(F"\n\t\u0022Current owner: {owner}\u0022")
+                    self._lgr.info(f"\u0022Current owner: {owner}\u0022")
                     mon_state = STATE_SEARCH
                     continue
 
@@ -136,34 +134,29 @@ class ParseMonarchInput:
                         if word in PLAN_IDS:
                             plan_type = PLAN_IDS[word][0]
                             plan_id = word
-                            self._lgr.debug(F"\n\t\t\u0022Current plan: type = {plan_type} ; id = {plan_id}\u0022")
+                            self._lgr.debug(f"\u0022Current plan: type = '{plan_type}' ; id = '{plan_id}'\u0022")
                             continue
-
-                if mon_state == STATE_SEARCH:
-                    # ensure that JOINT transactions are only recorded ONCE
-                    if owner == MON_LULU and plan_id == JOINT_PLAN_ID:
-                        continue
 
                 # PRICES
                 if words[0] in FUND_NAME_CODE:
                     # NOTE: price lines start with a fund name and have enough words to match the accounts header
                     if len(words) >= 11:
                         fd_cpy = words[0]
-                        self._lgr.debug(F"FOUND a NEW Price: {fd_cpy}")
+                        self._lgr.debug(f"FOUND a NEW Price: {fd_cpy}")
                         pfund = words[-11]
                         if '-' in pfund:
                             pfund = pfund.replace('-', ' ')
                         else:
-                            raise Exception(F"Did NOT find proper fund name: {pfund}!")
+                            raise Exception(f"Did NOT find proper fund name: {pfund}!")
                         bal = words[-9]
                         if '.' not in bal or '$' in bal:
-                            raise Exception(F"Did NOT find proper balance: {bal}!")
+                            raise Exception(f"Did NOT find proper balance: {bal}!")
                         price = words[-8]
                         if '.' not in price or '$' not in price:
-                            raise Exception(F"Did NOT find proper price: {price}!")
+                            raise Exception(f"Did NOT find proper price: {price}!")
                         price_info = { DATE:doc_date, DESC:PRICE, FUND_CMPY:fd_cpy, FUND:pfund, UNIT_BAL:bal, PRICE:price }
                         self._input_txs.add_tx(plan_type, PRICE, price_info)
-                        self._lgr.debug(F"ADD current Price tx:\n\t{price_info}")
+                        self._lgr.debug(f"ADD current Price tx: {price_info}")
                     continue
 
                 # TRADES
@@ -171,15 +164,15 @@ class ParseMonarchInput:
                 # NOTE: trade lines start with a date and have enough words to match the tx header
                 if re_match and len(words) >= 8:
                     tx_date = re_match.group(1)
-                    self._lgr.debug(F"FOUND a NEW Tx! Date: {tx_date}")
+                    self._lgr.debug(f"FOUND a NEW Tx! Date: {tx_date}")
                     fund_cpy = words[-8]
                     if fund_cpy not in FUND_NAME_CODE.values():
-                        raise Exception(F"Did NOT find proper Fund company: {fund_cpy}!")
+                        raise Exception(f"Did NOT find proper Fund company: {fund_cpy}!")
                     fund_code = words[-7]
                     if not fund_code.isnumeric():
-                        raise Exception(F"Did NOT find proper Fund code: {fund_code}!")
+                        raise Exception(f"Did NOT find proper Fund code: {fund_code}!")
                     tfund = fund_cpy + " " + fund_code
-                    self._lgr.debug(F"fund is: {tfund}")
+                    self._lgr.debug(f"fund is: {tfund}")
 
                     # set the DESCRIPTION based on the different TYPES
                     tx_type = words[1]
@@ -195,30 +188,30 @@ class ParseMonarchInput:
                         desc = TX_TYPES[tx_type]
                     if not desc.isprintable():
                         raise Exception(f"Did NOT find proper Description: {desc}!")
-                    self._lgr.debug(f"description = {desc}")
+                    self._lgr.debug(f"description = '{desc}'")
 
                     # noinspection PyDictCreation
                     trade_info = { TRADE_DATE:tx_date, FUND:tfund, TYPE:desc, CMPY:COMPANY_NAME[fund_cpy] }
                     trade_info[DESC] = trade_info[CMPY] + ": " + desc
                     trade_info[UNITS] = words[-1]
                     if '.' not in trade_info[UNITS] or '$' in trade_info[UNITS]:
-                        raise Exception(F"Did NOT find proper Units!: {trade_info[UNITS]}")
+                        raise Exception(f"Did NOT find proper Units!: {trade_info[UNITS]}")
                     trade_info[PRICE] = words[-2]
                     if '.' not in trade_info[PRICE] or '$' not in trade_info[PRICE]:
-                        raise Exception(F"Did NOT find proper Price: {trade_info[PRICE]}!")
+                        raise Exception(f"Did NOT find proper Price: {trade_info[PRICE]}!")
                     trade_info[NET] = words[-3]
                     if '.' not in trade_info[NET] or '$' not in trade_info[NET]:
-                        raise Exception(F"Did NOT find proper Net amount: {trade_info[NET]}!")
+                        raise Exception(f"Did NOT find proper Net amount: {trade_info[NET]}!")
                     trade_info[GROSS] = words[-4]
                     if '.' not in trade_info[GROSS] or '$' not in trade_info[GROSS]:
-                        raise Exception(F"Did NOT find proper Gross amount: {trade_info[GROSS]}!")
+                        raise Exception(f"Did NOT find proper Gross amount: {trade_info[GROSS]}!")
                     load = words[-5]
                     if not load.isalpha():
-                        raise Exception(F"Did NOT find proper Load: {load}!")
+                        raise Exception(f"Did NOT find proper Load: {load}!")
                     trade_info[LOAD] = load
 
                     self._input_txs.add_tx(plan_type, TRADE, trade_info)
-                    self._lgr.debug(F"ADD current Trade tx:\n\t{trade_info}")
+                    self._lgr.debug(f"ADD current Trade tx:\n\t\t\t{trade_info}")
 
     def get_trade_info(self, mon_tx:dict, plan_type:str, ast_parent:Account, rev_acct:Account) -> (dict,dict):
         """
@@ -238,7 +231,7 @@ class ParseMonarchInput:
         :param    rev_acct: Revenue account
         :return one trade tx or both txs of a switch, if available
         """
-        self._lgr.debug(F"plan type = {plan_type}, asset parent = {ast_parent.GetName()}")
+        self._lgr.debug(f"plan type = {plan_type}, asset parent = {ast_parent.GetName()}")
 
         fund_name = mon_tx[FUND]
         asset_acct = self.gnc_session.get_account(fund_name, ast_parent)
@@ -248,13 +241,13 @@ class ParseMonarchInput:
             trust_acct = TRUST_REV_ACCT if mon_tx[TYPE] == TX_TYPES[REINV] else TRUST_EQY_ACCT
             rev_acct = self.gnc_session.get_account(trust_acct)
 
-        self._lgr.debug(F"get_trade_info(): asset account = {asset_acct.GetName()}; revenue account = {rev_acct.GetName()}")
+        self._lgr.debug(f"get_trade_info(): asset account = '{asset_acct.GetName()}'; revenue account = '{rev_acct.GetName()}'")
 
         # get required date fields
         conv_date = dt.strptime(mon_tx[TRADE_DATE], "%d-%b-%Y")
         init_tx = { FUND:fund_name, ACCT:asset_acct, REV:rev_acct, TRADE_DATE:mon_tx[TRADE_DATE],
                     TRADE_DAY:conv_date.day, TRADE_MTH:conv_date.month, TRADE_YR:conv_date.year }
-        self._lgr.debug(F"trade day-month-year = {init_tx[TRADE_DAY]}-{init_tx[TRADE_MTH]}-{init_tx[TRADE_YR]}")
+        self._lgr.debug(f"trade day-month-year = '{init_tx[TRADE_DAY]}-{init_tx[TRADE_MTH]}-{init_tx[TRADE_YR]}'")
 
         # different accounts depending if Switch, Redemption, Purchase, Distribution
         init_tx[TYPE] = mon_tx[TYPE]
@@ -266,53 +259,53 @@ class ParseMonarchInput:
         # get the GROSS dollar value of the tx
         re_match = re.match(re_dollars, mon_tx[GROSS])
         if re_match:
-            self._lgr.info(F"gross dollars = {re_match.groups()}")
+            self._lgr.info(f"gross dollars = '{re_match.groups()}'")
             str_gross = re_match.group(2) + re_match.group(3)
             # remove possible comma
             gross_amt = int(str_gross.replace(',', ''))
             # if match group 1 is NOT empty, amount is NEGATIVE
             if re_match.group(1):
                 gross_amt *= -1
-            self._lgr.debug(F"gross amount = {gross_amt}")
+            self._lgr.debug(f"gross amount = '{gross_amt}'")
             init_tx[GROSS] = gross_amt
         else:
-            raise Exception(F"PROBLEM: gross amount DID NOT match with value: {mon_tx[GROSS]}!")
+            raise Exception(f"PROBLEM: gross amount DID NOT match with value: {mon_tx[GROSS]}!")
 
         # get the NET dollar value of the tx
         re_match = re.match(re_dollars, mon_tx[NET])
         if re_match:
-            self._lgr.info(F"net dollars = {re_match.groups()}")
+            self._lgr.info(f"net dollars = '{re_match.groups()}'")
             str_net = re_match.group(2) + re_match.group(3)
             # remove possible comma
             net_amount = int(str_net.replace(',', ''))
             # if match group 1 is NOT empty, amount is negative
             if re_match.group(1):
                 net_amount *= -1
-            self._lgr.debug(F"net_amount = {net_amount}")
+            self._lgr.debug(f"net_amount = '{net_amount}'")
             init_tx[NET] = net_amount
         else:
-            raise Exception(F"PROBLEM: net amount DID NOT match with value: {mon_tx[NET]}!")
+            raise Exception(f"PROBLEM: net amount DID NOT match with value: {mon_tx[NET]}!")
 
         # get the number of units for the tx
         re_match = re.match(r'(-?)([0-9]{1,5})\.([0-9]{4}).*', mon_tx[UNITS])
         if re_match:
-            self._lgr.info(F"tx units = {re_match.groups()}")
+            self._lgr.info(f"tx units = '{re_match.groups()}'")
             units = int(re_match.group(2) + re_match.group(3))
             # if match group 1 is NOT empty, units is negative
             if re_match.group(1):
                 units *= -1
             init_tx[UNITS] = units
         else:
-            raise Exception(F"PROBLEM: units DID NOT match with value: {mon_tx[UNITS]}!")
+            raise Exception(f"PROBLEM: units DID NOT match with value: {mon_tx[UNITS]}!")
 
         # assemble the Description string
         init_tx[DESC] = mon_tx[DESC]
-        self._lgr.debug(F"descr = {init_tx[DESC]}")
+        self._lgr.debug(f"descr = '{init_tx[DESC]}'")
 
         # notes field
-        notes = mon_tx[NOTES] if NOTES in mon_tx else F"Load = {mon_tx[LOAD]}"
+        notes = mon_tx[NOTES] if NOTES in mon_tx else f"Load = {mon_tx[LOAD]}"
         init_tx[NOTES] = notes
-        self._lgr.debug(F"notes = {init_tx[NOTES]}")
+        self._lgr.debug(f"notes = '{init_tx[NOTES]}'")
 
         pair_tx = None
         have_pair = False
@@ -343,7 +336,7 @@ class ParseMonarchInput:
         :param ast_parent: Asset parent account
         :param    p_owner: str name
         """
-        self._lgr.debug(F"plan type = {plan_type}, asset parent = {ast_parent.GetName()}, owner = {p_owner}")
+        self._lgr.debug(f"plan type = {plan_type}, asset parent = {ast_parent.GetName()}, owner = {p_owner}")
         rev_acct = self.gnc_session.get_revenue_account(plan_type, p_owner)
 
         # get all the tx required information from the Monarch json
@@ -366,7 +359,7 @@ class ParseMonarchInput:
         """
         self._lgr.debug( get_current_time() )
         for iplan in self._input_txs.get_data():
-            self._lgr.debug(F"plan type = {repr(iplan)}")
+            self._lgr.debug(f"plan type = '{repr(iplan)}'")
             plan = self._input_txs.get_plan(iplan)
             for tx in plan[PRICE]:
                 indx = 0
@@ -377,12 +370,13 @@ class ParseMonarchInput:
                         trd_date = dt.strptime(trd[TRADE_DATE], "%d-%b-%Y")
                         if latest_dte is None or trd_date > latest_dte:
                             latest_dte = trd_date
-                            self._lgr.debug(F"Latest date for {tx[FUND]} = {latest_dte}")
+                            self._lgr.debug(f"Latest date for {tx[FUND]} = '{latest_dte}'")
                             latest_indx = indx
                     indx += 1
                 if latest_indx > -1:
                     plan[TRADE][latest_indx][UNIT_BAL] = tx[UNIT_BAL]
-                    plan[TRADE][latest_indx][NOTES] = F"{tx[FUND]} Balance = {tx[UNIT_BAL]}"
+                    plan[TRADE][latest_indx][NOTES] = f"{tx[FUND]} Balance = {tx[UNIT_BAL]}"
+                    self._lgr.debug(f"Notes for {tx[FUND]} = '{plan[TRADE][latest_indx][NOTES]}'")
 
     def insert_txs_to_gnucash_file(self, p_gncs:GnucashSession):
         """
@@ -392,7 +386,7 @@ class ParseMonarchInput:
         self._lgr.info(get_current_time())
         self.gnc_session = p_gncs
         owner = self._input_txs.get_owner()
-        self._lgr.debug(F"Owner = {owner}")
+        self._lgr.debug(f"Owner = {owner}")
 
         self.gnc_session.begin_session()
         self.create_gnucash_info(owner)
@@ -403,10 +397,10 @@ class ParseMonarchInput:
         domain = self.gnc_session.get_domain()
         plans = self._input_txs.get_data()
         for plan_type in plans:
-            self._lgr.debug(F"\n\n\t\t\u0022Plan type = {plan_type}\u0022")
+            self._lgr.debug(f"\n\n\t\t\u0022Plan type = {plan_type}\u0022")
 
             asset_parent = self.gnc_session.get_asset_account(plan_type, p_owner)
-            self._lgr.debug(F"create_gnucash_info(): asset parent = {asset_parent.GetName()}")
+            self._lgr.debug(f"create_gnucash_info(): asset parent = {asset_parent.GetName()}")
 
             if domain in (TRADE,BOTH):
                 # TODO: DO NOT commit txs unless ALL txs are good for this monarch report?
@@ -426,7 +420,7 @@ class GoogleUpdate:
         self._domain = domain
         self._gncfile = gncfile
         self._lgr = p_lgr
-        self._lgr.info(F"Start {self.__class__.__name__} @ {get_current_time()}")
+        self._lgr.info(f"Start {self.__class__.__name__} @ {get_current_time()}")
 
         self._sheet = MhsSheetAccess(self._lgr)
         self.response = None
@@ -437,7 +431,7 @@ class GoogleUpdate:
         # skip header rows
         if current_row % 50 == 0:
             current_row += 1
-        self._lgr.info(F"current row = {current_row}\n")
+        self._lgr.info(f"current row = {current_row}\n")
 
         # keep record of this update
         self._sheet.fill_cell(RECORD_SHEET, RECORD_DATE_COL, current_row, now_dt.strftime(CELL_DATE_STR))
@@ -454,7 +448,7 @@ class GoogleUpdate:
 
         self.record_update_info()
         self.response = self._sheet.send_sheets_data()
-        self._lgr.info(F"sent update @ {get_current_time()}\n\tGoogle response = {self.response}")
+        self._lgr.info(f"sent update @ {get_current_time()}\n\tGoogle response = {self.response}")
 
         self._sheet.end_session()
 # END class GoogleUpdate
@@ -480,29 +474,29 @@ def set_args():
 
 def process_input_parameters(argx:list):
     args = set_args().parse_args(argx)
-    info = [F"args = {args}"]
+    info = [f"args = {args}"]
 
     if not osp.isfile(args.inputfile):
-        raise Exception(F"File path '{args.inputfile}' does not exist! Exiting...")
-    info.append(F"Input file = {args.inputfile}")
+        raise Exception(f"File path '{args.inputfile}' does not exist! Exiting...")
+    info.append(f"Input file = {args.inputfile}")
 
     mode = TEST
     domain = None
     gnc_file = None
     if "gncfile" in args:
         if not osp.isfile(args.gncfile):
-            raise Exception(F"File path '{args.gncfile}' is NOT valid. Exiting...")
+            raise Exception(f"File path '{args.gncfile}' is NOT valid. Exiting...")
         gnc_file = args.gncfile
-        info.append(F"Writing to Gnucash file = {gnc_file}")
+        info.append(f"Writing to Gnucash file = {gnc_file}")
         mode = SEND
         domain = args.type
-        info.append(F"Inserting '{domain}' transaction types to Gnucash.")
+        info.append(f"Inserting '{domain}' transaction types to Gnucash.")
     else:
         info.append("mode = TEST")
 
     return args.inputfile, args.json, args.level, mode, gnc_file, domain, info
 
-def main_monarch_input(args:list) -> list:
+def main_monarch_input(args:list):
     in_file, save_monarch, level, mode, gnc_file, domain, parse_info = process_input_parameters(args)
 
     log_control = MhsLogger( get_base_filename(__file__), con_level = level, suffix = "gncout" )
@@ -535,7 +529,7 @@ def main_monarch_input(args:list) -> list:
 
         if ftype == MON.lower() and save_monarch:
             out_file = save_to_json(basename, parser.get_input_record().to_json(), get_current_time(FILE_DATETIME_FORMAT))
-            lgr.info(F"Created Monarch JSON file: {out_file}")
+            lgr.info(f"Created Monarch JSON file: {out_file}")
 
     except Exception as monex:
         lgr.exception(monex)
