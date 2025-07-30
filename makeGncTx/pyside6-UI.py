@@ -4,13 +4,13 @@
 # pyside6-UI.py
 #   -- use a PySide6 UI to select the input files and execution options
 #
-# Copyright (c) 2024 Mark Sattolo <epistemik@gmail.com>
+# Copyright (c) 2025 Mark Sattolo <epistemik@gmail.com>
 
 __author_name__    = "Mark Sattolo"
 __author_email__   = "epistemik@gmail.com"
 __python_version__ = "3.9+"
 __created__ = "2024-07-02"
-__updated__ = "2024-10-06"
+__updated__ = "2025-07-24"
 
 from PySide6.QtWidgets import (QApplication, QComboBox, QVBoxLayout, QGroupBox, QDialog, QFileDialog, QLabel, QTextEdit,
                                QPushButton, QFormLayout, QDialogButtonBox, QCheckBox, QInputDialog, QMessageBox)
@@ -30,7 +30,7 @@ class MonarchGnucashUI(QDialog):
     """Use a PySide6 UI to conveniently specify parameters and run the parseMonarchCopyRep program."""
     def __init__(self):
         super().__init__()
-        self.title = "Monarch Info to Gnucash UI"
+        self.title = "UI for sending Monarch info to Gnucash"
         self.left = 42
         self.top  = 64
         self.width  = 660
@@ -40,7 +40,7 @@ class MonarchGnucashUI(QDialog):
         self._lgr = log_control.get_logger()
 
         self.init_ui()
-        self._lgr.info(f"{self.title} Runtime = {dt.now().strftime(RUN_DATETIME_FORMAT)}\n")
+        self._lgr.info(f"start {self.title}: Runtime = {dt.now().strftime(RUN_DATETIME_FORMAT)}\n")
 
     # TODO: better layout of widgets
     def init_ui(self):
@@ -99,30 +99,30 @@ class MonarchGnucashUI(QDialog):
         self.gb_main.setLayout(layout)
 
     def add_mon_file_btn(self):
-        self.mon_btn_title = F"Get {INPUT} file"
+        self.mon_btn_title = f"Get {INPUT} file"
         self.mon_file_btn  = QPushButton(self.mon_btn_title)
         self.mon_label     = QLabel(INPUT+FILE_LABEL)
         self.mon_file_btn.clicked.connect( partial(self.open_file_name_dialog, INPUT) )
 
     def add_gnc_file_btn(self):
-        self.gnc_btn_title = F"Get {GNC} file"
+        self.gnc_btn_title = f"Get {GNC} file"
         self.gnc_file_btn  = QPushButton(NO_NEED)
         self.gnc_label     = QLabel(GNC+FILE_LABEL)
         self.gnc_file_btn.clicked.connect( partial(self.open_file_name_dialog, GNC) )
 
     def open_file_name_dialog(self, label:str):
-        self._lgr.info(label)
+        self._lgr.debug(f"label: {label}")
         if label == INPUT:
-            f_filter = F"{INPUT} (*.monarch *.json);;All Files (*)"
+            f_filter = f"{INPUT} (*.monarch *.json);;All Files (*)"
             f_dir = osp.join(BASE_PYTHON_FOLDER, "gnucash" + osp.sep + "CreateGncTxs" + osp.sep + "makeGncTx" + osp.sep)
         else: # gnucash file
-            f_filter = F"{GNC} (*.gnc *.gnucash);;All Files (*)"
+            f_filter = f"{GNC} (*.gnc *.gnucash);;All Files (*)"
             f_dir = osp.join(BASE_GNUCASH_FOLDER, "bak-files" + osp.sep)
 
         file_name, _ = QFileDialog.getOpenFileName(self, caption = f"Get {label} Files", filter = f_filter, dir = f_dir,
                                                    options = QFileDialog.Option.DontUseNativeDialog)
         if file_name:
-            self._lgr.info(F"\nFile selected: {file_name}")
+            self._lgr.info(f"\n\t\tFile selected: {file_name}")
             display_name = file_name.split(osp.pathsep)[-1]
             if label == INPUT: # either a monarch or json file
                 self.mon_file = file_name
@@ -144,11 +144,11 @@ class MonarchGnucashUI(QDialog):
         num, ok = QInputDialog.getInt(self, "Logging Level", "Enter a value (0-100)", value=self.log_level, minValue=0, maxValue=100)
         if ok:
             self.log_level = num
-            self._lgr.info(F"logging level changed to {num}.")
+            self._lgr.info(f"logging level changed to {num}.")
 
     def button_click(self):
         """Prepare the parameters string and send to main function of module parseMonarchCopyRep."""
-        self._lgr.info(F"Clicked '{self.exe_btn.text()}'.")
+        self._lgr.info(f"Clicked '{self.exe_btn.text()}'.")
 
         if self.mon_file is None:
             msg_box = QMessageBox()
@@ -174,7 +174,7 @@ class MonarchGnucashUI(QDialog):
             cl_params.append('-g' + self.gnc_file)
             cl_params.append('-t' + mode)
 
-        self._lgr.info(F"Parameters = \n{json.dumps(cl_params, indent=4)}\nCalling main_monarch_input...")
+        self._lgr.info(f"\n\t\tParameters = '{json.dumps(cl_params, indent=4)}'\n\t\t>> Calling main_monarch_input")
         try:
             response = main_monarch_input(cl_params)
             reply = {"response": response}
@@ -187,7 +187,7 @@ class MonarchGnucashUI(QDialog):
 
 
 if __name__ == "__main__":
-    log_control = MhsLogger(MonarchGnucashUI.__name__, suffix = "gncout")
+    log_control = MhsLogger(MonarchGnucashUI.__name__, con_level = DEFAULT_LOG_LEVEL, suffix = "gncout")
     dialog = None
     app = None
     code = 0
@@ -201,7 +201,7 @@ if __name__ == "__main__":
         code = 13
     except ValueError as mve:
         log_control.exception(mve)
-        code = 13
+        code = 27
     except Exception as mex:
         log_control.exception(mex)
         code = 66
